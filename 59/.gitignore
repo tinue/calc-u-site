@@ -2,10 +2,11 @@
 uploads/
 
 # Only present when running .seo/check.js, which needs jsdom.
-# The build itself has no dependencies.
+# The build itself has no dependencies. Anchored to 59/: tests/ has its
+# own package.json, which is committed.
 node_modules/
-package.json
-package-lock.json
+/package.json
+/package-lock.json
 
 # macOS
 .DS_Store
