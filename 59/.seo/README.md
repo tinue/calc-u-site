@@ -9,15 +9,32 @@ node .seo/build.js     # compile + prerender. No dependencies.
 node .seo/check.js     # verify. Optional: npm i --no-save jsdom for the boot check.
 ```
 
+## Living under /59
+
+The site is served at `https://calc-u.org/59/`, from the `59/` folder of the
+calc-u-site repository. `BASE` in `routes.js` is `"/59"`:
+
+- Route paths in `routes.js` and `.seo/pages.js` are site paths (`"/faq/"`).
+  `url()` turns one into an address (`"/59/faq/"`); `matchRoute()` takes an
+  address.
+- Links and image paths written directly in the `.jsx` text, `fetch()` and
+  `new Worker()` paths, and `app/sw.js` / `app/manifest.json` carry the
+  `/59` prefix literally.
+- `check.js` fails on any root-relative URL in the built pages or the scripts
+  that does not start with `/59/`.
+- `robots.txt` and `404.html` only work at the domain root, so the build no
+  longer writes them; the repository root owns both.
+
 ## Serving it locally
 
-`docs/` is not viewable from the filesystem — every page references its
-scripts and styles as `/build/…` and `/assets/…`, and the routes are
-directories. It needs an HTTP server at the document root:
+The site is not viewable from the filesystem — every page references its
+scripts and styles as `/59/build/…` and `/59/assets/…`, and the routes are
+directories. It needs an HTTP server at the repository root, one level up:
 
 ```bash
-cd docs
-node .seo/build.js && python3 -m http.server 8000
+cd 59
+node .seo/build.js && (cd .. && python3 -m http.server 8000)
+# then open http://localhost:8000/59/
 ```
 
 **Build first, every time.** What a server hands out is the last build's
@@ -60,8 +77,8 @@ Each piece has one home, and `check.js` asserts the result:
 | Open Graph / Twitter | `renderPage()` in `build.js`, from the same title and description. |
 | Structured data | `build.js`: `SoftwareApplication` on the home page, `FAQPage` on `/faq/` (parsed out of `Pages.jsx` so markup and JSON-LD cannot disagree), `BreadcrumbList` everywhere else. |
 | `sitemap.xml` | Generated from `ROUTES` — self-canonical pages only. |
-| `robots.txt` | Generated. Blocks `/app/` and `/preview/`; deliberately does **not** block `/build/` or `/vendor/`, which hold the scripts a crawler needs to render the page. |
-| `404.html` | The home page chrome, `noindex`, no canonical. GitHub Pages serves it for unknown paths. |
+| `robots.txt` | At the repository root, not generated. At launch it should block `/59/app/` and `/59/preview/`, and deliberately **not** `/59/build/` or `/59/vendor/`, which hold the scripts a crawler needs to render the page. |
+| `404.html` | At the repository root, not generated: GitHub Pages only serves the root one. |
 
 Two rules are easy to break by accident:
 
@@ -87,7 +104,7 @@ depth too.
 
 ## Self-hosted, and no analytics
 
-Every byte the browser fetches comes from `calcu59.ch`: the fonts in `fonts/`,
+Every byte the browser fetches comes from `calc-u.org`: the fonts in `fonts/`,
 React in `vendor/`, the WASM core in `wasm/`. Nothing is loaded from a CDN, and
 the site carries no analytics, tag manager or telemetry of any kind — not
 Google's, not a self-hosted Matomo, none.
@@ -140,24 +157,19 @@ The one failure mode worth guarding: someone edits a `.jsx`, commits, and the
 published HTML still shows the old text. `check.js` will not catch that — it
 validates the last build, not whether the build is current.
 
-CI covers it. `.github/workflows/build-site.yml`, **on this branch**, runs on
-every push to `gh-pages`: it rebuilds, runs `check.js`, and commits the result
-if the output differs. Actions runs the copy of a workflow that lives on the
-branch being pushed, and `gh-pages`'s root is the site, so paths inside that
-file have no `docs/` prefix.
-
-Two things keep it from looping: pushes made with `GITHUB_TOKEN` do not trigger
-workflows, and a build whose output is already current stages nothing. The push
-*does* trigger the Pages deployment, which is the point.
+Nothing covers it yet. In the Calc-U-59 repository a workflow on the
+`gh-pages` branch rebuilt and checked on every push; it was not carried over
+with the copy. Until there is one at the calc-u-site root, run
+`node .seo/build.js && node .seo/check.js` before every commit.
 
 ## After deploying
 
 - Verify the site in [Google Search Console](https://search.google.com/search-console)
-  and submit `https://www.calcu59.ch/sitemap.xml`. Do the same in
+  and submit `https://calc-u.org/59/sitemap.xml`. Do the same in
   [Bing Webmaster Tools](https://www.bing.com/webmasters), which also feeds
   DuckDuckGo.
 - Use the URL Inspection tool on `/play/` and `/what-is-a-ti-59/` and request
   indexing. Those two are the pages most likely to match a cold search.
 - The App Store listing and the GitHub repository both rank already. Link from
-  each of them to `https://www.calcu59.ch/` — the repository's About field and
+  each of them to `https://calc-u.org/59/` — the repository's About field and
   its README are the cheapest, strongest links available.

@@ -1,7 +1,7 @@
 # TI-59 Preset File Tutorial — complete
 #
 # This file is used to explain how preset files are constructed. See
-# https://www.calcu59.ch/presets/tutorial/ for the step-by-step walkthrough.
+# https://calc-u.org/59/presets/tutorial/ for the step-by-step walkthrough.
 
 # Setup the system: Choose the model, solid state module and printer on/off
 MODEL: TI-59

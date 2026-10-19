@@ -20,7 +20,13 @@ const path = require("path");
 
 const SEO = __dirname;
 const DOCS = path.join(SEO, "..");
-const { ROUTES, ORIGIN, normalizePath } = require(path.join(DOCS, "routes.js"));
+const { ROUTES, ORIGIN, BASE, url, normalizePath } = require(path.join(DOCS, "routes.js"));
+
+// The site lives under BASE ("/59"), so every root-relative URL it names
+// must start with BASE + "/". Addresses → site paths and files on disk:
+const underBase = (u) => u.startsWith(BASE + "/");
+const sitePath = (u) => u.slice(BASE.length);
+const diskPath = (u) => path.join(DOCS, u.slice(BASE.length + 1));
 
 let failures = 0;
 let checks = 0;
@@ -50,11 +56,11 @@ for (const route of ROUTES) {
 
   ok(title.length > 15 && title.length <= 75, `${route.path}: title length ${title.length} — "${title}"`);
   ok(desc.length >= 110 && desc.length <= 175, `${route.path}: description length ${desc.length}`);
-  ok(canon === ORIGIN + (route.canonical || route.path), `${route.path}: canonical is "${canon}"`);
+  ok(canon === ORIGIN + url(route.canonical || route.path), `${route.path}: canonical is "${canon}"`);
   ok(/<h1[^>]*>/.test(root), `${route.path}: no <h1> in prerendered markup`);
   ok(text.length > 700, `${route.path}: only ${text.length} chars of prerendered text`);
   ok(/og:title/.test(html) && /og:description/.test(html), `${route.path}: missing Open Graph tags`);
-  ok(html.includes("/build/site.js"), `${route.path}: does not load the app bundle`);
+  ok(html.includes(url("/build/site.js")), `${route.path}: does not load the app bundle`);
 
   // Every script the page names must exist, and React has to be among them:
   // without it site.js throws on ReactDOM.createRoot and the page is frozen
@@ -62,11 +68,12 @@ for (const route of ROUTES) {
   // shows up on /play/, where the calculator stays dead.
   const srcs = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map((m) => m[1]);
   for (const src of srcs) {
-    ok(fs.existsSync(path.join(DOCS, src.replace(/^\//, ""))), `${route.path}: script ${src} missing`);
+    ok(underBase(src), `${route.path}: script ${src} is not under ${BASE}/`);
+    ok(underBase(src) && fs.existsSync(diskPath(src)), `${route.path}: script ${src} missing`);
   }
   ok(srcs.some((s) => /react\./.test(s)), `${route.path}: does not load React`);
   ok(srcs.some((s) => /react-dom\./.test(s)), `${route.path}: does not load ReactDOM`);
-  ok(srcs.findIndex((s) => /react-dom\./.test(s)) < srcs.indexOf("/build/site.js"),
+  ok(srcs.findIndex((s) => /react-dom\./.test(s)) < srcs.indexOf(url("/build/site.js")),
      `${route.path}: ReactDOM is not loaded before site.js`);
 }
 
@@ -91,9 +98,11 @@ section("internal links");
 const STATIC_TARGETS = { "/app/": path.join(DOCS, "app", "index.html") };
 for (const [p, html] of built) {
   const hrefs = [...html.matchAll(/href="(\/[^"]*)"/g)].map((m) => m[1]);
-  for (const href of new Set(hrefs)) {
+  for (const address of new Set(hrefs)) {
+    if (!underBase(address)) { ok(false, `${p}: link ${address} is not under ${BASE}/`); continue; }
+    const href = sitePath(address);
     if (/\.(css|png|js|xml|txt|json|woff2?|ti59|ti58|ti58c|asm)$/.test(href)) {
-      ok(fs.existsSync(path.join(DOCS, href.replace(/^\//, ""))), `${p}: asset ${href} missing`);
+      ok(fs.existsSync(diskPath(address)), `${p}: asset ${address} missing`);
     } else if (STATIC_TARGETS[href]) {
       ok(fs.existsSync(STATIC_TARGETS[href]), `${p}: static page ${href} missing`);
     } else {
@@ -114,16 +123,16 @@ for (const [p, html] of built) {
  * would still find the file (path.join doesn't know a browser resolves
  * relative URLs against the page's own address) and miss the bug entirely.
  * Every <img> on this site is meant to be root-relative, so require the
- * leading "/" rather than just checking the file exists on disk.
+ * leading BASE + "/" rather than just checking the file exists on disk.
  */
 section("image sources");
 for (const [p, html] of built) {
   const root = html.slice(html.indexOf('<div id="root">'));
   const srcs = [...root.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]);
   for (const src of new Set(srcs)) {
-    ok(src.startsWith("/"), `${p}: <img src="${src}"> is not root-relative`);
-    if (src.startsWith("/")) {
-      ok(fs.existsSync(path.join(DOCS, src.replace(/^\//, ""))), `${p}: <img> asset ${src} missing`);
+    ok(underBase(src), `${p}: <img src="${src}"> is not root-relative under ${BASE}/`);
+    if (underBase(src)) {
+      ok(fs.existsSync(diskPath(src)), `${p}: <img> asset ${src} missing`);
     }
   }
 }
@@ -131,15 +140,31 @@ for (const [p, html] of built) {
 /* ---- crawl files -------------------------------------------------- */
 section("crawl files");
 const sitemap = fs.readFileSync(path.join(DOCS, "sitemap.xml"), "utf8");
-const robots = fs.readFileSync(path.join(DOCS, "robots.txt"), "utf8");
 for (const route of ROUTES) {
-  const listed = sitemap.includes(`<loc>${ORIGIN}${route.path}</loc>`);
+  const listed = sitemap.includes(`<loc>${ORIGIN}${url(route.path)}</loc>`);
   ok(listed === !route.canonical, `sitemap: ${route.path} should ${route.canonical ? "not " : ""}be listed`);
 }
-ok(robots.includes(`Sitemap: ${ORIGIN}/sitemap.xml`), "robots.txt: no Sitemap line");
-ok(fs.existsSync(path.join(DOCS, "404.html")), "404.html missing");
+// robots.txt and 404.html live at the domain root, outside this site.
 ok(fs.existsSync(path.join(DOCS, ".nojekyll")), ".nojekyll missing");
-ok(/noindex/.test(fs.readFileSync(path.join(DOCS, "404.html"), "utf8")), "404.html is not noindex");
+
+/* ---- scripts name only paths under BASE --------------------------- *
+ *
+ * fetch(), new Worker() and the service worker's precache list are not
+ * in the prerendered HTML, so the link checks above never see them. Any
+ * root-relative string literal in a script must carry the BASE prefix.
+ * routes.js is exempt: its paths are site paths by design.
+ */
+section("script paths");
+const SCRIPTS = [
+  ...fs.readdirSync(path.join(DOCS, "build")).filter((f) => f.endsWith(".js") && f !== "routes.js").map((f) => "build/" + f),
+  "app/app.jsx", "app/sw.js", "app/manifest.json", "calc-engine-worker.js",
+];
+for (const name of SCRIPTS) {
+  const body = fs.readFileSync(path.join(DOCS, name), "utf8");
+  for (const m of body.matchAll(/["'`](\/[A-Za-z_][^"'`]*)/g)) {
+    ok(underBase(m[1]), `${name}: path ${m[1]} is not under ${BASE}/`);
+  }
+}
 
 /* ---- nothing is fetched from a third party ------------------------ *
  *
@@ -225,7 +250,7 @@ if (!JSDOM) {
   // Each page loads the same scripts; read each once.
   const scriptCache = new Map();
   const readScript = (src) => {
-    if (!scriptCache.has(src)) scriptCache.set(src, fs.readFileSync(path.join(DOCS, src.replace(/^\//, "")), "utf8"));
+    if (!scriptCache.has(src)) scriptCache.set(src, fs.readFileSync(diskPath(src), "utf8"));
     return scriptCache.get(src);
   };
   const pages = ["/", "/play/", "/faq/", "/what-is-a-ti-59/", "/modules/", "/getting-started/debugger/"];
@@ -233,7 +258,7 @@ if (!JSDOM) {
     const html = built.get(normalizePath(p));
     const errors = [];
     const dom = new JSDOM(html, {
-      url: ORIGIN + p,
+      url: ORIGIN + url(p),
       runScripts: "outside-only",
       pretendToBeVisual: true,
     });

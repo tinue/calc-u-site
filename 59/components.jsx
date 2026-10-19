@@ -10,13 +10,13 @@ function SiteHeader({ page }) {
   // disk, so they are crawlable links first and SPA transitions second
   // (site.jsx intercepts the click).
   const items = [
-    { id: "home",     label: "Overview",        href: "/" },
-    { id: "start",    label: "Getting Started", href: "/getting-started/" },
-    { id: "play",     label: "Play",            href: "/play/" },
-    { id: "ref",      label: "App Reference",   href: "/reference/" },
-    { id: "modules",  label: "Modules",         href: "/modules/" },
-    { id: "software", label: "Software",        href: "/software/" },
-    { id: "faq",      label: "FAQ",             href: "/faq/" },
+    { id: "home",     label: "Overview",        href: "/59/" },
+    { id: "start",    label: "Getting Started", href: "/59/getting-started/" },
+    { id: "play",     label: "Play",            href: "/59/play/" },
+    { id: "ref",      label: "App Reference",   href: "/59/reference/" },
+    { id: "modules",  label: "Modules",         href: "/59/modules/" },
+    { id: "software", label: "Software",        href: "/59/software/" },
+    { id: "faq",      label: "FAQ",             href: "/59/faq/" },
   ];
   // Under 1060px the links collapse behind a disclosure button (styles.css).
   // They are hidden with CSS rather than unmounted, so the markup a crawler
@@ -30,8 +30,8 @@ function SiteHeader({ page }) {
   return (
     <header className="site-header">
       <div className="inner">
-        <a className="brand" href="/">
-          <img className="app-icon" src="/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon" />
+        <a className="brand" href="/59/">
+          <img className="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon" />
           <div className="wm">
             <span className="top">Calc-U <em>59</em></span>
             <span className="sub">User Guide</span>
@@ -82,15 +82,15 @@ function SiteFooter() {
           textTransform: "uppercase",
           color: "var(--fg-2)",
         }}>Calc-U 59</strong>
-        <a href="/what-is-a-ti-59/">What is a TI-59?</a>
-        <a href="/play/">Online emulator</a>
-        <a href="/software/">TI-59 Software Collection</a>
+        <a href="/59/what-is-a-ti-59/">What is a TI-59?</a>
+        <a href="/59/play/">Online emulator</a>
+        <a href="/59/software/">TI-59 Software Collection</a>
         {/* /app/ is the calculator alone, installable to a phone's home
             screen — deliberately not a route (see routes.js) or a nav item,
             so this is its only link from inside the site. Kept out of
             robots.txt's crawl on purpose (see the Disallow comment there):
             it would otherwise compete with /play/ for the same searches. */}
-        <a href="/app/">Install the web app</a>
+        <a href="/59/app/">Install the web app</a>
         <a href="https://github.com/tinue/Calc-U-59">GitHub</a>
         <a href="https://github.com/tinue/Calc-U-59/blob/main/CHANGELOG.md">Release notes</a>
         <a href="https://github.com/tinue/Calc-U-59/blob/main/PRIVACY.md">Privacy</a>

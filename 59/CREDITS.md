@@ -1,6 +1,6 @@
 # Credits & Licenses — Calc-U 59 website
 
-Every third-party asset used on **www.calcu59.ch**, with its source and license. The goal: only openly-licensed material, with a paper trail. Keep this file current whenever an asset is added.
+Every third-party asset used on **calc-u.org/59**, with its source and license. The goal: only openly-licensed material, with a paper trail. Keep this file current whenever an asset is added.
 
 ---
 

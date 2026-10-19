@@ -7,24 +7,24 @@
 // over afterwards and makes subsequent navigation instant.
 
 // Old #hash links (shared bookmarks, forum posts, the previous sitemap)
-// land on "/" and are rewritten in place before React ever renders, so
+// land on the home page and are rewritten in place before React ever renders, so
 // they never register as a separate URL.
 function redirectLegacyHash() {
   var raw = (window.location.hash || "").replace(/^#/, "");
   if (!raw) return false;
   var target = LEGACY_HASHES[raw];
   if (!target) return false;
-  window.location.replace(target);
+  window.location.replace(url(target));
   return true;
 }
 function useRouter() {
-  var initial = matchRoute(window.location.pathname) || matchRoute("/");
+  var initial = matchRoute(window.location.pathname) || matchRoute(url("/"));
   var state = React.useState(initial);
   var route = state[0];
   var setRoute = state[1];
   React.useEffect(function () {
     function onPop() {
-      var next = matchRoute(window.location.pathname) || matchRoute("/");
+      var next = matchRoute(window.location.pathname) || matchRoute(url("/"));
       setRoute(next);
     }
     window.addEventListener("popstate", onPop);
@@ -54,7 +54,7 @@ function useRouter() {
 }
 
 // One delegated listener instead of an onClick on every link: the nav,
-// the sidebar and the topic cards all emit ordinary <a href="/faq/">, so
+// the sidebar and the topic cards all emit ordinary <a href="/59/faq/">, so
 // they stay real, crawlable, middle-clickable links and still navigate
 // without a reload.
 function useLinkInterception(onNav) {

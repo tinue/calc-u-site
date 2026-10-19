@@ -7,6 +7,12 @@
 //
 // Every indexable page needs a real path here. Hash URLs (#faq) are the
 // old scheme and survive only as redirects — see LEGACY_HASHES.
+//
+// Paths below are relative to the site, which lives under BASE on
+// calc-u.org: route "/faq/" is the address "/59/faq/". url() makes the
+// address, matchRoute() takes one. Links written directly in the page
+// text carry the "/59" prefix themselves; .seo/check.js fails the build
+// on any root-relative URL without it.
 (function (factory) {
   var api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
@@ -72,6 +78,13 @@
     "faq":                    "/faq/"
   };
 
+  var BASE = "/59";
+
+  // Site path → address on calc-u.org.
+  function url(p) {
+    return BASE + p;
+  }
+
   // Trailing slash is canonical; "/faq" and "/faq/" resolve identically.
   function normalizePath(pathname) {
     var p = (pathname || "/").split("?")[0].split("#")[0];
@@ -80,8 +93,11 @@
     return p;
   }
 
+  // Takes an address ("/59/faq/"); anything outside BASE matches nothing.
   function matchRoute(pathname) {
     var p = normalizePath(pathname);
+    if (p.indexOf(BASE + "/") !== 0) return null;
+    p = p.slice(BASE.length);
     for (var i = 0; i < ROUTES.length; i++) {
       if (ROUTES[i].path === p) return ROUTES[i];
     }
@@ -91,8 +107,10 @@
   return {
     ROUTES: ROUTES,
     LEGACY_HASHES: LEGACY_HASHES,
+    BASE: BASE,
+    url: url,
     normalizePath: normalizePath,
     matchRoute: matchRoute,
-    ORIGIN: "https://www.calcu59.ch"
+    ORIGIN: "https://calc-u.org"
   };
 });

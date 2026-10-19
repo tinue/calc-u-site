@@ -19,8 +19,7 @@
 // in docs/vendor/ for the browser; the one extra file, the server
 // renderer, is vendored alongside this script.
 //
-// Run it after editing any .jsx, or let .github/workflows/build-site.yml
-// (see .seo/README.md) run it on push.
+// Run it after editing any .jsx (see .seo/README.md).
 
 const fs = require("fs");
 const path = require("path");
@@ -30,7 +29,7 @@ const SEO = __dirname;
 const DOCS = path.join(SEO, "..");
 const OUT_JS = path.join(DOCS, "build");
 
-const { ROUTES, ORIGIN } = require(path.join(DOCS, "routes.js"));
+const { ROUTES, ORIGIN, url } = require(path.join(DOCS, "routes.js"));
 const { PAGES, FALLBACK } = require(path.join(SEO, "pages.js"));
 
 const read = (p) => fs.readFileSync(p, "utf8");
@@ -59,7 +58,7 @@ function makeSandbox() {
     setTimeout, clearTimeout, setInterval, clearInterval,
     queueMicrotask, TextEncoder, TextDecoder, URL, Uint8Array, Math, Date, JSON,
     navigator: { userAgent: "calcu59-static-build", platform: "node" },
-    location: { pathname: "/", hash: "", search: "", href: ORIGIN + "/", replace: noop, assign: noop },
+    location: { pathname: url("/"), hash: "", search: "", href: ORIGIN + url("/"), replace: noop, assign: noop },
     history: { length: 1, pushState: noop, replaceState: noop, back: noop, state: null },
     requestAnimationFrame: () => 0,
     cancelAnimationFrame: noop,
@@ -185,7 +184,7 @@ function renderRoute(route) {
  * ------------------------------------------------------------------ */
 const APP_STORE = "https://apps.apple.com/us/app/calc-u-59/id6761413142";
 const REPO = "https://github.com/tinue/Calc-U-59";
-const OG_IMAGE = ORIGIN + "/assets/app-icon.png";
+const OG_IMAGE = ORIGIN + url("/assets/app-icon.png");
 
 const esc = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -199,10 +198,10 @@ function softwareApplicationLd() {
     applicationCategory: "UtilitiesApplication",
     applicationSubCategory: "Calculator emulator",
     operatingSystem: "macOS, iOS, iPadOS, Windows, Linux",
-    url: ORIGIN + "/",
+    url: ORIGIN + url("/"),
     downloadUrl: APP_STORE,
     installUrl: APP_STORE,
-    softwareHelp: ORIGIN + "/getting-started/",
+    softwareHelp: ORIGIN + url("/getting-started/"),
     codeRepository: REPO,
     image: OG_IMAGE,
     description:
@@ -238,7 +237,7 @@ function faqLd() {
 }
 
 function breadcrumbLd(route, meta) {
-  const items = [{ "@type": "ListItem", position: 1, name: "Calc-U 59", item: ORIGIN + "/" }];
+  const items = [{ "@type": "ListItem", position: 1, name: "Calc-U 59", item: ORIGIN + url("/") }];
   const segs = route.path.split("/").filter(Boolean);
   let acc = "";
   segs.forEach((s, i) => {
@@ -247,7 +246,7 @@ function breadcrumbLd(route, meta) {
       "@type": "ListItem",
       position: i + 2,
       name: i === segs.length - 1 ? meta.heading : s.replace(/-/g, " "),
-      item: ORIGIN + acc + "/",
+      item: ORIGIN + url(acc + "/"),
     });
   });
   return { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items };
@@ -261,19 +260,19 @@ function breadcrumbLd(route, meta) {
 // guarantees execution in document order, so the vendored globals exist
 // before the first build/ script runs.
 const VENDOR_SCRIPTS = [
-  "/vendor/react.production.min.js",
-  "/vendor/react-dom.production.min.js",
+  url("/vendor/react.production.min.js"),
+  url("/vendor/react-dom.production.min.js"),
 ];
 
 function scripts() {
-  return VENDOR_SCRIPTS.concat(SCRIPT_ORDER.map((n) => "/build/" + n))
+  return VENDOR_SCRIPTS.concat(SCRIPT_ORDER.map((n) => url("/build/" + n)))
     .map((src) => `<script src="${src}" defer></script>`)
     .join("\n");
 }
 
 function renderPage(route) {
   const meta = PAGES[route.canonical || route.path] || PAGES[route.path] || FALLBACK;
-  const canonical = ORIGIN + (route.canonical || route.path);
+  const canonical = ORIGIN + url(route.canonical || route.path);
   const isHome = route.path === "/";
 
   const ld = [];
@@ -304,12 +303,12 @@ function renderPage(route) {
 <meta name="twitter:description" content="${esc(meta.description)}">
 <meta name="twitter:image" content="${esc(OG_IMAGE)}">
 
-<link rel="icon" type="image/png" href="/assets/app-icon.png">
-<link rel="apple-touch-icon" href="/assets/app-icon.png">
+<link rel="icon" type="image/png" href="${url("/assets/app-icon.png")}">
+<link rel="apple-touch-icon" href="${url("/assets/app-icon.png")}">
 <meta name="theme-color" content="#000000">
 <meta name="apple-itunes-app" content="app-id=6761413142">
-<link rel="stylesheet" href="/colors_and_type.css">
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="${url("/colors_and_type.css")}">
+<link rel="stylesheet" href="${url("/styles.css")}">
 ${ld.map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 2)}\n</script>`).join("\n")}
 </head>
 <body>
@@ -344,7 +343,7 @@ const sitemap =
   indexable
     .map(
       (r) =>
-        `  <url>\n    <loc>${ORIGIN}${r.path}</loc>\n` +
+        `  <url>\n    <loc>${ORIGIN}${url(r.path)}</loc>\n` +
         `    <lastmod>${today}</lastmod>\n` +
         `    <priority>${r.path === "/" ? "1.0" : "0.8"}</priority>\n  </url>\n`
     )
@@ -353,28 +352,9 @@ const sitemap =
 fs.writeFileSync(path.join(DOCS, "sitemap.xml"), sitemap);
 log(`sitemap.xml  →  ${indexable.length} URLs`);
 
-fs.writeFileSync(
-  path.join(DOCS, "robots.txt"),
-  `# https://www.calcu59.ch/\nUser-agent: *\nAllow: /\n\n` +
-    `# The design preview and the installable PWA shell: no useful text to\n` +
-    `# index, and /app/ would compete with /play/.\n` +
-    `#\n` +
-    `# /build/ and /vendor/ are deliberately NOT disallowed. They hold every\n` +
-    `# script the pages load, and a crawler that cannot fetch them renders a\n` +
-    `# page without its JavaScript — which reports as a blocked resource and\n` +
-    `# leaves /play/'s calculator invisible.\n` +
-    `Disallow: /app/\nDisallow: /preview/\n\n` +
-    `Sitemap: ${ORIGIN}/sitemap.xml\n`
-);
-log("robots.txt");
-
-// GitHub Pages serves 404.html for unknown paths. Give it the homepage
-// chrome rather than the default Pages 404, and keep it out of the index.
-const notFound = renderPage({ path: "/", page: "home" })
-  .replace("<title>", '<meta name="robots" content="noindex">\n<title>')
-  .replace(/<link rel="canonical"[^>]*>\n/, "");
-fs.writeFileSync(path.join(DOCS, "404.html"), notFound);
-log("404.html");
+// robots.txt and 404.html are not generated here: search engines and
+// GitHub Pages only look for them at the domain root, so calc-u.org's
+// root owns both (see the repo README).
 
 // Jekyll would otherwise refuse to publish .seo/ — harmless — but also
 // anything else that starts with a dot or underscore. Be explicit.

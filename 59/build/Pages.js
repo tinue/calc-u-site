@@ -9,44 +9,44 @@ const STARTED_SECTIONS = [{
   items: [{
     id: "overview",
     label: "Overview",
-    href: "/getting-started/"
+    href: "/59/getting-started/"
   }]
 }, {
   title: "Setup",
   items: [{
     id: "install-mobile",
     label: "Installing on iPhone and iPad",
-    href: "/install/iphone-ipad/"
+    href: "/59/install/iphone-ipad/"
   }, {
     id: "install-mac",
     label: "Installing on Mac",
-    href: "/install/mac/"
+    href: "/59/install/mac/"
   }, {
     id: "install-pc",
     label: "Installing on Windows and Linux",
-    href: "/install/windows-linux/"
+    href: "/59/install/windows-linux/"
   }]
 }, {
   title: "Using the emulator",
   items: [{
     id: "presets",
     label: "Loading a preset",
-    href: "/presets/"
+    href: "/59/presets/"
   }, {
     id: "debugger",
     label: "Using the debugger",
-    href: "/debugger/"
+    href: "/59/debugger/"
   }, {
     id: "printer",
     label: "Printer and card reader",
-    href: "/getting-started/printer/"
+    href: "/59/getting-started/printer/"
   }]
 }, {
   title: "Help",
   items: [{
     id: "faq",
     label: "FAQ",
-    href: "/faq/"
+    href: "/59/faq/"
   },
   // The README lives on GitHub: an ordinary outbound link.
   {
@@ -61,32 +61,32 @@ const STARTED_SECTIONS = [{
 const START_CARDS = [{
   eyebrow: "Setup",
   title: "Installing on iPhone and iPad",
-  href: "/install/iphone-ipad/",
+  href: "/59/install/iphone-ipad/",
   text: "Install from the App Store, pick the calculator model, and open .ti59 files from the file picker."
 }, {
   eyebrow: "Setup",
   title: "Installing on Mac",
-  href: "/install/mac/",
+  href: "/59/install/mac/",
   text: "Download the release from GitHub and drag it to Applications."
 }, {
   eyebrow: "Setup",
   title: "Installing on Windows and Linux",
-  href: "/install/windows-linux/",
+  href: "/59/install/windows-linux/",
   text: "Run the Windows installer or the Linux AppImage from GitHub Releases."
 }, {
   eyebrow: "Files",
   title: "Loading a preset",
-  href: "/presets/",
+  href: "/59/presets/",
   text: "What .ti59, .ti58 and .ti58c files contain, and how each section — partition, program, registers, keystrokes — is applied."
 }, {
   eyebrow: "Debug",
   title: "Using the debugger",
-  href: "/debugger/",
+  href: "/59/debugger/",
   text: "The CALCULATOR, CPU and LOG tabs, freeze and step, FREEZE ON START, and binary trace files for offline analysis."
 }, {
   eyebrow: "Hardware",
   title: "Printer and card reader",
-  href: "/getting-started/printer/",
+  href: "/59/getting-started/printer/",
   text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and where card files are kept."
 }];
 function StartCards() {
@@ -110,7 +110,7 @@ function BackButton() {
   }
   return /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: "/",
+    href: "/59/",
     onClick: handleBack
   }, "\u2190 Return to start");
 }
@@ -138,7 +138,7 @@ function HomePage() {
       color: "var(--fg)"
     }
   }, "TI-59, TI-58 and TI-58C emulator"), " for macOS, Windows, Linux, iPhone and iPad. It runs the original Texas Instruments ROM, reads and writes virtual magnetic cards, emulates the PC-100C printer and all fourteen Solid State Software modules, and includes a CPU-level debugger. You can ", /*#__PURE__*/React.createElement("a", {
-    href: "/play/"
+    href: "/59/play/"
   }, "try it in your browser"), " before you install anything."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -147,18 +147,18 @@ function HomePage() {
     }
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn primary",
-    href: "/getting-started/"
+    href: "/59/getting-started/"
   }, "Getting started ", /*#__PURE__*/React.createElement("span", {
     style: {
       opacity: .5
     }
   }, "\u2192")), /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: "/reference/"
+    href: "/59/reference/"
   }, "App reference"))), /*#__PURE__*/React.createElement("div", {
     className: "hero-shot"
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/assets/app-screenshot.png",
+    src: "/59/assets/app-screenshot.png",
     alt: "The Calc-U 59 TI-59 emulator running on an iPhone, showing the red LED display, the cue card and the full key matrix"
   })), /*#__PURE__*/React.createElement("div", {
     className: "hero-cards grid-2"
@@ -218,17 +218,17 @@ function HomePage() {
       paddingLeft: 20
     }
   }, /*#__PURE__*/React.createElement("li", null, "Switchable ", /*#__PURE__*/React.createElement("strong", null, "TI-59 / TI-58 / TI-58C"), " models, with the correct memory partition and startup state for each."), /*#__PURE__*/React.createElement("li", null, "All fourteen ", /*#__PURE__*/React.createElement("strong", null, "Solid State Software"), " library modules, from the Master Library to the RPN Simulator \u2014 ", /*#__PURE__*/React.createElement("a", {
-    href: "/modules/"
+    href: "/59/modules/"
   }, "see the full list"), "."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Magnetic cards"), " read and written as files, synced between your Apple devices over iCloud."), /*#__PURE__*/React.createElement("li", null, "The ", /*#__PURE__*/React.createElement("strong", null, "PC-100C thermal printer"), ", in both a dot-matrix view and a copyable text view."), /*#__PURE__*/React.createElement("li", null, "A ", /*#__PURE__*/React.createElement("a", {
-    href: "/debugger/"
+    href: "/59/debugger/"
   }, "CPU-level debugger"), " with a live program listing, a ROM instruction trace, and binary trace capture for offline analysis."), /*#__PURE__*/React.createElement("li", null, "Plain-text ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/"
+    href: "/59/presets/"
   }, ".ti59 preset files"), " that carry a program, the registers, a cue card and a module selection in one readable file.")), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
   }, "New to these machines, or trying to work out which model you owned?", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/what-is-a-ti-59/"
+    href: "/59/what-is-a-ti-59/"
   }, "Start with the background on the TI-59 and TI-58 \u2192"))), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
@@ -238,7 +238,7 @@ function HomePage() {
       gap: 24
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/assets/app-icon.png",
+    src: "/59/assets/app-icon.png",
     alt: "",
     style: {
       width: 80,
@@ -406,7 +406,7 @@ function AboutTi59Page() {
       marginBottom: 0
     }
   }, "Calc-U 59 includes all fourteen. ", /*#__PURE__*/React.createElement("a", {
-    href: "/modules/"
+    href: "/59/modules/"
   }, "See the module list \u2192"))), /*#__PURE__*/React.createElement("h2", {
     className: "section"
   }, "The PC-100C printer"), /*#__PURE__*/React.createElement("div", {
@@ -420,7 +420,7 @@ function AboutTi59Page() {
       margin: 0
     }
   }, "The calculator docked into a thermal printer \u2014 the PC-100A, B or C \u2014 and locked in place with a key. Beyond printing results, it was how you got a readable listing of a program with mnemonics instead of raw numeric key codes, dumped the data registers, or traced execution. It is emulated in Calc-U 59, including the paper strip, which you can copy as plain text rather than squinting at dot-matrix output.", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/getting-started/printer/"
+    href: "/59/getting-started/printer/"
   }, "Printer and card reader \u2192"))), /*#__PURE__*/React.createElement("h2", {
     className: "section"
   }, "Try one"), /*#__PURE__*/React.createElement("div", {
@@ -434,13 +434,13 @@ function AboutTi59Page() {
       marginTop: 0
     }
   }, "The quickest way to see whether this is the machine you remember is to use one. The", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/play/"
+    href: "/59/play/"
   }, "browser emulator"), " runs the app's own emulator compiled to WebAssembly \u2014 a TI-59 with all fourteen library modules and a magnetic card \u2014 and needs no installation. The full app, with the TI-58 and TI-58C, the printer and the debugger, is free on the ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/mac/"
+    href: "/59/install/mac/"
   }, "Mac"), ",", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/windows-linux/"
+    href: "/59/install/windows-linux/"
   }, "Windows and Linux"), ", and", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/iphone-ipad/"
+    href: "/59/install/iphone-ipad/"
   }, "on the App Store"), " for iPhone and iPad."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0,
@@ -794,7 +794,7 @@ Style: button`;
     }
   }, "New to writing a preset from scratch? The tutorial builds one up section by section, with a downloadable file at every step."), /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: "/presets/tutorial/"
+    href: "/59/presets/tutorial/"
   }, "Preset tutorial ", /*#__PURE__*/React.createElement("span", {
     style: {
       opacity: .5
@@ -823,7 +823,7 @@ Style: button`;
       marginTop: 12
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/assets/cuecard-single-label.png",
+    src: "/59/assets/cuecard-single-label.png",
     alt: "MagnetCard cue card titled Example, with the Start label in the A key position and blank A\u2032\u2013E\u2032 and B\u2013E cells",
     style: {
       width: "100%",
@@ -893,7 +893,7 @@ Style: button`;
       marginTop: 12
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/assets/cuecard-key-grid.png",
+    src: "/59/assets/cuecard-key-grid.png",
     alt: "MagnetCard cue card titled Roots and Powers, with per-key labels on both the A\u2032\u2013E\u2032 and A\u2013E rows, including a merged x \u2192 y span",
     style: {
       width: "100%",
@@ -925,7 +925,7 @@ Style: button`;
       marginTop: 12
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/assets/cuecard-row-text.png",
+    src: "/59/assets/cuecard-row-text.png",
     alt: "CueCard titled Compound Interest, with a centered, boxed Row1 instruction line and left-aligned Row2 / right-aligned Row2R text below it",
     style: {
       width: "100%",
@@ -1023,7 +1023,7 @@ function TutorialStep({
     }
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: `/tutorial-files/${file}`,
+    href: `/59/tutorial-files/${file}`,
     download: true
   }, "Download ", filename || file)));
 }
@@ -1152,7 +1152,7 @@ REGISTERS:
   const step6 = `# TI-59 Preset File Tutorial — complete
 #
 # This file is used to explain how preset files are constructed. See
-# https://www.calcu59.ch/presets/tutorial/ for the step-by-step walkthrough.
+# https://calc-u.org/59/presets/tutorial/ for the step-by-step walkthrough.
 
 # Setup the system: Choose the model, solid state module and printer on/off
 MODEL: TI-59
@@ -1235,7 +1235,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
       marginBottom: 0
     }
   }, "None of that is required, though: you can write and edit a preset directly on an iPhone or iPad in any text editor that saves plain text, with no computer involved at all. That also means you can read this tutorial on the device itself and download each step's file straight to it \u2014 the same goes for every other preset on the", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/software/"
+    href: "/59/software/"
   }, "TI-59 Software Collection"), " page.")), /*#__PURE__*/React.createElement("div", {
     id: "txt-extension",
     className: "panel",
@@ -1299,7 +1299,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
       marginBottom: 0
     }
   }, "Load this file now and the card appears immediately \u2014 nothing on it does anything yet, because there's still no program behind the", " ", /*#__PURE__*/React.createElement("strong", null, "A"), " key. The full", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/#labeling-keys"
+    href: "/59/presets/#labeling-keys"
   }, "CUECARD field reference"), " ", "covers every field, the math-notation shortcuts, and both templates in more depth.")), /*#__PURE__*/React.createElement(TutorialStep, {
     num: 4,
     title: "Program",
@@ -1327,7 +1327,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
       marginBottom: 0
     }
   }, "To check that a value actually loaded, open the ", /*#__PURE__*/React.createElement("a", {
-    href: "/debugger/"
+    href: "/59/debugger/"
   }, "debugger"), " ", "and look at the register list \u2014 on Mac, Windows, Linux and on iPad in landscape it's visible right alongside the calculator; on iPhone (and iPad in portrait) swipe to it. The debugger has to be turned on first on iPhone/portrait iPad: enable ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), " ", "under ", /*#__PURE__*/React.createElement("strong", null, "Settings"), ", or it won't be there to swipe to.")), /*#__PURE__*/React.createElement(TutorialStep, {
     num: 6,
     title: "Keystrokes",
@@ -1354,7 +1354,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
       marginTop: 0
     }
   }, "That covers enough to write your own preset from scratch. The", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/"
+    href: "/59/presets/"
   }, "preset reference page"), " documents every section in one place, and the complete grammar \u2014 the full matrix code table, 2nd-function key codes, and the CUECARD field list \u2014 is developer documentation in the GitHub repository:", " ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
     className: "link-accent"
@@ -1363,7 +1363,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
       marginBottom: 0
     }
   }, "For more preset files to read and load, including much longer real-world programs, see the", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/software/"
+    href: "/59/software/"
   }, "TI-59 Software Collection"), ".")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
@@ -1457,7 +1457,7 @@ function DebuggerPage() {
       marginTop: 8
     }
   }, /*#__PURE__*/React.createElement("strong", null, "ASM OVERLAY"), " \u2014 below the CPU tab, ", /*#__PURE__*/React.createElement("strong", null, "Select File"), " loads a small assembly program (see the ", /*#__PURE__*/React.createElement("a", {
-    href: "/software/"
+    href: "/59/software/"
   }, "assembly examples"), "), ", /*#__PURE__*/React.createElement("strong", null, "Run"), " starts it and ", /*#__PURE__*/React.createElement("strong", null, "Clear"), " removes it. While an overlay is active, the CALCULATOR tab is unavailable."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 8,
@@ -1594,7 +1594,7 @@ function DebuggerPage() {
       margin: "0 0 10px"
     }
   }, "CALCULATOR tab \u2014 iPhone"), /*#__PURE__*/React.createElement("img", {
-    src: "/assets/iphone-debug.png",
+    src: "/59/assets/iphone-debug.png",
     alt: "iPhone screenshot showing the CALCULATOR debug tab with program listing and registers",
     style: {
       width: "auto",
@@ -1615,7 +1615,7 @@ function DebuggerPage() {
       margin: "0 0 10px"
     }
   }, "CALCULATOR tab \u2014 iPad"), /*#__PURE__*/React.createElement("img", {
-    src: "/assets/ipad-13-2752x2064.png",
+    src: "/59/assets/ipad-13-2752x2064.png",
     alt: "iPad screenshot showing the CALCULATOR debug tab",
     style: {
       width: "100%",
@@ -1634,7 +1634,7 @@ function DebuggerPage() {
       margin: "0 0 10px"
     }
   }, "CPU tab \u2014 iPad"), /*#__PURE__*/React.createElement("img", {
-    src: "/assets/ipad-2752x2064-asm.png",
+    src: "/59/assets/ipad-2752x2064-asm.png",
     alt: "iPad screenshot showing the CPU debug tab with execution trace",
     style: {
       width: "100%",
@@ -1716,7 +1716,7 @@ function ReferencePage() {
       marginBottom: 0
     }
   }, "The CALCULATOR and CPU tabs have different step semantics: CALCULATOR advances one program step, as SST does; CPU advances exactly one ROM opcode. See ", /*#__PURE__*/React.createElement("a", {
-    href: "/debugger/"
+    href: "/59/debugger/"
   }, "Using the debugger"), ".")), /*#__PURE__*/React.createElement("h2", {
     className: "section"
   }, "Settings"), /*#__PURE__*/React.createElement("div", {
@@ -1749,7 +1749,7 @@ function ReferencePage() {
       position: "relative"
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/assets/app-screenshot.png",
+    src: "/59/assets/app-screenshot.png",
     alt: "Calc-U 59 main app screenshot with annotated interface regions and toolbar buttons",
     style: {
       width: "100%",
@@ -1974,13 +1974,13 @@ const FAQS = [{
 }, {
   question: "How do I create the cards that label the A-E and A'-E' keys?",
   answer: /*#__PURE__*/React.createElement(React.Fragment, null, "Add a ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section to a preset: set", " ", /*#__PURE__*/React.createElement("strong", null, "Template"), " to ", /*#__PURE__*/React.createElement("code", null, "MagnetCard"), " or", " ", /*#__PURE__*/React.createElement("code", null, "CueCard"), ", then fill in fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " ", "through ", /*#__PURE__*/React.createElement("strong", null, "E"), " and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through", " ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " for the two key rows. Load that file (or write it onto a virtual magnetic card to keep the label with the card) and it appears on screen. See", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/#labeling-keys",
+    href: "/59/presets/#labeling-keys",
     className: "link-accent"
   }, "Loading a preset \u2192 Labeling the A\u2013E and A\u2032\u2013E\u2032 keys"), " ", "for the format, the math shortcuts, and the loading options.")
 }, {
   question: "I wrote a preset file myself, but the app shows it grayed out and won't load it. Why?",
   answer: /*#__PURE__*/React.createElement(React.Fragment, null, "Almost always a hidden ", /*#__PURE__*/React.createElement("strong", null, ".txt"), " extension. Some text editors, and Finder/Explorer with extensions hidden, save", " ", /*#__PURE__*/React.createElement("code", null, "my-preset.ti59"), " as ", /*#__PURE__*/React.createElement("code", null, "my-preset.ti59.txt"), " ", "without showing it \u2014 the file looks right in the file browser, but the preset picker only accepts ", /*#__PURE__*/React.createElement("code", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("code", null, ".ti58"), " ", "and ", /*#__PURE__*/React.createElement("code", null, ".ti58c"), ", so it's shown grayed out and can't be selected. Turn on \"Show file extensions\" (Explorer) or \"Show all filename extensions\" (Finder), or rename the file from a terminal, and it should load normally. See", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/tutorial/#txt-extension",
+    href: "/59/presets/tutorial/#txt-extension",
     className: "link-accent"
   }, "the preset tutorial"), " ", "for more on avoiding this.")
 }];
@@ -2373,19 +2373,19 @@ function SoftwarePage() {
       marginTop: 0
     }
   }, "Each entry below is a ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/"
+    href: "/59/presets/"
   }, "preset file"), " \u2014 the calculator's program, registers and (where the original used one) magnetic-card cue card, ready to load. Programs marked ", /*#__PURE__*/React.createElement("strong", null, "Requires printer"), " ", "need the emulated PC-100/PC-100C \u2014 available in the full app, not the browser emulator below."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
   }, "Get Calc-U 59 for ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/mac/"
+    href: "/59/install/mac/"
   }, "Mac"), ",", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/windows-linux/"
+    href: "/59/install/windows-linux/"
   }, "Windows and Linux"), " or", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/iphone-ipad/"
+    href: "/59/install/iphone-ipad/"
   }, "iPhone and iPad"), ", then open a downloaded file, or try the", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/play/"
+    href: "/59/play/"
   }, "browser emulator"), " first \u2014 it has no printer, but the utilities below that don't need one will run.")), categories.map(cat => /*#__PURE__*/React.createElement(React.Fragment, {
     key: cat.heading
   }, /*#__PURE__*/React.createElement("h2", {
@@ -2423,7 +2423,7 @@ function SoftwarePage() {
     }
   }, it.title), /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: `/software-files/${it.file}`,
+    href: `/59/software-files/${it.file}`,
     download: true
   }, "Download ", it.file.replace(/^assembly\//, ""))), /*#__PURE__*/React.createElement("p", {
     style: {
@@ -2451,9 +2451,9 @@ function SoftwarePage() {
   }, "These files are maintained in the ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59/tree/main/examples"
   }, "examples/ directory"), " of the Calc-U 59 repository \u2014 its name predates this collection outgrowing \"examples\" \u2014 together with a few internal debugging and screenshot-test files not listed here. The", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/"
+    href: "/59/presets/"
   }, "preset file format"), " is documented if you want to write your own \u2014 the", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/presets/tutorial/"
+    href: "/59/presets/tutorial/"
   }, "tutorial"), " walks through building one from scratch \u2014 and the debugger's ASM Overlay is documented for the assembly examples above."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0,
@@ -2515,7 +2515,7 @@ function PlayPage() {
     }
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: "/app/"
+    href: "/59/app/"
   }, "Open as a standalone app ", /*#__PURE__*/React.createElement("span", {
     style: {
       opacity: .5
@@ -2528,17 +2528,17 @@ function PlayPage() {
   }, "TI-59 emulator, online"), /*#__PURE__*/React.createElement("div", {
     className: "prose"
   }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original TI-59 ROM. The debugger and the printer are not part of this build; everything else works."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default. Switch modules (that resets the calculator, as swapping the real module did), load one of the curated presets, or upload your own ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), " file below the keyboard \u2014 uploads are read entirely in your browser and never leave your machine. For more programs to try, including several that need the full app's PC-100 printer, see the", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/software/"
+    href: "/59/software/"
   }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Queue Card"), " passes a virtual magnetic card through the reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1: ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then Queue Card. To load it back, press Queue Card while the calculator is idle and it reads the card. The card starts blank and keeps whatever was last written until you leave the page."), /*#__PURE__*/React.createElement("p", null, "For the TI-58 and TI-58C models, the PC-100C printer, card files you keep and the CPU debugger, use the full app: free on the ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/mac/"
+    href: "/59/install/mac/"
   }, "Mac"), " and on", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/windows-linux/"
+    href: "/59/install/windows-linux/"
   }, "Windows and Linux"), ", or", " ", /*#__PURE__*/React.createElement("a", {
-    href: "/install/iphone-ipad/"
+    href: "/59/install/iphone-ipad/"
   }, "on the App Store"), " for iPhone and iPad. If you are not sure what any of this is, ", /*#__PURE__*/React.createElement("a", {
-    href: "/what-is-a-ti-59/"
+    href: "/59/what-is-a-ti-59/"
   }, "start here"), "."), /*#__PURE__*/React.createElement("p", null, "Prefer this without the browser chrome? ", /*#__PURE__*/React.createElement("a", {
-    href: "/app/"
+    href: "/59/app/"
   }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {

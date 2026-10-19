@@ -20,31 +20,31 @@ function SiteHeader({
   const items = [{
     id: "home",
     label: "Overview",
-    href: "/"
+    href: "/59/"
   }, {
     id: "start",
     label: "Getting Started",
-    href: "/getting-started/"
+    href: "/59/getting-started/"
   }, {
     id: "play",
     label: "Play",
-    href: "/play/"
+    href: "/59/play/"
   }, {
     id: "ref",
     label: "App Reference",
-    href: "/reference/"
+    href: "/59/reference/"
   }, {
     id: "modules",
     label: "Modules",
-    href: "/modules/"
+    href: "/59/modules/"
   }, {
     id: "software",
     label: "Software",
-    href: "/software/"
+    href: "/59/software/"
   }, {
     id: "faq",
     label: "FAQ",
-    href: "/faq/"
+    href: "/59/faq/"
   }];
   // Under 1060px the links collapse behind a disclosure button (styles.css).
   // They are hidden with CSS rather than unmounted, so the markup a crawler
@@ -62,10 +62,10 @@ function SiteHeader({
     className: "inner"
   }, /*#__PURE__*/React.createElement("a", {
     className: "brand",
-    href: "/"
+    href: "/59/"
   }, /*#__PURE__*/React.createElement("img", {
     className: "app-icon",
-    src: "/assets/app-icon.png",
+    src: "/59/assets/app-icon.png",
     alt: "Calc-U 59 \u2014 TI-59 emulator app icon"
   }), /*#__PURE__*/React.createElement("div", {
     className: "wm"
@@ -118,13 +118,13 @@ function SiteFooter() {
       color: "var(--fg-2)"
     }
   }, "Calc-U 59"), /*#__PURE__*/React.createElement("a", {
-    href: "/what-is-a-ti-59/"
+    href: "/59/what-is-a-ti-59/"
   }, "What is a TI-59?"), /*#__PURE__*/React.createElement("a", {
-    href: "/play/"
+    href: "/59/play/"
   }, "Online emulator"), /*#__PURE__*/React.createElement("a", {
-    href: "/software/"
+    href: "/59/software/"
   }, "TI-59 Software Collection"), /*#__PURE__*/React.createElement("a", {
-    href: "/app/"
+    href: "/59/app/"
   }, "Install the web app"), /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59"
   }, "GitHub"), /*#__PURE__*/React.createElement("a", {

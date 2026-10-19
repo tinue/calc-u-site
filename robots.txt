@@ -1,2 +1,18 @@
+# https://calc-u.org/
+# Under construction: keep everything out of search engines until launch.
 User-agent: *
 Disallow: /
+
+# At launch, replace the two lines above with:
+#
+#   User-agent: *
+#   Allow: /
+#
+#   # Calc-U-59: the design preview and the installable PWA shell have no
+#   # useful text to index, and /59/app/ would compete with /59/play/.
+#   # /59/build/ and /59/vendor/ stay crawlable: they hold the scripts a
+#   # crawler needs to render the pages.
+#   Disallow: /59/app/
+#   Disallow: /59/preview/
+#
+#   Sitemap: https://calc-u.org/59/sitemap.xml

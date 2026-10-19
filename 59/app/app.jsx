@@ -111,7 +111,7 @@ function StandaloneApp() {
 }
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/app/sw.js");
+  navigator.serviceWorker.register("/59/app/sw.js");
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<StandaloneApp />);

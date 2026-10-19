@@ -6,20 +6,20 @@
 // page; every other item is a page of its own.
 const STARTED_SECTIONS = [
   { title: "Start here", items: [
-    { id: "overview", label: "Overview", href: "/getting-started/" },
+    { id: "overview", label: "Overview", href: "/59/getting-started/" },
   ]},
   { title: "Setup", items: [
-    { id: "install-mobile", label: "Installing on iPhone and iPad", href: "/install/iphone-ipad/" },
-    { id: "install-mac", label: "Installing on Mac", href: "/install/mac/" },
-    { id: "install-pc", label: "Installing on Windows and Linux", href: "/install/windows-linux/" },
+    { id: "install-mobile", label: "Installing on iPhone and iPad", href: "/59/install/iphone-ipad/" },
+    { id: "install-mac", label: "Installing on Mac", href: "/59/install/mac/" },
+    { id: "install-pc", label: "Installing on Windows and Linux", href: "/59/install/windows-linux/" },
   ]},
   { title: "Using the emulator", items: [
-    { id: "presets", label: "Loading a preset", href: "/presets/" },
-    { id: "debugger", label: "Using the debugger", href: "/debugger/" },
-    { id: "printer", label: "Printer and card reader", href: "/getting-started/printer/" },
+    { id: "presets", label: "Loading a preset", href: "/59/presets/" },
+    { id: "debugger", label: "Using the debugger", href: "/59/debugger/" },
+    { id: "printer", label: "Printer and card reader", href: "/59/getting-started/printer/" },
   ]},
   { title: "Help", items: [
-    { id: "faq", label: "FAQ", href: "/faq/" },
+    { id: "faq", label: "FAQ", href: "/59/faq/" },
     // The README lives on GitHub: an ordinary outbound link.
     { id: "readme", label: "Main README", href: "https://github.com/tinue/Calc-U-59/blob/main/README.md", external: true },
   ]},
@@ -27,17 +27,17 @@ const STARTED_SECTIONS = [
 
 // The topic cards of the home page and of /getting-started/.
 const START_CARDS = [
-  { eyebrow: "Setup", title: "Installing on iPhone and iPad", href: "/install/iphone-ipad/",
+  { eyebrow: "Setup", title: "Installing on iPhone and iPad", href: "/59/install/iphone-ipad/",
     text: "Install from the App Store, pick the calculator model, and open .ti59 files from the file picker." },
-  { eyebrow: "Setup", title: "Installing on Mac", href: "/install/mac/",
+  { eyebrow: "Setup", title: "Installing on Mac", href: "/59/install/mac/",
     text: "Download the release from GitHub and drag it to Applications." },
-  { eyebrow: "Setup", title: "Installing on Windows and Linux", href: "/install/windows-linux/",
+  { eyebrow: "Setup", title: "Installing on Windows and Linux", href: "/59/install/windows-linux/",
     text: "Run the Windows installer or the Linux AppImage from GitHub Releases." },
-  { eyebrow: "Files", title: "Loading a preset", href: "/presets/",
+  { eyebrow: "Files", title: "Loading a preset", href: "/59/presets/",
     text: "What .ti59, .ti58 and .ti58c files contain, and how each section — partition, program, registers, keystrokes — is applied." },
-  { eyebrow: "Debug", title: "Using the debugger", href: "/debugger/",
+  { eyebrow: "Debug", title: "Using the debugger", href: "/59/debugger/",
     text: "The CALCULATOR, CPU and LOG tabs, freeze and step, FREEZE ON START, and binary trace files for offline analysis." },
-  { eyebrow: "Hardware", title: "Printer and card reader", href: "/getting-started/printer/",
+  { eyebrow: "Hardware", title: "Printer and card reader", href: "/59/getting-started/printer/",
     text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and where card files are kept." },
 ];
 
@@ -55,7 +55,7 @@ function BackButton() {
   function handleBack(e) {
     if (history.length > 1) { e.preventDefault(); history.back(); }
   }
-  return <a className="btn secondary" href="/" onClick={handleBack}>← Return to start</a>;
+  return <a className="btn secondary" href="/59/" onClick={handleBack}>← Return to start</a>;
 }
 
 /* =============================================================
@@ -70,17 +70,17 @@ function HomePage() {
           <div className="hero-copy">
             <p className="eyebrow">TI-59 emulator for Mac, Windows, Linux, iPhone and iPad</p>
             <h1 className="page-title">Calc-U <em>59</em></h1>
-            <p className="lede">Calc-U 59 is a <strong style={{ color: "var(--fg)" }}>TI-59, TI-58 and TI-58C emulator</strong> for macOS, Windows, Linux, iPhone and iPad. It runs the original Texas Instruments ROM, reads and writes virtual magnetic cards, emulates the PC-100C printer and all fourteen Solid State Software modules, and includes a CPU-level debugger. You can <a href="/play/">try it in your browser</a> before you install anything.</p>
+            <p className="lede">Calc-U 59 is a <strong style={{ color: "var(--fg)" }}>TI-59, TI-58 and TI-58C emulator</strong> for macOS, Windows, Linux, iPhone and iPad. It runs the original Texas Instruments ROM, reads and writes virtual magnetic cards, emulates the PC-100C printer and all fourteen Solid State Software modules, and includes a CPU-level debugger. You can <a href="/59/play/">try it in your browser</a> before you install anything.</p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <a className="btn primary" href="/getting-started/">Getting started <span style={{opacity:.5}}>→</span></a>
-              <a className="btn secondary" href="/reference/">App reference</a>
+              <a className="btn primary" href="/59/getting-started/">Getting started <span style={{opacity:.5}}>→</span></a>
+              <a className="btn secondary" href="/59/reference/">App reference</a>
             </div>
           </div>
           {/* Placed by .hero into the right-hand column on a wide screen and
               directly under the pitch once the hero stacks. */}
           <div className="hero-shot">
             <img
-              src="/assets/app-screenshot.png"
+              src="/59/assets/app-screenshot.png"
               alt="The Calc-U 59 TI-59 emulator running on an iPhone, showing the red LED display, the cue card and the full key matrix"
             />
           </div>
@@ -124,15 +124,15 @@ function HomePage() {
           </p>
           <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
             <li>Switchable <strong>TI-59 / TI-58 / TI-58C</strong> models, with the correct memory partition and startup state for each.</li>
-            <li>All fourteen <strong>Solid State Software</strong> library modules, from the Master Library to the RPN Simulator — <a href="/modules/">see the full list</a>.</li>
+            <li>All fourteen <strong>Solid State Software</strong> library modules, from the Master Library to the RPN Simulator — <a href="/59/modules/">see the full list</a>.</li>
             <li><strong>Magnetic cards</strong> read and written as files, synced between your Apple devices over iCloud.</li>
             <li>The <strong>PC-100C thermal printer</strong>, in both a dot-matrix view and a copyable text view.</li>
-            <li>A <a href="/debugger/">CPU-level debugger</a> with a live program listing, a ROM instruction trace, and binary trace capture for offline analysis.</li>
-            <li>Plain-text <a href="/presets/">.ti59 preset files</a> that carry a program, the registers, a cue card and a module selection in one readable file.</li>
+            <li>A <a href="/59/debugger/">CPU-level debugger</a> with a live program listing, a ROM instruction trace, and binary trace capture for offline analysis.</li>
+            <li>Plain-text <a href="/59/presets/">.ti59 preset files</a> that carry a program, the registers, a cue card and a module selection in one readable file.</li>
           </ul>
           <p style={{ marginBottom: 0 }}>
             New to these machines, or trying to work out which model you owned?{" "}
-            <a href="/what-is-a-ti-59/">Start with the background on the TI-59 and TI-58 →</a>
+            <a href="/59/what-is-a-ti-59/">Start with the background on the TI-59 and TI-58 →</a>
           </p>
         </div>
 
@@ -140,7 +140,7 @@ function HomePage() {
         <div className="panel" style={{
           marginTop: 48, display: "flex", alignItems: "center", gap: 24,
         }}>
-          <img src="/assets/app-icon.png" alt=""
+          <img src="/59/assets/app-icon.png" alt=""
                style={{ width: 80, height: 80, borderRadius: 18, flex: "0 0 auto" }}/>
           <div>
             <h3 className="sub" style={{ margin: "0 0 4px" }}>Available now</h3>
@@ -279,7 +279,7 @@ function AboutTi59Page() {
           complete set is now hard to find and expensive.
         </p>
         <p style={{ marginBottom: 0 }}>
-          Calc-U 59 includes all fourteen. <a href="/modules/">See the module list →</a>
+          Calc-U 59 includes all fourteen. <a href="/59/modules/">See the module list →</a>
         </p>
       </div>
 
@@ -291,7 +291,7 @@ function AboutTi59Page() {
           with mnemonics instead of raw numeric key codes, dumped the data registers, or traced
           execution. It is emulated in Calc-U 59, including the paper strip, which you can copy as
           plain text rather than squinting at dot-matrix output.{" "}
-          <a href="/getting-started/printer/">Printer and card reader →</a>
+          <a href="/59/getting-started/printer/">Printer and card reader →</a>
         </p>
       </div>
 
@@ -299,12 +299,12 @@ function AboutTi59Page() {
       <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}>
           The quickest way to see whether this is the machine you remember is to use one. The{" "}
-          <a href="/play/">browser emulator</a> runs the app's own emulator compiled to
+          <a href="/59/play/">browser emulator</a> runs the app's own emulator compiled to
           WebAssembly — a TI-59 with all fourteen library modules and a magnetic card — and needs
           no installation. The full app, with the TI-58 and TI-58C, the printer and the debugger,
-          is free on the <a href="/install/mac/">Mac</a>,{" "}
-          <a href="/install/windows-linux/">Windows and Linux</a>, and{" "}
-          <a href="/install/iphone-ipad/">on the App Store</a> for iPhone and iPad.
+          is free on the <a href="/59/install/mac/">Mac</a>,{" "}
+          <a href="/59/install/windows-linux/">Windows and Linux</a>, and{" "}
+          <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad.
         </p>
         <p style={{ marginBottom: 0, color: "var(--fg-3)", fontSize: 13 }}>
           For the original operating manuals, program libraries and the wider TI-59 community,
@@ -566,7 +566,7 @@ Style: button`;
 
       <div className="panel" style={{ padding: 16, marginTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
         <p style={{ margin: 0, lineHeight: 1.6 }}>New to writing a preset from scratch? The tutorial builds one up section by section, with a downloadable file at every step.</p>
-        <a className="btn secondary" href="/presets/tutorial/">Preset tutorial <span style={{opacity:.5}}>→</span></a>
+        <a className="btn secondary" href="/59/presets/tutorial/">Preset tutorial <span style={{opacity:.5}}>→</span></a>
       </div>
 
       <div className="panel" style={{ padding: 20, marginTop: 12 }}>
@@ -584,7 +584,7 @@ Style: button`;
 
       <div className="panel" style={{ padding: 16, marginTop: 12 }}>
         <img
-          src="/assets/cuecard-single-label.png"
+          src="/59/assets/cuecard-single-label.png"
           alt="MagnetCard cue card titled Example, with the Start label in the A key position and blank A′–E′ and B–E cells"
           style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
         />
@@ -689,7 +689,7 @@ Style: button`;
 
       <div className="panel" style={{ padding: 16, marginTop: 12 }}>
         <img
-          src="/assets/cuecard-key-grid.png"
+          src="/59/assets/cuecard-key-grid.png"
           alt="MagnetCard cue card titled Roots and Powers, with per-key labels on both the A′–E′ and A–E rows, including a merged x → y span"
           style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
         />
@@ -710,7 +710,7 @@ Style: button`;
 
       <div className="panel" style={{ padding: 16, marginTop: 12 }}>
         <img
-          src="/assets/cuecard-row-text.png"
+          src="/59/assets/cuecard-row-text.png"
           alt="CueCard titled Compound Interest, with a centered, boxed Row1 instruction line and left-aligned Row2 / right-aligned Row2R text below it"
           style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
         />
@@ -773,7 +773,7 @@ function TutorialStep({ num, title, children, code, file, filename }) {
         }}>{code}</pre>
       </div>
       <div style={{ marginTop: 12, textAlign: "right" }}>
-        <a className="btn secondary" href={`/tutorial-files/${file}`} download>
+        <a className="btn secondary" href={`/59/tutorial-files/${file}`} download>
           Download {filename || file}
         </a>
       </div>
@@ -911,7 +911,7 @@ REGISTERS:
   const step6 = `# TI-59 Preset File Tutorial — complete
 #
 # This file is used to explain how preset files are constructed. See
-# https://www.calcu59.ch/presets/tutorial/ for the step-by-step walkthrough.
+# https://calc-u.org/59/presets/tutorial/ for the step-by-step walkthrough.
 
 # Setup the system: Choose the model, solid state module and printer on/off
 MODEL: TI-59
@@ -1001,7 +1001,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
           text, with no computer involved at all. That also means you can
           read this tutorial on the device itself and download each step's
           file straight to it — the same goes for every other preset on the{" "}
-          <a href="/software/">TI-59 Software Collection</a> page.
+          <a href="/59/software/">TI-59 Software Collection</a> page.
         </p>
       </div>
 
@@ -1091,7 +1091,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
           Load this file now and the card appears immediately — nothing on
           it does anything yet, because there's still no program behind the{" "}
           <strong>A</strong> key. The full{" "}
-          <a href="/presets/#labeling-keys">CUECARD field reference</a>{" "}
+          <a href="/59/presets/#labeling-keys">CUECARD field reference</a>{" "}
           covers every field, the math-notation shortcuts, and both
           templates in more depth.
         </p>
@@ -1131,7 +1131,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
           has something worth recalling with <strong>RCL</strong>.
         </p>
         <p style={{ marginBottom: 0 }}>
-          To check that a value actually loaded, open the <a href="/debugger/">debugger</a>{" "}
+          To check that a value actually loaded, open the <a href="/59/debugger/">debugger</a>{" "}
           and look at the register list — on Mac, Windows, Linux and on iPad
           in landscape it's visible right alongside the calculator; on iPhone (and iPad in
           portrait) swipe to it. The debugger has to be turned on first on
@@ -1165,7 +1165,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
       <div className="panel" style={{ padding: 20, marginTop: 32, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}>
           That covers enough to write your own preset from scratch. The{" "}
-          <a href="/presets/">preset reference page</a> documents every
+          <a href="/59/presets/">preset reference page</a> documents every
           section in one place, and the complete grammar — the full matrix
           code table, 2nd-function key codes, and the CUECARD field list —
           is developer documentation in the GitHub repository:{" "}
@@ -1176,7 +1176,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
         <p style={{ marginBottom: 0 }}>
           For more preset files to read and load, including much longer
           real-world programs, see the{" "}
-          <a href="/software/">TI-59 Software Collection</a>.
+          <a href="/59/software/">TI-59 Software Collection</a>.
         </p>
       </div>
 
@@ -1239,7 +1239,7 @@ function DebuggerPage() {
           <strong>ROM HEATMAP</strong> — shows how often each ROM address ran; <strong>CLR</strong> starts it over. It resets when you switch to the CPU tab, unless the CPU is frozen.
         </p>
         <p style={{ marginTop: 8 }}>
-          <strong>ASM OVERLAY</strong> — below the CPU tab, <strong>Select File</strong> loads a small assembly program (see the <a href="/software/">assembly examples</a>), <strong>Run</strong> starts it and <strong>Clear</strong> removes it. While an overlay is active, the CALCULATOR tab is unavailable.
+          <strong>ASM OVERLAY</strong> — below the CPU tab, <strong>Select File</strong> loads a small assembly program (see the <a href="/59/software/">assembly examples</a>), <strong>Run</strong> starts it and <strong>Clear</strong> removes it. While an overlay is active, the CALCULATOR tab is unavailable.
         </p>
         <p style={{ marginTop: 8, marginBottom: 0 }}>
           <strong>Note on TEST/JUMP flags:</strong> because state is captured <em>after</em> each instruction, a TEST shows the flag it set, but the following JUMP shows the auto-restored condition (usually 1). This is expected behaviour — it is not a bug.
@@ -1319,7 +1319,7 @@ function DebuggerPage() {
         <div className="panel" style={{ padding: 16 }}>
           <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPhone</h3>
           <img
-            src="/assets/iphone-debug.png"
+            src="/59/assets/iphone-debug.png"
             alt="iPhone screenshot showing the CALCULATOR debug tab with program listing and registers"
             style={{ width: "auto", maxWidth: "60%", height: "auto", display: "block", borderRadius: 8, margin: "0 auto" }}
           />
@@ -1327,7 +1327,7 @@ function DebuggerPage() {
         <div className="panel" style={{ padding: 16 }}>
           <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPad</h3>
           <img
-            src="/assets/ipad-13-2752x2064.png"
+            src="/59/assets/ipad-13-2752x2064.png"
             alt="iPad screenshot showing the CALCULATOR debug tab"
             style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
           />
@@ -1335,7 +1335,7 @@ function DebuggerPage() {
         <div className="panel" style={{ padding: 16 }}>
           <h3 className="sub" style={{ margin: "0 0 10px" }}>CPU tab — iPad</h3>
           <img
-            src="/assets/ipad-2752x2064-asm.png"
+            src="/59/assets/ipad-2752x2064-asm.png"
             alt="iPad screenshot showing the CPU debug tab with execution trace"
             style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
           />
@@ -1397,7 +1397,7 @@ function ReferencePage() {
             <li><strong>LOG</strong> — Dumps of the SCOM registers, memory, program and variables, the debug log level, and the TRACE toggle. Use TRACE to capture a binary session file for detailed analysis with read_trace.py.</li>
           </ul>
           <p style={{ marginTop: 8, marginBottom: 0 }}>
-            The CALCULATOR and CPU tabs have different step semantics: CALCULATOR advances one program step, as SST does; CPU advances exactly one ROM opcode. See <a href="/debugger/">Using the debugger</a>.
+            The CALCULATOR and CPU tabs have different step semantics: CALCULATOR advances one program step, as SST does; CPU advances exactly one ROM opcode. See <a href="/59/debugger/">Using the debugger</a>.
           </p>
         </div>
 
@@ -1420,7 +1420,7 @@ function ReferencePage() {
         <div className="panel" style={{ padding: 14 }}>
           <div style={{ position: "relative" }}>
             <img
-              src="/assets/app-screenshot.png"
+              src="/59/assets/app-screenshot.png"
               alt="Calc-U 59 main app screenshot with annotated interface regions and toolbar buttons"
               style={{ width: "100%", height: "auto", display: "block", borderRadius: 10 }}
             />
@@ -1521,7 +1521,7 @@ const FAQS = [
         <strong>E′</strong> for the two key rows. Load that file (or write it
         onto a virtual magnetic card to keep the label with the card) and it
         appears on screen. See{" "}
-        <a href="/presets/#labeling-keys" className="link-accent">
+        <a href="/59/presets/#labeling-keys" className="link-accent">
           Loading a preset → Labeling the A–E and A′–E′ keys
         </a>{" "}
         for the format, the math shortcuts, and the loading options.
@@ -1541,7 +1541,7 @@ const FAQS = [
         selected. Turn on "Show file extensions" (Explorer) or "Show all
         filename extensions" (Finder), or rename the file from a terminal,
         and it should load normally. See{" "}
-        <a href="/presets/tutorial/#txt-extension" className="link-accent">
+        <a href="/59/presets/tutorial/#txt-extension" className="link-accent">
           the preset tutorial
         </a>{" "}
         for more on avoiding this.
@@ -1748,15 +1748,15 @@ function SoftwarePage() {
       <div className="panel" style={{ padding: 20, marginTop: 24, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}>
           Each entry below is a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong>{" "}
-          <a href="/presets/">preset file</a> — the calculator's program, registers and (where the
+          <a href="/59/presets/">preset file</a> — the calculator's program, registers and (where the
           original used one) magnetic-card cue card, ready to load. Programs marked <strong>Requires printer</strong>{" "}
           need the emulated PC-100/PC-100C — available in the full app, not the browser emulator below.
         </p>
         <p style={{ marginBottom: 0 }}>
-          Get Calc-U 59 for <a href="/install/mac/">Mac</a>,{" "}
-          <a href="/install/windows-linux/">Windows and Linux</a> or{" "}
-          <a href="/install/iphone-ipad/">iPhone and iPad</a>, then open a downloaded file, or try the{" "}
-          <a href="/play/">browser emulator</a> first — it has no printer, but the utilities below that don't
+          Get Calc-U 59 for <a href="/59/install/mac/">Mac</a>,{" "}
+          <a href="/59/install/windows-linux/">Windows and Linux</a> or{" "}
+          <a href="/59/install/iphone-ipad/">iPhone and iPad</a>, then open a downloaded file, or try the{" "}
+          <a href="/59/play/">browser emulator</a> first — it has no printer, but the utilities below that don't
           need one will run.
         </p>
       </div>
@@ -1770,7 +1770,7 @@ function SoftwarePage() {
               <div key={it.file} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "4px 16px" }}>
                   <h3 className="sub" style={{ margin: 0 }}>{it.title}</h3>
-                  <a className="btn secondary" href={`/software-files/${it.file}`} download>
+                  <a className="btn secondary" href={`/59/software-files/${it.file}`} download>
                     Download {it.file.replace(/^assembly\//, "")}
                   </a>
                 </div>
@@ -1790,8 +1790,8 @@ function SoftwarePage() {
           These files are maintained in the <a href="https://github.com/tinue/Calc-U-59/tree/main/examples">
           examples/ directory</a> of the Calc-U 59 repository — its name predates this collection outgrowing
           "examples" — together with a few internal debugging and screenshot-test files not listed here. The{" "}
-          <a href="/presets/">preset file format</a> is documented if you want to write your own — the{" "}
-          <a href="/presets/tutorial/">tutorial</a> walks through building one from scratch — and the
+          <a href="/59/presets/">preset file format</a> is documented if you want to write your own — the{" "}
+          <a href="/59/presets/tutorial/">tutorial</a> walks through building one from scratch — and the
           debugger's ASM Overlay is documented for the assembly examples above.
         </p>
         <p style={{ marginBottom: 0, color: "var(--fg-3)", fontSize: 13 }}>
@@ -1845,7 +1845,7 @@ function PlayPage() {
         <PlayCalculator scale={scale} keyboard />
       </div>
       <div style={{ textAlign: "center", marginTop: 12 }}>
-        <a className="btn secondary" href="/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
+        <a className="btn secondary" href="/59/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
       </div>
 
       <h1 className="page-title" style={{ marginTop: 32 }}>TI-59 emulator, online</h1>
@@ -1862,7 +1862,7 @@ function PlayPage() {
           calculator, as swapping the real module did), load one of the curated presets, or upload your own <strong>.ti59</strong> file below the keyboard — uploads are
           read entirely in your browser and never leave your machine. For more programs to try,
           including several that need the full app's PC-100 printer, see the{" "}
-          <a href="/software/">TI-59 Software Collection</a>.
+          <a href="/59/software/">TI-59 Software Collection</a>.
         </p>
         <p>
           Press <strong>2nd</strong> then <strong>Pgm</strong> then a two-digit program number to
@@ -1877,13 +1877,13 @@ function PlayPage() {
         </p>
         <p>
           For the TI-58 and TI-58C models, the PC-100C printer, card files you keep and the CPU
-          debugger, use the full app: free on the <a href="/install/mac/">Mac</a> and on{" "}
-          <a href="/install/windows-linux/">Windows and Linux</a>, or{" "}
-          <a href="/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. If you are
-          not sure what any of this is, <a href="/what-is-a-ti-59/">start here</a>.
+          debugger, use the full app: free on the <a href="/59/install/mac/">Mac</a> and on{" "}
+          <a href="/59/install/windows-linux/">Windows and Linux</a>, or{" "}
+          <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. If you are
+          not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
         </p>
         <p>
-          Prefer this without the browser chrome? <a href="/app/">Open the standalone app</a> — the
+          Prefer this without the browser chrome? <a href="/59/app/">Open the standalone app</a> — the
           same calculator alone at its own address, installable to your phone's home screen for a
           one-tap, full-screen launch.
         </p>

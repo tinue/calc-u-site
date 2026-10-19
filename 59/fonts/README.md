@@ -2,7 +2,7 @@
 
 **Done — this is the current state, not a plan.** `colors_and_type.css` does
 `@import "fonts/self-hosted.css"`, and every `.woff2` in this folder is served
-from `calcu59.ch`. Two reasons, and they are why it must stay that way:
+from `calc-u.org`. Two reasons, and they are why it must stay that way:
 
 1. **Privacy / law.** Loading Google Fonts from Google's CDN sends every visitor's IP to Google. A German court (LG München I, 2022) ruled that a GDPR violation; Swiss FADP expectations are similar. Self-hosting keeps visitor data on your domain.
 2. **Reliability + speed.** No dependency on Google being reachable; no extra DNS/TLS to `fonts.googleapis.com` + `fonts.gstatic.com`.
@@ -24,4 +24,4 @@ re-introducing a CDN `@import` here will be caught rather than shipped.
 
 ## Verify it worked
 
-Open the live site → DevTools → **Network** → filter **Font** → reload. Every `.woff2` should load from `calcu59.ch`, status 200. Then check **Computed → Rendered Fonts** on a heading: it should read `Archivo`.
+Open the live site → DevTools → **Network** → filter **Font** → reload. Every `.woff2` should load from `calc-u.org`, status 200. Then check **Computed → Rendered Fonts** on a heading: it should read `Archivo`.

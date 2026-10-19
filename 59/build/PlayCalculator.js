@@ -63,7 +63,7 @@ function PlayCalculator({
   usePlayEffect(() => {
     // Root-relative: the page may sit at /play/ or /app/, and the worker's own
     // URL is what its importScripts()/fetch() calls resolve against.
-    const worker = new Worker("/calc-engine-worker.js");
+    const worker = new Worker("/59/calc-engine-worker.js");
     workerRef.current = worker;
     worker.onmessage = e => {
       const msg = e.data;
@@ -99,7 +99,7 @@ function PlayCalculator({
     };
 
     // Only the pickers need it, so the standalone app skips it.
-    if (controls) fetch("/presets/manifest.json").then(r => r.json()).then(setPresets).catch(() => {});
+    if (controls) fetch("/59/presets/manifest.json").then(r => r.json()).then(setPresets).catch(() => {});
     const onVisibility = () => worker.postMessage({
       type: document.hidden ? "pause" : "resume"
     });
@@ -186,7 +186,7 @@ function PlayCalculator({
   }, [post]);
   const handlePresetChange = usePlayCallback(file => {
     if (!file) return;
-    fetch(`/presets/${file}`).then(r => r.text()).then(loadPresetText);
+    fetch(`/59/presets/${file}`).then(r => r.text()).then(loadPresetText);
   }, [loadPresetText]);
   const handleUpload = usePlayCallback(e => {
     const file = e.target.files && e.target.files[0];

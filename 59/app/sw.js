@@ -1,4 +1,4 @@
-// Service worker for the standalone Calc-U 59 app (scope: /app/).
+// Service worker for the standalone Calc-U 59 app (scope: /59/app/).
 // Precaches the app shell plus the calculator's fixed dependencies — the
 // WASM engine, the TI-59 ROM files and module 01 (Master Library, the only
 // module the app uses — there's no module switcher), and the fonts/scripts
@@ -10,48 +10,48 @@
 const CACHE_NAME = "calcu59-app-v4";
 
 const CORE_ASSETS = [
-  "/app/",
-  "/app/index.html",
-  "/app/app.css",
-  "/app/app.jsx",
-  "/app/manifest.json",
+  "/59/app/",
+  "/59/app/index.html",
+  "/59/app/app.css",
+  "/59/app/app.jsx",
+  "/59/app/manifest.json",
 
-  "/styles.css",
+  "/59/styles.css",
 
-  "/vendor/react.production.min.js",
-  "/vendor/react-dom.production.min.js",
-  "/vendor/babel.min.js",
+  "/59/vendor/react.production.min.js",
+  "/59/vendor/react-dom.production.min.js",
+  "/59/vendor/babel.min.js",
 
-  "/Calculator.jsx",
-  "/cuecard.jsx",
-  "/led-display.jsx",
-  "/PlayCalculator.jsx",
-  "/calc-engine-worker.js",
+  "/59/Calculator.jsx",
+  "/59/cuecard.jsx",
+  "/59/led-display.jsx",
+  "/59/PlayCalculator.jsx",
+  "/59/calc-engine-worker.js",
 
-  "/colors_and_type.css",
-  "/fonts/self-hosted.css",
-  "/fonts/archivo-400.woff2",
-  "/fonts/archivo-400italic.woff2",
-  "/fonts/archivo-500.woff2",
-  "/fonts/archivo-600.woff2",
-  "/fonts/archivo-600italic.woff2",
-  "/fonts/archivo-700.woff2",
-  "/fonts/archivo-800.woff2",
-  "/fonts/barlow-condensed-600.woff2",
-  "/fonts/barlow-condensed-700.woff2",
+  "/59/colors_and_type.css",
+  "/59/fonts/self-hosted.css",
+  "/59/fonts/archivo-400.woff2",
+  "/59/fonts/archivo-400italic.woff2",
+  "/59/fonts/archivo-500.woff2",
+  "/59/fonts/archivo-600.woff2",
+  "/59/fonts/archivo-600italic.woff2",
+  "/59/fonts/archivo-700.woff2",
+  "/59/fonts/archivo-800.woff2",
+  "/59/fonts/barlow-condensed-600.woff2",
+  "/59/fonts/barlow-condensed-700.woff2",
 
-  "/wasm/ti59-core.js",
-  "/wasm/ti59-core.wasm",
+  "/59/wasm/ti59-core.js",
+  "/59/wasm/ti59-core.wasm",
   // Module.requiredRomFiles() in docs/wasm/bindings.cpp
-  "/wasm/roms/TMC0582.txt",
-  "/wasm/roms/TMC0583.txt",
-  "/wasm/roms/TMC0571B.txt",
-  "/wasm/roms/TMC0582-CONST-K.txt",
-  "/wasm/roms/TMC0583-CONST-K.txt",
-  "/wasm/roms/cuecards.txt",
-  "/wasm/roms/TMC0541.txt",
+  "/59/wasm/roms/TMC0582.txt",
+  "/59/wasm/roms/TMC0583.txt",
+  "/59/wasm/roms/TMC0571B.txt",
+  "/59/wasm/roms/TMC0582-CONST-K.txt",
+  "/59/wasm/roms/TMC0583-CONST-K.txt",
+  "/59/wasm/roms/cuecards.txt",
+  "/59/wasm/roms/TMC0541.txt",
 
-  "/assets/app-icon.png",
+  "/59/assets/app-icon.png",
 ];
 
 self.addEventListener("install", (event) => {
