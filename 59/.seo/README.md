@@ -17,13 +17,43 @@ calc-u-site repository. `BASE` in `routes.js` is `"/59"`:
 - Route paths in `routes.js` and `.seo/pages.js` are site paths (`"/faq/"`).
   `url()` turns one into an address (`"/59/faq/"`); `matchRoute()` takes an
   address.
-- Links and image paths written directly in the `.jsx` text, `fetch()` and
-  `new Worker()` paths, and `app/sw.js` / `app/manifest.json` carry the
-  `/59` prefix literally.
+- Links and image paths written directly in the `.jsx` text carry the `/59`
+  prefix literally.
 - `check.js` fails on any root-relative URL in the built pages or the scripts
   that does not start with `/59/`.
+- `calc/` (the web client, below) has no root-relative URLs at all, so it
+  needs no prefix and works wherever it sits.
 - `robots.txt` and `404.html` only work at the domain root, so the build no
   longer writes them; the repository root owns both.
+
+## The playable calculator (`calc/`)
+
+`/play/` and the installable app `/calc/app/` are the web client of the
+Calc-U-59 repository (`Web/`; the contract is its `reference/WebClient.md`).
+Its CI builds it, and each release carries it as `Calc-U-59-web.zip`.
+`calc/` is that zip, unpacked unchanged — **never edit it here**; a
+calculator change is made in Calc-U-59 and arrives with its next build.
+
+```bash
+node .seo/fetch-web-client.js               # (re)install the pinned build
+node .seo/fetch-web-client.js --pin <url>   # move to another release asset
+node .seo/fetch-web-client.js --local ../../Calc-U-59/Web/dist   # test a local build
+```
+
+`web-client.json` pins the zip's URL and sha256 and the version and commit
+of its `MANIFEST.json`. The script checks both on every install and replaces
+`calc/` as a whole. `check.js` fails when `calc/` differs from its
+`MANIFEST.json` (a hand edit) or is not the pinned build (a `--local` test
+build left in place). An update is one commit: pin, rebuild, check, test,
+then commit `calc/`, `web-client.json` and the rebuilt pages together.
+
+How the site uses it: every page loads `calc/calc.css` and `calc/calc.js`
+(37 KB; loaded everywhere so client-side navigation to `/play/` works), and
+`build.js` evaluates `calc.js` with the site's own components, so `/play/`
+prerenders with the real `PlayCalculator`. `PlayPage` in `Pages.jsx` only
+sizes it (`useFittedScale`) and passes `scale` and `keyboard`. `calc.css`
+loads before the site's CSS: both declare the same font families, and the
+site's declarations win.
 
 ## Serving it locally
 
@@ -77,7 +107,7 @@ Each piece has one home, and `check.js` asserts the result:
 | Open Graph / Twitter | `renderPage()` in `build.js`, from the same title and description. |
 | Structured data | `build.js`: `SoftwareApplication` on the home page, `FAQPage` on `/faq/` (parsed out of `Pages.jsx` so markup and JSON-LD cannot disagree), `BreadcrumbList` everywhere else. |
 | `sitemap.xml` | Generated from `ROUTES` — self-canonical pages only. |
-| `robots.txt` | At the repository root, not generated. At launch it should block `/59/app/` and `/59/preview/`, and deliberately **not** `/59/build/` or `/59/vendor/`, which hold the scripts a crawler needs to render the page. |
+| `robots.txt` | At the repository root, not generated. At launch it should block `/59/calc/app/`, the client's demo page `/59/calc/index.html` and `/59/preview/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
 | `404.html` | At the repository root, not generated: GitHub Pages only serves the root one. |
 
 Two rules are easy to break by accident:
@@ -105,7 +135,7 @@ depth too.
 ## Self-hosted, and no analytics
 
 Every byte the browser fetches comes from `calc-u.org`: the fonts in `fonts/`,
-React in `vendor/`, the WASM core in `wasm/`. Nothing is loaded from a CDN, and
+React in `vendor/`, the calculator and its WASM core in `calc/`. Nothing is loaded from a CDN, and
 the site carries no analytics, tag manager or telemetry of any kind — not
 Google's, not a self-hosted Matomo, none.
 
@@ -124,22 +154,25 @@ stay legal, because `rel=canonical` and `og:url` have to be absolute.
 
 | Path | Role |
 |---|---|
-| `.seo/build.js` | The build. Compile, prerender, sitemap, robots, 404. |
+| `.seo/build.js` | The build. Compile, prerender, sitemap. |
 | `.seo/check.js` | 400-odd assertions over the output. Run it before pushing. |
 | `.seo/pages.js` | Per-page `<title>` and meta description. |
 | `.seo/vendor/` | `react-dom-server`, the one file not already vendored for the browser. |
+| `.seo/fetch-web-client.js`, `.seo/webclient.js` | Install and verify the web client in `calc/`. |
+| `web-client.json` | Which web client build `calc/` must be. |
+| `calc/` | The web client. Imported; never edit. |
+| `tests/` | Playwright: navigation, fonts, the embedded calculator. `tests/run-tests.sh` after a build. |
 | `routes.js` | The URL map. Shared by the browser router and the build. |
 | `site.jsx` | Client router. |
 | `build/` | Generated. Never edit; never hand-fix. |
 
 Generated and safe to delete before a rebuild: `build/`, `index.html`,
-`404.html`, `robots.txt`, `sitemap.xml`, and the `index.html` inside every route
-directory (`faq/`, `play/`, `modules/`, …).
+`sitemap.xml`, and the `index.html` inside every route directory (`faq/`,
+`play/`, `modules/`, …).
 
-Hand-written and never touched by the build: every `.jsx`, `calc-engine-worker.js`, `styles.css`,
-`colors_and_type.css`, `assets/`, `fonts/`, `wasm/`, `presets/`, and all of
-`app/` — the installable PWA still uses the in-browser Babel path and is
-unaffected.
+Hand-written and never touched by the build: every `.jsx`, `styles.css`,
+`colors_and_type.css`, `assets/`, `fonts/`, `software-files/`,
+`tutorial-files/`. Imported: `calc/`.
 
 ## Adding a page
 
@@ -157,10 +190,14 @@ The one failure mode worth guarding: someone edits a `.jsx`, commits, and the
 published HTML still shows the old text. `check.js` will not catch that — it
 validates the last build, not whether the build is current.
 
-Nothing covers it yet. In the Calc-U-59 repository a workflow on the
-`gh-pages` branch rebuilt and checked on every push; it was not carried over
-with the copy. Until there is one at the calc-u-site root, run
-`node .seo/build.js && node .seo/check.js` before every commit.
+CI covers it: `.github/workflows/site.yml` at the repository root runs on
+every push to `main`. It re-downloads the pinned web client and fails if it
+differs, rebuilds and fails if the output differs from what was committed
+(`sitemap.xml` excepted — its `lastmod` is the build date), then runs
+`check.js` and the tests. It commits nothing: Pages publishes `main` as
+pushed, so the workflow is an alarm, not a fixer. Locally, before every
+commit: `node .seo/build.js && node .seo/check.js`, and
+`tests/run-tests.sh` before pushing.
 
 ## After deploying
 

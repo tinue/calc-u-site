@@ -124,7 +124,7 @@ function SiteFooter() {
   }, "Online emulator"), /*#__PURE__*/React.createElement("a", {
     href: "/59/software/"
   }, "TI-59 Software Collection"), /*#__PURE__*/React.createElement("a", {
-    href: "/59/app/"
+    href: "/59/calc/app/"
   }, "Install the web app"), /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59"
   }, "GitHub"), /*#__PURE__*/React.createElement("a", {

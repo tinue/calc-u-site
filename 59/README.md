@@ -87,7 +87,7 @@ All four are **SIL OFL 1.1** — see `CREDITS.md`. To self-host (recommended for
 
 - **Page background is pure `#000000`.** No gradient, no texture, no paper warmth.
 - Cards are `--bg-elevated` (`#14100C`) with a hairline `--stroke` border and a faint two-layer shadow.
-- The **mahogany display strip** — dark wood-toned gradient with a 1px warm hairline border, containing the LED window and the module name — is `PlayDisplay` in `PlayCalculator.jsx`.
+- The **mahogany display strip** — dark wood-toned gradient with a 1px warm hairline border, containing the LED window and the module name — is `PlayDisplay` in the web client (Calc-U-59 `Web/src/PlayCalculator.jsx`).
 - The **module header strip** ("MASTER LIBRARY DIAGNOSTIC  ML-01") sits below the LED window in `--silk-mahogany` orange-tan (`#C89858`) — a signature element.
 
 ### Borders, radii, and shadows
@@ -135,7 +135,7 @@ The brand uses **no general-purpose icon library**. Here is the system's full ic
 
 1. **The app icon** (`assets/app-icon.png`) — dark brown rounded square with a yellow-outlined calculator illustration and a red "59" LED. Used at 40px in the site header, 64–160px in brand contexts, and as the favicon.
 2. **The `<K>` keycap pill** — the system's primary "icon." When you need to refer to a calculator action, render the actual key as a small pill (cream / dark / yellow) — not an abstract glyph.
-3. **`SymbolShare`** — one hand-drawn SVG glyph after Apple's share symbol, in `Calculator.jsx`, for the standalone app's "add to home screen" hint. Not a real SF Symbol (SF is not redistributable).
+3. **`SymbolShare`** — one hand-drawn SVG glyph after Apple's share symbol, in the web client (Calc-U-59 `Web/src/Calculator.jsx`), for the standalone app's "add to home screen" hint. Not a real SF Symbol (SF is not redistributable).
 
 **Hard rules:**
 
@@ -144,7 +144,7 @@ The brand uses **no general-purpose icon library**. Here is the system's full ic
 - **No external icon CDNs** (Lucide / Heroicons / Feather / Font Awesome). The vocabulary above is the whole vocabulary.
 - **No SVG illustrations of the calculator hardware.** Show the real one: the playable `<PlayCalculator>` or a screenshot.
 
-If a future page truly needs a glyph the system doesn't cover (e.g. a download-availability chip), commission a specific monochrome SVG with 1.6px stroke, no fills, square line caps — to match `SymbolShare`.
+If a future page truly needs a glyph the system doesn't cover (e.g. a download-availability chip), commission a specific monochrome SVG with 1.6px stroke, no fills, square line caps — to match `SymbolShare` (in the web client, Calc-U-59 `Web/src/Calculator.jsx`).
 
 **Photographic assets** in `assets/`:
 - `app-icon.png` — 1024×1024 app icon
@@ -154,7 +154,10 @@ If a future page truly needs a glyph the system doesn't cover (e.g. a download-a
 
 ## File index
 
-Files live at the **worktree root**, which is the `gh-pages` branch root that GitHub Pages serves at `www.calcu59.ch`. `.seo/README.md` covers the build, the URL map and the generated files; `SKILL.md` (the main repo's `calc-u-59-docs` skill) the content rules.
+The site is the `59/` folder of the calc-u-site repository, served at
+`https://calc-u.org/59/`. `.seo/README.md` covers the build, the URL map, the
+web client import and the generated files; the repository's `site-59` skill
+the content rules.
 
 ```
 ── Pages (hand-written; prerendered by node .seo/build.js) ─────
@@ -162,23 +165,21 @@ routes.js                       · URL → page map, shared by the build and the
 site.jsx                        · App(): header, the current page, footer
 components.jsx                  · SiteHeader, SiteFooter, K, KSeq, TopicCard, DocsSidebar
 Pages.jsx                       · every page's content
-Calculator.jsx                  · the calculator's key bank (CALC_ROWS) and key chrome (CalcKey)
-PlayCalculator.jsx              · /play/ — the playable calculator: draws, forwards input
-led-display.jsx                 · its LED canvas (painting only)
-cuecard.jsx                     · its cue card (painting only)
-calc-engine-worker.js           · Web Worker around the WASM engine
-wasm/                           · the engine: bindings.cpp (adapter), ti59-core.{js,wasm}
-                                  and roms/ — built by tools/build_wasm.sh in the main repo
-presets/                        · the presets the /play/ picker offers
-software-files/, tutorial-files/· downloadable .ti59 files (copies of the main repo's examples/)
-app/                            · the installable standalone calculator (PWA, in-browser Babel)
+software-files/, tutorial-files/· downloadable .ti59 files (copies of Calc-U-59's examples/)
 styles.css, colors_and_type.css · site CSS and the design tokens
 fonts/, vendor/, assets/        · self-hosted fonts, React/Babel, images
-CNAME                           · "www.calcu59.ch" — GitHub Pages custom domain
+
+── Imported (never edit) ──────────────────────────────────────
+calc/                           · the web client from Calc-U-59 (Web/): /play/'s
+                                  PlayCalculator and the installable app calc/app/
+web-client.json                 · which build calc/ must be
+
+── Build and tests ────────────────────────────────────────────
+.seo/                           · build, checks, web client install
+tests/                          · Playwright
 
 ── Design-system source (not part of the site) ────────────────
 README.md                       · this file
-SKILL.md                        · Agent-Skill manifest for Claude Code
 preview/                        · Design System tab cards (~700px wide each)
 ```
 
@@ -187,7 +188,7 @@ preview/                        · Design System tab cards (~700px wide each)
 ## How to use
 
 1. Drop `colors_and_type.css` into your page and wrap content in `<div class="calcu">`.
-2. The site is **prerendered**: `node .seo/build.js` compiles the `.jsx` and writes a static HTML file per route; React and Babel are vendored in `vendor/`, nothing comes from a CDN. Serve it with `node .seo/build.js && python3 -m http.server 8000` from this folder — the pages use root-relative paths, so opening `index.html` from the file system does not work.
+2. The site is **prerendered**: `node .seo/build.js` compiles the `.jsx` and writes a static HTML file per route; React and Babel are vendored in `vendor/`, nothing comes from a CDN. Serve it as `.seo/README.md` § "Serving it locally" says — from the repository root, at `/59/`; the pages use root-relative paths, so opening `index.html` from the file system does not work.
 3. To add a page, follow `.seo/README.md` § "Adding a page".
 4. Use `<K tone="cream|dark|yellow">` for any key reference. **Never** type keystrokes as ASCII like `[2nd] [LRN]` — the typographic version is part of the brand.
 
@@ -195,7 +196,10 @@ preview/                        · Design System tab cards (~700px wide each)
 
 ## Deploy workflow
 
-`docs/` in the main checkout is a `git worktree` on the `gh-pages` branch. Commit site changes from inside it; a push to `gh-pages` runs `.github/workflows/build-site.yml` (on that branch), which rebuilds, checks and deploys. The `CNAME` file binds the custom domain.
+Commit to `main` of calc-u-site; GitHub Pages publishes it as pushed. The
+repository's `.github/workflows/site.yml` then checks that the build is
+current, `check.js` passes and the tests pass. The custom domain is bound by
+the repository root's `CNAME`.
 
 ---
 

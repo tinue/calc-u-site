@@ -90,7 +90,7 @@ function SiteFooter() {
             so this is its only link from inside the site. Kept out of
             robots.txt's crawl on purpose (see the Disallow comment there):
             it would otherwise compete with /play/ for the same searches. */}
-        <a href="/59/app/">Install the web app</a>
+        <a href="/59/calc/app/">Install the web app</a>
         <a href="https://github.com/tinue/Calc-U-59">GitHub</a>
         <a href="https://github.com/tinue/Calc-U-59/blob/main/CHANGELOG.md">Release notes</a>
         <a href="https://github.com/tinue/Calc-U-59/blob/main/PRIVACY.md">Privacy</a>

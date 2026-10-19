@@ -2515,7 +2515,7 @@ function PlayPage() {
     }
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: "/59/app/"
+    href: "/59/calc/app/"
   }, "Open as a standalone app ", /*#__PURE__*/React.createElement("span", {
     style: {
       opacity: .5
@@ -2538,7 +2538,7 @@ function PlayPage() {
   }, "on the App Store"), " for iPhone and iPad. If you are not sure what any of this is, ", /*#__PURE__*/React.createElement("a", {
     href: "/59/what-is-a-ti-59/"
   }, "start here"), "."), /*#__PURE__*/React.createElement("p", null, "Prefer this without the browser chrome? ", /*#__PURE__*/React.createElement("a", {
-    href: "/59/app/"
+    href: "/59/calc/app/"
   }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {

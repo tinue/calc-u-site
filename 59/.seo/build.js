@@ -16,8 +16,12 @@
 //      and takes over navigation, so behaviour is unchanged.
 //
 // Zero npm dependencies: React and Babel are the copies already vendored
-// in docs/vendor/ for the browser; the one extra file, the server
-// renderer, is vendored alongside this script.
+// in vendor/ for the browser; the one extra file, the server renderer, is
+// vendored alongside this script.
+//
+// The playable calculator is not built here: calc/ is the web client from
+// the Calc-U-59 repository, installed by fetch-web-client.js. Its calc.js
+// joins the bundle below so /play/ prerenders with the real component.
 //
 // Run it after editing any .jsx (see .seo/README.md).
 
@@ -120,13 +124,17 @@ const PLAIN = ["routes.js"];
 // because it mounts.
 const JSX = [
   "components.jsx",
-  "Calculator.jsx",
-  "cuecard.jsx",
-  "led-display.jsx",
-  "PlayCalculator.jsx",
   "Pages.jsx",
   "site.jsx",
 ];
+
+// The web client: exposes PlayCalculator, which Pages.jsx's PlayPage uses.
+// It finds the rest of calc/ from its own URL, so it is loaded from calc/
+// rather than copied into build/.
+const CLIENT_JS = path.join(DOCS, "calc", "calc.js");
+if (!fs.existsSync(CLIENT_JS)) {
+  throw new Error("calc/calc.js missing: run node .seo/fetch-web-client.js first");
+}
 
 const SCRIPT_ORDER = PLAIN.concat(JSX.map((n) => n.replace(/\.jsx$/, ".js")));
 
@@ -172,7 +180,9 @@ for (const name of JSX) {
  * returns something, and the stub returns null, so nothing happens here.
  * ------------------------------------------------------------------ */
 log("evaluating the compiled site…");
-const bundle = SCRIPT_ORDER.map((n) => "\n;/* === " + n + " === */\n" + compiled[n]).join("");
+const bundle =
+  "\n;/* === calc/calc.js === */\n" + read(CLIENT_JS) +
+  SCRIPT_ORDER.map((n) => "\n;/* === " + n + " === */\n" + compiled[n]).join("");
 vm.runInContext(bundle, sandbox, { filename: "calcu59-bundle.js" });
 
 function renderRoute(route) {
@@ -262,6 +272,7 @@ function breadcrumbLd(route, meta) {
 const VENDOR_SCRIPTS = [
   url("/vendor/react.production.min.js"),
   url("/vendor/react-dom.production.min.js"),
+  url("/calc/calc.js"),
 ];
 
 function scripts() {
@@ -307,6 +318,7 @@ function renderPage(route) {
 <link rel="apple-touch-icon" href="${url("/assets/app-icon.png")}">
 <meta name="theme-color" content="#000000">
 <meta name="apple-itunes-app" content="app-id=6761413142">
+<link rel="stylesheet" href="${url("/calc/calc.css")}">
 <link rel="stylesheet" href="${url("/colors_and_type.css")}">
 <link rel="stylesheet" href="${url("/styles.css")}">
 ${ld.map((o) => `<script type="application/ld+json">\n${JSON.stringify(o, null, 2)}\n</script>`).join("\n")}

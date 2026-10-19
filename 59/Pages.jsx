@@ -1845,7 +1845,7 @@ function PlayPage() {
         <PlayCalculator scale={scale} keyboard />
       </div>
       <div style={{ textAlign: "center", marginTop: 12 }}>
-        <a className="btn secondary" href="/59/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
+        <a className="btn secondary" href="/59/calc/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
       </div>
 
       <h1 className="page-title" style={{ marginTop: 32 }}>TI-59 emulator, online</h1>
@@ -1883,7 +1883,7 @@ function PlayPage() {
           not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
         </p>
         <p>
-          Prefer this without the browser chrome? <a href="/59/app/">Open the standalone app</a> — the
+          Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
           same calculator alone at its own address, installable to your phone's home screen for a
           one-tap, full-screen launch.
         </p>

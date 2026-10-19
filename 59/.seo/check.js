@@ -21,6 +21,7 @@ const path = require("path");
 const SEO = __dirname;
 const DOCS = path.join(SEO, "..");
 const { ROUTES, ORIGIN, BASE, url, normalizePath } = require(path.join(DOCS, "routes.js"));
+const { CLIENT_DIR, verifyTree, readLock } = require(path.join(SEO, "webclient.js"));
 
 // The site lives under BASE ("/59"), so every root-relative URL it names
 // must start with BASE + "/". Addresses → site paths and files on disk:
@@ -92,10 +93,11 @@ for (const route of ROUTES.filter((r) => !r.canonical)) {
 section("internal links");
 // Static pages that live outside routes.js entirely — not React pages, so
 // never prerendered into `built` — but that are real, deliberately-linked
-// targets on disk. /app/ is the installable standalone calculator; it is
-// left out of routes.js (and out of robots.txt's crawl) on purpose so it
-// never competes with /play/, but SiteFooter and PlayPage both link to it.
-const STATIC_TARGETS = { "/app/": path.join(DOCS, "app", "index.html") };
+// targets on disk. /calc/app/ is the web client's installable standalone
+// calculator; it is left out of routes.js (and out of robots.txt's crawl)
+// on purpose so it never competes with /play/, but SiteFooter and PlayPage
+// both link to it.
+const STATIC_TARGETS = { "/calc/app/": path.join(DOCS, "calc", "app", "index.html") };
 for (const [p, html] of built) {
   const hrefs = [...html.matchAll(/href="(\/[^"]*)"/g)].map((m) => m[1]);
   for (const address of new Set(hrefs)) {
@@ -149,21 +151,37 @@ ok(fs.existsSync(path.join(DOCS, ".nojekyll")), ".nojekyll missing");
 
 /* ---- scripts name only paths under BASE --------------------------- *
  *
- * fetch(), new Worker() and the service worker's precache list are not
- * in the prerendered HTML, so the link checks above never see them. Any
- * root-relative string literal in a script must carry the BASE prefix.
- * routes.js is exempt: its paths are site paths by design.
+ * Paths a script builds at run time are not in the prerendered HTML, so
+ * the link checks above never see them. Any root-relative string literal
+ * in a script must carry the BASE prefix. routes.js is exempt: its paths
+ * are site paths by design. calc/ is exempt too: the web client uses no
+ * root-relative URLs at all (its own tests prove that).
  */
 section("script paths");
-const SCRIPTS = [
-  ...fs.readdirSync(path.join(DOCS, "build")).filter((f) => f.endsWith(".js") && f !== "routes.js").map((f) => "build/" + f),
-  "app/app.jsx", "app/sw.js", "app/manifest.json", "calc-engine-worker.js",
-];
+const SCRIPTS = fs.readdirSync(path.join(DOCS, "build"))
+  .filter((f) => f.endsWith(".js") && f !== "routes.js").map((f) => "build/" + f);
 for (const name of SCRIPTS) {
   const body = fs.readFileSync(path.join(DOCS, name), "utf8");
   for (const m of body.matchAll(/["'`](\/[A-Za-z_][^"'`]*)/g)) {
     ok(underBase(m[1]), `${name}: path ${m[1]} is not under ${BASE}/`);
   }
+}
+
+/* ---- the web client is the pinned build, unchanged ---------------- *
+ *
+ * calc/ is imported from the Calc-U-59 repository and never edited here.
+ * It must match its own MANIFEST.json file for file, and be the build
+ * web-client.json pins — a --local test build fails here until the pinned
+ * one is installed again (node .seo/fetch-web-client.js).
+ */
+section("web client");
+{
+  const { manifest, problems } = verifyTree(CLIENT_DIR);
+  for (const p of problems) ok(false, `calc/: ${p} — calc/ is imported, reinstall with fetch-web-client.js`);
+  const lock = readLock();
+  ok(manifest && manifest.commit === lock.commit && manifest.version === lock.version,
+     `calc/ is ${manifest ? manifest.version + " (" + manifest.commit + ")" : "missing"}, ` +
+     `web-client.json pins ${lock.version} (${lock.commit})`);
 }
 
 /* ---- nothing is fetched from a third party ------------------------ *
@@ -215,6 +233,7 @@ const scanned = [
     .filter((f) => f.endsWith(".js"))
     .map((f) => ["build/" + f, fs.readFileSync(path.join(DOCS, "build", f), "utf8")]),
   ...AUTHORED_CSS.map((f) => [f, fs.readFileSync(path.join(DOCS, f), "utf8")]),
+  ["calc/calc.js", fs.readFileSync(path.join(CLIENT_DIR, "calc.js"), "utf8")],
 ];
 for (const [name, body] of scanned) {
   const hit = body.match(TRACKERS);

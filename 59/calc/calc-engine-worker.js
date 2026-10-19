@@ -1,14 +1,15 @@
-// Background Worker for the playable web calculator (/play/, /app/). It owns
-// the WASM WebController (docs/wasm/bindings.cpp) — the real
+// Background Worker for the web calculator (PlayCalculator.jsx). It owns
+// the WASM WebController (Web/bindings.cpp) — the real
 // cu59::SessionController from the main repo's Shared/ layer, run
 // single-threaded — and calls its 60 Hz tick. Everything that isn't drawing
 // (pacing, key timing, presets, cue cards, the card reader) happens in there;
-// this file only fetches files and passes messages.
+// this file only fetches files and passes messages. Every URL here is
+// relative to this script, so the client works wherever it is hosted.
 //
 // Protocol (postMessage), main thread -> worker:
 //   {type: "pointerDown", row, col}   -- on-screen key, 0-indexed grid position
 //   {type: "pointerUp"}
-//   {type: "keyDown", key, produced, isLetter, shift, command}  -- see playKeyPress() in PlayCalculator.jsx
+//   {type: "keyDown", key, produced, isLetter, shift, command}  -- see playKeyPress() in src/PlayCalculator.jsx
 //   {type: "keyUp", key, produced, isLetter, shift, command}
 //   {type: "blur"}                    -- focus lost: release whatever is held
 //   {type: "pause"} / {type: "resume"} -- document.visibilitychange
@@ -105,8 +106,8 @@ function handle(msg) {
 }
 
 async function init() {
-  // ti59-core.js resolves its .wasm next to this worker (docs/), not next to
-  // itself (docs/wasm/): locateFile points it back.
+  // ti59-core.js resolves its .wasm next to this worker, not next to itself
+  // (wasm/): locateFile points it back.
   const [mod, cuecards] = await Promise.all([
     createTI59CoreModule({ locateFile: (path) => `wasm/${path}` }),
     fetchText("cuecards.txt"),
