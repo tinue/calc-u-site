@@ -1,0 +1,51 @@
+name: Site
+
+# Checks every push to main: the Calc-U-59 site (/59/) is built from its
+# current sources, its static checks pass, and the Playwright tests pass
+# against the repository served as calc-u.org serves it.
+#
+# GitHub Pages publishes main as it is ("Deploy from a branch"); this
+# workflow commits nothing. A failure means the published site is stale or
+# broken — fix it locally and push again.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  site-59:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: 59
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      # calc/ is committed; this proves it is the pinned build, untouched.
+      # (check.js verifies it too, but this also re-downloads the release
+      # asset and fails if it no longer matches the pinned sha256.)
+      - name: Web client matches the pinned release
+        run: |
+          node .seo/fetch-web-client.js
+          git diff --exit-code -- calc
+
+      # sitemap.xml carries the build date as lastmod, so it differs on any
+      # other day by design (.seo/README.md) and is left out of the diff.
+      - name: Build is current
+        run: |
+          node .seo/build.js
+          git diff --exit-code -- . ':!sitemap.xml'
+
+      - name: Check
+        run: |
+          npm install --no-save --no-audit --no-fund jsdom
+          node .seo/check.js
+
+      - name: Tests
+        run: tests/run-tests.sh
