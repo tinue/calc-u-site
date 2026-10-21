@@ -54,10 +54,12 @@ attached to each release as `Calc-U-59-web.zip`.
   (`calc-u-59-web` skill there) and arrives with its next build.
 - **Updating it:** `node .seo/fetch-web-client.js --pin <url of Calc-U-59-web.zip>`,
   then build, check, test, and commit `calc/`, `web-client.json` and the
-  rebuilt pages in one commit. The pin is the latest release's asset,
-  `https://github.com/tinue/Calc-U-59/releases/latest/download/Calc-U-59-web.zip`,
-  so each new Calc-U-59 release fails the sha256 check (and CI) until it is
-  re-pinned with the same URL.
+  rebuilt pages in one commit. Pin the release tag
+  (`https://github.com/tinue/Calc-U-59/releases/download/v<version>/Calc-U-59-web.zip`),
+  so the calculator and its documentation move together. Never push a
+  `-pre` pin or `releases/latest/`: promotion deletes the `-pre` tag (404)
+  and rebuilds the zip, and `latest` fails the sha256 check on every push
+  once the next version is out.
 - **Testing an unreleased client:**
   `node .seo/fetch-web-client.js --local ../../Calc-U-59/Web/dist` (build it
   there first). `check.js` then fails on purpose until the pinned build is
