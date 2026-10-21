@@ -2410,7 +2410,7 @@ function SoftwarePage() {
       lineHeight: 1.7,
       marginTop: -8
     }
-  }, "How the undocumented tricks behind several of these programs work, and how the TI-58C's firmware differs from its predecessors \u2014 each as Markdown and as PDF."), /*#__PURE__*/React.createElement("div", {
+  }, "How the undocumented tricks behind several of these programs work, and how the TI-58C's firmware differs from its predecessors \u2014 to read here or download as PDF."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gap: 12
@@ -2443,12 +2443,12 @@ function SoftwarePage() {
     }
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: `/59/articles/${a.file}.pdf`
-  }, "PDF"), /*#__PURE__*/React.createElement("a", {
+    href: `/59/articles/${a.file}.html`
+  }, "Read"), /*#__PURE__*/React.createElement("a", {
     className: "btn secondary",
-    href: `/59/articles/${a.file}.md`,
+    href: `/59/articles/${a.file}.pdf`,
     download: true
-  }, "Markdown"))), /*#__PURE__*/React.createElement("p", {
+  }, "PDF"))), /*#__PURE__*/React.createElement("p", {
     style: {
       margin: "8px 0 0",
       color: "var(--fg-2)"
@@ -2464,7 +2464,7 @@ function SoftwarePage() {
       marginTop: -8
     }
   }, cat.intro, cat.article ? /*#__PURE__*/React.createElement(React.Fragment, null, " How it works: ", /*#__PURE__*/React.createElement("a", {
-    href: `/59/articles/${cat.article}.pdf`
+    href: `/59/articles/${cat.article}.html`
   }, articles.find(a => a.file === cat.article).title), ".") : null), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",

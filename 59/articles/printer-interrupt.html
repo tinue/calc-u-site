@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TI-59 Printer Interrupt: Stopping a Printed Line Halfway — Calc-U 59</title>
+<meta name="description" content="The PC-100 printer prints a line as 7 rows of dots and needs about 0.2 s for it. It works on its own: the calculator sends the line and goes on with the…">
+<link rel="canonical" href="https://calc-u.org/59/articles/printer-interrupt.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/articles/printer-interrupt.html">
+<meta property="og:title" content="TI-59 Printer Interrupt: Stopping a Printed Line Halfway">
+<meta property="og:description" content="The PC-100 printer prints a line as 7 rows of dots and needs about 0.2 s for it. It works on its own: the calculator sends the line and goes on with the…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/calc/calc.css">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/articles/article.css">
+</head>
+<body class="calcu">
+<main class="wrap-narrow article">
+<nav class="article-nav">
+<a href="/59/software/#articles">← Calc-U 59 · Articles</a>
+<a href="/59/articles/printer-interrupt.pdf" download>Download PDF</a>
+</nav>
+<h1 id="ti-59-printer-interrupt-stopping-a-printed-line-halfway">TI-59 Printer Interrupt: Stopping a Printed Line Halfway</h1>
+<h2 id="what-the-printer-interrupt-is">What the printer interrupt is</h2>
+<p>The PC-100 printer prints a line as 7 rows of dots and needs about 0.2 s for it. It works on its own: the calculator sends the line and goes on with the program. TI-59 users found a program step that stops the printer while it is still printing. The line then appears with only its first rows of dots. Programs use this for graphics with a finer vertical resolution than whole characters (<a href="https://calc-u.org/59/software/#texas-print-ti59">texas-print.ti59</a>, the TI logo) or to show truncated characters (<a href="https://calc-u.org/59/software/#printer-quirks-ti59">printer-quirks.ti59</a>).</p>
+<p><a href="https://calc-u.org/59/software/#printer-interrupt-ti59">printer-interrupt.ti59</a> is the smallest example. It prints "A0" once in full and once cut off after 2 rows.</p>
+<h2 id="the-hack">The hack</h2>
+<p>The interrupt is a program step with the keycode 1F. Keycodes are two decimal digits, so no key can record it. It has to be manufactured with a firmware bug that leaves a hexadecimal digit in program memory.</p>
+<p>When the program reaches 1F, the firmware turns its two digits into a jump address without checking them. The jump lands three instructions before the signal that tells the printer "line finished, advance the paper". The printer is still busy with the line before, and the early signal stops it.</p>
+<h2 id="rules-for-using-it">Rules for using it</h2>
+<ul>
+<li>Put it right after the print: <code>0 Op 05 1F</code>. The number of rows printed depends on the time between the two. With nothing in between, 2 of 7 rows are printed; slower steps in between give more.</li>
+<li>The display must be 0, with no EE mode and no error, when 1F runs.</li>
+<li>Step 000 must hold <code>INV SBR</code>, and the step after 1F must be RTN. After the interrupt the program continues at step 000. <code>INV SBR</code> there returns to the RTN, and the RTN returns from the subroutine that holds 1F.</li>
+<li>Call that subroutine with a label (<code>A</code> in the examples). All labels must come before 1F.</li>
+<li>1F can only be made at a step divisible by 8, from 008 to at most 376.</li>
+<li>Cards recorded after 1F was made do not keep it. Record the program before making the code.</li>
+</ul>
+<h2 id="making-the-code">Making the code</h2>
+<p>Both methods use LRN and Ins on a corrupted step buffer (see "How the code is made" below). They differ in how they corrupt it.</p>
+<ul>
+<li><strong>The article's sequence</strong> (PPX Exchange, March/April 1982; <a href="https://calc-u.org/59/software/#texas-print-ti59">texas-print.ti59</a> documents every step). Key <code>lnx (</code> at step 008, then <code>GTO 008  9 Op 17  Pgm 12 SBR 444  R/S  P/R  LRN Ins LRN  CLR RST</code>. It needs the Master Library module and the partition 9 or 10 Op 17, and goes through four separate firmware bugs.</li>
+<li><strong>The fast-mode hack</strong> (<a href="https://calc-u.org/59/software/#printer-interrupt-ti59">printer-interrupt.ti59</a>). Put St flg on step 8k+4, a 0 on 8k+6 and R/S on 8k+7, where 8k is the step for 1F. For 1F at 008: key <code>lnx (</code> at 008, St flg at 012 and R/S at 015, then key <code>1 + 48 EE 12 +/- =  GTO 012 SST 0 STO  LRN Ins LRN  CLR RST</code>. No module and no special partition are needed.</li>
+</ul>
+<p>The keys at 8k and 8k+1 must suit the ROM data used for that location. The article's table lists them for 008–104; both methods use the same table. For 008 they are <code>lnx (</code>, which become 1F and RTN.</p>
+<p>Ins also moves every step after the location up by one, up to the end of the partition. The last step of the partition is lost. The 6 steps after the RTN get meaningless codes.</p>
+<h2 id="how-the-interrupt-works">How the interrupt works</h2>
+<p><strong>Dispatch.</strong> For every program step, the firmware splits the keycode into its two digits and builds a jump address from them (ROM <code>0F53</code>). Legal digits are 0–9. Nothing checks this, so the digit F builds an address too. For 1F it is <code>0EF1</code>.</p>
+<p><strong>The landing.</strong> <code>0EF1</code> is in the middle of the routine that prints a number. Three instructions later that routine sends PRT.GO, the signal that ends a printed line. With the display at 0, positive and without EE, the branches in between skip everything else and go straight to PRT.GO. Other display contents take other branches, which is why the article warns of hangs.</p>
+<p><strong>The printer.</strong> Op 05 sent the line a moment before. The printer is still printing its dot rows. PRT.GO while it is busy makes it stop. In the example, 1020 of the 2808 instruction cycles of a line have passed, so 2 of the 7 rows are on paper.</p>
+<p><strong>The way back.</strong> After PRT.GO, execution continues at step 000, and the step after 1F is left as a return point, as after a subroutine call. The trace shows the steps 000, 009 and then the caller: <code>INV SBR</code> at 000 returns to 009, and the RTN there returns from the label subroutine.</p>
+<h2 id="how-the-code-is-made">How the code is made</h2>
+<p>You need three facts about the calculator's internals.</p>
+<ol type="1">
+<li><strong>The step buffer.</strong> The firmware reads 8 program steps at a time into a buffer and works through it; <a href="https://calc-u.org/59/articles/fast-mode.html">TI-59 Fast Mode</a> explains the details. The buffer is normally a copy of the RAM register the step counter points to.</li>
+<li><strong>The program source.</strong> A digit in the status register says where program steps come from. Its value 8 means the ROM's built-in keycode programs (Σ+, P→R, …). The buffer then reads from a ROM table row instead of RAM.</li>
+<li><strong>Hexadecimal digit 0.</strong> The CPU's arithmetic is decimal in digits 1–15 of a register, but hexadecimal in digit 0. Digit 0 of a program register is the units digit of its first step, 8k.</li>
+</ol>
+<p><strong>Ins trusts the buffer.</strong> Ins computes each register as (RAM − buffer) + (buffer shifted up one step). With an honest buffer this is just the shift. With a wrong one, the difference is garbage, and in digit 0 a borrow gives a hex digit instead of a decimal one.</p>
+<p><strong>Corrupting the buffer.</strong> Both methods leave the program source at 8 while the calculator is stopped just before step 8k. LRN then moves to 8k, a new block, and loads the buffer from ROM row 16 + k instead of RAM. For 008 the row starts with 04 65. Ins at 008 then gives:</p>
+<ul>
+<li>step 008: 23 − 04 = 1F (units 3 − 4 = F with a borrow, tens 2 − 0 − 1 = 1);</li>
+<li>step 009: 53 − 65 − 1 + 04 = 92, the RTN.</li>
+</ul>
+<p><strong>Setting the source to 8.</strong> The article's sequence gets there through a failed module call (<code>Pgm 12 SBR 444</code>), whose cleanup is incomplete. R/S then runs bytes of the module header. P→R finally writes source 8 and then gives up because its own step lies outside the small partition. The fast-mode hack writes the source directly: X = 1.000000000048 holds source 8 and step 004. A non-zero source starts a run. The buffer still holds the block with St flg, so steps 005–007 run the three steps after St flg: the first is swallowed, the 0 makes X displayable, and the R/S stops the run at step 007 with the source still 8.</p>
+<h2 id="limits">Limits</h2>
+<p>Everything here was observed on Calc-U-59, which runs the original TI-59 ROM unmodified, and not on a real TI-59. The number of rows printed depends on the timing of the calculator and the printer, and real machines differ, as the PPX article notes.</p>
+</main>
+</body>
+</html>

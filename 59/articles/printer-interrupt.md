@@ -92,7 +92,7 @@ returns to 009, and the RTN there returns from the label subroutine.
 You need three facts about the calculator's internals.
 
 1. **The step buffer.** The firmware reads 8 program steps at a time into a
-   buffer and works through it; [TI-59 Fast Mode](https://calc-u.org/59/articles/fast-mode.pdf)
+   buffer and works through it; [TI-59 Fast Mode](https://calc-u.org/59/articles/fast-mode.html)
    explains the details. The
    buffer is normally a copy of the RAM register the step counter points to.
 2. **The program source.** A digit in the status register says where

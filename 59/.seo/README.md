@@ -165,6 +165,8 @@ stay legal, because `rel=canonical` and `og:url` have to be absolute.
 | `routes.js` | The URL map. Shared by the browser router and the build. |
 | `site.jsx` | Client router. |
 | `build/` | Generated. Never edit; never hand-fix. |
+| `articles/` | Articles: `*.md` is the source; `*.html` and `*.pdf` are rendered from it (below). |
+| `.seo/articles.js`, `.seo/article-template.html` | Render the articles. |
 
 Generated and safe to delete before a rebuild: `build/`, `index.html`,
 `sitemap.xml`, and the `index.html` inside every route directory (`faq/`,
@@ -173,6 +175,24 @@ Generated and safe to delete before a rebuild: `build/`, `index.html`,
 Hand-written and never touched by the build: every `.jsx`, `styles.css`,
 `colors_and_type.css`, `assets/`, `fonts/`, `software-files/`,
 `tutorial-files/`. Imported: `calc/`.
+
+## Articles (`articles/`)
+
+Longer technical documents, linked from the Articles section of
+`/software/`. Each is a Markdown file, `articles/<name>.md`, rendered to a
+standalone page `<name>.html` (pandoc, GitHub Markdown, the template in
+`.seo/article-template.html`, styles in `articles/article.css`) and a PDF
+download `<name>.pdf` (`md2pdf`). Neither tool is in CI, so both outputs
+are committed. After editing an article, or adding one (and its entry in
+`articles` in `SoftwarePage`):
+
+```bash
+node .seo/articles.js && node .seo/build.js && node .seo/check.js
+```
+
+`check.js` fails when an article's HTML or PDF is missing or its title no
+longer matches the Markdown. The article pages are not routes, so they are
+not in the sitemap.
 
 ## Adding a page
 

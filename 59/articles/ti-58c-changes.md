@@ -262,7 +262,7 @@ step 252 with no observable effect.
 
 - **Fast mode.** The St flg / KEY_ENCODE mis-dispatch at `0B34` and the
   HIR STO into SCOM[0] (`11BC`) work exactly as on the TI-59
-  ([TI-59 Fast Mode](https://calc-u.org/59/articles/fast-mode.pdf)). The 69! test program runs in
+  ([TI-59 Fast Mode](https://calc-u.org/59/articles/fast-mode.html)). The 69! test program runs in
   363k weighted cycles in fast mode against 585k normally.
 - **The 7th SBR level is still dropped.** The push moved to `1334`, and
   the depth check is at `1339–133C`.

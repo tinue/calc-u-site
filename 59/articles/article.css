@@ -1,0 +1,31 @@
+/* Articles rendered from Markdown by .seo/articles.js. The .calcu scope in
+   colors_and_type.css styles headings, paragraphs, links and inline code;
+   this file adds what pandoc emits beyond that. */
+
+.article-nav {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px;
+  font-family: var(--font-key); font-size: 13px; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 32px;
+}
+.article h1 { font-size: clamp(28px, 6.5vw, 40px); }
+.article ul, .article ol { padding-left: 22px; margin: 0 0 14px; max-width: 68ch; color: var(--fg-2); }
+.article li { margin: 4px 0; }
+.article li > p { margin-bottom: 6px; }
+.article strong { color: var(--fg); }
+
+.article pre {
+  background: var(--bg-inset); border: 1px solid var(--stroke); border-radius: 4px;
+  padding: 12px 16px; overflow-x: auto; margin: 0 0 14px;
+}
+.article pre code { background: none; border: 0; padding: 0; }
+
+/* Wide tables scroll inside their own box instead of widening the page. */
+.article table {
+  display: block; overflow-x: auto; max-width: 100%;
+  border-collapse: collapse; margin: 0 0 18px; font-size: 14px; color: var(--fg-2);
+}
+.article th, .article td {
+  border: 1px solid var(--stroke); padding: 6px 10px; text-align: left; vertical-align: top;
+}
+.article th { color: var(--fg); background: var(--bg-elevated); }
+.article td code { white-space: nowrap; }

@@ -1771,7 +1771,7 @@ function SoftwarePage() {
       <h2 className="section" id="articles">Articles</h2>
       <p style={{ color: "var(--fg-2)", lineHeight: 1.7, marginTop: -8 }}>
         How the undocumented tricks behind several of these programs work, and how the TI-58C's firmware differs
-        from its predecessors — each as Markdown and as PDF.
+        from its predecessors — to read here or download as PDF.
       </p>
       <div style={{ display: "grid", gap: 12 }}>
         {articles.map((a) => (
@@ -1779,8 +1779,8 @@ function SoftwarePage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "4px 16px" }}>
               <h3 className="sub" style={{ margin: 0 }}>{a.title}</h3>
               <span style={{ display: "flex", gap: 8 }}>
-                <a className="btn secondary" href={`/59/articles/${a.file}.pdf`}>PDF</a>
-                <a className="btn secondary" href={`/59/articles/${a.file}.md`} download>Markdown</a>
+                <a className="btn secondary" href={`/59/articles/${a.file}.html`}>Read</a>
+                <a className="btn secondary" href={`/59/articles/${a.file}.pdf`} download>PDF</a>
               </span>
             </div>
             <p style={{ margin: "8px 0 0", color: "var(--fg-2)" }}>{a.description}</p>
@@ -1794,7 +1794,7 @@ function SoftwarePage() {
           <p style={{ color: "var(--fg-2)", lineHeight: 1.7, marginTop: -8 }}>
             {cat.intro}
             {cat.article ? (
-              <> How it works: <a href={`/59/articles/${cat.article}.pdf`}>{articles.find((a) => a.file === cat.article).title}</a>.</>
+              <> How it works: <a href={`/59/articles/${cat.article}.html`}>{articles.find((a) => a.file === cat.article).title}</a>.</>
             ) : null}
           </p>
           <div style={{ display: "grid", gap: 12 }}>

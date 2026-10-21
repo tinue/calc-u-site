@@ -97,13 +97,19 @@ section("internal links");
 // calculator; it is left out of routes.js (and out of robots.txt's crawl)
 // on purpose so it never competes with /play/, but SiteFooter and PlayPage
 // both link to it.
-const STATIC_TARGETS = { "/calc/app/": path.join(DOCS, "calc", "app", "index.html") };
+// articles/*.html are rendered from Markdown by .seo/articles.js, outside
+// this build; the software page links to them.
+const ARTICLES = fs.readdirSync(path.join(DOCS, "articles")).filter((f) => f.endsWith(".md")).map((f) => f.slice(0, -3));
+const STATIC_TARGETS = {
+  "/calc/app/": path.join(DOCS, "calc", "app", "index.html"),
+  ...Object.fromEntries(ARTICLES.map((a) => [`/articles/${a}.html`, path.join(DOCS, "articles", `${a}.html`)])),
+};
 for (const [p, html] of built) {
   const hrefs = [...html.matchAll(/href="(\/[^"]*)"/g)].map((m) => m[1]);
   for (const address of new Set(hrefs)) {
     if (!underBase(address)) { ok(false, `${p}: link ${address} is not under ${BASE}/`); continue; }
     const href = sitePath(address);
-    if (/\.(css|png|js|xml|txt|json|woff2?|ti59|ti58|ti58c|asm|md|pdf)$/.test(href)) {
+    if (/\.(css|png|js|xml|txt|json|woff2?|ti59|ti58|ti58c|asm|pdf)$/.test(href)) {
       ok(fs.existsSync(diskPath(address)), `${p}: asset ${address} missing`);
     } else if (STATIC_TARGETS[href]) {
       ok(fs.existsSync(STATIC_TARGETS[href]), `${p}: static page ${href} missing`);
@@ -210,7 +216,7 @@ for (const [p, html] of built) {
   }
 }
 
-const AUTHORED_CSS = ["styles.css", "colors_and_type.css", "fonts/self-hosted.css"];
+const AUTHORED_CSS = ["styles.css", "colors_and_type.css", "fonts/self-hosted.css", "articles/article.css"];
 for (const name of AUTHORED_CSS) {
   const file = path.join(DOCS, name);
   if (!fs.existsSync(file)) { ok(false, `${name}: missing`); continue; }
@@ -223,6 +229,19 @@ for (const name of AUTHORED_CSS) {
   }
 }
 
+for (const a of ARTICLES) {
+  const md = fs.readFileSync(path.join(DOCS, "articles", `${a}.md`), "utf8");
+  const file = path.join(DOCS, "articles", `${a}.html`);
+  ok(fs.existsSync(path.join(DOCS, "articles", `${a}.pdf`)), `articles/${a}.pdf: missing — run node .seo/articles.js`);
+  if (!fs.existsSync(file)) { ok(false, `articles/${a}.html: missing — run node .seo/articles.js`); continue; }
+  const html = fs.readFileSync(file, "utf8");
+  ok(html.includes(`<title>${md.match(/^# (.+)$/m)[1]} — Calc-U 59</title>`), `articles/${a}.html: title differs from ${a}.md — run node .seo/articles.js`);
+  for (const [, tag, url] of html.matchAll(/<(\w+)\b[^>]*?\b(?:src|href)="([^"]+)"/g)) {
+    if (offOrigin(url)) ok(tag.toLowerCase() === "a", `articles/${a}.html: <${tag}> fetches ${url} from another origin`);
+    else if (url.startsWith("/")) ok(fs.existsSync(diskPath(url.split("#")[0])) || built.has(normalizePath(sitePath(url.split("#")[0]))), `articles/${a}.html: link ${url} missing`);
+  }
+}
+
 // Belt and braces: a named tracker, even self-hosted, is still a tracker.
 // Patterns are anchored to a host or a call so React's onDoubleClick and
 // friends do not trip them.
@@ -232,6 +251,7 @@ const scanned = [
   ...fs.readdirSync(path.join(DOCS, "build"))
     .filter((f) => f.endsWith(".js"))
     .map((f) => ["build/" + f, fs.readFileSync(path.join(DOCS, "build", f), "utf8")]),
+  ...ARTICLES.map((a) => [`articles/${a}.html`, fs.readFileSync(path.join(DOCS, "articles", `${a}.html`), "utf8")]),
   ...AUTHORED_CSS.map((f) => [f, fs.readFileSync(path.join(DOCS, f), "utf8")]),
   ["calc/calc.js", fs.readFileSync(path.join(CLIENT_DIR, "calc.js"), "utf8")],
 ];

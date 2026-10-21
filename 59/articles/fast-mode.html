@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TI-59 Fast Mode: Running Programs at ROM Speed — Calc-U 59</title>
+<meta name="description" content="The TI-59 runs some programs that are not in RAM. The built-in functions Σ+, x̄, P→R, D.MS and Op 11–15 are short keycode programs stored in ROM, and Solid…">
+<link rel="canonical" href="https://calc-u.org/59/articles/fast-mode.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/articles/fast-mode.html">
+<meta property="og:title" content="TI-59 Fast Mode: Running Programs at ROM Speed">
+<meta property="og:description" content="The TI-59 runs some programs that are not in RAM. The built-in functions Σ+, x̄, P→R, D.MS and Op 11–15 are short keycode programs stored in ROM, and Solid…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/calc/calc.css">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/articles/article.css">
+</head>
+<body class="calcu">
+<main class="wrap-narrow article">
+<nav class="article-nav">
+<a href="/59/software/#articles">← Calc-U 59 · Articles</a>
+<a href="/59/articles/fast-mode.pdf" download>Download PDF</a>
+</nav>
+<h1 id="ti-59-fast-mode-running-programs-at-rom-speed">TI-59 Fast Mode: Running Programs at ROM Speed</h1>
+<h2 id="what-fast-mode-is">What fast mode is</h2>
+<p>The TI-59 runs some programs that are not in RAM. The built-in functions Σ+, x̄, P→R, D.MS and Op 11–15 are short keycode programs stored in ROM, and Solid State Software modules hold up to 5000 more steps. TI built a faster way to run these programs. Between two steps the firmware skips work that a user program normally needs:</p>
+<ul>
+<li><strong>No display update.</strong> X is not formatted for the display after each step. The display stays as it was until the program ends.</li>
+<li><strong>No R/S check.</strong> The R/S key cannot interrupt the program, and holding GTO shows no intermediate values.</li>
+<li><strong>No trace printing.</strong> Neither the printer's TRACE switch nor flag 9 prints the steps.</li>
+<li><strong>No error stop.</strong> An error does not halt the program, even with flag 8 set.</li>
+</ul>
+<p>For a ROM routine such as P→R this is exactly right: 20–40 internal steps should look like a single operation, with no flicker and no way to interrupt them halfway. The same steps run in about 40 % less time.</p>
+<h2 id="the-hack">The hack</h2>
+<p>The firmware keeps a <em>program source</em> digit that says where the running program comes from: 0 for RAM, 1 for the module, 8 for the ROM routines. The digit is tested in two different ways:</p>
+<ul>
+<li>The run loop asks only "is it non-zero?". If so, it takes the fast path.</li>
+<li>The step fetch tests single bits. Bit 0 means fetch from the module, bit 3 means fetch from ROM, and anything else means fetch from RAM.</li>
+</ul>
+<p>The values 2, 4 and 6 are never set by TI's code. They pass the first test but match neither bit of the second. With one of them in place, a user program in RAM runs on the fast path. No normal key writes this digit, so getting such a value there takes a firmware bug. TI-59 users' clubs found and published such bugs.</p>
+<h2 id="rules-for-fast-mode-programs">Rules for fast-mode programs</h2>
+<p><strong>Allowed:</strong></p>
+<ul>
+<li>Number entry, all arithmetic and parentheses, and all functions.</li>
+<li>STO, RCL, SUM, Prd and Exc, including their INV and Ind forms. Also HIR, CMs, CP, x⇄t, CE and CLR.</li>
+<li>St flg, If flg, Fix, Eng, Deg, Rad and Grad.</li>
+<li>Op 00–08, Op 10 and Op 16–39, and Prt, Adv and Pause.</li>
+<li>Transfers to an absolute or Ind address: GTO, x=t, x≥t, If flg and Dsz. Dsz loops do work, despite the old advice not to use them.</li>
+</ul>
+<p><strong>Not allowed.</strong> Each of these leaves fast mode and loses the result:</p>
+<ul>
+<li><strong>Labels as targets:</strong> GTO, SBR, x=t, x≥t, If flg or Dsz to a label, and A–E′ called from the program. Use absolute addresses instead.</li>
+<li><strong>Subroutines:</strong> SBR in every form, including <code>Pgm nn SBR</code>.</li>
+<li><strong>Built-in ROM routines:</strong> Σ+, x̄, P→R, D.MS and Op 11–15, and their INV forms.</li>
+</ul>
+<p><strong>Differences you must expect:</strong></p>
+<ul>
+<li>The display is frozen, and R/S cannot stop the program.</li>
+<li>Errors never stop the program, and nothing is traced.</li>
+<li>INV SBR with nothing to return to does not stop the program.</li>
+</ul>
+<p><strong>Ending the program.</strong> This is where most fast-mode programs go wrong. The program must end with RST or R/S, and at that moment X must be 0, a number still being typed, or a value just shown by Pause or Prt. If X holds any other result, the calculator hangs with a dark display, and only switching it off helps. Switching off erases the program.</p>
+<ul>
+<li>Safe endings: <code>CLR RST</code>, <code>0 RST</code>, <code>RCL nn Pause RST</code>.</li>
+<li>Hanging endings: <code>RCL nn RST</code>, <code>… = RST</code>, <code>RCL nn R/S</code>.</li>
+<li>A good pattern: store the result, end with <code>CLR RST</code>, and let a normal-mode <code>RCL nn R/S</code> at step 000 show it.</li>
+<li><code>RCL nn Pause R/S</code> stops with the result on the display, but the calculator is still in fast mode. Pressing any operation key quietly continues the program. Press RST first.</li>
+</ul>
+<h2 id="ways-in">Ways in</h2>
+<p>All methods put X = 1.000000000002 (or …04, …06) on the display first; <code>1 + 2 EE 12 +/- =</code> produces it exactly.</p>
+<ul>
+<li><strong>SST</strong> (shortest; <a href="https://calc-u.org/59/software/#fastmode-sst-ti59">fastmode-sst.ti59</a>). Put a St flg step at step 007 (the last step of the first 8-step block; see "How the hack works") and start the real program at step 008. Key <code>GTO 007 SST 0 STO</code>.</li>
+<li><strong>St flg at the end of the partition</strong> (TI PPC Notes V9N3P5; <a href="https://calc-u.org/59/software/#fastmode-ti59">fastmode.ti59</a>). The program ends with St flg on the last step and halts with a flashing display. Key <code>7 EE</code>.</li>
+<li><strong>Acosta's "hi2"</strong> (<a href="https://calc-u.org/59/software/#calendar-08-acosta-ti59">calendar-08-acosta.ti59</a>). The trigger is built into the program with a manufactured pseudo-keycode, so a single key starts it.</li>
+<li><strong>LRN inside a module program</strong> (<code>Pgm 02 SBR 239</code>; <a href="https://calc-u.org/59/software/#FastMode_Zero4-ti59">FastMode_Zero4.ti59</a>). This is an unrelated bug that reaches the same state.</li>
+</ul>
+<h2 id="flags-and-fix-after-entry">Flags and Fix after entry</h2>
+<p>Entry overwrites all ten user flags and the Fix setting. Set any flags you need inside the fast-mode program.</p>
+<ul>
+<li><strong>Entry from X</strong> (all methods except <code>Pgm 02 SBR 239</code>). The first five digits of X set the flag pairs 4/9, 3/8, 2/7, 1/6 and 0/5. A digit of 1, 5 or 9 sets the lower flag, 2 or 6 the upper one, 3 or 7 both, and 0, 4 or 8 neither. So <code>1 + 2 EE 12 +/- =</code> sets flag 4, which has no special meaning; <code>4 + 2 EE 12 +/- =</code> works the same and leaves all flags clear. A positive X gives floating display.</li>
+<li><strong>Entry with <code>Pgm 02 SBR 239</code>.</strong> The flags come from steps 013–015 instead, two digits per step from step 015 down. Zeros there clear all flags; <code>Op 00</code> at 014–015 sets flags 7 and 1 (TI PPC Notes V6N8P3, and Claborn's PPX article in the Fast Mode Summaries). Fix ends up at 0.</li>
+</ul>
+<h2 id="how-the-hack-works">How the hack works</h2>
+<p>You need three facts about the calculator's internals to follow it.</p>
+<ol type="1">
+<li><strong>The status register.</strong> The firmware keeps its bookkeeping in one 16-digit scratch register. That register holds the Fix setting, the current program step, the user flags, and the program source digit.</li>
+<li><strong>Operations come in pieces.</strong> A key such as St flg needs a second key, the flag number. The firmware stores the half-finished operation, waits for the digit, and then jumps to the code that completes it. It computes that jump target by combining address bits.</li>
+<li><strong>HIR registers.</strong> HIR STO n copies X, digit for digit, into internal register n. HIR normally accepts only n = 1–8. Register 0 would be the status register.</li>
+</ol>
+<p><strong>The bug.</strong> Run from a program, St flg expects a two-digit flag number. If a key such as STO, EE or x⇄t arrives after the first digit, the firmware ends the operation early. But the code that decoded that key leaves one stray address bit behind, and St flg's completion adds its own bits on top of it. The jump lands in the wrong routine. After one more misrouted jump, execution ends in the code of HIR STO, with register number 0.</p>
+<p><strong>The payload.</strong> X is now copied into the status register, digit for digit. 1.000000000002 is laid out so that each digit lands in a useful field:</p>
+<ul>
+<li>The final 2 becomes the program source.</li>
+<li>The zeros become step 000 and floating-point display.</li>
+<li>The leading 1 happens to set flag 4.</li>
+</ul>
+<p><strong>Why it starts running.</strong> Like every operation, the misrouted St flg ends in the display routine. That routine sees a non-zero source, assumes a ROM routine such as P→R is between two of its steps, and fetches the next step instead of formatting X. This is TI's own mechanism for running ROM routines; from here on every step takes the fast path, and the fetch still reads RAM.</p>
+<p><strong>Why the program starts at step 008.</strong> The RAM chips transfer only whole registers of 16 digits. A register is either one data register or 8 program steps (000–007, 008–015, …). The firmware therefore copies a whole block of 8 steps into a buffer, a shift register with the current step at the bottom. Within a block it only shifts the buffer down by one step; it reads memory only when the step counter moves on to the next block. Each shift moves an empty step (keycode 00) in at the top. Each regular jump (GTO, RST, SBR, BST, label search) marks the buffer stale, so counter and buffer always agree. The next fetch reads the target's block and shifts it down until the target step is at the bottom. After <code>GTO 007</code>, for example, the buffer holds step 007 and seven empty steps above it.</p>
+<p>HIR STO knows nothing about the buffer. The hack sets the counter to 000 but leaves the buffer as it was, at the step that held St flg's flag number. Until the counter leaves block 000–007, the two disagree:</p>
+<ul>
+<li>Steps 001–007 run the steps that follow in the old block, then the empty steps that the shifts moved in. Each empty step types a harmless 0.</li>
+<li>The first of these steps is swallowed. With <code>SUM 06</code> there, the SUM has no effect and the 06 types a 6.</li>
+<li>Step 008 is the first read from memory. From there on, counter and buffer agree again.</li>
+</ul>
+<p>St flg therefore goes on the last step of a block: 007, 015, … (8k+7). Then nothing is left over: <code>GTO 007</code> already filled the buffer with empty steps above St flg, so steps 001–007 are all empty, and the real program starts at 008. With St flg on step 003 and <code>1 2 3 4</code> on steps 004–007, the run types 234000 before step 008.</p>
+<p>Acosta's "hi2" reads the flag number from the program. With St flg at 135 (8·16+7), that read already moves into the block 136–143. Steps 001–007 then run 137–143, and Acosta puts <code>GTO 062</code> there.</p>
+<p>Steps 000–006 are never read during the run, so they can hold anything.</p>
+<p><strong>Why the restrictions follow.</strong> All the other places that look at the source digit also ask only "non-zero?", and each draws the conclusion that suits a module program:</p>
+<ul>
+<li><strong>Label search</strong> scans the module, because a module program's labels live there. The RAM label is never found.</li>
+<li><strong>A subroutine call</strong> saves the module's position as the return address, because that is where a module program continues. The return then jumps into the module.</li>
+<li><strong>The ROM routines</strong> (Σ+, P→R, …) are called the same way, so they fail the same way.</li>
+<li><strong>The display</strong> is never formatted. When the program stops, the firmware shows X, but X is still in internal format. The routine that lays out the digits then waits for a condition that never occurs. A typed number, 0, or a value just shown by Pause or Prt is already in display format, so these endings are safe.</li>
+</ul>
+<h2 id="limits">Limits</h2>
+<p>Everything here was observed on Calc-U-59, which runs the original TI-59 ROM unmodified, and not on a real TI-59. Op 09 and card reading or writing were not tested in fast mode.</p>
+</main>
+</body>
+</html>
