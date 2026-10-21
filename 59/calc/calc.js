@@ -207,9 +207,10 @@ const CALC_ROWS = [[{
 // forcePressed lets an outside caller light a key that no pointer is touching —
 // PlayCalculator.jsx uses it so a physical-keyboard press looks exactly like a
 // clicked one. onDown/onUp drive the emulator's press/release from the actual
-// pointer down/up.
+// pointer down/up; they get the key's `id`.
 function CalcKey({
   kc,
+  id,
   scale,
   onDown,
   onUp,
@@ -266,23 +267,23 @@ function CalcKey({
   }, kc.top || "\u00A0"), /*#__PURE__*/React.createElement("button", {
     onMouseDown: () => {
       setPointerPressed(true);
-      onDown && onDown(kc.label);
+      onDown && onDown(id);
     },
     onMouseUp: () => {
       setPointerPressed(false);
-      onUp && onUp(kc.label);
+      onUp && onUp(id);
     },
     onMouseLeave: () => {
       setPointerPressed(false);
-      onUp && onUp(kc.label);
+      onUp && onUp(id);
     },
     onTouchStart: () => {
       setPointerPressed(true);
-      onDown && onDown(kc.label);
+      onDown && onDown(id);
     }
     // preventDefault here suppresses the mousedown/mouseup/click "compatibility"
     // cascade Safari synthesizes after a touch it still classifies as a tap.
-    // Without it, a touch held past PlayCalculator.jsx's PLAY_KEY_HOLD_MS floor
+    // Without it, a touch held past the minimum hold (KeySequencer::kHold)
     // (so its own release already fired synchronously, right at touch-up) gets
     // a second, independent press/release cycle from that synthetic cascade —
     // a real second digit landing right when the finger lifts. Brief taps and
@@ -297,7 +298,7 @@ function CalcKey({
     onTouchEnd: e => {
       e.preventDefault();
       setPointerPressed(false);
-      onUp && onUp(kc.label);
+      onUp && onUp(id);
     },
     onClick: e => {
       if (onDown) {
@@ -308,8 +309,8 @@ function CalcKey({
         // mousedown/mouseup pair above; treating it here too would
         // press-and-release the key twice per click.
         if (e.detail === 0) {
-          onDown(kc.label);
-          onUp && onUp(kc.label);
+          onDown(id);
+          onUp && onUp(id);
         }
       }
     },
@@ -565,7 +566,9 @@ function CueCard({
 // The LED display of the playable calculator: the classic (dot-matrix) style
 // of App/Views/LEDDisplayView.swift and Qt6/app/LedRenderer.cpp. What to
 // draw comes from the worker, computed by the main repo's Shared/ layer:
-//   cells    — Float32Array [segments, level, dp] × 12, cell 0 rightmost: the
+//   frames   — {cells, onFrame}: the owner stores each frame's cells and calls
+//              onFrame(), which repaints without a React render. cells is a
+//              Float32Array [segments, level, dp] × 12, cell 0 rightmost: the
 //              lit-segment mask (Shared/SevenSegment.hpp, the "C" indicator
 //              in cell 11), brightness 0–1 (Shared/DisplayPov) and the
 //              decimal point's
@@ -605,10 +608,12 @@ function ledPaths(width, height, g) {
   };
 }
 
-// Lit shapes with the same brightness share one blurred glow pass.
+// Lit shapes with the same brightness, in 1/64 steps, share one blurred glow
+// pass: brightness is continuous, and a blur per distinct level is expensive.
 function ledFillGlowing(ctx, shapes, rgb, blur, glowOpacity) {
   const byLevel = new Map();
-  for (const [path, level] of shapes) {
+  for (const [path, exact] of shapes) {
+    const level = Math.round(exact * 64) / 64;
     if (!byLevel.has(level)) byLevel.set(level, new Path2D());
     byLevel.get(level).addPath(path);
   }
@@ -651,7 +656,7 @@ const {
 // (width × scale / 12) × (height × scale). Nothing is drawn until it arrives.
 function LedDisplayCanvas({
   scale,
-  cells,
+  frames,
   geometry,
   width,
   height
@@ -670,9 +675,14 @@ function LedDisplayCanvas({
     canvas.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
   }, [cssWidth, cssHeight]);
   useLedEffect(() => {
-    if (!paths) return;
-    ledDrawDisplay(canvasRef.current.getContext("2d"), cssWidth, cssHeight, cells, geometry, paths);
-  }, [cells, paths]);
+    if (!paths) return undefined;
+    const draw = () => ledDrawDisplay(canvasRef.current.getContext("2d"), cssWidth, cssHeight, frames.cells, geometry, paths);
+    draw();
+    frames.onFrame = draw;
+    return () => {
+      frames.onFrame = null;
+    };
+  }, [frames, paths]);
   return /*#__PURE__*/React.createElement("canvas", {
     ref: canvasRef,
     style: {
@@ -747,7 +757,12 @@ function PlayCalculator({
 }) {
   const workerRef = usePlayRef(null);
   const post = usePlayCallback(msg => workerRef.current?.postMessage(msg), []);
-  const [cells, setCells] = usePlayState(null);
+
+  // Display frames bypass React state: the canvas repaints, nothing re-renders.
+  const frames = usePlayRef({
+    cells: null,
+    onFrame: null
+  }).current;
   const [geometry, setGeometry] = usePlayState(null);
   const [moduleId, setModuleId] = usePlayState("");
   const [modules, setModules] = usePlayState([]);
@@ -768,7 +783,8 @@ function PlayCalculator({
           setStatusMessage("");
           break;
         case "display":
-          setCells(msg.cells);
+          frames.cells = msg.cells;
+          if (frames.onFrame) frames.onFrame();
           break;
         case "geometry":
           setGeometry(msg.geometry);
@@ -847,27 +863,21 @@ function PlayCalculator({
 
   // ── On-screen key clicks/taps ────────────────────────────────────────
   // Real pointer down/up; the worker keeps a short click down for the
-  // ROM's minimum hold. <CalcKey> reports its label — every label is unique —
-  // and also reports an up when the pointer merely leaves a key, so only the
-  // key the pointer pressed is released.
-  const pointerLabelRef = usePlayRef(null);
-  const pointerDownByLabel = usePlayCallback(label => {
-    for (let ri = 0; ri < CALC_ROWS.length; ri++) {
-      const ci = CALC_ROWS[ri].findIndex(kc => kc.label === label);
-      if (ci !== -1) {
-        pointerLabelRef.current = label;
-        post({
-          type: "pointerDown",
-          row: ri,
-          col: ci
-        });
-        return;
-      }
-    }
+  // ROM's minimum hold. <CalcKey> reports its id (row×5 + col) and also
+  // reports an up when the pointer merely leaves a key, so only the key the
+  // pointer pressed is released.
+  const pointerKeyRef = usePlayRef(null);
+  const pointerDown = usePlayCallback(id => {
+    pointerKeyRef.current = id;
+    post({
+      type: "pointerDown",
+      row: Math.floor(id / 5),
+      col: id % 5
+    });
   }, [post]);
-  const pointerUpByLabel = usePlayCallback(label => {
-    if (pointerLabelRef.current !== label) return;
-    pointerLabelRef.current = null;
+  const pointerUp = usePlayCallback(id => {
+    if (pointerKeyRef.current !== id) return;
+    pointerKeyRef.current = null;
     post({
       type: "pointerUp"
     });
@@ -936,7 +946,7 @@ function PlayCalculator({
     }
   }), /*#__PURE__*/React.createElement(PlayDisplay, {
     scale: scale,
-    cells: cells,
+    frames: frames,
     geometry: geometry,
     moduleName: currentModule ? currentModule.menuTitle : "",
     statusMessage: statusMessage
@@ -964,9 +974,10 @@ function PlayCalculator({
   }, row.map((kc, ci) => /*#__PURE__*/React.createElement(MemoCalcKey, {
     key: ci,
     kc: kc,
+    id: ri * 5 + ci,
     scale: scale,
-    onDown: pointerDownByLabel,
-    onUp: pointerUpByLabel,
+    onDown: pointerDown,
+    onUp: pointerUp,
     forcePressed: heldKey === ri * 5 + ci
   }))))), keyboard ? /*#__PURE__*/React.createElement("div", {
     style: {
@@ -991,7 +1002,7 @@ function PlayCalculator({
 }
 function PlayDisplay({
   scale,
-  cells,
+  frames,
   geometry,
   moduleName,
   statusMessage
@@ -1016,7 +1027,7 @@ function PlayDisplay({
     }
   }, /*#__PURE__*/React.createElement(LedDisplayCanvas, {
     scale: scale,
-    cells: cells,
+    frames: frames,
     geometry: geometry,
     width: PLAY_LED_WIDTH,
     height: PLAY_LED_HEIGHT

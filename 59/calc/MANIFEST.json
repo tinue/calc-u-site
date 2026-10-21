@@ -1,17 +1,17 @@
 {
   "name": "Calc-U-59-web",
   "version": "2.0.0",
-  "commit": "38d65a5590df0228d66827f801f213eb55988787",
+  "commit": "73851056a46d92a4e687e7f49d3774373eb02f49",
   "files": {
     "app/app.css": "c93e9978720b54c6eff597c5757e6030ff5d0a5fd573c5a73a6e7e628b90e39d",
     "app/app.js": "5405dfd24c7e17f5afc4b472119777c41581c3cf837eb89573bc27e932cc1345",
     "app/icon.png": "0aacbf51f7d4ab2c0bb2820b614257ba7dbfea13c129444e43face920160e100",
     "app/index.html": "bc37e3769231d8ee4219d74e7d112f2adf2e44cb41299f3f03b36f7a164598fd",
     "app/manifest.json": "46e9e12dfcc50bc823f295a3f24f0fa0aa6e93549d274f564fcd99f19cbf05f9",
-    "app/sw.js": "86966bfcd8be4a94e8654b1f3bf7233c3a768179b49ced3429bb1feeb8628c59",
+    "app/sw.js": "e796828126aabf30fbf22a7d56bc85669549578b459c1d0be09f8bfd1789bdce",
     "calc-engine-worker.js": "0393caf2b73acdccb2c7be79d603b04808db401eae985e4bcfdce08d6f3f2884",
     "calc.css": "a01611813846b733276a0c90fdbaa31d6d736ffbd8b27bf063cfe699d4edfbd7",
-    "calc.js": "d8d15687ba2d66cc102a6b0e9e50d77418a28b628c9697f701d962c9efcb88d0",
+    "calc.js": "0c71155eae26272378b882c12f88534925c86ca9c56e3ba873688a7fc6221961",
     "fonts/Archivo-OFL.txt": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
     "fonts/BarlowCondensed-OFL.txt": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
     "fonts/archivo-400.woff2": "07f9160163da2ec0f6376ef9d27a2bb8163f98019ba798da4baafb154e30056e",
@@ -44,7 +44,7 @@
     "wasm/roms/TMC0583-CONST-K.txt": "bda4ac42985d2802bbe16b1cf53c066d20dd72dcea886eb21aff2a2a432cdf1d",
     "wasm/roms/TMC0583.txt": "269fdb103cba80a055efd274180e4efeb2ae6e2a63b3b8c5489fee98e63cb353",
     "wasm/roms/cuecards.txt": "834f95142c1f16a993324203129f6135accdc128adc209928a632934e8af9d0e",
-    "wasm/ti59-core.js": "54a2bf810bacef60330eb2f3c329e07923a5cbef992a9f0ec1d0ca6d41b0ddd2",
-    "wasm/ti59-core.wasm": "9d1652fe065cbcebf3f303802b508a7e18a30e00fb0c4c9adc726f22e166f480"
+    "wasm/ti59-core.js": "13f638542027e1a53b1bb52a156a23c4e1142db4110170419f2a5f4465f9bf05",
+    "wasm/ti59-core.wasm": "2d316864bbadbd6d69c60d2a33ddcc7106c525e784504b5bf611080102f08d69"
   }
 }

@@ -11,7 +11,7 @@
 // drops this app's older caches. The scope is part of the name: the origin
 // may be shared with the host site, or with another copy of the client.
 const CACHE_PREFIX = `calcu59-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "73d9618429e758a7";
+const CACHE_NAME = CACHE_PREFIX + "6b82b7200492155e";
 
 const CORE_ASSETS = [
   "./",
