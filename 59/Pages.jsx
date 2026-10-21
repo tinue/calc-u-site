@@ -1660,6 +1660,11 @@ function ModulesPage() {
    actually searches for.
    ============================================================= */
 function SoftwarePage() {
+  const articles = [
+    { file: "fast-mode", title: "TI-59 Fast Mode: Running Programs at ROM Speed", description: "What Fast Mode skips between steps, which instructions a fast-mode program may use, the safe ways to end one, four ways in — and how a firmware bug makes it possible." },
+    { file: "printer-interrupt", title: "TI-59 Printer Interrupt: Stopping a Printed Line Halfway", description: "The manufactured keycode 1F that stops the PC-100 mid-line, the rules for using it, two ways to make it, and why it works." },
+    { file: "ti-58c-changes", title: "TI-58C: Changes and Improvements compared to TI-58/59", description: "The TI-58C's revised ROM: constant memory, the rebuilt idle loop and its timing, the TI-59 bugs it fixes, Op 40, the TRACE branch marker and the factory self-test." },
+  ];
   const categories = [
     {
       heading: "The calendar printer competition, 1978–1981",
@@ -1679,6 +1684,7 @@ function SoftwarePage() {
     {
       heading: "PC-100 printer graphics and tricks",
       intro: "The PC-100/PC-100C thermal printer had an undocumented quirk: interrupting it mid-character exposes partial print heads, which the TI PPC user community turned into a small genre of printer-graphics demos through the early 1980s.",
+      article: "printer-interrupt",
       items: [
         { file: "characters.ti59", title: "Print character table", description: "Prints the full TI-59 print-code table with row and column headers." },
         { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980).", printer: true },
@@ -1705,6 +1711,7 @@ function SoftwarePage() {
     {
       heading: "Fast Mode, keycodes and firmware curiosities",
       intro: "Fast Mode is an undocumented TI-58/TI-58C/TI-59 execution mode, discovered and written up by the TI PPC club over several years — these programs demonstrate it, along with a couple of other undocumented corners of the ROM.",
+      article: "fast-mode",
       items: [
         { file: "fastmode.ti59", title: "Fast Mode factorial demo (TI-59)", description: "Computes factorials in both normal and Fast Mode so the roughly 70% speed difference is directly comparable — 10! in about 4.6 seconds, 69! in about 31." },
         { file: "fastmode.ti58", title: "Fast Mode factorial demo (TI-58)", description: "The same Fast Mode factorial comparison, for the TI-58/TI-58C." },
@@ -1761,13 +1768,38 @@ function SoftwarePage() {
         </p>
       </div>
 
+      <h2 className="section" id="articles">Articles</h2>
+      <p style={{ color: "var(--fg-2)", lineHeight: 1.7, marginTop: -8 }}>
+        How the undocumented tricks behind several of these programs work, and how the TI-58C's firmware differs
+        from its predecessors — each as Markdown and as PDF.
+      </p>
+      <div style={{ display: "grid", gap: 12 }}>
+        {articles.map((a) => (
+          <div key={a.file} id={a.file} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "4px 16px" }}>
+              <h3 className="sub" style={{ margin: 0 }}>{a.title}</h3>
+              <span style={{ display: "flex", gap: 8 }}>
+                <a className="btn secondary" href={`/59/articles/${a.file}.pdf`}>PDF</a>
+                <a className="btn secondary" href={`/59/articles/${a.file}.md`} download>Markdown</a>
+              </span>
+            </div>
+            <p style={{ margin: "8px 0 0", color: "var(--fg-2)" }}>{a.description}</p>
+          </div>
+        ))}
+      </div>
+
       {categories.map((cat) => (
         <React.Fragment key={cat.heading}>
           <h2 className="section">{cat.heading}</h2>
-          <p style={{ color: "var(--fg-2)", lineHeight: 1.7, marginTop: -8 }}>{cat.intro}</p>
+          <p style={{ color: "var(--fg-2)", lineHeight: 1.7, marginTop: -8 }}>
+            {cat.intro}
+            {cat.article ? (
+              <> How it works: <a href={`/59/articles/${cat.article}.pdf`}>{articles.find((a) => a.file === cat.article).title}</a>.</>
+            ) : null}
+          </p>
           <div style={{ display: "grid", gap: 12 }}>
             {cat.items.map((it) => (
-              <div key={it.file} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+              <div key={it.file} id={it.file.replace(/^assembly\//, "").replace(/\./g, "-")} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "4px 16px" }}>
                   <h3 className="sub" style={{ margin: 0 }}>{it.title}</h3>
                   <a className="btn secondary" href={`/59/software-files/${it.file}`} download>

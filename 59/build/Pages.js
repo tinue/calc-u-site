@@ -2164,6 +2164,19 @@ function ModulesPage() {
    actually searches for.
    ============================================================= */
 function SoftwarePage() {
+  const articles = [{
+    file: "fast-mode",
+    title: "TI-59 Fast Mode: Running Programs at ROM Speed",
+    description: "What Fast Mode skips between steps, which instructions a fast-mode program may use, the safe ways to end one, four ways in — and how a firmware bug makes it possible."
+  }, {
+    file: "printer-interrupt",
+    title: "TI-59 Printer Interrupt: Stopping a Printed Line Halfway",
+    description: "The manufactured keycode 1F that stops the PC-100 mid-line, the rules for using it, two ways to make it, and why it works."
+  }, {
+    file: "ti-58c-changes",
+    title: "TI-58C: Changes and Improvements compared to TI-58/59",
+    description: "The TI-58C's revised ROM: constant memory, the rebuilt idle loop and its timing, the TI-59 bugs it fixes, Op 40, the TRACE branch marker and the factory self-test."
+  }];
   const categories = [{
     heading: "The calendar printer competition, 1978–1981",
     intro: "“52-Notes,” the TI programmable-calculator newsletter, ran a competition from 1978 to write the fastest TI-59 program that prints a full year calendar on the PC-100 printer, using the Master Library module's date routines. Each entry improved on the last; the 1981 winner is here too, with a new entry from 2026. PC-100/PC-100C printer required.",
@@ -2216,6 +2229,7 @@ function SoftwarePage() {
   }, {
     heading: "PC-100 printer graphics and tricks",
     intro: "The PC-100/PC-100C thermal printer had an undocumented quirk: interrupting it mid-character exposes partial print heads, which the TI PPC user community turned into a small genre of printer-graphics demos through the early 1980s.",
+    article: "printer-interrupt",
     items: [{
       file: "characters.ti59",
       title: "Print character table",
@@ -2291,6 +2305,7 @@ function SoftwarePage() {
   }, {
     heading: "Fast Mode, keycodes and firmware curiosities",
     intro: "Fast Mode is an undocumented TI-58/TI-58C/TI-59 execution mode, discovered and written up by the TI PPC club over several years — these programs demonstrate it, along with a couple of other undocumented corners of the ROM.",
+    article: "fast-mode",
     items: [{
       file: "fastmode.ti59",
       title: "Fast Mode factorial demo (TI-59)",
@@ -2386,7 +2401,59 @@ function SoftwarePage() {
     href: "/59/install/iphone-ipad/"
   }, "iPhone and iPad"), ", then open a downloaded file, or try the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
-  }, "browser emulator"), " first \u2014 it has no printer, but the utilities below that don't need one will run.")), categories.map(cat => /*#__PURE__*/React.createElement(React.Fragment, {
+  }, "browser emulator"), " first \u2014 it has no printer, but the utilities below that don't need one will run.")), /*#__PURE__*/React.createElement("h2", {
+    className: "section",
+    id: "articles"
+  }, "Articles"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: "var(--fg-2)",
+      lineHeight: 1.7,
+      marginTop: -8
+    }
+  }, "How the undocumented tricks behind several of these programs work, and how the TI-58C's firmware differs from its predecessors \u2014 each as Markdown and as PDF."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gap: 12
+    }
+  }, articles.map(a => /*#__PURE__*/React.createElement("div", {
+    key: a.file,
+    id: a.file,
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "baseline",
+      flexWrap: "wrap",
+      gap: "4px 16px"
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "sub",
+    style: {
+      margin: 0
+    }
+  }, a.title), /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "btn secondary",
+    href: `/59/articles/${a.file}.pdf`
+  }, "PDF"), /*#__PURE__*/React.createElement("a", {
+    className: "btn secondary",
+    href: `/59/articles/${a.file}.md`,
+    download: true
+  }, "Markdown"))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: "8px 0 0",
+      color: "var(--fg-2)"
+    }
+  }, a.description)))), categories.map(cat => /*#__PURE__*/React.createElement(React.Fragment, {
     key: cat.heading
   }, /*#__PURE__*/React.createElement("h2", {
     className: "section"
@@ -2396,13 +2463,16 @@ function SoftwarePage() {
       lineHeight: 1.7,
       marginTop: -8
     }
-  }, cat.intro), /*#__PURE__*/React.createElement("div", {
+  }, cat.intro, cat.article ? /*#__PURE__*/React.createElement(React.Fragment, null, " How it works: ", /*#__PURE__*/React.createElement("a", {
+    href: `/59/articles/${cat.article}.pdf`
+  }, articles.find(a => a.file === cat.article).title), ".") : null), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gap: 12
     }
   }, cat.items.map(it => /*#__PURE__*/React.createElement("div", {
     key: it.file,
+    id: it.file.replace(/^assembly\//, "").replace(/\./g, "-"),
     className: "panel",
     style: {
       padding: 20,

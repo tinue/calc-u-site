@@ -103,7 +103,7 @@ for (const [p, html] of built) {
   for (const address of new Set(hrefs)) {
     if (!underBase(address)) { ok(false, `${p}: link ${address} is not under ${BASE}/`); continue; }
     const href = sitePath(address);
-    if (/\.(css|png|js|xml|txt|json|woff2?|ti59|ti58|ti58c|asm)$/.test(href)) {
+    if (/\.(css|png|js|xml|txt|json|woff2?|ti59|ti58|ti58c|asm|md|pdf)$/.test(href)) {
       ok(fs.existsSync(diskPath(address)), `${p}: asset ${address} missing`);
     } else if (STATIC_TARGETS[href]) {
       ok(fs.existsSync(STATIC_TARGETS[href]), `${p}: static page ${href} missing`);
