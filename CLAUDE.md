@@ -24,8 +24,7 @@ Invoke the site's skill before working in its folder.
   `59/.seo/fetch-web-client.js` from a release asset; `check.js` fails on any
   change to it.
 - **`robots.txt` and `404.html` live at the root**, for all sites: search
-  engines and GitHub Pages only look for them here. Until launch,
-  `robots.txt` blocks everything (the launch version is in its comment).
+  engines and GitHub Pages only look for them here.
 - **Nothing is fetched from a third party** on any page — fonts, scripts,
   images and the calculator are all served from calc-u.org, and there are no
   analytics, cookies or embeds. Outbound `<a href>` links are fine.

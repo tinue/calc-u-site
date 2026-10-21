@@ -107,7 +107,7 @@ Each piece has one home, and `check.js` asserts the result:
 | Open Graph / Twitter | `renderPage()` in `build.js`, from the same title and description. |
 | Structured data | `build.js`: `SoftwareApplication` on the home page, `FAQPage` on `/faq/` (parsed out of `Pages.jsx` so markup and JSON-LD cannot disagree), `BreadcrumbList` everywhere else. |
 | `sitemap.xml` | Generated from `ROUTES` — self-canonical pages only. |
-| `robots.txt` | At the repository root, not generated. At launch it should block `/59/calc/app/`, the client's demo page `/59/calc/index.html` and `/59/preview/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
+| `robots.txt` | At the repository root, not generated. It blocks `/59/calc/app/`, the client's demo page `/59/calc/index.html` and `/59/preview/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
 | `404.html` | At the repository root, not generated: GitHub Pages only serves the root one. |
 
 Two rules are easy to break by accident:
