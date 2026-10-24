@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TI-59 Printer Interrupt: Stopping a Printed Line Halfway — Calc-U 59</title>
-<meta name="description" content="The PC-100 printer prints a line as 7 rows of dots and needs about 0.2 s for it. It works on its own: the calculator sends the line and goes on with the…">
+<meta name="description" content="The PC-100 printer prints a line as 7 rows of dots, one stroke per 508 instruction cycles (36 ms on a TI-59), then advances the paper. It works on its own:…">
 <link rel="canonical" href="https://calc-u.org/59/articles/printer-interrupt.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Calc-U 59">
 <meta property="og:url" content="https://calc-u.org/59/articles/printer-interrupt.html">
 <meta property="og:title" content="TI-59 Printer Interrupt: Stopping a Printed Line Halfway">
-<meta property="og:description" content="The PC-100 printer prints a line as 7 rows of dots and needs about 0.2 s for it. It works on its own: the calculator sends the line and goes on with the…">
+<meta property="og:description" content="The PC-100 printer prints a line as 7 rows of dots, one stroke per 508 instruction cycles (36 ms on a TI-59), then advances the paper. It works on its own:…">
 <meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
 <link rel="icon" type="image/png" href="/59/assets/app-icon.png">
 <link rel="apple-touch-icon" href="/59/assets/app-icon.png">
@@ -28,7 +28,7 @@
 </nav>
 <h1 id="ti-59-printer-interrupt-stopping-a-printed-line-halfway">TI-59 Printer Interrupt: Stopping a Printed Line Halfway</h1>
 <h2 id="what-the-printer-interrupt-is">What the printer interrupt is</h2>
-<p>The PC-100 printer prints a line as 7 rows of dots and needs about 0.2 s for it. It works on its own: the calculator sends the line and goes on with the program. TI-59 users found a program step that stops the printer while it is still printing. The line then appears with only its first rows of dots. Programs use this for graphics with a finer vertical resolution than whole characters (<a href="https://calc-u.org/59/software/#texas-print-ti59">texas-print.ti59</a>, the TI logo) or to show truncated characters (<a href="https://calc-u.org/59/software/#printer-quirks-ti59">printer-quirks.ti59</a>).</p>
+<p>The PC-100 printer prints a line as 7 rows of dots, one stroke per 508 instruction cycles (36 ms on a TI-59), then advances the paper. It works on its own: the calculator sends the line and goes on with the program. TI-59 users found a program step that stops the printer while it is still printing. The line then appears with only its first rows of dots. Programs use this for graphics with a finer vertical resolution than whole characters (<a href="https://calc-u.org/59/software/#texas-print-ti59">texas-print.ti59</a>, the TI logo) or to show truncated characters (<a href="https://calc-u.org/59/software/#printer-quirks-ti59">printer-quirks.ti59</a>).</p>
 <p><a href="https://calc-u.org/59/software/#printer-interrupt-ti59">printer-interrupt.ti59</a> is the smallest example. It prints "A0" once in full and once cut off after 2 rows.</p>
 <h2 id="the-hack">The hack</h2>
 <p>The interrupt is a program step with the keycode 1F. Keycodes are two decimal digits, so no key can record it. It has to be manufactured with a firmware bug that leaves a hexadecimal digit in program memory.</p>
@@ -53,7 +53,7 @@
 <h2 id="how-the-interrupt-works">How the interrupt works</h2>
 <p><strong>Dispatch.</strong> For every program step, the firmware splits the keycode into its two digits and builds a jump address from them (ROM <code>0F53</code>). Legal digits are 0–9. Nothing checks this, so the digit F builds an address too. For 1F it is <code>0EF1</code>.</p>
 <p><strong>The landing.</strong> <code>0EF1</code> is in the middle of the routine that prints a number. Three instructions later that routine sends PRT.GO, the signal that ends a printed line. With the display at 0, positive and without EE, the branches in between skip everything else and go straight to PRT.GO. Other display contents take other branches, which is why the article warns of hangs.</p>
-<p><strong>The printer.</strong> Op 05 sent the line a moment before. The printer is still printing its dot rows. PRT.GO while it is busy makes it stop. In the example, 1020 of the 2808 instruction cycles of a line have passed, so 2 of the 7 rows are on paper.</p>
+<p><strong>The printer.</strong> Op 05 sent the line a moment before. The printer is still printing its dot rows. PRT.GO while it is busy makes it stop. In the example, 1020 instruction cycles have passed, two strokes of 508, so 2 of the 7 rows are on paper.</p>
 <p><strong>The way back.</strong> After PRT.GO, execution continues at step 000, and the step after 1F is left as a return point, as after a subroutine call. The trace shows the steps 000, 009 and then the caller: <code>INV SBR</code> at 000 returns to 009, and the RTN there returns from the label subroutine.</p>
 <h2 id="how-the-code-is-made">How the code is made</h2>
 <p>You need three facts about the calculator's internals.</p>
