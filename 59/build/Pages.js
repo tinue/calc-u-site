@@ -2223,7 +2223,7 @@ function SoftwarePage() {
     }, {
       file: "calendar-09-dispatch.ti59",
       title: "Calendar Printer — fast mode with dispatched fix-ups (2026)",
-      description: "A new entry, written with the Calc-U 59 tools: Acosta's output format, about 4% faster.",
+      description: "A new entry, written with the Calc-U 59 tools: Acosta's output format, about 7% faster.",
       printer: true
     }]
   }, {

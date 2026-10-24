@@ -1678,7 +1678,7 @@ function SoftwarePage() {
         { file: "calendar-06-cargile.ti59", title: "Calendar Printer — Lou Cargile (bugfix)", description: "V3N7: a correction to an earlier entry — a missing CLR' meant the 1st of a month could fail to print if it fell on a Thursday.", printer: true },
         { file: "calendar-07-calidas.ti59", title: "Calendar Printer — Panos Galidas", description: "V3N9: the fastest of the 1978 entries, averaging 2 minutes 38.6 seconds per year over a five-year test span.", printer: true },
         { file: "calendar-08-acosta.ti59", title: "Calendar Printer — Patrick Acosta", description: "TI PPC Notes V9N2: the 1981 program that ended the race, using Fast Mode to print the worst-case year 2000 in 1 minute 23 seconds.", printer: true },
-        { file: "calendar-09-dispatch.ti59", title: "Calendar Printer — fast mode with dispatched fix-ups (2026)", description: "A new entry, written with the Calc-U 59 tools: Acosta's output format, about 4% faster.", printer: true },
+        { file: "calendar-09-dispatch.ti59", title: "Calendar Printer — fast mode with dispatched fix-ups (2026)", description: "A new entry, written with the Calc-U 59 tools: Acosta's output format, about 7% faster.", printer: true },
       ],
     },
     {
