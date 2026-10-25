@@ -2569,44 +2569,58 @@ function SoftwarePage() {
   }, /*#__PURE__*/React.createElement(BackButton, null)));
 }
 
-// PlayCalculator lays itself out from a fixed 360px grid multiplied by
-// `scale`, so a constant 1.4 is a hard 504px — wider than any iPhone in
-// portrait, which is why the fifth key column used to run off the page.
-// Measure the container instead of the window: .wrap-narrow's gutters change
-// at the 620px breakpoint, and the element already knows what it was given.
-function useFittedScale(max, min) {
+// The wide layout (calculator, printer and debugger side by side) needs
+// 862px (Calc-U-59 reference/WebClient.md, "Mounting it"); narrower, it would
+// keep that size and the page would scroll sideways, so phones and narrow
+// windows get the portrait layout instead. Measure the container, not the
+// window: .wrap's gutters change at the 620px breakpoint. The prerender
+// assumes .wrap's full 1072px. Portrait is capped so it stays a
+// calculator-sized column on a tablet.
+const WIDE_MIN_WIDTH = 862;
+const PORTRAIT_MAX_WIDTH = 504;
+function usePlayLayout() {
   const ref = React.useRef(null);
-  const [scale, setScale] = React.useState(max);
+  const [layout, setLayout] = React.useState({
+    wide: true,
+    width: 1072
+  });
   React.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     function measure() {
-      // 8px: the focus ring PlayCalculator permanently reserves around itself.
-      setScale(Math.max(min, Math.min(max, (el.clientWidth - 8) / 360)));
+      const width = el.clientWidth;
+      setLayout({
+        wide: width >= WIDE_MIN_WIDTH,
+        width
+      });
     }
     measure();
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", measure);
-      return () => window.removeEventListener("resize", measure);
-    }
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [max, min]);
-  return [ref, scale];
+  }, []);
+  return [ref, layout];
 }
 function PlayPage() {
-  const [holderRef, scale] = useFittedScale(1.4, 0.7);
+  const [holderRef, {
+    wide,
+    width
+  }] = usePlayLayout();
   return /*#__PURE__*/React.createElement("main", {
-    className: "wrap-narrow"
+    className: "wrap"
   }, /*#__PURE__*/React.createElement("div", {
     ref: holderRef,
     style: {
       display: "flex",
       justifyContent: "center"
     }
-  }, /*#__PURE__*/React.createElement(PlayCalculator, {
-    scale: scale,
+  }, wide ? /*#__PURE__*/React.createElement(PlayCalculator, {
+    layout: "wide",
+    width: width,
+    keyboard: true
+  }) : /*#__PURE__*/React.createElement(PlayCalculator, {
+    layout: "portrait",
+    width: Math.min(width, PORTRAIT_MAX_WIDTH),
     keyboard: true
   })), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -2620,16 +2634,21 @@ function PlayPage() {
     style: {
       opacity: .5
     }
-  }, "\u2192"))), /*#__PURE__*/React.createElement("h1", {
+  }, "\u2192"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 772,
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("h1", {
     className: "page-title",
     style: {
       marginTop: 32
     }
   }, "TI-59 emulator, online"), /*#__PURE__*/React.createElement("div", {
     className: "prose"
-  }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original Texas Instruments ROMs. The model picker switches between the ", /*#__PURE__*/React.createElement("strong", null, "TI-59"), ", ", /*#__PURE__*/React.createElement("strong", null, "TI-58"), " and ", /*#__PURE__*/React.createElement("strong", null, "TI-58C"), ", and the ", /*#__PURE__*/React.createElement("strong", null, "PC-100C printer"), " is connected from the start: the chevron in the corner turns to its page and back."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default; ", /*#__PURE__*/React.createElement("strong", null, "Settings"), " switches modules (that resets the calculator, as swapping the real module did) and chooses the calculator the page starts with. ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " loads one of the bundled presets or your own", " ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file, and you can also drop a file onto the calculator \u2014 files are read entirely in your browser and never leave your machine. The TI-58C keeps its constant memory in your browser between visits. For more programs to try, see the", " ", /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original Texas Instruments ROMs. The model picker switches between the ", /*#__PURE__*/React.createElement("strong", null, "TI-59"), ", ", /*#__PURE__*/React.createElement("strong", null, "TI-58"), " and ", /*#__PURE__*/React.createElement("strong", null, "TI-58C"), ", and the ", /*#__PURE__*/React.createElement("strong", null, "PC-100C printer"), " is connected from the start. On a wide screen the printer and the full debugger sit beside the calculator, with the ASM overlay and trace downloads; on a phone the chevron in the corner turns to the printer's page and back."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default; ", /*#__PURE__*/React.createElement("strong", null, "Settings"), " switches modules (that resets the calculator, as swapping the real module did) and chooses the calculator the page starts with. ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " loads one of the bundled presets or your own", " ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file, and you can also drop a file onto the calculator \u2014 files are read entirely in your browser and never leave your machine. The TI-58C keeps its constant memory in your browser between visits. For more programs to try, see the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/software/"
-  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button that writes a blank card, and give the card a name. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " card file; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a card out. Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "On a wide screen the same web client can also show the printer and the full debugger side by side, with the ASM overlay and trace downloads; this page shows the calculator and the printer one at a time. The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
+  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button that writes a blank card, and give the card a name. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " card file; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a card out. Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/mac/"
   }, "Mac"), " and on", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/windows-linux/"
@@ -2650,7 +2669,7 @@ function PlayPage() {
     style: {
       marginTop: 24
     }
-  }, /*#__PURE__*/React.createElement(BackButton, null)));
+  }, /*#__PURE__*/React.createElement(BackButton, null))));
 }
 
 // The physical-keyboard bindings in face order. The bindings themselves are

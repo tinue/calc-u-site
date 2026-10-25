@@ -1856,112 +1856,116 @@ function SoftwarePage() {
   );
 }
 
-// PlayCalculator lays itself out from a fixed 360px grid multiplied by
-// `scale`, so a constant 1.4 is a hard 504px — wider than any iPhone in
-// portrait, which is why the fifth key column used to run off the page.
-// Measure the container instead of the window: .wrap-narrow's gutters change
-// at the 620px breakpoint, and the element already knows what it was given.
-function useFittedScale(max, min) {
+// The wide layout (calculator, printer and debugger side by side) needs
+// 862px (Calc-U-59 reference/WebClient.md, "Mounting it"); narrower, it would
+// keep that size and the page would scroll sideways, so phones and narrow
+// windows get the portrait layout instead. Measure the container, not the
+// window: .wrap's gutters change at the 620px breakpoint. The prerender
+// assumes .wrap's full 1072px. Portrait is capped so it stays a
+// calculator-sized column on a tablet.
+const WIDE_MIN_WIDTH = 862;
+const PORTRAIT_MAX_WIDTH = 504;
+
+function usePlayLayout() {
   const ref = React.useRef(null);
-  const [scale, setScale] = React.useState(max);
+  const [layout, setLayout] = React.useState({ wide: true, width: 1072 });
   React.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     function measure() {
-      // 8px: the focus ring PlayCalculator permanently reserves around itself.
-      setScale(Math.max(min, Math.min(max, (el.clientWidth - 8) / 360)));
+      const width = el.clientWidth;
+      setLayout({ wide: width >= WIDE_MIN_WIDTH, width });
     }
     measure();
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", measure);
-      return () => window.removeEventListener("resize", measure);
-    }
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [max, min]);
-  return [ref, scale];
+  }, []);
+  return [ref, layout];
 }
 
 function PlayPage() {
-  const [holderRef, scale] = useFittedScale(1.4, 0.7);
+  const [holderRef, { wide, width }] = usePlayLayout();
   return (
-    <main className="wrap-narrow">
+    <main className="wrap">
       <div ref={holderRef} style={{ display: "flex", justifyContent: "center" }}>
-        <PlayCalculator scale={scale} keyboard />
+        {wide
+          ? <PlayCalculator layout="wide" width={width} keyboard />
+          : <PlayCalculator layout="portrait" width={Math.min(width, PORTRAIT_MAX_WIDTH)} keyboard />}
       </div>
       <div style={{ textAlign: "center", marginTop: 12 }}>
         <a className="btn secondary" href="/59/calc/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
       </div>
 
-      <h1 className="page-title" style={{ marginTop: 32 }}>TI-59 emulator, online</h1>
-      <div className="prose">
-        <p>
-          The calculator above is a working <strong>Texas Instruments TI-59 emulator running in
-          your browser</strong> — no install, no account, nothing to download. It is the Calc-U 59
-          app's own emulator — the same code the Mac, Windows and Linux apps run — compiled to
-          WebAssembly, executing the original Texas Instruments ROMs. The model picker switches
-          between the <strong>TI-59</strong>, <strong>TI-58</strong> and <strong>TI-58C</strong>,
-          and the <strong>PC-100C printer</strong> is connected from the start: the chevron in the
-          corner turns to its page and back.
-        </p>
-        <p>
-          Module 01 (Master Library) is loaded by default; <strong>Settings</strong> switches modules
-          (that resets the calculator, as swapping the real module did) and chooses the calculator
-          the page starts with. <strong>Preset</strong> loads one of the bundled presets or your own{" "}
-          <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file, and you can
-          also drop a file onto the calculator — files are read entirely in your browser and never
-          leave your machine. The TI-58C keeps its constant memory in your browser between visits.
-          For more programs to try, see the{" "}
-          <a href="/59/software/">TI-59 Software Collection</a>.
-        </p>
-        <p>
-          Press <strong>2nd</strong> then <strong>Pgm</strong> then a two-digit program number to
-          bring up that program's cue card, the same way it works on the module itself.
-        </p>
-        <p>
-          The TI-59 has a card reader. To save a program, press <strong>2nd Write</strong> (bank 1:{" "}
-          <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button that writes a blank card,
-          and give the card a name. To load it back, press the other <strong>Crd</strong> button and
-          pick the card, or upload a <strong>.U59</strong> card file; <strong>Eject Card</strong> takes
-          a card out. Cards last until you close the page — download one from the card list to keep it.
-        </p>
-        <p>
-          On a wide screen the same web client can also show the printer and the full debugger side by
-          side, with the ASM overlay and trace downloads; this page shows the calculator and the
-          printer one at a time. The full app adds a card folder that stays (synced through iCloud on
-          Apple devices), traces saved to disk and the Modernized LED style; it is free on the{" "}
-          <a href="/59/install/mac/">Mac</a> and on{" "}
-          <a href="/59/install/windows-linux/">Windows and Linux</a>, or{" "}
-          <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. If you are
-          not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
-        </p>
-        <p>
-          Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
-          same calculator alone at its own address, installable to your phone's home screen for a
-          one-tap, full-screen launch. Once installed it runs all three calculators offline.
-        </p>
-      </div>
+      <div style={{ maxWidth: 772, margin: "0 auto" }}>
+        <h1 className="page-title" style={{ marginTop: 32 }}>TI-59 emulator, online</h1>
+        <div className="prose">
+          <p>
+            The calculator above is a working <strong>Texas Instruments TI-59 emulator running in
+            your browser</strong> — no install, no account, nothing to download. It is the Calc-U 59
+            app's own emulator — the same code the Mac, Windows and Linux apps run — compiled to
+            WebAssembly, executing the original Texas Instruments ROMs. The model picker switches
+            between the <strong>TI-59</strong>, <strong>TI-58</strong> and <strong>TI-58C</strong>,
+            and the <strong>PC-100C printer</strong> is connected from the start. On a wide screen the
+            printer and the full debugger sit beside the calculator, with the ASM overlay and trace
+            downloads; on a phone the chevron in the corner turns to the printer's page and back.
+          </p>
+          <p>
+            Module 01 (Master Library) is loaded by default; <strong>Settings</strong> switches modules
+            (that resets the calculator, as swapping the real module did) and chooses the calculator
+            the page starts with. <strong>Preset</strong> loads one of the bundled presets or your own{" "}
+            <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file, and you can
+            also drop a file onto the calculator — files are read entirely in your browser and never
+            leave your machine. The TI-58C keeps its constant memory in your browser between visits.
+            For more programs to try, see the{" "}
+            <a href="/59/software/">TI-59 Software Collection</a>.
+          </p>
+          <p>
+            Press <strong>2nd</strong> then <strong>Pgm</strong> then a two-digit program number to
+            bring up that program's cue card, the same way it works on the module itself.
+          </p>
+          <p>
+            The TI-59 has a card reader. To save a program, press <strong>2nd Write</strong> (bank 1:{" "}
+            <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button that writes a blank card,
+            and give the card a name. To load it back, press the other <strong>Crd</strong> button and
+            pick the card, or upload a <strong>.U59</strong> card file; <strong>Eject Card</strong> takes
+            a card out. Cards last until you close the page — download one from the card list to keep it.
+          </p>
+          <p>
+            The full app adds a card folder that stays (synced through iCloud on
+            Apple devices), traces saved to disk and the Modernized LED style; it is free on the{" "}
+            <a href="/59/install/mac/">Mac</a> and on{" "}
+            <a href="/59/install/windows-linux/">Windows and Linux</a>, or{" "}
+            <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. If you are
+            not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
+          </p>
+          <p>
+            Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
+            same calculator alone at its own address, installable to your phone's home screen for a
+            one-tap, full-screen launch. Once installed it runs all three calculators offline.
+          </p>
+        </div>
 
-      <h2 className="section" style={{ marginTop: 32 }}>Use your keyboard</h2>
-      <div className="prose">
-        <p>
-          Click the calculator once and it takes your keystrokes — a golden outline shows when it
-          has them. Click anywhere else, or press <K>Tab</K>, and the page gets the keyboard back.
-        </p>
-        <p>
-          The number keys, the yellow operation keys, <strong>A</strong>–<strong>E</strong>, and
-          <strong> EE</strong> <strong>(</strong> <strong>)</strong> are typeable. Everything else —
-          2nd, STO, RCL, LRN and the rest — is click-only, so the keyboard stays out of the way of
-          the page. Holding <K>Shift</K> while you press a letter gives you that key's second
-          function: <K>Shift</K> + <K>A</K> is <strong>A'</strong>.
-        </p>
-      </div>
+        <h2 className="section" style={{ marginTop: 32 }}>Use your keyboard</h2>
+        <div className="prose">
+          <p>
+            Click the calculator once and it takes your keystrokes — a golden outline shows when it
+            has them. Click anywhere else, or press <K>Tab</K>, and the page gets the keyboard back.
+          </p>
+          <p>
+            The number keys, the yellow operation keys, <strong>A</strong>–<strong>E</strong>, and
+            <strong> EE</strong> <strong>(</strong> <strong>)</strong> are typeable. Everything else —
+            2nd, STO, RCL, LRN and the rest — is click-only, so the keyboard stays out of the way of
+            the page. Holding <K>Shift</K> while you press a letter gives you that key's second
+            function: <K>Shift</K> + <K>A</K> is <strong>A'</strong>.
+          </p>
+        </div>
 
-      <KeyboardLegend />
+        <KeyboardLegend />
 
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
+        <div style={{ marginTop: 24 }}>
+          <BackButton />
+        </div>
       </div>
     </main>
   );

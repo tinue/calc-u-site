@@ -308,6 +308,9 @@ if (!JSDOM) {
     w.document.getElementById("root").innerHTML = "";
     w.Worker = function () { this.postMessage = () => {}; this.terminate = () => {}; };
     w.HTMLCanvasElement.prototype.getContext = stub2d;
+    // jsdom has no ResizeObserver; the client's wide layout (and PlayPage)
+    // observe their panels with it, as every supported browser can.
+    w.ResizeObserver = function () { this.observe = this.unobserve = this.disconnect = () => {}; };
     w.fetch = () => Promise.resolve({ json: () => Promise.resolve([]), text: () => Promise.resolve("") });
     const srcs = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map((m) => m[1]);
     try {

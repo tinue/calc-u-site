@@ -46,6 +46,19 @@ test('/play/ starts the engine with no errors', async ({ page }) => {
   expect(errors, `Console/page errors:\n${errors.join('\n')}`).toHaveLength(0);
 });
 
+test('/play/ is wide on a desktop and portrait on a phone', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/59/play/');
+  await ready(page);
+  await expect(page.locator('.calcu-device')).toHaveAttribute('data-layout', 'wide');
+  await expect(page.locator('[data-panel=debug]')).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('.calcu-device')).toHaveAttribute('data-layout', 'portrait');
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 test('/play/ computes through the engine', async ({ page }) => {
   await page.goto('/59/play/');
   await ready(page);
@@ -61,7 +74,8 @@ test('/play/ computes through the engine', async ({ page }) => {
 test('/play/ offers the presets from calc/presets/', async ({ page }) => {
   await page.goto('/59/play/');
   await ready(page);
-  await expect(page.locator('select').nth(1).locator('option', { hasText: 'Calculator diagnostic' })).toHaveCount(1);
+  await page.getByRole('button', { name: 'Preset' }).click();
+  await expect(page.locator('.calcu-dialog').getByRole('button', { name: 'Calculator diagnostic diag.ti59' })).toHaveCount(1);
 });
 
 test('client-side navigation to /play/ mounts the calculator', async ({ page }) => {

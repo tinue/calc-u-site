@@ -65,7 +65,7 @@ attached to each release as `Calc-U-59-web.zip`.
   there first). `check.js` then fails on purpose until the pinned build is
   reinstalled with `node .seo/fetch-web-client.js` — never commit a local
   build.
-- The site only sizes it: `PlayPage` in `Pages.jsx` passes `scale` and
+- The site only sizes it: `PlayPage` in `Pages.jsx` passes `layout`, `width` and
   `keyboard`. Its styles come with it (`calc/calc.css`, tokens scoped to
   `.calcu-client`); don't restyle it from the site's CSS.
 
