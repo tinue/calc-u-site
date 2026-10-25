@@ -26,7 +26,7 @@ const PAGES = {
   "/play/": {
     title: "Online TI-59 Emulator — run a TI-59 in your browser",
     description:
-      "Use a working Texas Instruments TI-59 in your browser: the app's real emulator compiled to WebAssembly, with all 14 library modules. No install, no account.",
+      "Run a Texas Instruments TI-59, TI-58 or TI-58C in your browser: the app's real emulator in WebAssembly, with all 14 modules, the PC-100C printer and cards. No install.",
     heading: "TI-59 emulator, online",
   },
 

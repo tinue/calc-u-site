@@ -300,9 +300,9 @@ function AboutTi59Page() {
         <p style={{ marginTop: 0 }}>
           The quickest way to see whether this is the machine you remember is to use one. The{" "}
           <a href="/59/play/">browser emulator</a> runs the app's own emulator compiled to
-          WebAssembly — a TI-59 with all fourteen library modules and a magnetic card — and needs
-          no installation. The full app, with the TI-58 and TI-58C, the printer and the debugger,
-          is free on the <a href="/59/install/mac/">Mac</a>,{" "}
+          WebAssembly — the TI-59, TI-58 and TI-58C with all fourteen library modules, magnetic
+          cards and the PC-100C printer — and needs no installation. The full app, which keeps
+          your cards and syncs them through iCloud on Apple devices, is free on the <a href="/59/install/mac/">Mac</a>,{" "}
           <a href="/59/install/windows-linux/">Windows and Linux</a>, and{" "}
           <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad.
         </p>
@@ -367,13 +367,16 @@ const TOPICS = {
           <p>
             <strong>PRINT</strong> and <strong>ADV</strong> are the printer's own keys: PRINT prints the display, ADV advances the paper while held. <strong>T</strong> is the printer's TRACE switch, which makes the calculator print every step it executes. Copy puts the strip on the clipboard as an image and as text; cut copies it and then clears the paper.
           </p>
+          <p>
+            The printer runs at the real PC-100's speed, measured on a TI-59 and a TI-58C: a printed line takes about 0.29 s on the TI-59 (a 2nd List line 0.31 s), a blank line from ADV about 0.19 s. The printer runs on the calculator's clock, so on the TI-58C, whose clock is slower, everything prints about 15% slower, as on the real one. Programs that use the <a href="/59/articles/printer-interrupt.html">printer interrupt</a> to cut a line short print the same dots as the real printer, faint dots included.
+          </p>
           <p style={{ marginBottom: 0 }}>
-            Holding the display runs the calculator at full speed, and that now includes printing — a long 2nd List or a calendar printout finishes in moments.
+            Holding the display runs the calculator at full speed, and that includes printing — a long 2nd List or a calendar printout finishes in moments.
           </p>
         </div>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0, marginBottom: 0 }}>
-            The TI-59 has a card reader; the TI-58 and TI-58C don't. Its <strong>Crd</strong> buttons load a card or insert a blank one to write, and <strong>Eject Card</strong> takes it out. Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files.
+            The TI-59 has a card reader; the TI-58 and TI-58C don't. Its <strong>Crd</strong> buttons load a card or insert a blank one to write, and <strong>Eject Card</strong> takes it out. Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.
           </p>
         </div>
       </div>
@@ -493,6 +496,13 @@ function InstallPcPage() {
         </p>
       </div>
 
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
+        <h3 className="sub" style={{ marginTop: 0 }}>Opening presets</h3>
+        <p style={{ marginTop: 0, marginBottom: 0 }}>
+          Besides <strong>Preset</strong>, you can drag a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file onto the window to load it. On Windows the installer associates these files with Calc-U-59, so double-clicking one opens it; on Linux, pass the file on the command line (<code>./Calc-U-59-*.AppImage program.ti59</code>).
+        </p>
+      </div>
+
       <div style={{ marginTop: 24 }}>
         <BackButton />
       </div>
@@ -594,10 +604,10 @@ Style: button`;
         <p style={{ marginTop: 0 }}><strong>PARTITION:</strong> sets the step split between program memory and data registers.</p>
         <p><strong>PROGRAM:</strong> accepts sparse step listings, numeric keycodes, and the <strong>...</strong> gap marker.</p>
         <p><strong>REGISTERS:</strong> stores calculator variables as decimal numbers.</p>
-        <p><strong>KEYSTROKES:</strong> injects matrix codes after the file loads. Between keys, lines such as <strong>Wait:</strong>, <strong>FullSpeed:</strong> and <strong>RegularSpeed:</strong> control timing, and a few more (<strong>Trace:</strong>, <strong>ZeroElapseTime:</strong>, <strong>ReportElapseTime:</strong>) help with timing and debugging programs. To run a long program at full speed, put <strong>FullSpeed:</strong> before the key that starts it; <strong>Wait:</strong> pauses so you can see what the calculator shows.</p>
+        <p><strong>KEYSTROKES:</strong> injects matrix codes after the file loads. Between keys, lines such as <strong>Wait:</strong>, <strong>FullSpeed:</strong> and <strong>RegularSpeed:</strong> control timing, and a few more (<strong>Trace:</strong>, <strong>ZeroElapseTime:</strong>, <strong>ReportElapseTime:</strong>) help with timing and debugging programs. To run a long program at full speed, put <strong>FullSpeed:</strong> before the key that starts it; <strong>Wait:</strong> pauses so you can see what the calculator shows. An unknown directive, or a <strong>Wait:</strong> without a unit, is reported as an error rather than read as keys.</p>
         <p><strong>CUECARD:</strong> defines the on-screen cue card that appears with the loaded file or module.</p>
         <p><strong>SOLID-STATE-MODULE:</strong> and <strong>PRINTER:</strong> let a file select the matching module and printer state automatically, and <strong>MODEL:</strong> switches to the calculator the file is for.</p>
-        <p><strong>SKIP-RESET: on</strong> loads into the running calculator without resetting it first — only the sections the file contains are applied.</p>
+        <p><strong>SKIP-RESET: on</strong> loads into the running calculator without resetting it first — only the sections the file contains are applied, and <strong>MODEL:</strong>, <strong>SOLID-STATE-MODULE:</strong> and <strong>PRINTER:</strong> are ignored (the LOG tab notes each one).</p>
         <p style={{ marginBottom: 0 }}>
           This page covers enough to load and tweak existing files. The complete
           grammar — matrix code table, 2nd-function presses, the CUECARD field
@@ -1236,7 +1246,7 @@ function DebuggerPage() {
           <strong>STEP in CPU mode</strong> — pressing Step executes exactly one ROM instruction, then freezes. This is the right tool when you want to follow the ROM's internal logic one opcode at a time.
         </p>
         <p style={{ marginTop: 8 }}>
-          <strong>ROM HEATMAP</strong> — shows how often each ROM address ran; <strong>CLR</strong> starts it over. It resets when you switch to the CPU tab, unless the CPU is frozen.
+          <strong>ROM HEATMAP</strong> — shows how often each ROM address ran; <strong>CLR</strong> starts it over. It also starts over on Reset, Clean reset, a model switch and loading a preset, and when you switch to the CPU tab, unless the CPU is frozen.
         </p>
         <p style={{ marginTop: 8 }}>
           <strong>ASM OVERLAY</strong> — below the CPU tab, <strong>Select File</strong> loads a small assembly program (see the <a href="/59/software/">assembly examples</a>), <strong>Run</strong> starts it and <strong>Clear</strong> removes it. While an overlay is active, the CALCULATOR tab is unavailable.
@@ -1294,9 +1304,9 @@ function DebuggerPage() {
           <li>Switch to the LOG tab and toggle TRACE on.</li>
           <li>Perform the action you want to analyze (e.g., press <strong>Reset</strong>, or execute a ROM subroutine).</li>
           <li>Toggle TRACE off to stop recording.</li>
-          <li>Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings › Files. The app tells you if the file couldn't be created or reached its size limit.</li>
-          <li>On a computer with Python, download the <code>read_trace.py</code> tool from the <a href="https://github.com/tinue/Calc-U-59/tree/main/tools" className="link-accent">Calc-U-59 tools folder</a>.</li>
-          <li>Run: <code style={{ background: "var(--bg-inset)", padding: "2px 6px", borderRadius: 4 }}>python3 ./read_trace.py --clean --skip-repeating CALCU59_TRACE.bin &gt; CALCU59_TRACE.txt</code> (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin).</li>
+          <li>Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings › Files; the <a href="/59/play/">browser emulator</a> downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit.</li>
+          <li>On a computer with Python, download or clone the <a href="https://github.com/tinue/Calc-U-59" className="link-accent">Calc-U-59 repository</a>. Its <code>tools/read_trace.py</code> needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own.</li>
+          <li>From the repository's root folder, run: <code style={{ background: "var(--bg-inset)", padding: "2px 6px", borderRadius: 4 }}>python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin &gt; CALCU59_TRACE.txt</code> (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin).</li>
           <li>Open the resulting text file to see the full execution trace as human-readable disassembly.</li>
         </ol>
 
@@ -1371,8 +1381,11 @@ function ReferencePage() {
           <p>
             Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (load a card; insert a blank card to write) and <strong>Eject Card</strong> — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
           </p>
-          <p style={{ marginBottom: 0 }}>
+          <p>
             On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding <strong>⌘</strong> (Mac) or <strong>Ctrl</strong> (Windows, Linux) turns Reset into <strong>Clean</strong>. On the Mac the model picker sits in the window's toolbar.
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            On the Mac, Windows and Linux you can also type on the calculator with your computer's keyboard: the digits, the yellow operation keys, <strong>A</strong>–<strong>E</strong>, <strong>EE</strong> and the parentheses, with <strong>Shift</strong> + a letter for <strong>A′</strong>–<strong>E′</strong>. The bindings are the same as in the browser emulator; the full list is under “Use your keyboard” on the <a href="/59/play/">online emulator page</a>.
           </p>
         </div>
 
@@ -1460,7 +1473,7 @@ function ReferencePage() {
 const FAQS = [
   {
     question: "Where do preset files live?",
-    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on iPhone and iPad, use the built-in file picker.",
+    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on Windows and Linux you can also drag one onto the window or double-click it (Windows); on iPhone and iPad, use the built-in file picker.",
   },
   {
     question: "Are there examples of preset files?",
@@ -1484,15 +1497,15 @@ const FAQS = [
   },
   {
     question: "How do I get a trace file?",
-    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. If the file can't be created or reaches its size limit, the app tells you.",
+    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, in its wide layout, downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you.",
   },
   {
     question: "What can I do with a trace file?",
-    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. Download the 'read_trace.py' script from GitHub to convert the binary file to a readable format. The script is available in the 'tools' directory of the GitHub repository.",
+    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, in its wide layout, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt",
   },
   {
     question: "Why does switching to the CPU tab reset the heat map?",
-    answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss.",
+    answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss. The heat map also starts over on Reset, Clean reset, a model switch and loading a preset, since the calculator starts afresh.",
   },
   {
     question: "What does FREEZE ON START do in the CPU tab?",
@@ -1683,7 +1696,7 @@ function SoftwarePage() {
     },
     {
       heading: "PC-100 printer graphics and tricks",
-      intro: "The PC-100/PC-100C thermal printer had an undocumented quirk: interrupting it mid-character exposes partial print heads, which the TI PPC user community turned into a small genre of printer-graphics demos through the early 1980s.",
+      intro: "The PC-100/PC-100C thermal printer had an undocumented quirk: stopping it partway through a line leaves only the first dot rows of the characters on paper, which the TI PPC user community turned into a small genre of printer-graphics demos through the early 1980s.",
       article: "printer-interrupt",
       items: [
         { file: "characters.ti59", title: "Print character table", description: "Prints the full TI-59 print-code table with row and column headers." },
@@ -1693,6 +1706,7 @@ function SoftwarePage() {
         { file: "printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
         { file: "printer-interrupt.ti59", title: "The printer interrupt, smallest form", description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.", printer: true },
         { file: "stars-and-stripes.ti59", title: "Stars & Stripes", description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).", printer: true },
+        { file: "switzerland.ti59", title: "Switzerland — printer-interrupt outline map", description: "The outline of Switzerland drawn from 41 lines, each cut off after its first two dot rows by the printer interrupt so they stack without a gap (2026). Loading the file makes the interrupt code and prints the picture automatically, at full speed.", printer: true },
         { file: "texas-print.ti59", title: "“TI” logo — high-resolution printer graphics", description: "Frank Dever's high-resolution “TI” logo (PPX Exchange, March/April 1982). The program corrupts a program-step keycode on purpose to redirect the ROM's dispatcher mid-instruction — the file's header traces exactly which ROM address that lands on.", printer: true },
         { file: "trace-quirk.ti59", title: "Printer trace-mode quirk", description: "A keystroke sequence, found by a TI PPC club member, that puts a TI-58 or TI-59 into an undocumented trace mode once a printer is attached (TI PPC Notes V6N4-5, 1981).", printer: true },
       ],
@@ -1732,7 +1746,7 @@ function SoftwarePage() {
     },
     {
       heading: "CPU-level assembly examples",
-      intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the app's debug panel. They only run in the full app (Mac, Windows, Linux, iPhone, iPad), not the browser emulator below.",
+      intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client when it is shown in its wide layout, next to the debugger.",
       items: [
         { file: "assembly/simple_count.asm", title: "Simple counter", description: "The smallest useful ASM overlay example: increments a counter on the display in a tight loop, about 1185 times a second." },
         { file: "assembly/stopwatch.asm", title: "Stopwatch", description: "A precisely timed stopwatch built on the WAIT Dn instruction rather than counting cycles — 222 increments per second, 4.5011 ms each." },
@@ -1757,14 +1771,14 @@ function SoftwarePage() {
           Each entry below is a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong>{" "}
           <a href="/59/presets/">preset file</a> — the calculator's program, registers and (where the
           original used one) magnetic-card cue card, ready to load. Programs marked <strong>Requires printer</strong>{" "}
-          need the emulated PC-100/PC-100C — available in the full app, not the browser emulator below.
+          need the emulated PC-100C printer — connected from the start in the full app and in the browser emulator.
         </p>
         <p style={{ marginBottom: 0 }}>
           Get Calc-U 59 for <a href="/59/install/mac/">Mac</a>,{" "}
           <a href="/59/install/windows-linux/">Windows and Linux</a> or{" "}
           <a href="/59/install/iphone-ipad/">iPhone and iPad</a>, then open a downloaded file, or try the{" "}
-          <a href="/59/play/">browser emulator</a> first — it has no printer, but the utilities below that don't
-          need one will run.
+          <a href="/59/play/">browser emulator</a> first — its <strong>Preset</strong> button opens a downloaded
+          file too, on the TI-59, TI-58 or TI-58C.
         </p>
       </div>
 
@@ -1886,14 +1900,19 @@ function PlayPage() {
           The calculator above is a working <strong>Texas Instruments TI-59 emulator running in
           your browser</strong> — no install, no account, nothing to download. It is the Calc-U 59
           app's own emulator — the same code the Mac, Windows and Linux apps run — compiled to
-          WebAssembly, executing the original TI-59 ROM. The debugger and the printer are not part
-          of this build; everything else works.
+          WebAssembly, executing the original Texas Instruments ROMs. The model picker switches
+          between the <strong>TI-59</strong>, <strong>TI-58</strong> and <strong>TI-58C</strong>,
+          and the <strong>PC-100C printer</strong> is connected from the start: the chevron in the
+          corner turns to its page and back.
         </p>
         <p>
-          Module 01 (Master Library) is loaded by default. Switch modules (that resets the
-          calculator, as swapping the real module did), load one of the curated presets, or upload your own <strong>.ti59</strong> file below the keyboard — uploads are
-          read entirely in your browser and never leave your machine. For more programs to try,
-          including several that need the full app's PC-100 printer, see the{" "}
+          Module 01 (Master Library) is loaded by default; <strong>Settings</strong> switches modules
+          (that resets the calculator, as swapping the real module did) and chooses the calculator
+          the page starts with. <strong>Preset</strong> loads one of the bundled presets or your own{" "}
+          <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file, and you can
+          also drop a file onto the calculator — files are read entirely in your browser and never
+          leave your machine. The TI-58C keeps its constant memory in your browser between visits.
+          For more programs to try, see the{" "}
           <a href="/59/software/">TI-59 Software Collection</a>.
         </p>
         <p>
@@ -1901,15 +1920,18 @@ function PlayPage() {
           bring up that program's cue card, the same way it works on the module itself.
         </p>
         <p>
-          <strong>Queue Card</strong> passes a virtual magnetic card through the reader. To save a
-          program, press <strong>2nd Write</strong> (bank 1: <strong>1 2nd Write</strong>), then
-          Queue Card. To load it back, press Queue Card while the calculator is idle and it reads
-          the card. The card starts blank and keeps whatever was last written until you leave the
-          page.
+          The TI-59 has a card reader. To save a program, press <strong>2nd Write</strong> (bank 1:{" "}
+          <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button that writes a blank card,
+          and give the card a name. To load it back, press the other <strong>Crd</strong> button and
+          pick the card, or upload a <strong>.U59</strong> card file; <strong>Eject Card</strong> takes
+          a card out. Cards last until you close the page — download one from the card list to keep it.
         </p>
         <p>
-          For the TI-58 and TI-58C models, the PC-100C printer, card files you keep and the CPU
-          debugger, use the full app: free on the <a href="/59/install/mac/">Mac</a> and on{" "}
+          On a wide screen the same web client can also show the printer and the full debugger side by
+          side, with the ASM overlay and trace downloads; this page shows the calculator and the
+          printer one at a time. The full app adds a card folder that stays (synced through iCloud on
+          Apple devices), traces saved to disk and the Modernized LED style; it is free on the{" "}
+          <a href="/59/install/mac/">Mac</a> and on{" "}
           <a href="/59/install/windows-linux/">Windows and Linux</a>, or{" "}
           <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. If you are
           not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
@@ -1917,7 +1939,7 @@ function PlayPage() {
         <p>
           Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
           same calculator alone at its own address, installable to your phone's home screen for a
-          one-tap, full-screen launch.
+          one-tap, full-screen launch. Once installed it runs all three calculators offline.
         </p>
       </div>
 

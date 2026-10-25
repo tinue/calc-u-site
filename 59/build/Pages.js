@@ -435,7 +435,7 @@ function AboutTi59Page() {
     }
   }, "The quickest way to see whether this is the machine you remember is to use one. The", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
-  }, "browser emulator"), " runs the app's own emulator compiled to WebAssembly \u2014 a TI-59 with all fourteen library modules and a magnetic card \u2014 and needs no installation. The full app, with the TI-58 and TI-58C, the printer and the debugger, is free on the ", /*#__PURE__*/React.createElement("a", {
+  }, "browser emulator"), " runs the app's own emulator compiled to WebAssembly \u2014 the TI-59, TI-58 and TI-58C with all fourteen library modules, magnetic cards and the PC-100C printer \u2014 and needs no installation. The full app, which keeps your cards and syncs them through iCloud on Apple devices, is free on the ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/mac/"
   }, "Mac"), ",", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/windows-linux/"
@@ -514,11 +514,13 @@ const TOPICS = {
       style: {
         marginTop: 0
       }
-    }, "The printer view mimics the PC-100C. The ", /*#__PURE__*/React.createElement("strong", null, "PC-100C"), " button at the top of the printer view, with its red or grey dot, connects or disconnects the printer; switching it resets the calculator, as plugging in the real printer does. Switch between dot view and text view depending on whether you want realism or easy copying."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "PRINT"), " and ", /*#__PURE__*/React.createElement("strong", null, "ADV"), " are the printer's own keys: PRINT prints the display, ADV advances the paper while held. ", /*#__PURE__*/React.createElement("strong", null, "T"), " is the printer's TRACE switch, which makes the calculator print every step it executes. Copy puts the strip on the clipboard as an image and as text; cut copies it and then clears the paper."), /*#__PURE__*/React.createElement("p", {
+    }, "The printer view mimics the PC-100C. The ", /*#__PURE__*/React.createElement("strong", null, "PC-100C"), " button at the top of the printer view, with its red or grey dot, connects or disconnects the printer; switching it resets the calculator, as plugging in the real printer does. Switch between dot view and text view depending on whether you want realism or easy copying."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "PRINT"), " and ", /*#__PURE__*/React.createElement("strong", null, "ADV"), " are the printer's own keys: PRINT prints the display, ADV advances the paper while held. ", /*#__PURE__*/React.createElement("strong", null, "T"), " is the printer's TRACE switch, which makes the calculator print every step it executes. Copy puts the strip on the clipboard as an image and as text; cut copies it and then clears the paper."), /*#__PURE__*/React.createElement("p", null, "The printer runs at the real PC-100's speed, measured on a TI-59 and a TI-58C: a printed line takes about 0.29 s on the TI-59 (a 2nd List line 0.31 s), a blank line from ADV about 0.19 s. The printer runs on the calculator's clock, so on the TI-58C, whose clock is slower, everything prints about 15% slower, as on the real one. Programs that use the ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/articles/printer-interrupt.html"
+    }, "printer interrupt"), " to cut a line short print the same dots as the real printer, faint dots included."), /*#__PURE__*/React.createElement("p", {
       style: {
         marginBottom: 0
       }
-    }, "Holding the display runs the calculator at full speed, and that now includes printing \u2014 a long 2nd List or a calendar printout finishes in moments.")), /*#__PURE__*/React.createElement("div", {
+    }, "Holding the display runs the calculator at full speed, and that includes printing \u2014 a long 2nd List or a calendar printout finishes in moments.")), /*#__PURE__*/React.createElement("div", {
       className: "panel",
       style: {
         padding: 20,
@@ -529,7 +531,9 @@ const TOPICS = {
         marginTop: 0,
         marginBottom: 0
       }
-    }, "The TI-59 has a card reader; the TI-58 and TI-58C don't. Its ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons load a card or insert a blank one to write, and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes it out. Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files.")))
+    }, "The TI-59 has a card reader; the TI-58 and TI-58C don't. Its ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons load a card or insert a blank one to write, and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes it out. Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/play/"
+    }, "browser emulator"), ", cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.")))
   }
 };
 function GettingStartedPage({
@@ -708,6 +712,23 @@ function InstallPcPage() {
       marginBottom: 0
     }
   }, "There is no iCloud on these platforms, so cards don't sync with the Apple apps \u2014 copy the .U59 files across if you want them there.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "sub",
+    style: {
+      marginTop: 0
+    }
+  }, "Opening presets"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0,
+      marginBottom: 0
+    }
+  }, "Besides ", /*#__PURE__*/React.createElement("strong", null, "Preset"), ", you can drag a ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file onto the window to load it. On Windows the installer associates these files with Calc-U-59, so double-clicking one opens it; on Linux, pass the file on the command line (", /*#__PURE__*/React.createElement("code", null, "./Calc-U-59-*.AppImage program.ti59"), ").")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
     }
@@ -842,7 +863,7 @@ Style: button`;
     style: {
       marginTop: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "PARTITION:"), " sets the step split between program memory and data registers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "PROGRAM:"), " accepts sparse step listings, numeric keycodes, and the ", /*#__PURE__*/React.createElement("strong", null, "..."), " gap marker."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "REGISTERS:"), " stores calculator variables as decimal numbers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " injects matrix codes after the file loads. Between keys, lines such as ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), ", ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " and ", /*#__PURE__*/React.createElement("strong", null, "RegularSpeed:"), " control timing, and a few more (", /*#__PURE__*/React.createElement("strong", null, "Trace:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ZeroElapseTime:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ReportElapseTime:"), ") help with timing and debugging programs. To run a long program at full speed, put ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " before the key that starts it; ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " pauses so you can see what the calculator shows."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " defines the on-screen cue card that appears with the loaded file or module."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SOLID-STATE-MODULE:"), " and ", /*#__PURE__*/React.createElement("strong", null, "PRINTER:"), " let a file select the matching module and printer state automatically, and ", /*#__PURE__*/React.createElement("strong", null, "MODEL:"), " switches to the calculator the file is for."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SKIP-RESET: on"), " loads into the running calculator without resetting it first \u2014 only the sections the file contains are applied."), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("strong", null, "PARTITION:"), " sets the step split between program memory and data registers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "PROGRAM:"), " accepts sparse step listings, numeric keycodes, and the ", /*#__PURE__*/React.createElement("strong", null, "..."), " gap marker."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "REGISTERS:"), " stores calculator variables as decimal numbers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " injects matrix codes after the file loads. Between keys, lines such as ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), ", ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " and ", /*#__PURE__*/React.createElement("strong", null, "RegularSpeed:"), " control timing, and a few more (", /*#__PURE__*/React.createElement("strong", null, "Trace:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ZeroElapseTime:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ReportElapseTime:"), ") help with timing and debugging programs. To run a long program at full speed, put ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " before the key that starts it; ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " pauses so you can see what the calculator shows. An unknown directive, or a ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " without a unit, is reported as an error rather than read as keys."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " defines the on-screen cue card that appears with the loaded file or module."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SOLID-STATE-MODULE:"), " and ", /*#__PURE__*/React.createElement("strong", null, "PRINTER:"), " let a file select the matching module and printer state automatically, and ", /*#__PURE__*/React.createElement("strong", null, "MODEL:"), " switches to the calculator the file is for."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SKIP-RESET: on"), " loads into the running calculator without resetting it first \u2014 only the sections the file contains are applied, and ", /*#__PURE__*/React.createElement("strong", null, "MODEL:"), ", ", /*#__PURE__*/React.createElement("strong", null, "SOLID-STATE-MODULE:"), " and ", /*#__PURE__*/React.createElement("strong", null, "PRINTER:"), " are ignored (the LOG tab notes each one)."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -1452,7 +1473,7 @@ function DebuggerPage() {
     style: {
       marginTop: 8
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "ROM HEATMAP"), " \u2014 shows how often each ROM address ran; ", /*#__PURE__*/React.createElement("strong", null, "CLR"), " starts it over. It resets when you switch to the CPU tab, unless the CPU is frozen."), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("strong", null, "ROM HEATMAP"), " \u2014 shows how often each ROM address ran; ", /*#__PURE__*/React.createElement("strong", null, "CLR"), " starts it over. It also starts over on Reset, Clean reset, a model switch and loading a preset, and when you switch to the CPU tab, unless the CPU is frozen."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 8
     }
@@ -1545,16 +1566,18 @@ function DebuggerPage() {
       margin: 0,
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, "Switch to the LOG tab and toggle TRACE on."), /*#__PURE__*/React.createElement("li", null, "Perform the action you want to analyze (e.g., press ", /*#__PURE__*/React.createElement("strong", null, "Reset"), ", or execute a ROM subroutine)."), /*#__PURE__*/React.createElement("li", null, "Toggle TRACE off to stop recording."), /*#__PURE__*/React.createElement("li", null, "Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings \u203A Files. The app tells you if the file couldn't be created or reached its size limit."), /*#__PURE__*/React.createElement("li", null, "On a computer with Python, download the ", /*#__PURE__*/React.createElement("code", null, "read_trace.py"), " tool from the ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/tree/main/tools",
+  }, /*#__PURE__*/React.createElement("li", null, "Switch to the LOG tab and toggle TRACE on."), /*#__PURE__*/React.createElement("li", null, "Perform the action you want to analyze (e.g., press ", /*#__PURE__*/React.createElement("strong", null, "Reset"), ", or execute a ROM subroutine)."), /*#__PURE__*/React.createElement("li", null, "Toggle TRACE off to stop recording."), /*#__PURE__*/React.createElement("li", null, "Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings \u203A Files; the ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/play/"
+  }, "browser emulator"), " downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit."), /*#__PURE__*/React.createElement("li", null, "On a computer with Python, download or clone the ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/Calc-U-59",
     className: "link-accent"
-  }, "Calc-U-59 tools folder"), "."), /*#__PURE__*/React.createElement("li", null, "Run: ", /*#__PURE__*/React.createElement("code", {
+  }, "Calc-U-59 repository"), ". Its ", /*#__PURE__*/React.createElement("code", null, "tools/read_trace.py"), " needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own."), /*#__PURE__*/React.createElement("li", null, "From the repository's root folder, run: ", /*#__PURE__*/React.createElement("code", {
     style: {
       background: "var(--bg-inset)",
       padding: "2px 6px",
       borderRadius: 4
     }
-  }, "python3 ./read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"), " (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin)."), /*#__PURE__*/React.createElement("li", null, "Open the resulting text file to see the full execution trace as human-readable disassembly.")), /*#__PURE__*/React.createElement("p", {
+  }, "python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"), " (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin)."), /*#__PURE__*/React.createElement("li", null, "Open the resulting text file to see the full execution trace as human-readable disassembly.")), /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 12,
       marginBottom: 0
@@ -1673,11 +1696,13 @@ function ReferencePage() {
     style: {
       marginTop: 0
     }
-  }, "The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape, the layout mirrors the Mac view."), /*#__PURE__*/React.createElement("p", null, "The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation."), /*#__PURE__*/React.createElement("p", null, "Bottom bar on iPhone and iPad (left to right): ", /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: a clean reset that also wipes the memory), the ", /*#__PURE__*/React.createElement("strong", null, "model picker"), " (TI-59/TI-58/TI-58C), the two ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons (load a card; insert a blank card to write) and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " \u2014 on the TI-59 only, the one with a card reader \u2014 then ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and ", /*#__PURE__*/React.createElement("strong", null, "Settings"), "."), /*#__PURE__*/React.createElement("p", {
+  }, "The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape, the layout mirrors the Mac view."), /*#__PURE__*/React.createElement("p", null, "The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation."), /*#__PURE__*/React.createElement("p", null, "Bottom bar on iPhone and iPad (left to right): ", /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: a clean reset that also wipes the memory), the ", /*#__PURE__*/React.createElement("strong", null, "model picker"), " (TI-59/TI-58/TI-58C), the two ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons (load a card; insert a blank card to write) and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " \u2014 on the TI-59 only, the one with a card reader \u2014 then ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and ", /*#__PURE__*/React.createElement("strong", null, "Settings"), "."), /*#__PURE__*/React.createElement("p", null, "On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding ", /*#__PURE__*/React.createElement("strong", null, "\u2318"), " (Mac) or ", /*#__PURE__*/React.createElement("strong", null, "Ctrl"), " (Windows, Linux) turns Reset into ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ". On the Mac the model picker sits in the window's toolbar."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
-  }, "On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding ", /*#__PURE__*/React.createElement("strong", null, "\u2318"), " (Mac) or ", /*#__PURE__*/React.createElement("strong", null, "Ctrl"), " (Windows, Linux) turns Reset into ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ". On the Mac the model picker sits in the window's toolbar.")), /*#__PURE__*/React.createElement("h2", {
+  }, "On the Mac, Windows and Linux you can also type on the calculator with your computer's keyboard: the digits, the yellow operation keys, ", /*#__PURE__*/React.createElement("strong", null, "A"), "\u2013", /*#__PURE__*/React.createElement("strong", null, "E"), ", ", /*#__PURE__*/React.createElement("strong", null, "EE"), " and the parentheses, with ", /*#__PURE__*/React.createElement("strong", null, "Shift"), " + a letter for ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), "\u2013", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), ". The bindings are the same as in the browser emulator; the full list is under \u201CUse your keyboard\u201D on the ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/play/"
+  }, "online emulator page"), ".")), /*#__PURE__*/React.createElement("h2", {
     className: "section"
   }, "The printer"), /*#__PURE__*/React.createElement("div", {
     className: "panel",
@@ -1934,7 +1959,7 @@ function ReferencePage() {
 // Also the FAQ page's structured data (.seo/build.js).
 const FAQS = [{
   question: "Where do preset files live?",
-  answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on iPhone and iPad, use the built-in file picker."
+  answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on Windows and Linux you can also drag one onto the window or double-click it (Windows); on iPhone and iPad, use the built-in file picker."
 }, {
   question: "Are there examples of preset files?",
   answer: "Yes. The GitHub repository includes an 'examples' folder with a selection of .ti59, .ti58, and .ti58c files, and the 'TI-59 Software Collection' page has downloadable copies. There's also a step-by-step tutorial that builds one from scratch."
@@ -1952,13 +1977,13 @@ const FAQS = [{
   answer: "Yes. Use the debug pane: CALCULATOR for program state and registers, CPU for the ROM instruction trace, and LOG for text output plus trace controls."
 }, {
   question: "How do I get a trace file?",
-  answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. If the file can't be created or reaches its size limit, the app tells you."
+  answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, in its wide layout, downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you."
 }, {
   question: "What can I do with a trace file?",
-  answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. Download the 'read_trace.py' script from GitHub to convert the binary file to a readable format. The script is available in the 'tools' directory of the GitHub repository."
+  answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, in its wide layout, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"
 }, {
   question: "Why does switching to the CPU tab reset the heat map?",
-  answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss."
+  answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss. The heat map also starts over on Reset, Clean reset, a model switch and loading a preset, since the calculator starts afresh."
 }, {
   question: "What does FREEZE ON START do in the CPU tab?",
   answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because the calculator was reset. This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other."
@@ -2228,7 +2253,7 @@ function SoftwarePage() {
     }]
   }, {
     heading: "PC-100 printer graphics and tricks",
-    intro: "The PC-100/PC-100C thermal printer had an undocumented quirk: interrupting it mid-character exposes partial print heads, which the TI PPC user community turned into a small genre of printer-graphics demos through the early 1980s.",
+    intro: "The PC-100/PC-100C thermal printer had an undocumented quirk: stopping it partway through a line leaves only the first dot rows of the characters on paper, which the TI PPC user community turned into a small genre of printer-graphics demos through the early 1980s.",
     article: "printer-interrupt",
     items: [{
       file: "characters.ti59",
@@ -2263,6 +2288,11 @@ function SoftwarePage() {
       file: "stars-and-stripes.ti59",
       title: "Stars & Stripes",
       description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).",
+      printer: true
+    }, {
+      file: "switzerland.ti59",
+      title: "Switzerland — printer-interrupt outline map",
+      description: "The outline of Switzerland drawn from 41 lines, each cut off after its first two dot rows by the printer interrupt so they stack without a gap (2026). Loading the file makes the interrupt code and prints the picture automatically, at full speed.",
       printer: true
     }, {
       file: "texas-print.ti59",
@@ -2349,7 +2379,7 @@ function SoftwarePage() {
     }]
   }, {
     heading: "CPU-level assembly examples",
-    intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the app's debug panel. They only run in the full app (Mac, Windows, Linux, iPhone, iPad), not the browser emulator below.",
+    intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client when it is shown in its wide layout, next to the debugger.",
     items: [{
       file: "assembly/simple_count.asm",
       title: "Simple counter",
@@ -2389,7 +2419,7 @@ function SoftwarePage() {
     }
   }, "Each entry below is a ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/"
-  }, "preset file"), " \u2014 the calculator's program, registers and (where the original used one) magnetic-card cue card, ready to load. Programs marked ", /*#__PURE__*/React.createElement("strong", null, "Requires printer"), " ", "need the emulated PC-100/PC-100C \u2014 available in the full app, not the browser emulator below."), /*#__PURE__*/React.createElement("p", {
+  }, "preset file"), " \u2014 the calculator's program, registers and (where the original used one) magnetic-card cue card, ready to load. Programs marked ", /*#__PURE__*/React.createElement("strong", null, "Requires printer"), " ", "need the emulated PC-100C printer \u2014 connected from the start in the full app and in the browser emulator."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -2401,7 +2431,7 @@ function SoftwarePage() {
     href: "/59/install/iphone-ipad/"
   }, "iPhone and iPad"), ", then open a downloaded file, or try the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
-  }, "browser emulator"), " first \u2014 it has no printer, but the utilities below that don't need one will run.")), /*#__PURE__*/React.createElement("h2", {
+  }, "browser emulator"), " first \u2014 its ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " button opens a downloaded file too, on the TI-59, TI-58 or TI-58C.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     id: "articles"
   }, "Articles"), /*#__PURE__*/React.createElement("p", {
@@ -2597,9 +2627,9 @@ function PlayPage() {
     }
   }, "TI-59 emulator, online"), /*#__PURE__*/React.createElement("div", {
     className: "prose"
-  }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original TI-59 ROM. The debugger and the printer are not part of this build; everything else works."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default. Switch modules (that resets the calculator, as swapping the real module did), load one of the curated presets, or upload your own ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), " file below the keyboard \u2014 uploads are read entirely in your browser and never leave your machine. For more programs to try, including several that need the full app's PC-100 printer, see the", " ", /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original Texas Instruments ROMs. The model picker switches between the ", /*#__PURE__*/React.createElement("strong", null, "TI-59"), ", ", /*#__PURE__*/React.createElement("strong", null, "TI-58"), " and ", /*#__PURE__*/React.createElement("strong", null, "TI-58C"), ", and the ", /*#__PURE__*/React.createElement("strong", null, "PC-100C printer"), " is connected from the start: the chevron in the corner turns to its page and back."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default; ", /*#__PURE__*/React.createElement("strong", null, "Settings"), " switches modules (that resets the calculator, as swapping the real module did) and chooses the calculator the page starts with. ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " loads one of the bundled presets or your own", " ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file, and you can also drop a file onto the calculator \u2014 files are read entirely in your browser and never leave your machine. The TI-58C keeps its constant memory in your browser between visits. For more programs to try, see the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/software/"
-  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Queue Card"), " passes a virtual magnetic card through the reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1: ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then Queue Card. To load it back, press Queue Card while the calculator is idle and it reads the card. The card starts blank and keeps whatever was last written until you leave the page."), /*#__PURE__*/React.createElement("p", null, "For the TI-58 and TI-58C models, the PC-100C printer, card files you keep and the CPU debugger, use the full app: free on the ", /*#__PURE__*/React.createElement("a", {
+  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button that writes a blank card, and give the card a name. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " card file; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a card out. Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "On a wide screen the same web client can also show the printer and the full debugger side by side, with the ASM overlay and trace downloads; this page shows the calculator and the printer one at a time. The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/mac/"
   }, "Mac"), " and on", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/windows-linux/"
@@ -2609,7 +2639,7 @@ function PlayPage() {
     href: "/59/what-is-a-ti-59/"
   }, "start here"), "."), /*#__PURE__*/React.createElement("p", null, "Prefer this without the browser chrome? ", /*#__PURE__*/React.createElement("a", {
     href: "/59/calc/app/"
-  }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch.")), /*#__PURE__*/React.createElement("h2", {
+  }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch. Once installed it runs all three calculators offline.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {
       marginTop: 32
