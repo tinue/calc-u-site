@@ -31,7 +31,9 @@ printer is still busy with the line before, and the early signal stops it.
 
 - Put it right after the print: `0 Op 05 1F`. The number of rows printed
   depends on the time between the two. With nothing in between, 2 of 7
-  rows are printed; slower steps in between give more.
+  rows are printed; slower steps in between give more. A cut can also
+  leave part of the next row: the head fires a row's 5 dot columns right
+  to left, 64 instruction cycles apart.
 - The display must be 0, with no EE mode and no error, when 1F runs.
 - Step 000 must hold `INV SBR`, and the step after 1F must be RTN. After
   the interrupt the program continues at step 000. `INV SBR` there returns
@@ -68,10 +70,13 @@ the RTN get meaningless codes.
 
 ## How the interrupt works
 
-**Dispatch.** For every program step, the firmware splits the keycode into
-its two digits and builds a jump address from them (ROM `0F53`). Legal
-digits are 0–9. Nothing checks this, so the digit F builds an address too.
-For 1F it is `0EF1`.
+**Dispatch.** A step whose first digit is 1 works like the label keys A–E.
+The firmware pushes a return point and searches the program for a label.
+No label matches, so the search walks on until it reaches the 1F itself.
+To skip the operands of each step, the search splits the keycode into its
+two digits and builds a jump address from them (ROM `0F53`). Legal digits
+are 0–9. Nothing checks this, so the digit F builds an address too. For 1F
+it is `0EF1`. All codes with a hex digit go wrong in similar ways.
 
 **The landing.** `0EF1` is in the middle of the routine that prints a
 number. Three instructions later that routine sends PRT.GO, the signal that
@@ -83,7 +88,12 @@ hangs.
 **The printer.** Op 05 sent the line a moment before. The printer is still
 printing its dot rows. PRT.GO while it is busy makes it stop. In the
 example, 1020 instruction cycles have passed, two strokes of 508, so 2 of
-the 7 rows are on paper.
+the 7 rows are on paper. Each stroke fires the 5 dot columns of all 20
+characters one after the other, right to left; the third row's rightmost
+column would have started 14 cycles later. A later cut leaves the
+rightmost columns of the row in progress, and a column cut in the first
+few cycles of its heating leaves a faint dot. The timing was measured on
+a real TI-58C with a PC-100A, cutting lines 16 cycles apart.
 
 **The way back.** After PRT.GO, execution continues at step 000, and the
 step after 1F is left as a return point, as after a subroutine call. The
@@ -131,7 +141,17 @@ with the source still 8.
 
 ## Limits
 
-Everything here was observed on Calc-U-59, which runs the original TI-59
-ROM unmodified, and not on a real TI-59. The number of rows printed depends
-on the timing of the calculator and the printer, and real machines differ,
-as the PPX article notes.
+The firmware side was worked out by reading the ROM and by tracing the
+1F on Calc-U-59, which runs the original ROM unmodified; both methods of
+making the code give the same 1F and RTN. A real TI-59 and a real TI-58C,
+each on a PC-100A, print the same 2 rows of
+[printer-interrupt.ti59](https://calc-u.org/59/software/#printer-interrupt-ti59)
+and [printer-quirks.ti59](https://calc-u.org/59/software/#printer-quirks-ti59)
+as the emulator.
+
+The article blames "the calculator-printer combination" for differences
+between machines. The printer runs on the calculator's clock, so the rows
+and columns depend on the cycles between print and cut, which only the ROM
+and the program decide; a drifting clock does not move them. How dark a
+cut-short dot comes out depends on the paper and the head. Only one
+PC-100A was measured, no PC-100C.
