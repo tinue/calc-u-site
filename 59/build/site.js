@@ -95,6 +95,7 @@ var PAGE_COMPONENTS = {
   "install-mobile": InstallMobilePage,
   "install-mac": InstallMacPage,
   "install-pc": InstallPcPage,
+  "install-android": InstallAndroidPage,
   presets: PresetsPage,
   "preset-tutorial": PresetTutorialPage,
   debugger: DebuggerPage,

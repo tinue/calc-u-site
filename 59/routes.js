@@ -29,6 +29,7 @@
     { path: "/install/iphone-ipad/",                 page: "install-mobile" },
     { path: "/install/mac/",                         page: "install-mac" },
     { path: "/install/windows-linux/",               page: "install-pc" },
+    { path: "/install/android/",                     page: "install-android" },
     { path: "/presets/",                             page: "presets" },
     { path: "/presets/tutorial/",                    page: "preset-tutorial" },
     { path: "/debugger/",                            page: "debugger" },

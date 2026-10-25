@@ -33,7 +33,7 @@ const PAGES = {
   "/getting-started/": {
     title: "Getting Started with the Calc-U 59 TI-59 Emulator",
     description:
-      "Install Calc-U 59 on iPhone, iPad, Mac, Windows or Linux, load a .ti59 preset, use the PC-100C printer and card reader, and find your way around the debugger.",
+      "Install Calc-U 59 on iPhone, iPad, Mac, Windows, Linux or Android, load a .ti59 preset, use the PC-100C printer and card reader, and find your way around the debugger.",
     heading: "Getting started",
   },
   "/getting-started/printer/": {
@@ -60,6 +60,12 @@ const PAGES = {
     description:
       "Download the free Calc-U 59 TI-59 emulator for Windows (x64, ARM64) or Linux (AppImage, x86_64, aarch64) from GitHub Releases, and find where it keeps your cards.",
     heading: "Installing on Windows and Linux",
+  },
+  "/install/android/": {
+    title: "Install the TI-59 Emulator on Android (free web app)",
+    description:
+      "Install the free Calc-U 59 TI-59 emulator on Android from the browser: add the web app to the home screen for a full-screen TI-59, TI-58 and TI-58C that works offline.",
+    heading: "Installing on Android",
   },
 
   "/presets/": {

@@ -25,6 +25,10 @@ const STARTED_SECTIONS = [{
     id: "install-pc",
     label: "Installing on Windows and Linux",
     href: "/59/install/windows-linux/"
+  }, {
+    id: "install-android",
+    label: "Installing on Android",
+    href: "/59/install/android/"
   }]
 }, {
   title: "Using the emulator",
@@ -260,7 +264,9 @@ function HomePage() {
     href: "https://github.com/tinue/Calc-U-59/releases/latest"
   }, "GitHub Releases"), ". The iPhone and iPad build is on the ", /*#__PURE__*/React.createElement("a", {
     href: "https://apps.apple.com/us/app/calc-u-59/id6761413142"
-  }, "App Store"), ". Calc-U 59 is free software under the GNU GPL version 3; the source code is on ", /*#__PURE__*/React.createElement("a", {
+  }, "App Store"), ". On Android, the web app ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/install/android/"
+  }, "installs from the browser"), ". Calc-U 59 is free software under the GNU GPL version 3; the source code is on ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59"
   }, "GitHub"), ".")))));
 }
@@ -441,7 +447,9 @@ function AboutTi59Page() {
     href: "/59/install/windows-linux/"
   }, "Windows and Linux"), ", and", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/iphone-ipad/"
-  }, "on the App Store"), " for iPhone and iPad."), /*#__PURE__*/React.createElement("p", {
+  }, "on the App Store"), " for iPhone and iPad, and the browser emulator ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/install/android/"
+  }, "installs on Android"), "."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0,
       color: "var(--fg-3)",
@@ -729,6 +737,90 @@ function InstallPcPage() {
       marginBottom: 0
     }
   }, "Besides ", /*#__PURE__*/React.createElement("strong", null, "Preset"), ", you can drag a ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file onto the window to load it. On Windows the installer associates these files with Calc-U-59, so double-clicking one opens it; on Linux, pass the file on the command line (", /*#__PURE__*/React.createElement("code", null, "./Calc-U-59-*.AppImage program.ti59"), ").")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 24
+    }
+  }, /*#__PURE__*/React.createElement(BackButton, null)));
+}
+function InstallAndroidPage() {
+  return /*#__PURE__*/React.createElement("main", {
+    className: "wrap-narrow"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "eyebrow"
+  }, "Setup"), /*#__PURE__*/React.createElement("h1", {
+    className: "page-title"
+  }, "Installing on Android"), /*#__PURE__*/React.createElement("p", {
+    className: "lede"
+  }, "There is no Android app in a store: the web app installs from your browser instead, gets its own icon on the home screen and starts full screen, without the browser around it."), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 24
+    }
+  }, /*#__PURE__*/React.createElement("ol", {
+    style: {
+      margin: 0,
+      paddingLeft: 20
+    }
+  }, /*#__PURE__*/React.createElement("li", null, "Open ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/calc/app/",
+    className: "link-accent"
+  }, "calc-u.org/59/calc/app/"), " in Chrome."), /*#__PURE__*/React.createElement("li", null, "Tap ", /*#__PURE__*/React.createElement("strong", null, "Install"), " in the banner that offers to install Calc-U 59. If there is no banner, open Chrome's ", /*#__PURE__*/React.createElement("strong", null, "\u22EE"), " menu and choose ", /*#__PURE__*/React.createElement("strong", null, "Add to Home screen"), " (in newer versions, ", /*#__PURE__*/React.createElement("strong", null, "Install app"), "), then confirm."), /*#__PURE__*/React.createElement("li", null, "Start Calc-U 59 from its icon on the home screen or in the app drawer."))), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, "Other browsers, such as Samsung Internet, Firefox and Edge, have a similar ", /*#__PURE__*/React.createElement("strong", null, "Add to Home screen"), " or ", /*#__PURE__*/React.createElement("strong", null, "Install"), " command in their menu."), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginBottom: 0
+    }
+  }, "The installed app is the ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/play/"
+  }, "browser emulator"), " in the iPhone app's portrait layout: the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings. The debugger is not in it; it needs the wide layout of the browser emulator on a computer, or the full app.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "sub",
+    style: {
+      marginTop: 0
+    }
+  }, "Offline and updates"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0,
+      marginBottom: 0
+    }
+  }, "Once installed, the app runs all three calculators without a connection, with module 01 (Master Library). Any other module needs the network the first time you load it. When a new version is out, the app updates itself.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "sub",
+    style: {
+      marginTop: 0
+    }
+  }, "Where your files go"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, "The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " file to read it again."), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginBottom: 0
+    }
+  }, /*#__PURE__*/React.createElement("strong", null, "Preset"), " opens a ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file from the phone's storage; files are read on the phone and never uploaded anywhere.")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
     }
@@ -2427,9 +2519,11 @@ function SoftwarePage() {
     href: "/59/install/mac/"
   }, "Mac"), ",", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/windows-linux/"
-  }, "Windows and Linux"), " or", " ", /*#__PURE__*/React.createElement("a", {
+  }, "Windows and Linux"), ",", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/iphone-ipad/"
-  }, "iPhone and iPad"), ", then open a downloaded file, or try the", " ", /*#__PURE__*/React.createElement("a", {
+  }, "iPhone and iPad"), " or", " ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/install/android/"
+  }, "Android"), ", then open a downloaded file, or try the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
   }, "browser emulator"), " first \u2014 its ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " button opens a downloaded file too, on the TI-59, TI-58 or TI-58C.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
@@ -2654,7 +2748,9 @@ function PlayPage() {
     href: "/59/install/windows-linux/"
   }, "Windows and Linux"), ", or", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/iphone-ipad/"
-  }, "on the App Store"), " for iPhone and iPad. If you are not sure what any of this is, ", /*#__PURE__*/React.createElement("a", {
+  }, "on the App Store"), " for iPhone and iPad. On Android,", " ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/install/android/"
+  }, "install the web app"), " from your browser. If you are not sure what any of this is, ", /*#__PURE__*/React.createElement("a", {
     href: "/59/what-is-a-ti-59/"
   }, "start here"), "."), /*#__PURE__*/React.createElement("p", null, "Prefer this without the browser chrome? ", /*#__PURE__*/React.createElement("a", {
     href: "/59/calc/app/"
@@ -2772,5 +2868,6 @@ Object.assign(window, {
   PlayPage,
   SoftwarePage,
   InstallPcPage,
+  InstallAndroidPage,
   FAQS
 });

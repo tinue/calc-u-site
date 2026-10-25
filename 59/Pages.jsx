@@ -12,6 +12,7 @@ const STARTED_SECTIONS = [
     { id: "install-mobile", label: "Installing on iPhone and iPad", href: "/59/install/iphone-ipad/" },
     { id: "install-mac", label: "Installing on Mac", href: "/59/install/mac/" },
     { id: "install-pc", label: "Installing on Windows and Linux", href: "/59/install/windows-linux/" },
+    { id: "install-android", label: "Installing on Android", href: "/59/install/android/" },
   ]},
   { title: "Using the emulator", items: [
     { id: "presets", label: "Loading a preset", href: "/59/presets/" },
@@ -147,6 +148,7 @@ function HomePage() {
             <p style={{ margin: 0, fontSize: 14 }}>
               The Mac, Windows and Linux builds ship free from <a href="https://github.com/tinue/Calc-U-59/releases/latest">GitHub Releases</a>.
               The iPhone and iPad build is on the <a href="https://apps.apple.com/us/app/calc-u-59/id6761413142">App Store</a>.
+              On Android, the web app <a href="/59/install/android/">installs from the browser</a>.
               Calc-U 59 is free software under the GNU GPL version 3; the source code is on <a href="https://github.com/tinue/Calc-U-59">GitHub</a>.
             </p>
           </div>
@@ -304,7 +306,8 @@ function AboutTi59Page() {
           cards and the PC-100C printer — and needs no installation. The full app, which keeps
           your cards and syncs them through iCloud on Apple devices, is free on the <a href="/59/install/mac/">Mac</a>,{" "}
           <a href="/59/install/windows-linux/">Windows and Linux</a>, and{" "}
-          <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad.
+          <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad, and the browser
+          emulator <a href="/59/install/android/">installs on Android</a>.
         </p>
         <p style={{ marginBottom: 0, color: "var(--fg-3)", fontSize: 13 }}>
           For the original operating manuals, program libraries and the wider TI-59 community,
@@ -500,6 +503,54 @@ function InstallPcPage() {
         <h3 className="sub" style={{ marginTop: 0 }}>Opening presets</h3>
         <p style={{ marginTop: 0, marginBottom: 0 }}>
           Besides <strong>Preset</strong>, you can drag a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file onto the window to load it. On Windows the installer associates these files with Calc-U-59, so double-clicking one opens it; on Linux, pass the file on the command line (<code>./Calc-U-59-*.AppImage program.ti59</code>).
+        </p>
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <BackButton />
+      </div>
+    </main>
+  );
+}
+
+function InstallAndroidPage() {
+  return (
+    <main className="wrap-narrow">
+      <p className="eyebrow">Setup</p>
+      <h1 className="page-title">Installing on Android</h1>
+      <p className="lede">There is no Android app in a store: the web app installs from your browser instead, gets its own icon on the home screen and starts full screen, without the browser around it.</p>
+
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
+        <ol style={{ margin: 0, paddingLeft: 20 }}>
+          <li>Open <a href="/59/calc/app/" className="link-accent">calc-u.org/59/calc/app/</a> in Chrome.</li>
+          <li>Tap <strong>Install</strong> in the banner that offers to install Calc-U 59. If there is no banner, open Chrome's <strong>⋮</strong> menu and choose <strong>Add to Home screen</strong> (in newer versions, <strong>Install app</strong>), then confirm.</li>
+          <li>Start Calc-U 59 from its icon on the home screen or in the app drawer.</li>
+        </ol>
+      </div>
+
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
+        <p style={{ marginTop: 0 }}>
+          Other browsers, such as Samsung Internet, Firefox and Edge, have a similar <strong>Add to Home screen</strong> or <strong>Install</strong> command in their menu.
+        </p>
+        <p style={{ marginBottom: 0 }}>
+          The installed app is the <a href="/59/play/">browser emulator</a> in the iPhone app's portrait layout: the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings. The debugger is not in it; it needs the wide layout of the browser emulator on a computer, or the full app.
+        </p>
+      </div>
+
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
+        <h3 className="sub" style={{ marginTop: 0 }}>Offline and updates</h3>
+        <p style={{ marginTop: 0, marginBottom: 0 }}>
+          Once installed, the app runs all three calculators without a connection, with module 01 (Master Library). Any other module needs the network the first time you load it. When a new version is out, the app updates itself.
+        </p>
+      </div>
+
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
+        <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
+        <p style={{ marginTop: 0 }}>
+          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to read it again.
+        </p>
+        <p style={{ marginBottom: 0 }}>
+          <strong>Preset</strong> opens a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage; files are read on the phone and never uploaded anywhere.
         </p>
       </div>
 
@@ -1775,8 +1826,9 @@ function SoftwarePage() {
         </p>
         <p style={{ marginBottom: 0 }}>
           Get Calc-U 59 for <a href="/59/install/mac/">Mac</a>,{" "}
-          <a href="/59/install/windows-linux/">Windows and Linux</a> or{" "}
-          <a href="/59/install/iphone-ipad/">iPhone and iPad</a>, then open a downloaded file, or try the{" "}
+          <a href="/59/install/windows-linux/">Windows and Linux</a>,{" "}
+          <a href="/59/install/iphone-ipad/">iPhone and iPad</a> or{" "}
+          <a href="/59/install/android/">Android</a>, then open a downloaded file, or try the{" "}
           <a href="/59/play/">browser emulator</a> first — its <strong>Preset</strong> button opens a downloaded
           file too, on the TI-59, TI-58 or TI-58C.
         </p>
@@ -1936,7 +1988,8 @@ function PlayPage() {
             Apple devices), traces saved to disk and the Modernized LED style; it is free on the{" "}
             <a href="/59/install/mac/">Mac</a> and on{" "}
             <a href="/59/install/windows-linux/">Windows and Linux</a>, or{" "}
-            <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. If you are
+            <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. On Android,{" "}
+            <a href="/59/install/android/">install the web app</a> from your browser. If you are
             not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
           </p>
           <p>
@@ -2036,5 +2089,6 @@ Object.assign(window, {
   PlayPage,
   SoftwarePage,
   InstallPcPage,
+  InstallAndroidPage,
   FAQS,
 });
