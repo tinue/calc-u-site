@@ -425,7 +425,7 @@ function InstallMobilePage() {
           The app needs iOS or iPadOS 18 or later. There is no extra setup after install.
         </p>
         <p style={{ marginBottom: 0 }}>
-          On iPhone in portrait, the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings › Debug Page in Portrait). In landscape, the iPhone shows the calculator next to the printer. On iPad in landscape, the layout mirrors the Mac view.
+          On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings › Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.
         </p>
       </div>
 
@@ -1193,8 +1193,8 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
         </p>
         <p style={{ marginBottom: 0 }}>
           To check that a value actually loaded, open the <a href="/59/debugger/">debugger</a>{" "}
-          and look at the register list — on Mac, Windows, Linux and on iPad
-          in landscape it's visible right alongside the calculator; on iPhone (and iPad in
+          and look at the register list — on Mac, Windows, Linux, on iPad
+          in landscape and on iPhone Duo opened flat it's visible right alongside the calculator; on iPhone (and iPad in
           portrait) swipe to it. The debugger has to be turned on first on
           iPhone/portrait iPad: enable <strong>Debug Page in Portrait</strong>{" "}
           under <strong>Settings</strong>, or it won't be there to swipe to.
@@ -1328,7 +1328,7 @@ function DebuggerPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>iPhone behaviour</h3>
         <p style={{ marginTop: 0 }}>
-          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad, the Mac, Windows and Linux, where both views are visible at the same time.
+          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time.
         </p>
         <ul style={{ margin: "8px 0 0", paddingLeft: 20 }}>
           <li>Switching to the <strong>CPU</strong> tab resets the heat map, because the CPU trace was not running while CALCULATOR was visible. Exception: if the CPU is already frozen when you switch, the heat map is preserved.</li>
@@ -1394,6 +1394,14 @@ function DebuggerPage() {
           />
         </div>
         <div className="panel" style={{ padding: 16 }}>
+          <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPhone Duo, opened flat</h3>
+          <img
+            src="/59/assets/iphone-duo-2852x2006.png"
+            alt="iPhone Duo screenshot: calculator, a narrow printer tape and the CALCULATOR debug tab side by side"
+            style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
+          />
+        </div>
+        <div className="panel" style={{ padding: 16 }}>
           <h3 className="sub" style={{ margin: "0 0 10px" }}>CPU tab — iPad</h3>
           <img
             src="/59/assets/ipad-2752x2064-asm.png"
@@ -1424,7 +1432,7 @@ function ReferencePage() {
         <h2 className="section">The calculator</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape, the layout mirrors the Mac view.
+            The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape and on iPhone Duo opened flat, the layout mirrors the Mac view.
           </p>
           <p>
             The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation.

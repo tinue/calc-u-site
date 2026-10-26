@@ -606,7 +606,7 @@ function InstallMobilePage() {
     style: {
       marginBottom: 0
     }
-  }, "On iPhone in portrait, the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings \u203A Debug Page in Portrait). In landscape, the iPhone shows the calculator next to the printer. On iPad in landscape, the layout mirrors the Mac view.")), /*#__PURE__*/React.createElement("div", {
+  }, "On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings \u203A Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
     }
@@ -1441,7 +1441,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
     }
   }, "To check that a value actually loaded, open the ", /*#__PURE__*/React.createElement("a", {
     href: "/59/debugger/"
-  }, "debugger"), " ", "and look at the register list \u2014 on Mac, Windows, Linux and on iPad in landscape it's visible right alongside the calculator; on iPhone (and iPad in portrait) swipe to it. The debugger has to be turned on first on iPhone/portrait iPad: enable ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), " ", "under ", /*#__PURE__*/React.createElement("strong", null, "Settings"), ", or it won't be there to swipe to.")), /*#__PURE__*/React.createElement(TutorialStep, {
+  }, "debugger"), " ", "and look at the register list \u2014 on Mac, Windows, Linux, on iPad in landscape and on iPhone Duo opened flat it's visible right alongside the calculator; on iPhone (and iPad in portrait) swipe to it. The debugger has to be turned on first on iPhone/portrait iPad: enable ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), " ", "under ", /*#__PURE__*/React.createElement("strong", null, "Settings"), ", or it won't be there to swipe to.")), /*#__PURE__*/React.createElement(TutorialStep, {
     num: 6,
     title: "Keystrokes",
     code: step6,
@@ -1621,7 +1621,7 @@ function DebuggerPage() {
     style: {
       marginTop: 0
     }
-  }, "On iPhone, the debugger is a page of its own in portrait (turn on Settings \u203A Debug Page in Portrait) and covers the calculator. This is different from iPad, the Mac, Windows and Linux, where both views are visible at the same time."), /*#__PURE__*/React.createElement("ul", {
+  }, "On iPhone, the debugger is a page of its own in portrait (turn on Settings \u203A Debug Page in Portrait) and covers the calculator. This is different from iPad, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time."), /*#__PURE__*/React.createElement("ul", {
     style: {
       margin: "8px 0 0",
       paddingLeft: 20
@@ -1748,6 +1748,25 @@ function DebuggerPage() {
     style: {
       margin: "0 0 10px"
     }
+  }, "CALCULATOR tab \u2014 iPhone Duo, opened flat"), /*#__PURE__*/React.createElement("img", {
+    src: "/59/assets/iphone-duo-2852x2006.png",
+    alt: "iPhone Duo screenshot: calculator, a narrow printer tape and the CALCULATOR debug tab side by side",
+    style: {
+      width: "100%",
+      height: "auto",
+      display: "block",
+      borderRadius: 8
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "sub",
+    style: {
+      margin: "0 0 10px"
+    }
   }, "CPU tab \u2014 iPad"), /*#__PURE__*/React.createElement("img", {
     src: "/59/assets/ipad-2752x2064-asm.png",
     alt: "iPad screenshot showing the CPU debug tab with execution trace",
@@ -1788,7 +1807,7 @@ function ReferencePage() {
     style: {
       marginTop: 0
     }
-  }, "The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape, the layout mirrors the Mac view."), /*#__PURE__*/React.createElement("p", null, "The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation."), /*#__PURE__*/React.createElement("p", null, "Bottom bar on iPhone and iPad (left to right): ", /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: a clean reset that also wipes the memory), the ", /*#__PURE__*/React.createElement("strong", null, "model picker"), " (TI-59/TI-58/TI-58C), the two ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons (load a card; insert a blank card to write) and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " \u2014 on the TI-59 only, the one with a card reader \u2014 then ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and ", /*#__PURE__*/React.createElement("strong", null, "Settings"), "."), /*#__PURE__*/React.createElement("p", null, "On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding ", /*#__PURE__*/React.createElement("strong", null, "\u2318"), " (Mac) or ", /*#__PURE__*/React.createElement("strong", null, "Ctrl"), " (Windows, Linux) turns Reset into ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ". On the Mac the model picker sits in the window's toolbar."), /*#__PURE__*/React.createElement("p", {
+  }, "The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape and on iPhone Duo opened flat, the layout mirrors the Mac view."), /*#__PURE__*/React.createElement("p", null, "The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation."), /*#__PURE__*/React.createElement("p", null, "Bottom bar on iPhone and iPad (left to right): ", /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: a clean reset that also wipes the memory), the ", /*#__PURE__*/React.createElement("strong", null, "model picker"), " (TI-59/TI-58/TI-58C), the two ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons (load a card; insert a blank card to write) and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " \u2014 on the TI-59 only, the one with a card reader \u2014 then ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and ", /*#__PURE__*/React.createElement("strong", null, "Settings"), "."), /*#__PURE__*/React.createElement("p", null, "On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding ", /*#__PURE__*/React.createElement("strong", null, "\u2318"), " (Mac) or ", /*#__PURE__*/React.createElement("strong", null, "Ctrl"), " (Windows, Linux) turns Reset into ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ". On the Mac the model picker sits in the window's toolbar."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
