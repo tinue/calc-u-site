@@ -619,6 +619,29 @@ Row2Align: left
 Row2RAlign: right
 Style: button`;
 
+  const reloadExample = `PROGRAM:
+…                    # the program, loaded as usual
+KEYSTROKES:
+11                   # A: it runs and stops
+PROGRAM:
+017 01               # then step 017 changes …
+REGISTERS:
+05 = 2.5             # … and register 05
+KEYSTROKES:
+11                   # A: run again`;
+
+  const cardExample = `CARD: mem:Bank4      # a card defined right here
+Bank: 4
+REGISTERS:
+00 = 12
+01 = 3.5
+END-CARD
+
+KEYSTROKES:
+InsertCard: mem:Bank4   # push it in, as at the start of a session
+ArmCard: Results        # ready for the program's own Write
+11                      # A: run`;
+
   return (
     <main className="wrap-narrow">
       <p className="eyebrow">Files</p>
@@ -668,6 +691,62 @@ Style: button`;
             reference/StateFileFormat.md →
           </a>
         </p>
+      </div>
+
+      <h2 id="sessions" className="section" style={{ marginTop: 24 }}>A whole session in one preset</h2>
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+        <p style={{ marginTop: 0 }}>
+          Some programs don't fit one load. Their users changed a few steps
+          between runs, or fed the calculator one magnetic card after another.
+          A preset can do both, so one file plays the whole session.
+        </p>
+        <p>
+          <strong>Keyed-in changes.</strong> A <strong>PROGRAM:</strong>,{" "}
+          <strong>REGISTERS:</strong> or <strong>CUECARD:</strong> section after{" "}
+          <strong>KEYSTROKES:</strong> is applied once the program has stopped,
+          as if you had typed the changes in. Only the steps and registers it
+          lists change; everything else stays. This works on every model.
+        </p>
+      </div>
+      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
+        <pre style={{
+          margin: 0,
+          padding: 16,
+          borderRadius: 8,
+          background: "var(--bg-inset)",
+          color: "var(--fg)",
+          overflowX: "auto",
+          lineHeight: 1.5,
+          fontSize: 13,
+        }}>{reloadExample}</pre>
+      </div>
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
+        <p style={{ marginTop: 0 }}>
+          <strong>A stack of cards (TI-59).</strong> For larger changes, TI-59
+          owners prepared their cards in advance and fed them in a written-down
+          order. Some programs stop and show which card comes next. Others ask
+          for a card themselves (<strong>Write</strong> or{" "}
+          <strong>INV Write</strong> in the program) and simply wait for it. A
+          preset feeds both kinds:
+        </p>
+        <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
+          <li><strong>InsertCard:</strong> pushes a card into the stopped calculator, as you would by hand.</li>
+          <li><strong>ArmCard:</strong> lays a card ready; it goes in as soon as the program asks for one.</li>
+          <li>A card is a file in your card folder, by its name, or a temporary card named <strong>mem:</strong>something that lives only while the preset is loaded. A <strong>CARD:</strong> block defines such a card's registers and steps in the preset itself. A card replaces its whole bank, as a real one does.</li>
+        </ul>
+        <p style={{ marginBottom: 0 }}>Picking the right card is up to the preset, just as it was up to the user.</p>
+      </div>
+      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
+        <pre style={{
+          margin: 0,
+          padding: 16,
+          borderRadius: 8,
+          background: "var(--bg-inset)",
+          color: "var(--fg)",
+          overflowX: "auto",
+          lineHeight: 1.5,
+          fontSize: 13,
+        }}>{cardExample}</pre>
       </div>
 
       <h2 id="labeling-keys" className="section" style={{ marginTop: 24 }}>Labeling the A–E and A′–E′ keys</h2>
@@ -1760,8 +1839,7 @@ function SoftwarePage() {
       items: [
         { file: "characters.ti59", title: "Print character table", description: "Prints the full TI-59 print-code table with row and column headers." },
         { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980).", printer: true },
-        { file: "fast-grafik-3d-plot-part1.ti59", title: "Fast-Grafik 3-D Plot — Part 1", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Load Part 2 after this one finishes, without resetting.", printer: true },
-        { file: "fast-grafik-3d-plot-part2.ti59", title: "Fast-Grafik 3-D Plot — Part 2", description: "The second half of Poloczek's 3-D plotter. Requires Part 1 to have already run in the same session.", printer: true },
+        { file: "fast-grafik-3d-plot.ti59", title: "Fast-Grafik 3-D Plot", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.", printer: true },
         { file: "printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
         { file: "printer-interrupt.ti59", title: "The printer interrupt, smallest form", description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.", printer: true },
         { file: "stars-and-stripes.ti59", title: "Stars & Stripes", description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).", printer: true },

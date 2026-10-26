@@ -881,6 +881,27 @@ Row2R: p. 3
 Row2Align: left
 Row2RAlign: right
 Style: button`;
+  const reloadExample = `PROGRAM:
+…                    # the program, loaded as usual
+KEYSTROKES:
+11                   # A: it runs and stops
+PROGRAM:
+017 01               # then step 017 changes …
+REGISTERS:
+05 = 2.5             # … and register 05
+KEYSTROKES:
+11                   # A: run again`;
+  const cardExample = `CARD: mem:Bank4      # a card defined right here
+Bank: 4
+REGISTERS:
+00 = 12
+01 = 3.5
+END-CARD
+
+KEYSTROKES:
+InsertCard: mem:Bank4   # push it in, as at the start of a session
+ArmCard: Results        # ready for the program's own Write
+11                      # A: run`;
   return /*#__PURE__*/React.createElement("main", {
     className: "wrap-narrow"
   }, /*#__PURE__*/React.createElement("p", {
@@ -963,6 +984,76 @@ Style: button`;
     href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
     className: "link-accent"
   }, "reference/StateFileFormat.md \u2192"))), /*#__PURE__*/React.createElement("h2", {
+    id: "sessions",
+    className: "section",
+    style: {
+      marginTop: 24
+    }
+  }, "A whole session in one preset"), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, "Some programs don't fit one load. Their users changed a few steps between runs, or fed the calculator one magnetic card after another. A preset can do both, so one file plays the whole session."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Keyed-in changes."), " A ", /*#__PURE__*/React.createElement("strong", null, "PROGRAM:"), ",", " ", /*#__PURE__*/React.createElement("strong", null, "REGISTERS:"), " or ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section after", " ", /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " is applied once the program has stopped, as if you had typed the changes in. Only the steps and registers it lists change; everything else stays. This works on every model.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("pre", {
+    style: {
+      margin: 0,
+      padding: 16,
+      borderRadius: 8,
+      background: "var(--bg-inset)",
+      color: "var(--fg)",
+      overflowX: "auto",
+      lineHeight: 1.5,
+      fontSize: 13
+    }
+  }, reloadExample)), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, /*#__PURE__*/React.createElement("strong", null, "A stack of cards (TI-59)."), " For larger changes, TI-59 owners prepared their cards in advance and fed them in a written-down order. Some programs stop and show which card comes next. Others ask for a card themselves (", /*#__PURE__*/React.createElement("strong", null, "Write"), " or", " ", /*#__PURE__*/React.createElement("strong", null, "INV Write"), " in the program) and simply wait for it. A preset feeds both kinds:"), /*#__PURE__*/React.createElement("ul", {
+    style: {
+      margin: "0 0 12px",
+      paddingLeft: 20
+    }
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "InsertCard:"), " pushes a card into the stopped calculator, as you would by hand."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "ArmCard:"), " lays a card ready; it goes in as soon as the program asks for one."), /*#__PURE__*/React.createElement("li", null, "A card is a file in your card folder, by its name, or a temporary card named ", /*#__PURE__*/React.createElement("strong", null, "mem:"), "something that lives only while the preset is loaded. A ", /*#__PURE__*/React.createElement("strong", null, "CARD:"), " block defines such a card's registers and steps in the preset itself. A card replaces its whole bank, as a real one does.")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginBottom: 0
+    }
+  }, "Picking the right card is up to the preset, just as it was up to the user.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("pre", {
+    style: {
+      margin: 0,
+      padding: 16,
+      borderRadius: 8,
+      background: "var(--bg-inset)",
+      color: "var(--fg)",
+      overflowX: "auto",
+      lineHeight: 1.5,
+      fontSize: 13
+    }
+  }, cardExample)), /*#__PURE__*/React.createElement("h2", {
     id: "labeling-keys",
     className: "section",
     style: {
@@ -2376,14 +2467,9 @@ function SoftwarePage() {
       description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980).",
       printer: true
     }, {
-      file: "fast-grafik-3d-plot-part1.ti59",
-      title: "Fast-Grafik 3-D Plot — Part 1",
-      description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Load Part 2 after this one finishes, without resetting.",
-      printer: true
-    }, {
-      file: "fast-grafik-3d-plot-part2.ti59",
-      title: "Fast-Grafik 3-D Plot — Part 2",
-      description: "The second half of Poloczek's 3-D plotter. Requires Part 1 to have already run in the same session.",
+      file: "fast-grafik-3d-plot.ti59",
+      title: "Fast-Grafik 3-D Plot",
+      description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.",
       printer: true
     }, {
       file: "printer-quirks.ti59",
