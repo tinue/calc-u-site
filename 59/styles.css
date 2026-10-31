@@ -284,6 +284,31 @@ h3.sub {
   padding: 20px 22px;
   box-shadow: var(--shadow-card);
 }
+/* ---------- Card bank table (/what-is-a-ti-59/#card-banks) -------------- */
+/* Wide on purpose: on a phone it scrolls inside its own box, not the page. */
+.bank-scroll { overflow-x: auto; margin: 0 0 14px; }
+.bank-table {
+  border-collapse: collapse; min-width: 640px; width: 100%;
+  font-size: 13px; color: var(--fg-2);
+}
+.bank-table th, .bank-table td {
+  border: 1px solid var(--stroke); padding: 4px 8px; text-align: center; white-space: nowrap;
+}
+.bank-table thead th {
+  font-family: var(--font-key); font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--fg); background: var(--bg-inset);
+}
+.bank-table tbody th { color: var(--fg); }
+.bank-table .bank-default th, .bank-table .bank-default td.mono { color: var(--accent-yellow); }
+.bank-table td.bank-cell { padding: 3px; width: 20%; }
+.bank-split { display: flex; gap: 3px; }
+.bank-prog, .bank-data {
+  font-family: var(--font-mono); font-size: 12px; padding: 2px 4px; border-radius: 6px;
+}
+.bank-prog { background: var(--key-cream); color: var(--fg-on-cream); }
+.bank-data { background: var(--accent-yellow); color: var(--fg-on-yellow); }
+.bank-key { padding: 0 6px; }
+
 /* ---------- Keystroke pill --------------------------------------------- */
 .k {
   display: inline-flex; align-items: center; justify-content: center;
