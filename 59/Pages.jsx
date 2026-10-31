@@ -168,6 +168,53 @@ function HomePage() {
    here to land on. It orients a newcomer and hands them to the app; it is
    not a substitute for the TI Personal Programming manual.
    ============================================================= */
+// The TI-59's four card banks for each partition, n Op 17 with n = 0–10.
+// Memory is 120 register cells (8 steps each); bank b is cells 30(b−1)…30b−1.
+// The program takes cells from 0 up, Rnn is cell 119 − nn.
+function CardBankTable() {
+  const pad = (v, w) => String(v).padStart(w, "0");
+  const rows = [];
+  for (let n = 0; n <= 10; n++) {
+    const prog = 120 - 10 * n;
+    const display = `${prog * 8 - 1}.${n ? pad(10 * n - 1, 2) : ""}`;
+    const banks = [0, 1, 2, 3].map(b => {
+      const lo = 30 * b, hi = lo + 29, parts = [];
+      const progEnd = Math.min(hi, prog - 1);
+      if (progEnd >= lo) parts.push(["prog", progEnd - lo + 1, `${pad(8 * lo, 3)}–${pad(8 * progEnd + 7, 3)}`]);
+      const dataStart = Math.max(lo, prog);
+      if (dataStart <= hi) parts.push(["data", hi - dataStart + 1, `R${pad(119 - dataStart, 2)}–R${pad(119 - hi, 2)}`]);
+      return parts;
+    });
+    rows.push({ n, display, banks });
+  }
+  return (
+    <div className="bank-scroll">
+      <table className="bank-table">
+        <thead>
+          <tr><th>n Op 17</th><th>Partition</th><th>Bank 1</th><th>Bank 2</th><th>Bank 3</th><th>Bank 4</th></tr>
+        </thead>
+        <tbody>
+          {rows.map(r => (
+            <tr key={r.n} className={r.n === 6 ? "bank-default" : undefined}>
+              <th>{r.n}</th>
+              <td className="mono">{r.display}</td>
+              {r.banks.map((parts, i) => (
+                <td key={i} className="bank-cell">
+                  <div className="bank-split">
+                    {parts.map(([kind, cells, label]) => (
+                      <span key={kind} className={`bank-${kind}`} style={{ flexGrow: cells, flexBasis: 0 }}>{label}</span>
+                    ))}
+                  </div>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function AboutTi59Page() {
   const models = [
     {
@@ -268,6 +315,27 @@ function AboutTi59Page() {
           Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the
           most failure-prone part of the original hardware, which is a reasonable argument for
           emulating one instead of restoring one.
+        </p>
+      </div>
+
+      <h3 id="card-banks" className="sub">What each bank holds</h3>
+      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
+        <p style={{ marginTop: 0 }}>
+          A card side holds one bank: a fixed quarter of the 960-step memory, 240 steps or 30 data
+          registers' worth. Program steps fill the memory from the bottom, data registers from the
+          top, so R00 is the last register in bank 4. <strong>n</strong>{" "}
+          <K tone="dark">2nd</K> <K tone="dark">Op</K> 17 moves the boundary between them in steps
+          of ten registers (80 program steps), and a bank holds whatever falls into its quarter:
+          steps, registers, or both. At the default partition, 479.59, banks 1 and 2 hold the
+          program and banks 3 and 4 the registers.
+        </p>
+        <CardBankTable/>
+        <p style={{ marginBottom: 0, fontSize: 14, color: "var(--fg-3)" }}>
+          Steps in <span className="bank-prog bank-key">cream</span>, data registers in{" "}
+          <span className="bank-data bank-key">yellow</span>, each sized by its share of the bank.
+          The display shows the partition as last step.last register. The layout comes from
+          the calculator's ROM; the details are in the emulator's{" "}
+          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/CoreArchitecture.md">CoreArchitecture.md</a>.
         </p>
       </div>
 
