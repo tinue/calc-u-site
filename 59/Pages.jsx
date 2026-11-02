@@ -313,7 +313,7 @@ function AboutTi59Page() {
         <p style={{ marginBottom: 0 }}>
           In the emulator, cards are files with both sides in one file, and{" "}
           <a href="/59/getting-started/printer/#magnetic-cards">a press on a corner of the card</a>{" "}
-          feeds that side. They live in iCloud storage, so a program written on a
+          feeds that side. On Apple devices they live in iCloud storage, so a program written on a
           Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the
           most failure-prone part of the original hardware, which is a reasonable argument for
           emulating one instead of restoring one.
@@ -470,14 +470,14 @@ const TOPICS = {
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <h3 className="sub" style={{ margin: "0 0 6px" }}>Loading it back</h3>
           <ol style={{ margin: 0, paddingLeft: 20 }}>
-            <li>Press the other <strong>Crd</strong> button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator.</li>
+            <li>Press the other <strong>Crd</strong> button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator; the TI-58 and TI-58C ignore a dropped card.</li>
             <li>Press the corner of the side you want. The card stays fitted afterwards, so the other side is one press away.</li>
           </ol>
         </div>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <h3 className="sub" style={{ margin: "0 0 6px" }}>Good to know</h3>
           <ul style={{ margin: 0, paddingLeft: 20 }}>
-            <li><strong>A side is not a bank.</strong> Either side can hold any <a href="/59/what-is-a-ti-59/#card-banks">bank</a>, even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty.</li>
+            <li><strong>A side is not a bank.</strong> Either side can hold any <a href="/59/what-is-a-ti-59/#card-banks">bank</a>, even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty. An older one-sided card shows the badges it was saved with.</li>
             <li><strong>Eject Card</strong> takes the place of the Crd buttons while a side is passing. It stops the pass; the card stays fitted.</li>
             <li><strong>A library program's cue card</strong> covers a fitted card, and the corners don't respond while it does. The card comes back with <strong>2nd Pgm 00</strong>.</li>
             <li><strong>A fitted card goes</strong> when you fit another one, reset, switch the model, switch the printer or the module, or load a preset. The file stays as it is.</li>
@@ -656,7 +656,7 @@ function InstallAndroidPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
         <p style={{ marginTop: 0 }}>
-          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to read it again.
+          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to fit it again.
         </p>
         <p style={{ marginBottom: 0 }}>
           <strong>Preset</strong> opens a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage; files are read on the phone and never uploaded anywhere.
@@ -914,8 +914,7 @@ ArmCard: Results        # ready for the program's own Write
           main label for space. Each of the three has its own alignment
           field — <strong>Row1Align</strong>, <strong>Row2Align</strong>,{" "}
           <strong>Row2RAlign</strong> — set to <code>left</code>,{" "}
-          <code>center</code>, or <code>right</code> (Row1 defaults to
-          center, Row2 and Row2R to left).{" "}
+          <code>center</code>, or <code>right</code>.{" "}
           On a CueCard or MagnetCard, <strong>PencilColor</strong> picks the
           ink: <code>black</code> (the default), <code>pencil</code> or{" "}
           <code>sharpie</code>.{" "}
@@ -974,7 +973,8 @@ ArmCard: Results        # ready for the program's own Write
           for example <code>\to</code> becomes an arrow, <code>\sqrt</code>{" "}
           becomes a root sign, <code>\sum</code> becomes Σ, and{" "}
           <code>{"x^{2}"}</code> becomes <code>x²</code>. The full token table
-          is in <strong>reference/StateFileFormat.md</strong>.
+          is in{" "}
+          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">reference/StateFileFormat.md</a>.
         </p>
         <p style={{ marginBottom: 0 }}>
           To make one label visually span more than one key position, set the
@@ -987,8 +987,8 @@ ArmCard: Results        # ready for the program's own Write
       <h2 className="section" style={{ marginTop: 24 }}>Loading a labeled card</h2>
       <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}><strong>From a preset</strong> — tap <strong>Preset</strong> and pick a <code>.ti59</code>/<code>.ti58</code>/<code>.ti58c</code> file with a CUECARD section; it's applied immediately and stays until you load something else or reset.</p>
-        <p><strong>Onto a virtual magnetic card</strong> — a card written by a preset gets that preset's CUECARD, with its full layout, in the card file along with the program or data. A fresh card from the <strong>Crd</strong> button starts with its file name as the title; edit the card file to add more. Loading a card back restores the label along with the contents.</p>
-        <p style={{ marginBottom: 0 }}><strong>By editing the card file directly</strong> — virtual card files are plain text too (see the FAQ entry on where they live), with the same <code>CUECARD:</code> syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is read.</p>
+        <p><strong>Onto a virtual magnetic card</strong> — a card written by a preset gets that preset's CUECARD, with its full layout, in the card file along with the program or data. A fresh card from the <strong>Crd</strong> button starts with its file name as the title; edit the card file to add more. Fitting a card restores the label; pressing a corner reads the contents.</p>
+        <p style={{ marginBottom: 0 }}><strong>By editing the card file directly</strong> — virtual card files are plain text too (see the FAQ entry on where they live), with the same <code>CUECARD:</code> syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is fitted.</p>
       </div>
 
       <div style={{ marginTop: 24 }}>
@@ -1628,7 +1628,7 @@ function ReferencePage() {
             The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation.
           </p>
           <p>
-            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (load a card; take a fresh card, either one fitted above the keys) and <strong>Eject Card</strong> — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
+            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (fit a card; fit a fresh card), which <strong>Eject Card</strong> replaces while a side is passing — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
           </p>
           <p>
             On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding <strong>⌘</strong> (Mac) or <strong>Ctrl</strong> (Windows, Linux) turns Reset into <strong>Clean</strong>. On the Mac the model picker sits in the window's toolbar.
@@ -1666,7 +1666,7 @@ function ReferencePage() {
         <h2 className="section">Settings</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>.
+            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The installable web app has <strong>Keyboard Feedback</strong> too: Off or Click Sound.
           </p>
           <p style={{ marginBottom: 0 }}>
             Where files go: on the Mac, the trace file's <strong>Save Location</strong> (local, iCloud or a folder you choose); on iPhone and iPad, traces go to the app's iCloud folder. On Windows and Linux, <strong>Files</strong> sets the preset, card and trace folders.
@@ -1703,8 +1703,8 @@ function ReferencePage() {
           <ol style={{ margin: "12px 0 0", paddingLeft: 20, lineHeight: 1.65, color: "var(--fg-2)", fontSize: 14 }}>
             <li><strong>Reset</strong> (long press: clean reset, wipes the memory)</li>
             <li><strong>Model picker</strong> (TI-59 / TI-58 / TI-58C)</li>
-            <li><strong>Crd</strong>: load a card (TI-59)</li>
-            <li><strong>Crd</strong>: take a fresh card (TI-59)</li>
+            <li><strong>Crd</strong>: fit a card (TI-59)</li>
+            <li><strong>Crd</strong>: fit a fresh card (TI-59)</li>
             <li><strong>Preset</strong></li>
             <li><strong>Settings</strong></li>
             <li><strong>Swipe to printer</strong></li>
@@ -1722,7 +1722,7 @@ function ReferencePage() {
 const FAQS = [
   {
     question: "Where do preset files live?",
-    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on Windows and Linux you can also drag one onto the window or double-click it (Windows); on iPhone and iPad, use the built-in file picker.",
+    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); you can also drag one onto the window, or double-click it on Windows; on iPhone and iPad, use the built-in file picker.",
   },
   {
     question: "Are there examples of preset files?",
@@ -1953,6 +1953,8 @@ function SoftwarePage() {
         { file: "fast-grafik-3d-plot.ti59", title: "Fast-Grafik 3-D Plot", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.", printer: true },
         { file: "printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
         { file: "printer-interrupt.ti59", title: "The printer interrupt, smallest form", description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.", printer: true },
+        { file: "picard.ti59", title: "Picard — printer-interrupt picture", description: "A picture printed two dot rows per line with the printer interrupt. Its file header explains how to run it on a real TI-59.", printer: true },
+        { file: "globe-print.ti59", title: "Globe — printer-interrupt picture", description: "A larger picture in three parts: the preset feeds the second and third from magnetic cards by itself. Its file header explains how to do it by hand on a real TI-59.", printer: true },
         { file: "stars-and-stripes.ti59", title: "Stars & Stripes", description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).", printer: true },
         { file: "switzerland.ti59", title: "Switzerland — printer-interrupt outline map", description: "The outline of Switzerland drawn from 41 lines, each cut off after its first two dot rows by the printer interrupt so they stack without a gap (2026). Loading the file makes the interrupt code and prints the picture automatically, at full speed.", printer: true },
         { file: "texas-print.ti59", title: "“TI” logo — high-resolution printer graphics", description: "Frank Dever's high-resolution “TI” logo (PPX Exchange, March/April 1982). The program corrupts a program-step keycode on purpose to redirect the ROM's dispatcher mid-instruction — the file's header traces exactly which ROM address that lands on.", printer: true },
@@ -2174,9 +2176,9 @@ function PlayPage() {
             bring up that program's cue card, the same way it works on the module itself.
           </p>
           <p>
-            The TI-59 has a card reader. To save a program, press <strong>2nd Write</strong> (bank 1:{" "}
-            <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button for a fresh card, give the
-            card a name, and press its top-left or top-right corner to write that side. To load it back,
+            The TI-59 has a card reader. To save a program, press the <strong>Crd</strong> button for a fresh card, give the
+            card a name, press <strong>2nd Write</strong> (bank 1:{" "}
+            <strong>1 2nd Write</strong>), and press its top-left or top-right corner to write that side. To load it back,
             press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
             card file, then press the corner of the side to read; <strong>Eject Card</strong> takes a
             passing card out (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
