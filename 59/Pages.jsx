@@ -39,7 +39,7 @@ const START_CARDS = [
   { eyebrow: "Debug", title: "Using the debugger", href: "/59/debugger/",
     text: "The CALCULATOR, CPU and LOG tabs, freeze and step, FREEZE ON START, and binary trace files for offline analysis." },
   { eyebrow: "Hardware", title: "Printer and card reader", href: "/59/getting-started/printer/",
-    text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and where card files are kept." },
+    text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and saving and loading magnetic cards." },
 ];
 
 function StartCards() {
@@ -311,7 +311,9 @@ function AboutTi59Page() {
           reproducing.
         </p>
         <p style={{ marginBottom: 0 }}>
-          In the emulator, cards are files. They live in iCloud storage, so a program written on a
+          In the emulator, cards are files with both sides in one file, and{" "}
+          <a href="/59/getting-started/printer/#magnetic-cards">a press on a corner of the card</a>{" "}
+          feeds that side. They live in iCloud storage, so a program written on a
           Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the
           most failure-prone part of the original hardware, which is a reasonable argument for
           emulating one instead of restoring one.
@@ -428,7 +430,7 @@ const TOPICS = {
   },
   printer: {
     title: "Printer and card reader",
-    note: "The PC-100C panel, paper strip, copy/cut, and card file behaviour.",
+    note: "The PC-100C panel, paper strip, copy/cut, and saving and loading two-sided magnetic cards.",
     body: (
       <div style={{ display: "grid", gap: 16, marginTop: 20 }}>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
@@ -445,9 +447,48 @@ const TOPICS = {
             Holding the display runs the calculator at full speed, and that includes printing — a long 2nd List or a calendar printout finishes in moments.
           </p>
         </div>
+        <h2 id="magnetic-cards" className="section" style={{ margin: "8px 0 0" }}>Magnetic cards</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0, marginBottom: 0 }}>
-            The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides. Its <strong>Crd</strong> buttons fit a card into the calculator above the keys: one loads a card, the other takes a fresh one and names it. On the Mac, Windows, Linux and in the browser you can also drop a card on the calculator. Nothing is read yet: press the card's top-left or top-right corner to feed that side into the reader, and the corner lights up while it passes. Those corners show the bank stored on each side. <strong>Eject Card</strong> takes a passing card out. Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.
+          <p style={{ marginTop: 0 }}>
+            The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides, as the real one has, and one card file holds both of them with one label.
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            Using a card takes two steps. Choosing a card only <strong>fits</strong> it into the calculator above the keys, where it labels them; nothing is read or written yet. Pressing one of its top corners then <strong>feeds</strong> that side through the reader: top-left for side 1, top-right for side 2. The corner lights up while the side passes.
+          </p>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Saving a program</h3>
+          <ol style={{ margin: 0, paddingLeft: 20 }}>
+            <li>Press the <strong>Crd</strong> button with the plus sign and name the card. The fresh card fits above the keys, labeled with its name. If the name is taken, the app asks first: the card's first write replaces both sides and the label of the old one.</li>
+            <li>Press <strong>2nd Write</strong> for the bank you want to save: <strong>1 2nd Write</strong> for bank 1.</li>
+            <li>Press a corner of the card. Once the side has passed, it is saved in the file and the corner shows the bank it now holds.</li>
+          </ol>
+          <p style={{ margin: "12px 0 0" }}>
+            A program too long for one side continues on the other: <strong>2 2nd Write</strong>, then the other corner.
+          </p>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Loading it back</h3>
+          <ol style={{ margin: 0, paddingLeft: 20 }}>
+            <li>Press the other <strong>Crd</strong> button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator.</li>
+            <li>Press the corner of the side you want. The card stays fitted afterwards, so the other side is one press away.</li>
+          </ol>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Good to know</h3>
+          <ul style={{ margin: 0, paddingLeft: 20 }}>
+            <li><strong>A side is not a bank.</strong> Either side can hold any <a href="/59/what-is-a-ti-59/#card-banks">bank</a>, even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty.</li>
+            <li><strong>Eject Card</strong> takes the place of the Crd buttons while a side is passing. It stops the pass; the card stays fitted.</li>
+            <li><strong>A library program's cue card</strong> covers a fitted card, and the corners don't respond while it does. The card comes back with <strong>2nd Pgm 00</strong>.</li>
+            <li><strong>A fitted card goes</strong> when you fit another one, reset, switch the model, switch the printer or the module, or load a preset. The file stays as it is.</li>
+            <li><strong>Older cards</strong> have one side and keep working: either corner feeds it, and it stays a one-sided card when written.</li>
+            <li><strong>Only the side you write changes.</strong> The app reads the file again first, so the other side survives even if it was changed on another device meanwhile. A file it can't read is left alone, and the app reports it.</li>
+          </ul>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Where card files live</h3>
+          <p style={{ margin: 0 }}>
+            Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can <a href="/59/presets/#sessions">feed them</a> or <a href="/59/presets/#labeling-keys">label them</a>; the format is in <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files" className="link-accent">reference/StateFileFormat.md</a>.
           </p>
         </div>
       </div>
@@ -835,7 +876,8 @@ ArmCard: Results        # ready for the program's own Write
           the back: a real magnetic card has a magnetic coating that stores
           the program; a cue card doesn't. Use <strong>MagnetCard</strong> if
           the preset is meant to end up written onto a magnetic card (it also
-          shows the <strong>Banks</strong> page badges). Cue cards shipped
+          shows the <strong>Banks</strong> page badges; once written to a card
+          file, the corners show the bank each side really holds). Cue cards shipped
           for TI-58, TI-58C <em>and</em> TI-59 owners, but TI-59 owners
           tended to skip them and just label whichever magnetic card already
           held the program instead; TI-58 and TI-58C, having no card reader
@@ -1692,7 +1734,7 @@ const FAQS = [
   },
   {
     question: "Where do virtual magnetic cards live?",
-    answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to load or save them. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another.",
+    answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to pick or create one, as described under Printer and card reader. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another.",
   },
   {
     question: "Where is the TI-58C state file?",
@@ -2137,7 +2179,8 @@ function PlayPage() {
             card a name, and press its top-left or top-right corner to write that side. To load it back,
             press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
             card file, then press the corner of the side to read; <strong>Eject Card</strong> takes a
-            passing card out. Cards last until you close the page — download one from the card list to keep it.
+            passing card out (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
+            Cards last until you close the page — download one from the card list to keep it.
           </p>
           <p>
             The full app adds a card folder that stays (synced through iCloud on

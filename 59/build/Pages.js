@@ -91,7 +91,7 @@ const START_CARDS = [{
   eyebrow: "Hardware",
   title: "Printer and card reader",
   href: "/59/getting-started/printer/",
-  text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and where card files are kept."
+  text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and saving and loading magnetic cards."
 }];
 function StartCards() {
   return START_CARDS.map((c, i) => /*#__PURE__*/React.createElement(TopicCard, {
@@ -443,7 +443,9 @@ function AboutTi59Page() {
     style: {
       marginBottom: 0
     }
-  }, "In the emulator, cards are files. They live in iCloud storage, so a program written on a Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the most failure-prone part of the original hardware, which is a reasonable argument for emulating one instead of restoring one.")), /*#__PURE__*/React.createElement("h3", {
+  }, "In the emulator, cards are files with both sides in one file, and", " ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/getting-started/printer/#magnetic-cards"
+  }, "a press on a corner of the card"), " ", "feeds that side. They live in iCloud storage, so a program written on a Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the most failure-prone part of the original hardware, which is a reasonable argument for emulating one instead of restoring one.")), /*#__PURE__*/React.createElement("h3", {
     id: "card-banks",
     className: "sub"
   }, "What each bank holds"), /*#__PURE__*/React.createElement("div", {
@@ -582,7 +584,7 @@ const TOPICS = {
   },
   printer: {
     title: "Printer and card reader",
-    note: "The PC-100C panel, paper strip, copy/cut, and card file behaviour.",
+    note: "The PC-100C panel, paper strip, copy/cut, and saving and loading two-sided magnetic cards.",
     body: /*#__PURE__*/React.createElement("div", {
       style: {
         display: "grid",
@@ -605,7 +607,13 @@ const TOPICS = {
       style: {
         marginBottom: 0
       }
-    }, "Holding the display runs the calculator at full speed, and that includes printing \u2014 a long 2nd List or a calendar printout finishes in moments.")), /*#__PURE__*/React.createElement("div", {
+    }, "Holding the display runs the calculator at full speed, and that includes printing \u2014 a long 2nd List or a calendar printout finishes in moments.")), /*#__PURE__*/React.createElement("h2", {
+      id: "magnetic-cards",
+      className: "section",
+      style: {
+        margin: "8px 0 0"
+      }
+    }, "Magnetic cards"), /*#__PURE__*/React.createElement("div", {
       className: "panel",
       style: {
         padding: 20,
@@ -613,12 +621,91 @@ const TOPICS = {
       }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
-        marginTop: 0,
+        marginTop: 0
+      }
+    }, "The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides, as the real one has, and one card file holds both of them with one label."), /*#__PURE__*/React.createElement("p", {
+      style: {
         marginBottom: 0
       }
-    }, "The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides. Its ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons fit a card into the calculator above the keys: one loads a card, the other takes a fresh one and names it. On the Mac, Windows, Linux and in the browser you can also drop a card on the calculator. Nothing is read yet: press the card's top-left or top-right corner to feed that side into the reader, and the corner lights up while it passes. Those corners show the bank stored on each side. ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a passing card out. Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
+    }, "Using a card takes two steps. Choosing a card only ", /*#__PURE__*/React.createElement("strong", null, "fits"), " it into the calculator above the keys, where it labels them; nothing is read or written yet. Pressing one of its top corners then ", /*#__PURE__*/React.createElement("strong", null, "feeds"), " that side through the reader: top-left for side 1, top-right for side 2. The corner lights up while the side passes.")), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Saving a program"), /*#__PURE__*/React.createElement("ol", {
+      style: {
+        margin: 0,
+        paddingLeft: 20
+      }
+    }, /*#__PURE__*/React.createElement("li", null, "Press the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button with the plus sign and name the card. The fresh card fits above the keys, labeled with its name. If the name is taken, the app asks first: the card's first write replaces both sides and the label of the old one."), /*#__PURE__*/React.createElement("li", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " for the bank you want to save: ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), " for bank 1."), /*#__PURE__*/React.createElement("li", null, "Press a corner of the card. Once the side has passed, it is saved in the file and the corner shows the bank it now holds.")), /*#__PURE__*/React.createElement("p", {
+      style: {
+        margin: "12px 0 0"
+      }
+    }, "A program too long for one side continues on the other: ", /*#__PURE__*/React.createElement("strong", null, "2 2nd Write"), ", then the other corner.")), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Loading it back"), /*#__PURE__*/React.createElement("ol", {
+      style: {
+        margin: 0,
+        paddingLeft: 20
+      }
+    }, /*#__PURE__*/React.createElement("li", null, "Press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator."), /*#__PURE__*/React.createElement("li", null, "Press the corner of the side you want. The card stays fitted afterwards, so the other side is one press away."))), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Good to know"), /*#__PURE__*/React.createElement("ul", {
+      style: {
+        margin: 0,
+        paddingLeft: 20
+      }
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "A side is not a bank."), " Either side can hold any ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/what-is-a-ti-59/#card-banks"
+    }, "bank"), ", even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes the place of the Crd buttons while a side is passing. It stops the pass; the card stays fitted."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "A library program's cue card"), " covers a fitted card, and the corners don't respond while it does. The card comes back with ", /*#__PURE__*/React.createElement("strong", null, "2nd Pgm 00"), "."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "A fitted card goes"), " when you fit another one, reset, switch the model, switch the printer or the module, or load a preset. The file stays as it is."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Older cards"), " have one side and keep working: either corner feeds it, and it stays a one-sided card when written."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Only the side you write changes."), " The app reads the file again first, so the other side survives even if it was changed on another device meanwhile. A file it can't read is left alone, and the app reports it."))), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Where card files live"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        margin: 0
+      }
+    }, "Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
       href: "/59/play/"
-    }, "browser emulator"), ", cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.")))
+    }, "browser emulator"), ", cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/presets/#sessions"
+    }, "feed them"), " or ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/presets/#labeling-keys"
+    }, "label them"), "; the format is in ", /*#__PURE__*/React.createElement("a", {
+      href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files",
+      className: "link-accent"
+    }, "reference/StateFileFormat.md"), ".")))
   }
 };
 function GettingStartedPage({
@@ -1146,7 +1233,7 @@ ArmCard: Results        # ready for the program's own Write
     style: {
       marginTop: 0
     }
-  }, "The five plain keys (", /*#__PURE__*/React.createElement("strong", null, "A\u2013E"), ") and their 2nd-function row (", /*#__PURE__*/React.createElement("strong", null, "A\u2032\u2013E\u2032"), ") are exactly what real TI-59/58/58C cards label. A ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section can do the same thing on-screen \u2014 either as its own row of short per-key labels, or as one line of running text across the whole row."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Template"), " picks the card artwork and layout, and matches the real card it stands in for \u2014 ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " ", "and ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " look almost identical on screen, since both were the same front-side label design. The difference is on the back: a real magnetic card has a magnetic coating that stores the program; a cue card doesn't. Use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " if the preset is meant to end up written onto a magnetic card (it also shows the ", /*#__PURE__*/React.createElement("strong", null, "Banks"), " page badges). Cue cards shipped for TI-58, TI-58C ", /*#__PURE__*/React.createElement("em", null, "and"), " TI-59 owners, but TI-59 owners tended to skip them and just label whichever magnetic card already held the program instead; TI-58 and TI-58C, having no card reader at all, relied on cue cards since there was no magnetic card to label in the first place \u2014 use", " ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " for that case, or for any file that just wants an on-screen label without a magnetic-card connotation. Which of the two you pick for a given preset is mostly personal preference, except when the file is a step toward an actual magnetic card \u2014 then use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " to match.", " ", /*#__PURE__*/React.createElement("strong", null, "SolidStateCard"), " ", "reproduces the pre-printed cards that shipped with a Solid State Software module; real ones can't be edited by the module's user, and in the emulator they're normally only touched by the project's developer to document a built-in module \u2014 reach for it yourself only if you're prototyping your own module (it shows an", " ", /*#__PURE__*/React.createElement("strong", null, "ID"), " like ", /*#__PURE__*/React.createElement("code", null, "ML-01"), " instead of Banks)."), /*#__PURE__*/React.createElement("p", null, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "(a straight apostrophe also works: ", /*#__PURE__*/React.createElement("code", null, "A'"), ") for the 2nd-function row. Leaving ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " or ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " ", "out entirely is what makes that row show the label grid instead of a line of text \u2014 if you fill in Row1/Row2, the individual A\u2013E labels for that row are not shown."), /*#__PURE__*/React.createElement("p", {
+  }, "The five plain keys (", /*#__PURE__*/React.createElement("strong", null, "A\u2013E"), ") and their 2nd-function row (", /*#__PURE__*/React.createElement("strong", null, "A\u2032\u2013E\u2032"), ") are exactly what real TI-59/58/58C cards label. A ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section can do the same thing on-screen \u2014 either as its own row of short per-key labels, or as one line of running text across the whole row."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Template"), " picks the card artwork and layout, and matches the real card it stands in for \u2014 ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " ", "and ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " look almost identical on screen, since both were the same front-side label design. The difference is on the back: a real magnetic card has a magnetic coating that stores the program; a cue card doesn't. Use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " if the preset is meant to end up written onto a magnetic card (it also shows the ", /*#__PURE__*/React.createElement("strong", null, "Banks"), " page badges; once written to a card file, the corners show the bank each side really holds). Cue cards shipped for TI-58, TI-58C ", /*#__PURE__*/React.createElement("em", null, "and"), " TI-59 owners, but TI-59 owners tended to skip them and just label whichever magnetic card already held the program instead; TI-58 and TI-58C, having no card reader at all, relied on cue cards since there was no magnetic card to label in the first place \u2014 use", " ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " for that case, or for any file that just wants an on-screen label without a magnetic-card connotation. Which of the two you pick for a given preset is mostly personal preference, except when the file is a step toward an actual magnetic card \u2014 then use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " to match.", " ", /*#__PURE__*/React.createElement("strong", null, "SolidStateCard"), " ", "reproduces the pre-printed cards that shipped with a Solid State Software module; real ones can't be edited by the module's user, and in the emulator they're normally only touched by the project's developer to document a built-in module \u2014 reach for it yourself only if you're prototyping your own module (it shows an", " ", /*#__PURE__*/React.createElement("strong", null, "ID"), " like ", /*#__PURE__*/React.createElement("code", null, "ML-01"), " instead of Banks)."), /*#__PURE__*/React.createElement("p", null, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "(a straight apostrophe also works: ", /*#__PURE__*/React.createElement("code", null, "A'"), ") for the 2nd-function row. Leaving ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " or ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " ", "out entirely is what makes that row show the label grid instead of a line of text \u2014 if you fill in Row1/Row2, the individual A\u2013E labels for that row are not shown."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -2247,7 +2334,7 @@ const FAQS = [{
   answer: "This feature is still a bit experimental. You can load these examples in the ASM OVERLAY box under the debugger's CPU tab: Select File, then Run. Clear removes the overlay again."
 }, {
   question: "Where do virtual magnetic cards live?",
-  answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to load or save them. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another."
+  answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to pick or create one, as described under Printer and card reader. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another."
 }, {
   question: "Where is the TI-58C state file?",
   answer: "The TI-58C state file (ti58c.mem) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions."
@@ -2924,7 +3011,9 @@ function PlayPage() {
     className: "prose"
   }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original Texas Instruments ROMs. The model picker switches between the ", /*#__PURE__*/React.createElement("strong", null, "TI-59"), ", ", /*#__PURE__*/React.createElement("strong", null, "TI-58"), " and ", /*#__PURE__*/React.createElement("strong", null, "TI-58C"), ", and the ", /*#__PURE__*/React.createElement("strong", null, "PC-100C printer"), " is connected from the start. On a wide screen the printer and the full debugger sit beside the calculator, with the ASM overlay and trace downloads; on a phone the chevron in the corner turns to the printer's page and back."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default; ", /*#__PURE__*/React.createElement("strong", null, "Settings"), " switches modules (that resets the calculator, as swapping the real module did) and chooses the calculator the page starts with. ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " loads one of the bundled presets or your own", " ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file, and you can also drop a file onto the calculator \u2014 files are read entirely in your browser and never leave your machine. The TI-58C keeps its constant memory in your browser between visits. For more programs to try, see the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/software/"
-  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button for a fresh card, give the card a name, and press its top-left or top-right corner to write that side. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " ", "card file, then press the corner of the side to read; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a passing card out. Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
+  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button for a fresh card, give the card a name, and press its top-left or top-right corner to write that side. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " ", "card file, then press the corner of the side to read; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a passing card out (", /*#__PURE__*/React.createElement("a", {
+    href: "/59/getting-started/printer/#magnetic-cards"
+  }, "more on cards"), "). Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/mac/"
   }, "Mac"), " and on", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/windows-linux/"
