@@ -447,7 +447,7 @@ const TOPICS = {
         </div>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0, marginBottom: 0 }}>
-            The TI-59 has a card reader; the TI-58 and TI-58C don't. Its <strong>Crd</strong> buttons load a card or insert a blank one to write, and <strong>Eject Card</strong> takes it out. Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.
+            The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides. Its <strong>Crd</strong> buttons fit a card into the calculator above the keys: one loads a card, the other takes a fresh one and names it. On the Mac, Windows, Linux and in the browser you can also drop a card on the calculator. Nothing is read yet: press the card's top-left or top-right corner to feed that side into the reader, and the corner lights up while it passes. Those corners show the bank stored on each side. <strong>Eject Card</strong> takes a passing card out. Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.
           </p>
         </div>
       </div>
@@ -800,6 +800,7 @@ ArmCard: Results        # ready for the program's own Write
         <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
           <li><strong>InsertCard:</strong> pushes a card into the stopped calculator, as you would by hand.</li>
           <li><strong>ArmCard:</strong> lays a card ready; it goes in as soon as the program asks for one.</li>
+          <li>A card file's side goes after the name: <code>InsertCard: Results:2</code>. Without one, it is side 1.</li>
           <li>A card is a file in your card folder, by its name, or a temporary card named <strong>mem:</strong>something that lives only while the preset is loaded. A <strong>CARD:</strong> block defines such a card's registers and steps in the preset itself. A card replaces its whole bank, as a real one does.</li>
         </ul>
         <p style={{ marginBottom: 0 }}>Picking the right card is up to the preset, just as it was up to the user.</p>
@@ -944,7 +945,7 @@ ArmCard: Results        # ready for the program's own Write
       <h2 className="section" style={{ marginTop: 24 }}>Loading a labeled card</h2>
       <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}><strong>From a preset</strong> — tap <strong>Preset</strong> and pick a <code>.ti59</code>/<code>.ti58</code>/<code>.ti58c</code> file with a CUECARD section; it's applied immediately and stays until you load something else or reset.</p>
-        <p><strong>Onto a virtual magnetic card</strong> — load a preset with the CUECARD you want active, then write a card on the TI-59 (press 2nd Write and insert a blank card with the <strong>Crd</strong> button): whatever cue card is on screen at that moment is saved into the card file along with the program or data. Loading that card back with the other <strong>Crd</strong> button restores the label along with the contents.</p>
+        <p><strong>Onto a virtual magnetic card</strong> — a card written by a preset gets that preset's CUECARD, with its full layout, in the card file along with the program or data. A fresh card from the <strong>Crd</strong> button starts with its file name as the title; edit the card file to add more. Loading a card back restores the label along with the contents.</p>
         <p style={{ marginBottom: 0 }}><strong>By editing the card file directly</strong> — virtual card files are plain text too (see the FAQ entry on where they live), with the same <code>CUECARD:</code> syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is read.</p>
       </div>
 
@@ -1585,7 +1586,7 @@ function ReferencePage() {
             The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation.
           </p>
           <p>
-            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (load a card; insert a blank card to write) and <strong>Eject Card</strong> — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
+            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (load a card; take a fresh card, either one fitted above the keys) and <strong>Eject Card</strong> — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
           </p>
           <p>
             On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding <strong>⌘</strong> (Mac) or <strong>Ctrl</strong> (Windows, Linux) turns Reset into <strong>Clean</strong>. On the Mac the model picker sits in the window's toolbar.
@@ -1661,7 +1662,7 @@ function ReferencePage() {
             <li><strong>Reset</strong> (long press: clean reset, wipes the memory)</li>
             <li><strong>Model picker</strong> (TI-59 / TI-58 / TI-58C)</li>
             <li><strong>Crd</strong>: load a card (TI-59)</li>
-            <li><strong>Crd</strong>: insert a blank card to write (TI-59)</li>
+            <li><strong>Crd</strong>: take a fresh card (TI-59)</li>
             <li><strong>Preset</strong></li>
             <li><strong>Settings</strong></li>
             <li><strong>Swipe to printer</strong></li>
@@ -2132,10 +2133,11 @@ function PlayPage() {
           </p>
           <p>
             The TI-59 has a card reader. To save a program, press <strong>2nd Write</strong> (bank 1:{" "}
-            <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button that writes a blank card,
-            and give the card a name. To load it back, press the other <strong>Crd</strong> button and
-            pick the card, or upload a <strong>.U59</strong> card file; <strong>Eject Card</strong> takes
-            a card out. Cards last until you close the page — download one from the card list to keep it.
+            <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button for a fresh card, give the
+            card a name, and press its top-left or top-right corner to write that side. To load it back,
+            press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
+            card file, then press the corner of the side to read; <strong>Eject Card</strong> takes a
+            passing card out. Cards last until you close the page — download one from the card list to keep it.
           </p>
           <p>
             The full app adds a card folder that stays (synced through iCloud on
