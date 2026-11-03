@@ -39,7 +39,7 @@ const START_CARDS = [
   { eyebrow: "Debug", title: "Using the debugger", href: "/59/debugger/",
     text: "The CALCULATOR, CPU and LOG tabs, freeze and step, FREEZE ON START, and binary trace files for offline analysis." },
   { eyebrow: "Hardware", title: "Printer and card reader", href: "/59/getting-started/printer/",
-    text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and where card files are kept." },
+    text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and saving and loading magnetic cards." },
 ];
 
 function StartCards() {
@@ -311,7 +311,9 @@ function AboutTi59Page() {
           reproducing.
         </p>
         <p style={{ marginBottom: 0 }}>
-          In the emulator, cards are files. They live in iCloud storage, so a program written on a
+          In the emulator, cards are files with both sides in one file, and{" "}
+          <a href="/59/getting-started/printer/#magnetic-cards">a press on a corner of the card</a>{" "}
+          feeds that side. On Apple devices they live in iCloud storage, so a program written on a
           Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the
           most failure-prone part of the original hardware, which is a reasonable argument for
           emulating one instead of restoring one.
@@ -428,7 +430,7 @@ const TOPICS = {
   },
   printer: {
     title: "Printer and card reader",
-    note: "The PC-100C panel, paper strip, copy/cut, and card file behaviour.",
+    note: "The PC-100C panel, paper strip, copy/cut, and saving and loading two-sided magnetic cards.",
     body: (
       <div style={{ display: "grid", gap: 16, marginTop: 20 }}>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
@@ -445,9 +447,48 @@ const TOPICS = {
             Holding the display runs the calculator at full speed, and that includes printing — a long 2nd List or a calendar printout finishes in moments.
           </p>
         </div>
+        <h2 id="magnetic-cards" className="section" style={{ margin: "8px 0 0" }}>Magnetic cards</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0, marginBottom: 0 }}>
-            The TI-59 has a card reader; the TI-58 and TI-58C don't. Its <strong>Crd</strong> buttons load a card or insert a blank one to write, and <strong>Eject Card</strong> takes it out. Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.
+          <p style={{ marginTop: 0 }}>
+            The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides, as the real one has, and one card file holds both of them with one label.
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            Using a card takes two steps. Choosing a card only <strong>fits</strong> it into the calculator above the keys, where it labels them; nothing is read or written yet. Pressing one of its top corners then <strong>feeds</strong> that side through the reader: top-left for side 1, top-right for side 2. The corner lights up while the side passes.
+          </p>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Saving a program</h3>
+          <ol style={{ margin: 0, paddingLeft: 20 }}>
+            <li>Press the <strong>Crd</strong> button with the plus sign and name the card. The fresh card fits above the keys, labeled with its name. If the name is taken, the app asks first: the card's first write replaces both sides and the label of the old one.</li>
+            <li>Press <strong>2nd Write</strong> for the bank you want to save: <strong>1 2nd Write</strong> for bank 1.</li>
+            <li>Press a corner of the card. Once the side has passed, it is saved in the file and the corner shows the bank it now holds.</li>
+          </ol>
+          <p style={{ margin: "12px 0 0" }}>
+            A program too long for one side continues on the other: <strong>2 2nd Write</strong>, then the other corner.
+          </p>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Loading it back</h3>
+          <ol style={{ margin: 0, paddingLeft: 20 }}>
+            <li>Press the other <strong>Crd</strong> button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator; the TI-58 and TI-58C ignore a dropped card.</li>
+            <li>Press the corner of the side you want. The card stays fitted afterwards, so the other side is one press away.</li>
+          </ol>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Good to know</h3>
+          <ul style={{ margin: 0, paddingLeft: 20 }}>
+            <li><strong>A side is not a bank.</strong> Either side can hold any <a href="/59/what-is-a-ti-59/#card-banks">bank</a>, even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty. An older one-sided card shows the badges it was saved with.</li>
+            <li><strong>Eject Card</strong> takes the place of the Crd buttons while a side is passing. It stops the pass; the card stays fitted.</li>
+            <li><strong>A library program's cue card</strong> covers a fitted card, and the corners don't respond while it does. The card comes back with <strong>2nd Pgm 00</strong>.</li>
+            <li><strong>A fitted card goes</strong> when you fit another one, reset, switch the model, switch the printer or the module, or load a preset. The file stays as it is.</li>
+            <li><strong>Older cards</strong> have one side and keep working: either corner feeds it, and it stays a one-sided card when written.</li>
+            <li><strong>Only the side you write changes.</strong> The app reads the file again first, so the other side survives even if it was changed on another device meanwhile. A file it can't read is left alone, and the app reports it.</li>
+          </ul>
+        </div>
+        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+          <h3 className="sub" style={{ margin: "0 0 6px" }}>Where card files live</h3>
+          <p style={{ margin: 0 }}>
+            Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can <a href="/59/presets/#sessions">feed them</a> or <a href="/59/presets/#labeling-keys">label them</a>; the format is in <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files" className="link-accent">reference/StateFileFormat.md</a>.
           </p>
         </div>
       </div>
@@ -493,7 +534,7 @@ function InstallMobilePage() {
           The app needs iOS or iPadOS 18 or later. There is no extra setup after install.
         </p>
         <p style={{ marginBottom: 0 }}>
-          On iPhone in portrait, the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings › Debug Page in Portrait). In landscape, the iPhone shows the calculator next to the printer. On iPad in landscape, the layout mirrors the Mac view.
+          On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you turn with the chevrons in the top corners (the debugger only with Settings › Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape, its print scaled down to fit, and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.
         </p>
       </div>
 
@@ -543,7 +584,7 @@ function InstallPcPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Windows</h3>
         <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>From the latest <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub release</a>, download <code>Calc-U-59-Setup.exe</code> (most PCs) or <code>Calc-U-59-Setup-arm64.exe</code> (Windows on ARM).</li>
+          <li>From the latest <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub release</a>, download <code>Calc-U-59-windows-x86_64.exe</code> (most PCs) or <code>Calc-U-59-windows-arm64.exe</code> (Windows on ARM).</li>
           <li>Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
           <li>Start Calc-U-59 from the Start menu.</li>
         </ol>
@@ -608,17 +649,17 @@ function InstallAndroidPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Offline and updates</h3>
         <p style={{ marginTop: 0, marginBottom: 0 }}>
-          Once installed, the app runs all three calculators without a connection, with module 01 (Master Library). Any other module needs the network the first time you load it. When a new version is out, the app updates itself.
+          Once installed, the app runs all three calculators without a connection, with every Solid State module and every preset in its list. When a new version is out, the app updates itself.
         </p>
       </div>
 
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
         <p style={{ marginTop: 0 }}>
-          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to read it again.
+          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to fit it again.
         </p>
         <p style={{ marginBottom: 0 }}>
-          <strong>Preset</strong> opens a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage; files are read on the phone and never uploaded anywhere.
+          <strong>Preset</strong> offers the main examples from its list, and opens any other <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage, such as the historic and calendar programs from the Software Collection; files are read on the phone and never uploaded anywhere.
         </p>
       </div>
 
@@ -676,16 +717,28 @@ C': n
 D': \\blank
 E': \\blank`;
 
-  const cueCardRowExample = `CUECARD:
-Template: CueCard
-Title: Compound Interest
-Row1: Enter n, i, PV — press B for FV
-Row1Align: center
-Row2: RPN 5.1
-Row2R: p. 3
-Row2Align: left
-Row2RAlign: right
-Style: button`;
+  const reloadExample = `PROGRAM:
+…                    # the program, loaded as usual
+KEYSTROKES:
+11                   # A: it runs and stops
+PROGRAM:
+017 01               # then step 017 changes …
+REGISTERS:
+05 = 2.5             # … and register 05
+KEYSTROKES:
+11                   # A: run again`;
+
+  const cardExample = `CARD: mem:Bank4      # a card defined right here
+Bank: 4
+REGISTERS:
+00 = 12
+01 = 3.5
+END-CARD
+
+KEYSTROKES:
+InsertCard: mem:Bank4   # push it in, as at the start of a session
+ArmCard: Results        # ready for the program's own Write
+11                      # A: run`;
 
   return (
     <main className="wrap-narrow">
@@ -726,7 +779,7 @@ Style: button`;
         <p><strong>KEYSTROKES:</strong> injects matrix codes after the file loads. Between keys, lines such as <strong>Wait:</strong>, <strong>FullSpeed:</strong> and <strong>RegularSpeed:</strong> control timing, and a few more (<strong>Trace:</strong>, <strong>ZeroElapseTime:</strong>, <strong>ReportElapseTime:</strong>) help with timing and debugging programs. To run a long program at full speed, put <strong>FullSpeed:</strong> before the key that starts it; <strong>Wait:</strong> pauses so you can see what the calculator shows. An unknown directive, or a <strong>Wait:</strong> without a unit, is reported as an error rather than read as keys.</p>
         <p><strong>CUECARD:</strong> defines the on-screen cue card that appears with the loaded file or module.</p>
         <p><strong>SOLID-STATE-MODULE:</strong> and <strong>PRINTER:</strong> let a file select the matching module and printer state automatically, and <strong>MODEL:</strong> switches to the calculator the file is for.</p>
-        <p><strong>SKIP-RESET: on</strong> loads into the running calculator without resetting it first — only the sections the file contains are applied, and <strong>MODEL:</strong>, <strong>SOLID-STATE-MODULE:</strong> and <strong>PRINTER:</strong> are ignored (the LOG tab notes each one).</p>
+        <p>A <strong>KEYSTROKES:</strong> script can also work the controls around the calculator: <strong>PrinterTrace: on</strong> / <strong>off</strong> sets the printer's TRACE switch, <strong>CutPaper:</strong> cuts the paper, and <strong>DebugPanel:</strong>, <strong>Freeze:</strong>, <strong>FreezeOnStart:</strong>, <strong>Step:</strong> and <strong>Resume:</strong> do what the debugger's tabs and buttons do. While the debugger is frozen, the script's keys wait until it runs again. Older presets using <strong>SKIP-RESET:</strong> or key 99 now get an error; a reload in the same file and <strong>PrinterTrace:</strong> replace them.</p>
         <p style={{ marginBottom: 0 }}>
           This page covers enough to load and tweak existing files. The complete
           grammar — matrix code table, 2nd-function presses, the CUECARD field
@@ -736,6 +789,63 @@ Style: button`;
             reference/StateFileFormat.md →
           </a>
         </p>
+      </div>
+
+      <h2 id="sessions" className="section" style={{ marginTop: 24 }}>A whole session in one preset</h2>
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+        <p style={{ marginTop: 0 }}>
+          Some programs don't fit one load. Their users changed a few steps
+          between runs, or fed the calculator one magnetic card after another.
+          A preset can do both, so one file plays the whole session.
+        </p>
+        <p>
+          <strong>Keyed-in changes.</strong> A <strong>PROGRAM:</strong>,{" "}
+          <strong>REGISTERS:</strong> or <strong>CUECARD:</strong> section after{" "}
+          <strong>KEYSTROKES:</strong> is applied once the program has stopped,
+          as if you had typed the changes in. Only the steps and registers it
+          lists change; everything else stays. This works on every model.
+        </p>
+      </div>
+      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
+        <pre style={{
+          margin: 0,
+          padding: 16,
+          borderRadius: 8,
+          background: "var(--bg-inset)",
+          color: "var(--fg)",
+          overflowX: "auto",
+          lineHeight: 1.5,
+          fontSize: 13,
+        }}>{reloadExample}</pre>
+      </div>
+      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
+        <p style={{ marginTop: 0 }}>
+          <strong>A stack of cards (TI-59).</strong> For larger changes, TI-59
+          owners prepared their cards in advance and fed them in a written-down
+          order. Some programs stop and show which card comes next. Others ask
+          for a card themselves (<strong>Write</strong> or{" "}
+          <strong>INV Write</strong> in the program) and simply wait for it. A
+          preset feeds both kinds:
+        </p>
+        <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
+          <li><strong>InsertCard:</strong> pushes a card into the stopped calculator, as you would by hand.</li>
+          <li><strong>ArmCard:</strong> lays a card ready; it goes in as soon as the program asks for one.</li>
+          <li>A card file's side goes after the name: <code>InsertCard: Results:2</code>. Without one, it is side 1.</li>
+          <li>A card is a file in your card folder, by its name, or a temporary card named <strong>mem:</strong>something that lives only while the preset is loaded. A <strong>CARD:</strong> block defines such a card's registers and steps in the preset itself. A card replaces its whole bank, as a real one does.</li>
+        </ul>
+        <p style={{ marginBottom: 0 }}>Picking the right card is up to the preset, just as it was up to the user.</p>
+      </div>
+      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
+        <pre style={{
+          margin: 0,
+          padding: 16,
+          borderRadius: 8,
+          background: "var(--bg-inset)",
+          color: "var(--fg)",
+          overflowX: "auto",
+          lineHeight: 1.5,
+          fontSize: 13,
+        }}>{cardExample}</pre>
       </div>
 
       <h2 id="labeling-keys" className="section" style={{ marginTop: 24 }}>Labeling the A–E and A′–E′ keys</h2>
@@ -755,7 +865,8 @@ Style: button`;
           the back: a real magnetic card has a magnetic coating that stores
           the program; a cue card doesn't. Use <strong>MagnetCard</strong> if
           the preset is meant to end up written onto a magnetic card (it also
-          shows the <strong>Banks</strong> page badges). Cue cards shipped
+          shows the <strong>Banks</strong> page badges; once written to a card
+          file, the corners show the bank each side really holds). Cue cards shipped
           for TI-58, TI-58C <em>and</em> TI-59 owners, but TI-59 owners
           tended to skip them and just label whichever magnetic card already
           held the program instead; TI-58 and TI-58C, having no card reader
@@ -774,32 +885,16 @@ Style: button`;
           only if you're prototyping your own module (it shows an{" "}
           <strong>ID</strong> like <code>ML-01</code> instead of Banks).
         </p>
-        <p>
+        <p style={{ marginBottom: 0 }}>
           Set fields <strong>A</strong> through <strong>E</strong> for the
           plain-key row, and <strong>A′</strong> through <strong>E′</strong>{" "}
-          (a straight apostrophe also works: <code>A'</code>) for the
-          2nd-function row. Leaving <strong>Row1</strong> or <strong>Row2</strong>{" "}
-          out entirely is what makes that row show the label grid instead of a
-          line of text — if you fill in Row1/Row2, the individual A–E labels for
-          that row are not shown.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          <strong>Row1</strong> replaces the A′–E′ grid with one line of
-          running text, and <strong>Row2</strong> does the same for the A–E
-          grid. <strong>Row2R</strong> is a second piece of text placed on the
-          same line as Row2, right-aligned against it — handy for something
-          like a page number or units note that shouldn't compete with the
-          main label for space. Each of the three has its own alignment
-          field — <strong>Row1Align</strong>, <strong>Row2Align</strong>,{" "}
-          <strong>Row2RAlign</strong> — set to <code>left</code>,{" "}
-          <code>center</code>, or <code>right</code> (Row1 defaults to
-          center, Row2 and Row2R to left).{" "}
-          On a CueCard or MagnetCard, <strong>PencilColor</strong> picks the
-          ink: <code>black</code> (the default), <code>pencil</code> or{" "}
-          <code>sharpie</code>.{" "}
-          <strong>Style</strong> is <code>none</code> by default, or{" "}
-          <code>button</code> to draw a border around the Row1/Row2/Row2R
-          text, mimicking the boxed instruction labels real cards use.
+          for the 2nd-function row, as in the example below.{" "}
+          <strong>Row1</strong> and <strong>Row2</strong> put one line of running
+          text across a row instead. The example also shows{" "}
+          <code>\blank</code>, which lets a label span the next key position,
+          and shortcuts such as <code>\sqrt</code> for the symbols real cards use.
+          All the fields, their alignment and ink options and the symbol table are in{" "}
+          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">reference/StateFileFormat.md</a>.
         </p>
       </div>
 
@@ -824,49 +919,11 @@ Style: button`;
         />
       </div>
 
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{cueCardRowExample}</pre>
-      </div>
-
-      <div className="panel" style={{ padding: 16, marginTop: 12 }}>
-        <img
-          src="/59/assets/cuecard-row-text.png"
-          alt="CueCard titled Compound Interest, with a centered, boxed Row1 instruction line and left-aligned Row2 / right-aligned Row2R text below it"
-          style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-        />
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ marginTop: 0 }}>
-          A short set of LaTeX-style shortcuts expand to the Unicode symbols
-          real TI-59 cards use in labels, so you don't need a Unicode picker —
-          for example <code>\to</code> becomes an arrow, <code>\sqrt</code>{" "}
-          becomes a root sign, <code>\sum</code> becomes Σ, and{" "}
-          <code>{"x^{2}"}</code> becomes <code>x²</code>. The full token table
-          is in <strong>reference/StateFileFormat.md</strong>.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          To make one label visually span more than one key position, set the
-          following cell(s) to <code>\blank</code> — for example{" "}
-          <code>{"D: \\blank"}</code> right after a filled-in <strong>C</strong>{" "}
-          merges D into C's column so the C label reads across both keys.
-        </p>
-      </div>
-
       <h2 className="section" style={{ marginTop: 24 }}>Loading a labeled card</h2>
       <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}><strong>From a preset</strong> — tap <strong>Preset</strong> and pick a <code>.ti59</code>/<code>.ti58</code>/<code>.ti58c</code> file with a CUECARD section; it's applied immediately and stays until you load something else or reset.</p>
-        <p><strong>Onto a virtual magnetic card</strong> — load a preset with the CUECARD you want active, then write a card on the TI-59 (press 2nd Write and insert a blank card with the <strong>Crd</strong> button): whatever cue card is on screen at that moment is saved into the card file along with the program or data. Loading that card back with the other <strong>Crd</strong> button restores the label along with the contents.</p>
-        <p style={{ marginBottom: 0 }}><strong>By editing the card file directly</strong> — virtual card files are plain text too (see the FAQ entry on where they live), with the same <code>CUECARD:</code> syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is read.</p>
+        <p><strong>Onto a virtual magnetic card</strong> — a card written by a preset gets that preset's CUECARD, with its full layout, in the card file along with the program or data. A fresh card from the <strong>Crd</strong> button starts with its file name as the title; edit the card file to add more. Fitting a card restores the label; pressing a corner reads the contents.</p>
+        <p style={{ marginBottom: 0 }}><strong>By editing the card file directly</strong> — virtual card files are plain text too (see the FAQ entry on where they live), with the same <code>CUECARD:</code> syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is fitted.</p>
       </div>
 
       <div style={{ marginTop: 24 }}>
@@ -1219,10 +1276,9 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
         <p style={{ marginBottom: 0 }}>
           Load this file now and the card appears immediately — nothing on
           it does anything yet, because there's still no program behind the{" "}
-          <strong>A</strong> key. The full{" "}
-          <a href="/59/presets/#labeling-keys">CUECARD field reference</a>{" "}
-          covers every field, the math-notation shortcuts, and both
-          templates in more depth.
+          <strong>A</strong> key. The{" "}
+          <a href="/59/presets/#labeling-keys">section on labeling keys</a>{" "}
+          explains the templates in more depth and links to the full field list.
         </p>
       </TutorialStep>
 
@@ -1261,11 +1317,11 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
         </p>
         <p style={{ marginBottom: 0 }}>
           To check that a value actually loaded, open the <a href="/59/debugger/">debugger</a>{" "}
-          and look at the register list — on Mac, Windows, Linux and on iPad
-          in landscape it's visible right alongside the calculator; on iPhone (and iPad in
-          portrait) swipe to it. The debugger has to be turned on first on
+          and look at the register list — on Mac, Windows, Linux, on iPad
+          in landscape and on iPhone Duo opened flat it's visible right alongside the calculator; on iPhone (and iPad in
+          portrait) tap the chevron to reach it. The debugger has to be turned on first on
           iPhone/portrait iPad: enable <strong>Debug Page in Portrait</strong>{" "}
-          under <strong>Settings</strong>, or it won't be there to swipe to.
+          under <strong>Settings</strong>, or it won't be there to turn to.
         </p>
       </TutorialStep>
 
@@ -1383,7 +1439,7 @@ function DebuggerPage() {
         <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
           <li><strong>FREEZE</strong> — stops the CPU (in the CALCULATOR tab, at the next step).</li>
           <li><strong>FREEZE ON START (CALCULATOR tab)</strong> — arms the debugger so it freezes right before the first program step runs, the same point STEP stops at. This is triggered by pressing R/S, launching a program via a label, or any similar action. Useful for catching the very start of a program run.</li>
-          <li><strong>FREEZE ON START (CPU tab)</strong> — arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or when the calculator is reset. Useful for catching the very first ROM instruction of a key-press handler.</li>
+          <li><strong>FREEZE ON START (CPU tab)</strong> — arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or on a Clean reset (on the TI-58C, any reset). Useful for catching the very first ROM instruction of a key-press handler.</li>
           <li><strong>ARMED</strong> — shown in yellow when FREEZE ON START is active; click it to cancel.</li>
           <li><strong>RESUME</strong> — resumes execution from the frozen state.</li>
           <li><strong>STEP</strong> — advances one step (semantics differ per tab, see above).</li>
@@ -1396,13 +1452,13 @@ function DebuggerPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>iPhone behaviour</h3>
         <p style={{ marginTop: 0 }}>
-          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad, the Mac, Windows and Linux, where both views are visible at the same time.
+          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad in landscape, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time.
         </p>
         <ul style={{ margin: "8px 0 0", paddingLeft: 20 }}>
           <li>Switching to the <strong>CPU</strong> tab resets the heat map, because the CPU trace was not running while CALCULATOR was visible. Exception: if the CPU is already frozen when you switch, the heat map is preserved.</li>
           <li>The selected tab (CALCULATOR, CPU, LOG) is remembered when you navigate away from the debugger and return.</li>
-          <li><strong>FREEZE ON START in CALCULATOR</strong> works best in landscape or on iPad/Mac, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger.</li>
-          <li><strong>FREEZE ON START in CPU</strong> arms in the background and fires as soon as you press any key (or reset the calculator), regardless of which tab or screen is visible — the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction.</li>
+          <li><strong>FREEZE ON START in CALCULATOR</strong> works best on iPad in landscape, on iPhone Duo opened flat or on a computer, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger.</li>
+          <li><strong>FREEZE ON START in CPU</strong> arms in the background and fires as soon as you press any key (or do a Clean reset; on the TI-58C, any reset), regardless of which tab or screen is visible — the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction.</li>
         </ul>
       </div>
 
@@ -1413,7 +1469,7 @@ function DebuggerPage() {
         </p>
         <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
           <li><strong>Dumps</strong> — the <strong>SCOM</strong>, <strong>Memory</strong>, <strong>Prog</strong> and <strong>Vars</strong> buttons write the scratch registers, the RAM, the program or the data registers to the log as raw values; the trash button clears it.</li>
-          <li><strong>TRACE toggle</strong> — Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like the reset routine or key-processing flow.</li>
+          <li><strong>TRACE toggle</strong> — Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like a Clean reset's routine or key-processing flow.</li>
         </ul>
 
         <p style={{ marginTop: 12, marginBottom: 12 }}>
@@ -1421,7 +1477,7 @@ function DebuggerPage() {
         </p>
         <ol style={{ margin: 0, paddingLeft: 20 }}>
           <li>Switch to the LOG tab and toggle TRACE on.</li>
-          <li>Perform the action you want to analyze (e.g., press <strong>Reset</strong>, or execute a ROM subroutine).</li>
+          <li>Perform the action you want to analyze (e.g., press <strong>Clean</strong>, or execute a ROM subroutine).</li>
           <li>Toggle TRACE off to stop recording.</li>
           <li>Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings › Files; the <a href="/59/play/">browser emulator</a> downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit.</li>
           <li>On a computer with Python, download or clone the <a href="https://github.com/tinue/Calc-U-59" className="link-accent">Calc-U-59 repository</a>. Its <code>tools/read_trace.py</code> needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own.</li>
@@ -1439,7 +1495,7 @@ function DebuggerPage() {
         <ul style={{ margin: 0, paddingLeft: 20 }}>
           <li><strong>CALCULATOR tab</strong> — Stepping through your own program one step at a time, checking registers and flags at each step.</li>
           <li><strong>CPU tab</strong> — Tracing the ROM's internal instruction flow, reviewing jumps and subroutine calls, scrolling back through execution history.</li>
-          <li><strong>TRACE (in LOG)</strong> — Capturing a complete ROM sequence for offline analysis (reset routine, memory writes, keyboard processing, etc.).</li>
+          <li><strong>TRACE (in LOG)</strong> — Capturing a complete ROM sequence for offline analysis (a Clean reset's routine, memory writes, keyboard processing, etc.).</li>
           <li><strong>Debug logging (in LOG)</strong> — the LOG button cycles the level between Off, Info and Debug (grey, orange and red dot). It is mainly used by the developer for debugging specific issues. When enabled, you will see all memory writes and other hardware events. This has limited utility for regular app users.</li>
         </ul>
       </div>
@@ -1458,6 +1514,14 @@ function DebuggerPage() {
           <img
             src="/59/assets/ipad-13-2752x2064.png"
             alt="iPad screenshot showing the CALCULATOR debug tab"
+            style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
+          />
+        </div>
+        <div className="panel" style={{ padding: 16 }}>
+          <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPhone Duo, opened flat</h3>
+          <img
+            src="/59/assets/iphone-duo-2852x2006.png"
+            alt="iPhone Duo screenshot: calculator, a narrow printer tape and the CALCULATOR debug tab side by side"
             style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
           />
         </div>
@@ -1492,13 +1556,13 @@ function ReferencePage() {
         <h2 className="section">The calculator</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape, the layout mirrors the Mac view.
+            The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape and on iPhone Duo opened flat, the layout mirrors the Mac view.
           </p>
           <p>
             The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation.
           </p>
           <p>
-            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (load a card; insert a blank card to write) and <strong>Eject Card</strong> — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
+            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (fit a card; fit a fresh card), which <strong>Eject Card</strong> replaces while a side is passing — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
           </p>
           <p>
             On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding <strong>⌘</strong> (Mac) or <strong>Ctrl</strong> (Windows, Linux) turns Reset into <strong>Clean</strong>. On the Mac the model picker sits in the window's toolbar.
@@ -1536,7 +1600,7 @@ function ReferencePage() {
         <h2 className="section">Settings</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>.
+            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The web client's portrait layout (the installed app, and the browser emulator on a phone) has <strong>Keyboard Feedback</strong> too: Off or Click Sound.
           </p>
           <p style={{ marginBottom: 0 }}>
             Where files go: on the Mac, the trace file's <strong>Save Location</strong> (local, iCloud or a folder you choose); on iPhone and iPad, traces go to the app's iCloud folder. On Windows and Linux, <strong>Files</strong> sets the preset, card and trace folders.
@@ -1573,11 +1637,11 @@ function ReferencePage() {
           <ol style={{ margin: "12px 0 0", paddingLeft: 20, lineHeight: 1.65, color: "var(--fg-2)", fontSize: 14 }}>
             <li><strong>Reset</strong> (long press: clean reset, wipes the memory)</li>
             <li><strong>Model picker</strong> (TI-59 / TI-58 / TI-58C)</li>
-            <li><strong>Crd</strong>: load a card (TI-59)</li>
-            <li><strong>Crd</strong>: insert a blank card to write (TI-59)</li>
+            <li><strong>Crd</strong>: fit a card (TI-59)</li>
+            <li><strong>Crd</strong>: fit a fresh card (TI-59)</li>
             <li><strong>Preset</strong></li>
             <li><strong>Settings</strong></li>
-            <li><strong>Swipe to printer</strong></li>
+            <li><strong>Chevron to the printer</strong></li>
           </ol>
         </div>
       </div>
@@ -1592,7 +1656,7 @@ function ReferencePage() {
 const FAQS = [
   {
     question: "Where do preset files live?",
-    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on Windows and Linux you can also drag one onto the window or double-click it (Windows); on iPhone and iPad, use the built-in file picker.",
+    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); you can also drag one onto the window, or double-click it on Windows; on iPhone and iPad, use the built-in file picker.",
   },
   {
     question: "Are there examples of preset files?",
@@ -1604,7 +1668,7 @@ const FAQS = [
   },
   {
     question: "Where do virtual magnetic cards live?",
-    answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to load or save them. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another.",
+    answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to pick or create one, as described under Printer and card reader. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another.",
   },
   {
     question: "Where is the TI-58C state file?",
@@ -1628,11 +1692,11 @@ const FAQS = [
   },
   {
     question: "What does FREEZE ON START do in the CPU tab?",
-    answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because the calculator was reset. This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other.",
+    answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because of a Clean reset (on the TI-58C, any reset). This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other.",
   },
   {
     question: "How can I step through the reset routine?",
-    answer: "Switch to the CPU tab and press FREEZE ON START. Then go to the calculator and press Reset — the CPU will freeze at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time.",
+    answer: "Switch to the CPU tab and press FREEZE ON START. Then press Clean (hold ⌘ or Ctrl while you click Reset; long-press Reset on a touch screen), which wipes the memory, or plain Reset on the TI-58C. The CPU freezes at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time. A plain Reset on the TI-59 and TI-58 runs the routine out of sight, to keep the memory, so the freeze then waits for the next key.",
   },
   {
     question: "I used FREEZE ON START in the CPU tab, the freeze triggered on a keypress — but after RESUME the key seems lost. Why?",
@@ -1650,9 +1714,8 @@ const FAQS = [
         <strong>Template</strong> to <code>MagnetCard</code> or{" "}
         <code>CueCard</code>, then fill in fields <strong>A</strong>{" "}
         through <strong>E</strong> and <strong>A′</strong> through{" "}
-        <strong>E′</strong> for the two key rows. Load that file (or write it
-        onto a virtual magnetic card to keep the label with the card) and it
-        appears on screen. See{" "}
+        <strong>E′</strong> for the two key rows. Load that file (a card the preset itself writes, with <strong>ArmCard:</strong>,
+        keeps the label) and it appears on screen. See{" "}
         <a href="/59/presets/#labeling-keys" className="link-accent">
           Loading a preset → Labeling the A–E and A′–E′ keys
         </a>{" "}
@@ -1806,7 +1869,7 @@ function SoftwarePage() {
         { file: "calendar-02-cargile.ti59", title: "Calendar Printer — Lou Cargile", description: "A second V3N5 entry, Lou Cargile's first attempt at the calendar problem.", printer: true },
         { file: "calendar-03-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh", description: "A third V3N5 entry, checking for the ML module and warning the user if it's missing.", printer: true },
         { file: "calendar-04-skillman.ti59", title: "Calendar Printer — Bill Skillman", description: "V3N6: a faster print-buffer packing approach, down to about 7½ minutes per year.", printer: true },
-        { file: "calendar-05-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh (revised)", description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to about 5½ minutes per year.", printer: true },
+        { file: "calendar-05-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh (revised)", description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to just under 5 minutes per year (4 min 53 s for 1978).", printer: true },
         { file: "calendar-06-cargile.ti59", title: "Calendar Printer — Lou Cargile (bugfix)", description: "V3N7: a correction to an earlier entry — a missing CLR' meant the 1st of a month could fail to print if it fell on a Thursday.", printer: true },
         { file: "calendar-07-calidas.ti59", title: "Calendar Printer — Panos Galidas", description: "V3N9: the fastest of the 1978 entries, averaging 2 minutes 38.6 seconds per year over a five-year test span.", printer: true },
         { file: "calendar-08-acosta.ti59", title: "Calendar Printer — Patrick Acosta", description: "TI PPC Notes V9N2: the 1981 program that ended the race, using Fast Mode to print the worst-case year 2000 in 1 minute 23 seconds.", printer: true },
@@ -1819,15 +1882,29 @@ function SoftwarePage() {
       article: "printer-interrupt",
       items: [
         { file: "characters.ti59", title: "Print character table", description: "Prints the full TI-59 print-code table with row and column headers." },
-        { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980).", printer: true },
-        { file: "fast-grafik-3d-plot-part1.ti59", title: "Fast-Grafik 3-D Plot — Part 1", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Load Part 2 after this one finishes, without resetting.", printer: true },
-        { file: "fast-grafik-3d-plot-part2.ti59", title: "Fast-Grafik 3-D Plot — Part 2", description: "The second half of Poloczek's 3-D plotter. Requires Part 1 to have already run in the same session.", printer: true },
+        { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). This program's way into Fast Mode (Pgm 02 SBR 239) clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.", printer: true },
+        { file: "fast-grafik-3d-plot.ti59", title: "Fast-Grafik 3-D Plot", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.", printer: true },
         { file: "printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
         { file: "printer-interrupt.ti59", title: "The printer interrupt, smallest form", description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.", printer: true },
+        { file: "picard.ti59", title: "Picard — printer-interrupt picture", description: "A picture printed two dot rows per line with the printer interrupt. Its file header explains how to run it on a real TI-59.", printer: true },
+        { file: "globe-print.ti59", title: "Globe — printer-interrupt picture", description: "A larger picture in three parts: the preset feeds the second and third from magnetic cards by itself. Its file header explains how to do it by hand on a real TI-59.", printer: true },
         { file: "stars-and-stripes.ti59", title: "Stars & Stripes", description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).", printer: true },
         { file: "switzerland.ti59", title: "Switzerland — printer-interrupt outline map", description: "The outline of Switzerland drawn from 41 lines, each cut off after its first two dot rows by the printer interrupt so they stack without a gap (2026). Loading the file makes the interrupt code and prints the picture automatically, at full speed.", printer: true },
         { file: "texas-print.ti59", title: "“TI” logo — high-resolution printer graphics", description: "Frank Dever's high-resolution “TI” logo (PPX Exchange, March/April 1982). The program corrupts a program-step keycode on purpose to redirect the ROM's dispatcher mid-instruction — the file's header traces exactly which ROM address that lands on.", printer: true },
         { file: "trace-quirk.ti59", title: "Printer trace-mode quirk", description: "A keystroke sequence, found by a TI PPC club member, that puts a TI-58 or TI-59 into an undocumented trace mode once a printer is attached (TI PPC Notes V6N4-5, 1981).", printer: true },
+      ],
+    },
+    {
+      heading: "From the German magazine CHIP, 1979–1980",
+      intro: "CHIP printed TI-59 programs that readers keyed in by hand. These were transcribed from the magazine's listings; each file's header names the article.",
+      items: [
+        { file: "pdcm-card-tricks.ti59", title: "PDCM — a card-swapping operating system", description: "Horst Umlauf's system (“Karten-Tricks”, CHIP 8/1979, with his corrections from 10/1979) that manages a program's magnetic cards: it asks for the card it needs, checks it and reads it, so memory is limited only by the stack of cards. Includes a demo program; the guide is below." },
+        { file: "pdcm-make-cards.ti59", title: "PDCM — write its two cards", description: "Creates PDCM's two magnetic cards in your card folder, as if they had been keyed in and saved by hand. Run it once, then follow the emulator guide below." },
+        { file: "PDCM-Emulator.md", title: "PDCM — guide for the emulator", description: "The short way into PDCM: start from the cards the preset above writes. A Markdown text file." },
+        { file: "PDCM.md", title: "PDCM — step-by-step guide", description: "What PDCM is for and how to use it on a TI-59, from keying it in to a worked demo. Written by an AI from the two articles; the key sequences were run on the emulator, not on a real calculator. A Markdown text file." },
+        { file: "erdkundetest.ti59", title: "Erdkundetest — geography quiz", description: "Michael Hartstang's printer quiz (CHIP 1/1980), which prints questions and answers and keeps the score. The texts are in German. This file holds the article's first set of questions.", printer: true },
+        { file: "erdkundetest-2.ti59", title: "Erdkundetest — second set of questions", description: "The same quiz with the second set from the article.", printer: true },
+        { file: "life.ti59", title: "LIFE — the Game of Life", description: "Joachim Dörges' Game of Life on a 10 × 10 field (“Life auf dem TI-59”, CHIP 9/1980). It prints every generation, with optional random mutations; a generation takes minutes, as on the real calculator. Loading the file starts it with a glider, which is not from the article.", printer: true },
       ],
     },
     {
@@ -1846,10 +1923,10 @@ function SoftwarePage() {
       intro: "Fast Mode is an undocumented TI-58/TI-58C/TI-59 execution mode, discovered and written up by the TI PPC club over several years — these programs demonstrate it, along with a couple of other undocumented corners of the ROM.",
       article: "fast-mode",
       items: [
-        { file: "fastmode.ti59", title: "Fast Mode factorial demo (TI-59)", description: "Computes factorials in both normal and Fast Mode so the roughly 70% speed difference is directly comparable — 10! in about 4.6 seconds, 69! in about 31." },
+        { file: "fastmode.ti59", title: "Fast Mode factorial demo (TI-59)", description: "Computes 69! in Fast Mode in about 24 seconds; the same program takes about 44 in normal mode, 85% longer (measured on the emulator)." },
         { file: "fastmode.ti58", title: "Fast Mode factorial demo (TI-58)", description: "The same Fast Mode factorial comparison, for the TI-58/TI-58C." },
         { file: "fastmode-sst.ti59", title: "The shortest way into Fast Mode", description: "A new, shorter Fast Mode entry, found by tracing the ROM in 2026; computes 69! like the factorial demo. Loading the file runs the entry sequence automatically." },
-        { file: "FastMode_Zero4.ti59", title: "Fast Mode zero-padding bug", description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state. Kept as a regression case; it also uncovered a display-refresh bug in the emulator, fixed before v1.0.0." },
+        { file: "FastMode_Zero4.ti59", title: "Fast Mode zero-padding bug", description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state." },
         { file: "firmware.ti59", title: "Firmware listing keystroke sequence", description: "An unusual keyboard sequence, originally described by TI PPC Notes editor Maurice Swinnen, that puts the TI-59 into a mode where the ROM firmware itself can be listed." },
         { file: "keycodes.ti59", title: "Print all keycodes", description: "Jared Weinberger's routine for generating and printing every TI-59 key code, using dynamic program-code modification (TI PPC Notes V5N4-5, 1980)." },
       ],
@@ -1870,7 +1947,7 @@ function SoftwarePage() {
         { file: "assembly/simple_count.asm", title: "Simple counter", description: "The smallest useful ASM overlay example: increments a counter on the display in a tight loop, about 1185 times a second." },
         { file: "assembly/stopwatch.asm", title: "Stopwatch", description: "A precisely timed stopwatch built on the WAIT Dn instruction rather than counting cycles — 222 increments per second, 4.5011 ms each." },
         { file: "assembly/DPT.asm", title: "Decimal-point test", description: "Cycles the decimal point across every digit position. The emulator shows the display as the eye sees it, so — as on the real calculator — all the points look lit at once." },
-        { file: "assembly/Decoder.asm", title: "7-segment decoder edge case (known non-working)", description: "A real-hardware timing edge case — a phase-shifted WAIT before SET IDLE exposes all 16 hex segment patterns on real silicon. Documented here for the CPU-emulation detail, but it does not reproduce on Calc-U 59: the emulator latches each display position at its own digit strobe, so CPU and display are always in phase and the timing quirk this program depends on has nothing to act on." },
+        { file: "assembly/Decoder.asm", title: "7-segment decoder edge case (known non-working)", description: "A real-hardware timing edge case — a phase-shifted WAIT before SET IDLE exposes all 16 hex segment patterns on real silicon. Documented here for the CPU-emulation detail, but it does not reproduce on Calc-U 59." },
       ],
     },
   ];
@@ -2045,11 +2122,13 @@ function PlayPage() {
             bring up that program's cue card, the same way it works on the module itself.
           </p>
           <p>
-            The TI-59 has a card reader. To save a program, press <strong>2nd Write</strong> (bank 1:{" "}
-            <strong>1 2nd Write</strong>), then the <strong>Crd</strong> button that writes a blank card,
-            and give the card a name. To load it back, press the other <strong>Crd</strong> button and
-            pick the card, or upload a <strong>.U59</strong> card file; <strong>Eject Card</strong> takes
-            a card out. Cards last until you close the page — download one from the card list to keep it.
+            The TI-59 has a card reader. To save a program, press the <strong>Crd</strong> button for a fresh card, give the
+            card a name, press <strong>2nd Write</strong> (bank 1:{" "}
+            <strong>1 2nd Write</strong>), and press its top-left or top-right corner to write that side. To load it back,
+            press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
+            card file, then press the corner of the side to read; <strong>Eject Card</strong> stops a
+            passing card; it stays fitted (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
+            Cards last until you close the page — download one from the card list to keep it.
           </p>
           <p>
             The full app adds a card folder that stays (synced through iCloud on
@@ -2063,7 +2142,7 @@ function PlayPage() {
           <p>
             Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
             same calculator alone at its own address, installable to your phone's home screen for a
-            one-tap, full-screen launch. Once installed it runs all three calculators offline.
+            one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list.
           </p>
         </div>
 

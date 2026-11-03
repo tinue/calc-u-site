@@ -105,6 +105,11 @@ const INITIAL_STATE = {
     keyboardFeedback: 0
   },
   debugFont: 11,
+  debugPanel: {
+    panel: 0,
+    n: 0
+  },
+  // KEYSTROKES DebugPanel: the tab asked for, and how often
   geometry: null
 };
 function createEngine({
@@ -119,6 +124,8 @@ function createEngine({
   };
   let framePending = false;
   const stateLoadedWaiters = [];
+  const replyWaiters = new Map(); // by request id
+  let lastRequest = 0;
   const set = patch => {
     state = {
       ...state,
@@ -232,6 +239,14 @@ function createEngine({
           debugFont: m.size
         });
         break;
+      case "debugPanel":
+        set({
+          debugPanel: {
+            panel: m.panel,
+            n: state.debugPanel.n + 1
+          }
+        });
+        break;
       case "geometry":
         set({
           geometry: m.geometry
@@ -246,6 +261,15 @@ function createEngine({
           if (resolve) resolve(m.errors || []);
           break;
         }
+      case "reply":
+        replyWaiters.get(m.id)(m.value);
+        replyWaiters.delete(m.id);
+        break;
+      case "dropRejected":
+        set({
+          status: `${m.name}: not a .ti59, .ti58, .ti58c, .u59 or .bin file`
+        });
+        break;
       case "error":
         set({
           status: m.message
@@ -286,6 +310,22 @@ function createEngine({
         type: "loadState",
         text
       });
+    }),
+    /// A WebController method whose result is wanted; resolves with it.
+    request: (method, ...args) => new Promise(resolve => {
+      const id = ++lastRequest;
+      replyWaiters.set(id, resolve);
+      post({
+        type: "call",
+        method,
+        args,
+        id
+      });
+    }),
+    /// A file dropped on the calculator; the worker decides what it does.
+    dropFile: file => post({
+      type: "dropFile",
+      file
     }),
     setStatus: status => set({
       status
@@ -459,6 +499,19 @@ function paintCueCard(ctx, card, onImage) {
       ctx.fillStyle = it.color;
       ctx.fillRect(x, y, w, h);
       ctx.globalAlpha = 1;
+    } else if (it.kind === "corner") {
+      const [x, y, w, h] = it.rect;
+      const r = it.radius;
+      ctx.fillStyle = it.color;
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, it.side === 0 ? [r, 0, 0, 0] : [0, r, 0, 0]);
+      ctx.fill();
+      ctx.fillStyle = "#000";
+      ctx.beginPath();
+      ctx.moveTo(it.arrow[0], it.arrow[1]);
+      for (let i = 2; i < it.arrow.length; i += 2) ctx.lineTo(it.arrow[i], it.arrow[i + 1]);
+      ctx.closePath();
+      ctx.fill();
     } else if (it.kind === "badge") {
       const [x, y, w, h] = it.frame;
       ctx.save();
@@ -638,6 +691,7 @@ function CalculatorFace({
   const data = useEngine(engine, s => s.data);
   const model = useEngine(engine, s => s.model ? s.model.model : 0);
   const heldKey = useEngine(engine, s => s.runState.heldKey);
+  const cardFitted = useEngine(engine, s => s.card.fitted);
   const fullSpeed = useEngine(engine, s => s.runState.fullSpeed);
   const height = width / CANVAS_ASPECT;
   const baseRef = React.useRef(null);
@@ -759,6 +813,26 @@ function CalculatorFace({
         height: h * height
       }
     });
+  }), data && cardFitted && [0, 1].map(side => {
+    const [cx, cy, cw, ch] = data.layout.cardCorners[side];
+    return /*#__PURE__*/React.createElement("button", {
+      key: `side${side}`,
+      type: "button",
+      tabIndex: -1,
+      className: "calcu-key",
+      "aria-label": `Feed card side ${side + 1}`
+      // A pointer press reaches the face's hit test; this is for assistive technology.
+      ,
+      onClick: e => {
+        if (e.detail === 0 && engine) engine.call("feedSide", side);
+      },
+      style: {
+        left: (c[0] + c[2] * cx) * width,
+        top: (c[1] + c[3] * cy) * height,
+        width: c[2] * cw * width,
+        height: c[3] * ch * height
+      }
+    });
   }));
 }
 /* === ControlBar.jsx === */
@@ -766,7 +840,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 // The bar under the calculator (Qt6/app/ControlBar, CalculatorView's bar in
 // the Swift app): Reset — Ctrl/⌘ held shows a red "Clean", a 1 s press on a
 // touch screen does the same —, the model picker, the card reader buttons
-// (TI-59: read / write a blank card, or Eject while one is in), Preset and
+// (TI-59: fit a card / a fresh card, or Eject while a side passes), Preset and
 // the Settings gear. `compact` (portrait) shows icons only, as on iOS.
 
 const CLEAN_RESET_HOLD_MS = 1000;
@@ -889,13 +963,13 @@ function ControlBar({
   }), hasReader && !swiping && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(BarButton, {
     icon: "\u2913",
     label: "Crd",
-    title: "Read a card",
+    title: "Fit a magnetic card into the calculator",
     compact: compact,
     onClick: () => onDialog("readCard")
   }), /*#__PURE__*/React.createElement(BarButton, {
     icon: "\uFF0B",
     label: "Crd",
-    title: "Write a blank card",
+    title: "Fit a fresh magnetic card into the calculator",
     compact: compact,
     onClick: () => onDialog("writeCard")
   })), hasReader && swiping && /*#__PURE__*/React.createElement(BarButton, {
@@ -925,7 +999,7 @@ function ControlBar({
 // and file upload), Settings (Qt6/app/SettingsDialog, App/Views/
 // SettingsView) and About.
 
-const CALC_VERSION = "2.1.0";
+const CALC_VERSION = "2.2.0";
 const HELP_URL = "https://calc-u.org/59/";
 function Dialog({
   title,
@@ -981,44 +1055,52 @@ function CardPicker({
   const [selected, setSelected] = React.useState(null);
   const [name, setName] = React.useState(card.fileName);
   const save = mode === "save";
+  const [replacing, setReplacing] = React.useState(null);
   const read = n => {
-    engine.call("insertCard", n, null);
+    engine.call("fitCard", n, null);
     onClose();
   };
   const upload = e => readFileInput(e, "bytes").then(f => {
     if (!f) return;
-    engine.call("insertCard", f.name, f.content);
+    engine.call("fitCard", f.name, f.content);
     onClose();
   });
-  const write = () => {
-    engine.call("insertBlankCard", name.trim());
+  const fitBlank = file => {
+    engine.call("fitBlankCard", file);
     onClose();
   };
+  const write = () => engine.request("freshCardFileName", name.trim()).then(file => {
+    if (card.cards.includes(file)) setReplacing(file);else fitBlank(file);
+  });
   return /*#__PURE__*/React.createElement(Dialog, {
-    title: save ? "Write Blank Card" : "Read Card",
+    title: save ? "Fit Fresh Card" : "Fit Card",
     onClose: onClose,
     footer: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
       className: "calcu-dialog-note"
     }, "Cards last for this page session \u2014 download one to keep it."), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: onClose
-    }, "Cancel"), save ? /*#__PURE__*/React.createElement("button", {
+    }, "Cancel"), replacing ? /*#__PURE__*/React.createElement("button", {
       type: "button",
       className: "calcu-primary",
-      disabled: !name.trim(),
-      onClick: write
-    }, "Save") : /*#__PURE__*/React.createElement("button", {
+      onClick: () => fitBlank(replacing)
+    }, "Replace") : /*#__PURE__*/React.createElement("button", {
       type: "button",
       className: "calcu-primary",
-      disabled: !selected,
-      onClick: () => read(selected)
-    }, "Read"))
-  }, save && /*#__PURE__*/React.createElement("input", {
+      disabled: save ? !name.trim() : !selected,
+      onClick: save ? write : () => read(selected)
+    }, "Fit"))
+  }, replacing && /*#__PURE__*/React.createElement("p", {
+    role: "alert"
+  }, "Replace card ", replacing, "? Its first write replaces both sides and the cue card."), save && /*#__PURE__*/React.createElement("input", {
     className: "calcu-textfield",
     "aria-label": "Card name",
     value: name,
     autoFocus: true,
-    onChange: e => setName(e.target.value),
+    onChange: e => {
+      setName(e.target.value);
+      setReplacing(null);
+    },
     onKeyDown: e => {
       if (e.key === "Enter" && name.trim()) write();
     }
@@ -1035,7 +1117,10 @@ function CardPicker({
     className: "calcu-listitem",
     onClick: () => {
       setSelected(n);
-      if (save) setName(n);
+      if (save) {
+        setName(n);
+        setReplacing(null);
+      }
     },
     onDoubleClick: () => save ? setName(n) : read(n)
   }, n), /*#__PURE__*/React.createElement("button", {
@@ -1116,7 +1201,6 @@ function Settings({
   const model = useEngine(engine, s => s.model);
   const settings = useEngine(engine, s => s.settings);
   const [moduleID, setModuleID] = React.useState(model ? model.moduleID : "ML");
-  const [feedback, setFeedback] = React.useState(settings.keyboardFeedback); // 0 off, 1 vibrate, 2 click
   const [traceMB, setTraceMB] = React.useState(settings.traceMaxMB);
 
   // The module applies when the dialog closes, as in both apps.
@@ -1151,16 +1235,11 @@ function Settings({
     key: m.id,
     value: m.id
   }, m.menuTitle)))), portrait && /*#__PURE__*/React.createElement("label", null, "Keyboard Feedback", /*#__PURE__*/React.createElement("select", {
-    value: feedback,
-    onChange: e => {
-      setFeedback(Number(e.target.value));
-      engine.call("setKeyboardFeedback", Number(e.target.value));
-    }
-  }, /*#__PURE__*/React.createElement("option", {
+    value: settings.keyboardFeedback === 2 ? 2 : 0,
+    onChange: e => engine.call("setKeyboardFeedback", Number(e.target.value))
+  }, "  ", /*#__PURE__*/React.createElement("option", {
     value: 0
   }, "Off"), /*#__PURE__*/React.createElement("option", {
-    value: 1
-  }, "Vibrate"), /*#__PURE__*/React.createElement("option", {
     value: 2
   }, "Click Sound"))), !portrait && /*#__PURE__*/React.createElement("label", null, "Maximum Trace File Size (MB)", /*#__PURE__*/React.createElement("input", {
     type: "number",
@@ -1922,7 +2001,11 @@ function Debugger({
   const data = useEngine(engine, s => s.data);
   const asmActive = useEngine(engine, s => s.runState.asmActive);
   const font = useEngine(engine, s => s.debugFont);
-  const [tab, setTab] = React.useState(0);
+  const panelRequest = useEngine(engine, s => s.debugPanel);
+  const [tab, setTab] = React.useState(panelRequest.panel);
+  React.useEffect(() => {
+    if (panelRequest.n) setTab(panelRequest.panel);
+  }, [panelRequest]);
   const rootRef = React.useRef(null);
   const shown = asmActive && tab === 0 ? 1 : tab; // the overlay runs on the CPU tab
 
@@ -2025,8 +2108,9 @@ function keyPressOf(e) {
   };
 }
 
-// Keyboard feedback (Settings, portrait): a vibration where the browser has
-// one (not iOS Safari), or a short click synthesised with WebAudio.
+// Keyboard feedback (Settings, portrait): a short click synthesised with
+// WebAudio. No vibration: iOS Safari has no Vibration API, and Android's
+// did nothing on the phones tried.
 let clickAudio = null;
 function playClick(count) {
   try {
@@ -2049,7 +2133,7 @@ function makeFeedback(engine, enabled) {
     if (!enabled || !engine) return;
     const mode = engine.getState().settings.keyboardFeedback;
     const count = kind === "clean" ? 2 : 1;
-    if (mode === 1 && navigator.vibrate) navigator.vibrate(count === 2 ? [15, 100, 15] : 15);else if (mode === 2) playClick(count);
+    if (mode === 2) playClick(count);
   };
 }
 
@@ -2287,7 +2371,7 @@ function PlayCalculator({
     });
   };
 
-  // ── Drag and drop a preset ───────────────────────────────────────────
+  // ── Drag and drop a preset or a card ─────────────────────────────────
   const onDragOver = e => {
     if (e.dataTransfer.types.includes("Files")) e.preventDefault();
   };
@@ -2295,7 +2379,7 @@ function PlayCalculator({
     const file = e.dataTransfer.files && e.dataTransfer.files[0];
     if (!file || !engine) return;
     e.preventDefault();
-    if (/\.(ti59|ti58|ti58c)$/i.test(file.name)) file.text().then(t => engine.loadState(t));else engine.setStatus(`${file.name}: not a .ti59, .ti58 or .ti58c file`);
+    engine.dropFile(file);
   };
   const Layout = portrait ? PortraitLayout : WideLayout;
   return /*#__PURE__*/React.createElement("div", {

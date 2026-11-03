@@ -39,7 +39,7 @@ const PAGES = {
   "/getting-started/printer/": {
     title: "PC-100C Printer and Magnetic Card Reader — Calc-U 59",
     description:
-      "How the emulated TI-59 PC-100C thermal printer works in Calc-U 59: dot and text views, print and advance, copying the paper strip, and where card files live.",
+      "The TI-59 PC-100C thermal printer in Calc-U 59: dot and text views, copying the paper strip, and saving and loading two-sided magnetic cards.",
     heading: "Printer and card reader",
   },
 

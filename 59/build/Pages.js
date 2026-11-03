@@ -91,7 +91,7 @@ const START_CARDS = [{
   eyebrow: "Hardware",
   title: "Printer and card reader",
   href: "/59/getting-started/printer/",
-  text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and where card files are kept."
+  text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and saving and loading magnetic cards."
 }];
 function StartCards() {
   return START_CARDS.map((c, i) => /*#__PURE__*/React.createElement(TopicCard, {
@@ -443,7 +443,9 @@ function AboutTi59Page() {
     style: {
       marginBottom: 0
     }
-  }, "In the emulator, cards are files. They live in iCloud storage, so a program written on a Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the most failure-prone part of the original hardware, which is a reasonable argument for emulating one instead of restoring one.")), /*#__PURE__*/React.createElement("h3", {
+  }, "In the emulator, cards are files with both sides in one file, and", " ", /*#__PURE__*/React.createElement("a", {
+    href: "/59/getting-started/printer/#magnetic-cards"
+  }, "a press on a corner of the card"), " ", "feeds that side. On Apple devices they live in iCloud storage, so a program written on a Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the most failure-prone part of the original hardware, which is a reasonable argument for emulating one instead of restoring one.")), /*#__PURE__*/React.createElement("h3", {
     id: "card-banks",
     className: "sub"
   }, "What each bank holds"), /*#__PURE__*/React.createElement("div", {
@@ -582,7 +584,7 @@ const TOPICS = {
   },
   printer: {
     title: "Printer and card reader",
-    note: "The PC-100C panel, paper strip, copy/cut, and card file behaviour.",
+    note: "The PC-100C panel, paper strip, copy/cut, and saving and loading two-sided magnetic cards.",
     body: /*#__PURE__*/React.createElement("div", {
       style: {
         display: "grid",
@@ -605,7 +607,13 @@ const TOPICS = {
       style: {
         marginBottom: 0
       }
-    }, "Holding the display runs the calculator at full speed, and that includes printing \u2014 a long 2nd List or a calendar printout finishes in moments.")), /*#__PURE__*/React.createElement("div", {
+    }, "Holding the display runs the calculator at full speed, and that includes printing \u2014 a long 2nd List or a calendar printout finishes in moments.")), /*#__PURE__*/React.createElement("h2", {
+      id: "magnetic-cards",
+      className: "section",
+      style: {
+        margin: "8px 0 0"
+      }
+    }, "Magnetic cards"), /*#__PURE__*/React.createElement("div", {
       className: "panel",
       style: {
         padding: 20,
@@ -613,12 +621,91 @@ const TOPICS = {
       }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
-        marginTop: 0,
+        marginTop: 0
+      }
+    }, "The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides, as the real one has, and one card file holds both of them with one label."), /*#__PURE__*/React.createElement("p", {
+      style: {
         marginBottom: 0
       }
-    }, "The TI-59 has a card reader; the TI-58 and TI-58C don't. Its ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons load a card or insert a blank one to write, and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes it out. Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
+    }, "Using a card takes two steps. Choosing a card only ", /*#__PURE__*/React.createElement("strong", null, "fits"), " it into the calculator above the keys, where it labels them; nothing is read or written yet. Pressing one of its top corners then ", /*#__PURE__*/React.createElement("strong", null, "feeds"), " that side through the reader: top-left for side 1, top-right for side 2. The corner lights up while the side passes.")), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Saving a program"), /*#__PURE__*/React.createElement("ol", {
+      style: {
+        margin: 0,
+        paddingLeft: 20
+      }
+    }, /*#__PURE__*/React.createElement("li", null, "Press the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button with the plus sign and name the card. The fresh card fits above the keys, labeled with its name. If the name is taken, the app asks first: the card's first write replaces both sides and the label of the old one."), /*#__PURE__*/React.createElement("li", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " for the bank you want to save: ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), " for bank 1."), /*#__PURE__*/React.createElement("li", null, "Press a corner of the card. Once the side has passed, it is saved in the file and the corner shows the bank it now holds.")), /*#__PURE__*/React.createElement("p", {
+      style: {
+        margin: "12px 0 0"
+      }
+    }, "A program too long for one side continues on the other: ", /*#__PURE__*/React.createElement("strong", null, "2 2nd Write"), ", then the other corner.")), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Loading it back"), /*#__PURE__*/React.createElement("ol", {
+      style: {
+        margin: 0,
+        paddingLeft: 20
+      }
+    }, /*#__PURE__*/React.createElement("li", null, "Press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator; the TI-58 and TI-58C ignore a dropped card."), /*#__PURE__*/React.createElement("li", null, "Press the corner of the side you want. The card stays fitted afterwards, so the other side is one press away."))), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Good to know"), /*#__PURE__*/React.createElement("ul", {
+      style: {
+        margin: 0,
+        paddingLeft: 20
+      }
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "A side is not a bank."), " Either side can hold any ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/what-is-a-ti-59/#card-banks"
+    }, "bank"), ", even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty. An older one-sided card shows the badges it was saved with."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes the place of the Crd buttons while a side is passing. It stops the pass; the card stays fitted."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "A library program's cue card"), " covers a fitted card, and the corners don't respond while it does. The card comes back with ", /*#__PURE__*/React.createElement("strong", null, "2nd Pgm 00"), "."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "A fitted card goes"), " when you fit another one, reset, switch the model, switch the printer or the module, or load a preset. The file stays as it is."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Older cards"), " have one side and keep working: either corner feeds it, and it stays a one-sided card when written."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Only the side you write changes."), " The app reads the file again first, so the other side survives even if it was changed on another device meanwhile. A file it can't read is left alone, and the app reports it."))), /*#__PURE__*/React.createElement("div", {
+      className: "panel",
+      style: {
+        padding: 20,
+        lineHeight: 1.7
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "sub",
+      style: {
+        margin: "0 0 6px"
+      }
+    }, "Where card files live"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        margin: 0
+      }
+    }, "Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
       href: "/59/play/"
-    }, "browser emulator"), ", cards last until you close the page: upload a .U59 file to read it, and download a card to keep it.")))
+    }, "browser emulator"), ", cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/presets/#sessions"
+    }, "feed them"), " or ", /*#__PURE__*/React.createElement("a", {
+      href: "/59/presets/#labeling-keys"
+    }, "label them"), "; the format is in ", /*#__PURE__*/React.createElement("a", {
+      href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files",
+      className: "link-accent"
+    }, "reference/StateFileFormat.md"), ".")))
   }
 };
 function GettingStartedPage({
@@ -683,7 +770,7 @@ function InstallMobilePage() {
     style: {
       marginBottom: 0
     }
-  }, "On iPhone in portrait, the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings \u203A Debug Page in Portrait). In landscape, the iPhone shows the calculator next to the printer. On iPad in landscape, the layout mirrors the Mac view.")), /*#__PURE__*/React.createElement("div", {
+  }, "On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you turn with the chevrons in the top corners (the debugger only with Settings \u203A Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape, its print scaled down to fit, and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
     }
@@ -759,7 +846,7 @@ function InstallPcPage() {
   }, /*#__PURE__*/React.createElement("li", null, "From the latest ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59/releases/latest",
     className: "link-accent"
-  }, "GitHub release"), ", download ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-Setup.exe"), " (most PCs) or ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-Setup-arm64.exe"), " (Windows on ARM)."), /*#__PURE__*/React.createElement("li", null, "Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose ", /*#__PURE__*/React.createElement("strong", null, "More info"), ", then ", /*#__PURE__*/React.createElement("strong", null, "Run anyway"), "."), /*#__PURE__*/React.createElement("li", null, "Start Calc-U-59 from the Start menu."))), /*#__PURE__*/React.createElement("div", {
+  }, "GitHub release"), ", download ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-windows-x86_64.exe"), " (most PCs) or ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-windows-arm64.exe"), " (Windows on ARM)."), /*#__PURE__*/React.createElement("li", null, "Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose ", /*#__PURE__*/React.createElement("strong", null, "More info"), ", then ", /*#__PURE__*/React.createElement("strong", null, "Run anyway"), "."), /*#__PURE__*/React.createElement("li", null, "Start Calc-U-59 from the Start menu."))), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -877,7 +964,7 @@ function InstallAndroidPage() {
       marginTop: 0,
       marginBottom: 0
     }
-  }, "Once installed, the app runs all three calculators without a connection, with module 01 (Master Library). Any other module needs the network the first time you load it. When a new version is out, the app updates itself.")), /*#__PURE__*/React.createElement("div", {
+  }, "Once installed, the app runs all three calculators without a connection, with every Solid State module and every preset in its list. When a new version is out, the app updates itself.")), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -893,11 +980,11 @@ function InstallAndroidPage() {
     style: {
       marginTop: 0
     }
-  }, "The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " file to read it again."), /*#__PURE__*/React.createElement("p", {
+  }, "The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " file to fit it again."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "Preset"), " opens a ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file from the phone's storage; files are read on the phone and never uploaded anywhere.")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("strong", null, "Preset"), " offers the main examples from its list, and opens any other ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file from the phone's storage, such as the historic and calendar programs from the Software Collection; files are read on the phone and never uploaded anywhere.")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
     }
@@ -948,16 +1035,27 @@ B': \\xbar
 C': n
 D': \\blank
 E': \\blank`;
-  const cueCardRowExample = `CUECARD:
-Template: CueCard
-Title: Compound Interest
-Row1: Enter n, i, PV — press B for FV
-Row1Align: center
-Row2: RPN 5.1
-Row2R: p. 3
-Row2Align: left
-Row2RAlign: right
-Style: button`;
+  const reloadExample = `PROGRAM:
+…                    # the program, loaded as usual
+KEYSTROKES:
+11                   # A: it runs and stops
+PROGRAM:
+017 01               # then step 017 changes …
+REGISTERS:
+05 = 2.5             # … and register 05
+KEYSTROKES:
+11                   # A: run again`;
+  const cardExample = `CARD: mem:Bank4      # a card defined right here
+Bank: 4
+REGISTERS:
+00 = 12
+01 = 3.5
+END-CARD
+
+KEYSTROKES:
+InsertCard: mem:Bank4   # push it in, as at the start of a session
+ArmCard: Results        # ready for the program's own Write
+11                      # A: run`;
   return /*#__PURE__*/React.createElement("main", {
     className: "wrap-narrow"
   }, /*#__PURE__*/React.createElement("p", {
@@ -1032,7 +1130,7 @@ Style: button`;
     style: {
       marginTop: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "PARTITION:"), " sets the step split between program memory and data registers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "PROGRAM:"), " accepts sparse step listings, numeric keycodes, and the ", /*#__PURE__*/React.createElement("strong", null, "..."), " gap marker."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "REGISTERS:"), " stores calculator variables as decimal numbers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " injects matrix codes after the file loads. Between keys, lines such as ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), ", ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " and ", /*#__PURE__*/React.createElement("strong", null, "RegularSpeed:"), " control timing, and a few more (", /*#__PURE__*/React.createElement("strong", null, "Trace:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ZeroElapseTime:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ReportElapseTime:"), ") help with timing and debugging programs. To run a long program at full speed, put ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " before the key that starts it; ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " pauses so you can see what the calculator shows. An unknown directive, or a ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " without a unit, is reported as an error rather than read as keys."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " defines the on-screen cue card that appears with the loaded file or module."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SOLID-STATE-MODULE:"), " and ", /*#__PURE__*/React.createElement("strong", null, "PRINTER:"), " let a file select the matching module and printer state automatically, and ", /*#__PURE__*/React.createElement("strong", null, "MODEL:"), " switches to the calculator the file is for."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SKIP-RESET: on"), " loads into the running calculator without resetting it first \u2014 only the sections the file contains are applied, and ", /*#__PURE__*/React.createElement("strong", null, "MODEL:"), ", ", /*#__PURE__*/React.createElement("strong", null, "SOLID-STATE-MODULE:"), " and ", /*#__PURE__*/React.createElement("strong", null, "PRINTER:"), " are ignored (the LOG tab notes each one)."), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("strong", null, "PARTITION:"), " sets the step split between program memory and data registers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "PROGRAM:"), " accepts sparse step listings, numeric keycodes, and the ", /*#__PURE__*/React.createElement("strong", null, "..."), " gap marker."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "REGISTERS:"), " stores calculator variables as decimal numbers."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " injects matrix codes after the file loads. Between keys, lines such as ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), ", ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " and ", /*#__PURE__*/React.createElement("strong", null, "RegularSpeed:"), " control timing, and a few more (", /*#__PURE__*/React.createElement("strong", null, "Trace:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ZeroElapseTime:"), ", ", /*#__PURE__*/React.createElement("strong", null, "ReportElapseTime:"), ") help with timing and debugging programs. To run a long program at full speed, put ", /*#__PURE__*/React.createElement("strong", null, "FullSpeed:"), " before the key that starts it; ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " pauses so you can see what the calculator shows. An unknown directive, or a ", /*#__PURE__*/React.createElement("strong", null, "Wait:"), " without a unit, is reported as an error rather than read as keys."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " defines the on-screen cue card that appears with the loaded file or module."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "SOLID-STATE-MODULE:"), " and ", /*#__PURE__*/React.createElement("strong", null, "PRINTER:"), " let a file select the matching module and printer state automatically, and ", /*#__PURE__*/React.createElement("strong", null, "MODEL:"), " switches to the calculator the file is for."), /*#__PURE__*/React.createElement("p", null, "A ", /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " script can also work the controls around the calculator: ", /*#__PURE__*/React.createElement("strong", null, "PrinterTrace: on"), " / ", /*#__PURE__*/React.createElement("strong", null, "off"), " sets the printer's TRACE switch, ", /*#__PURE__*/React.createElement("strong", null, "CutPaper:"), " cuts the paper, and ", /*#__PURE__*/React.createElement("strong", null, "DebugPanel:"), ", ", /*#__PURE__*/React.createElement("strong", null, "Freeze:"), ", ", /*#__PURE__*/React.createElement("strong", null, "FreezeOnStart:"), ", ", /*#__PURE__*/React.createElement("strong", null, "Step:"), " and ", /*#__PURE__*/React.createElement("strong", null, "Resume:"), " do what the debugger's tabs and buttons do. While the debugger is frozen, the script's keys wait until it runs again. Older presets using ", /*#__PURE__*/React.createElement("strong", null, "SKIP-RESET:"), " or key 99 now get an error; a reload in the same file and ", /*#__PURE__*/React.createElement("strong", null, "PrinterTrace:"), " replace them."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -1040,6 +1138,76 @@ Style: button`;
     href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
     className: "link-accent"
   }, "reference/StateFileFormat.md \u2192"))), /*#__PURE__*/React.createElement("h2", {
+    id: "sessions",
+    className: "section",
+    style: {
+      marginTop: 24
+    }
+  }, "A whole session in one preset"), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, "Some programs don't fit one load. Their users changed a few steps between runs, or fed the calculator one magnetic card after another. A preset can do both, so one file plays the whole session."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Keyed-in changes."), " A ", /*#__PURE__*/React.createElement("strong", null, "PROGRAM:"), ",", " ", /*#__PURE__*/React.createElement("strong", null, "REGISTERS:"), " or ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section after", " ", /*#__PURE__*/React.createElement("strong", null, "KEYSTROKES:"), " is applied once the program has stopped, as if you had typed the changes in. Only the steps and registers it lists change; everything else stays. This works on every model.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("pre", {
+    style: {
+      margin: 0,
+      padding: 16,
+      borderRadius: 8,
+      background: "var(--bg-inset)",
+      color: "var(--fg)",
+      overflowX: "auto",
+      lineHeight: 1.5,
+      fontSize: 13
+    }
+  }, reloadExample)), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, /*#__PURE__*/React.createElement("strong", null, "A stack of cards (TI-59)."), " For larger changes, TI-59 owners prepared their cards in advance and fed them in a written-down order. Some programs stop and show which card comes next. Others ask for a card themselves (", /*#__PURE__*/React.createElement("strong", null, "Write"), " or", " ", /*#__PURE__*/React.createElement("strong", null, "INV Write"), " in the program) and simply wait for it. A preset feeds both kinds:"), /*#__PURE__*/React.createElement("ul", {
+    style: {
+      margin: "0 0 12px",
+      paddingLeft: 20
+    }
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "InsertCard:"), " pushes a card into the stopped calculator, as you would by hand."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "ArmCard:"), " lays a card ready; it goes in as soon as the program asks for one."), /*#__PURE__*/React.createElement("li", null, "A card file's side goes after the name: ", /*#__PURE__*/React.createElement("code", null, "InsertCard: Results:2"), ". Without one, it is side 1."), /*#__PURE__*/React.createElement("li", null, "A card is a file in your card folder, by its name, or a temporary card named ", /*#__PURE__*/React.createElement("strong", null, "mem:"), "something that lives only while the preset is loaded. A ", /*#__PURE__*/React.createElement("strong", null, "CARD:"), " block defines such a card's registers and steps in the preset itself. A card replaces its whole bank, as a real one does.")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginBottom: 0
+    }
+  }, "Picking the right card is up to the preset, just as it was up to the user.")), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 20,
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("pre", {
+    style: {
+      margin: 0,
+      padding: 16,
+      borderRadius: 8,
+      background: "var(--bg-inset)",
+      color: "var(--fg)",
+      overflowX: "auto",
+      lineHeight: 1.5,
+      fontSize: 13
+    }
+  }, cardExample)), /*#__PURE__*/React.createElement("h2", {
     id: "labeling-keys",
     className: "section",
     style: {
@@ -1055,11 +1223,14 @@ Style: button`;
     style: {
       marginTop: 0
     }
-  }, "The five plain keys (", /*#__PURE__*/React.createElement("strong", null, "A\u2013E"), ") and their 2nd-function row (", /*#__PURE__*/React.createElement("strong", null, "A\u2032\u2013E\u2032"), ") are exactly what real TI-59/58/58C cards label. A ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section can do the same thing on-screen \u2014 either as its own row of short per-key labels, or as one line of running text across the whole row."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Template"), " picks the card artwork and layout, and matches the real card it stands in for \u2014 ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " ", "and ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " look almost identical on screen, since both were the same front-side label design. The difference is on the back: a real magnetic card has a magnetic coating that stores the program; a cue card doesn't. Use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " if the preset is meant to end up written onto a magnetic card (it also shows the ", /*#__PURE__*/React.createElement("strong", null, "Banks"), " page badges). Cue cards shipped for TI-58, TI-58C ", /*#__PURE__*/React.createElement("em", null, "and"), " TI-59 owners, but TI-59 owners tended to skip them and just label whichever magnetic card already held the program instead; TI-58 and TI-58C, having no card reader at all, relied on cue cards since there was no magnetic card to label in the first place \u2014 use", " ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " for that case, or for any file that just wants an on-screen label without a magnetic-card connotation. Which of the two you pick for a given preset is mostly personal preference, except when the file is a step toward an actual magnetic card \u2014 then use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " to match.", " ", /*#__PURE__*/React.createElement("strong", null, "SolidStateCard"), " ", "reproduces the pre-printed cards that shipped with a Solid State Software module; real ones can't be edited by the module's user, and in the emulator they're normally only touched by the project's developer to document a built-in module \u2014 reach for it yourself only if you're prototyping your own module (it shows an", " ", /*#__PURE__*/React.createElement("strong", null, "ID"), " like ", /*#__PURE__*/React.createElement("code", null, "ML-01"), " instead of Banks)."), /*#__PURE__*/React.createElement("p", null, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "(a straight apostrophe also works: ", /*#__PURE__*/React.createElement("code", null, "A'"), ") for the 2nd-function row. Leaving ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " or ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " ", "out entirely is what makes that row show the label grid instead of a line of text \u2014 if you fill in Row1/Row2, the individual A\u2013E labels for that row are not shown."), /*#__PURE__*/React.createElement("p", {
+  }, "The five plain keys (", /*#__PURE__*/React.createElement("strong", null, "A\u2013E"), ") and their 2nd-function row (", /*#__PURE__*/React.createElement("strong", null, "A\u2032\u2013E\u2032"), ") are exactly what real TI-59/58/58C cards label. A ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section can do the same thing on-screen \u2014 either as its own row of short per-key labels, or as one line of running text across the whole row."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Template"), " picks the card artwork and layout, and matches the real card it stands in for \u2014 ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " ", "and ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " look almost identical on screen, since both were the same front-side label design. The difference is on the back: a real magnetic card has a magnetic coating that stores the program; a cue card doesn't. Use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " if the preset is meant to end up written onto a magnetic card (it also shows the ", /*#__PURE__*/React.createElement("strong", null, "Banks"), " page badges; once written to a card file, the corners show the bank each side really holds). Cue cards shipped for TI-58, TI-58C ", /*#__PURE__*/React.createElement("em", null, "and"), " TI-59 owners, but TI-59 owners tended to skip them and just label whichever magnetic card already held the program instead; TI-58 and TI-58C, having no card reader at all, relied on cue cards since there was no magnetic card to label in the first place \u2014 use", " ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " for that case, or for any file that just wants an on-screen label without a magnetic-card connotation. Which of the two you pick for a given preset is mostly personal preference, except when the file is a step toward an actual magnetic card \u2014 then use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " to match.", " ", /*#__PURE__*/React.createElement("strong", null, "SolidStateCard"), " ", "reproduces the pre-printed cards that shipped with a Solid State Software module; real ones can't be edited by the module's user, and in the emulator they're normally only touched by the project's developer to document a built-in module \u2014 reach for it yourself only if you're prototyping your own module (it shows an", " ", /*#__PURE__*/React.createElement("strong", null, "ID"), " like ", /*#__PURE__*/React.createElement("code", null, "ML-01"), " instead of Banks)."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "Row1"), " replaces the A\u2032\u2013E\u2032 grid with one line of running text, and ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " does the same for the A\u2013E grid. ", /*#__PURE__*/React.createElement("strong", null, "Row2R"), " is a second piece of text placed on the same line as Row2, right-aligned against it \u2014 handy for something like a page number or units note that shouldn't compete with the main label for space. Each of the three has its own alignment field \u2014 ", /*#__PURE__*/React.createElement("strong", null, "Row1Align"), ", ", /*#__PURE__*/React.createElement("strong", null, "Row2Align"), ",", " ", /*#__PURE__*/React.createElement("strong", null, "Row2RAlign"), " \u2014 set to ", /*#__PURE__*/React.createElement("code", null, "left"), ",", " ", /*#__PURE__*/React.createElement("code", null, "center"), ", or ", /*#__PURE__*/React.createElement("code", null, "right"), " (Row1 defaults to center, Row2 and Row2R to left).", " ", "On a CueCard or MagnetCard, ", /*#__PURE__*/React.createElement("strong", null, "PencilColor"), " picks the ink: ", /*#__PURE__*/React.createElement("code", null, "black"), " (the default), ", /*#__PURE__*/React.createElement("code", null, "pencil"), " or", " ", /*#__PURE__*/React.createElement("code", null, "sharpie"), ".", " ", /*#__PURE__*/React.createElement("strong", null, "Style"), " is ", /*#__PURE__*/React.createElement("code", null, "none"), " by default, or", " ", /*#__PURE__*/React.createElement("code", null, "button"), " to draw a border around the Row1/Row2/Row2R text, mimicking the boxed instruction labels real cards use.")), /*#__PURE__*/React.createElement("div", {
+  }, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "for the 2nd-function row, as in the example below.", " ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " and ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " put one line of running text across a row instead. The example also shows", " ", /*#__PURE__*/React.createElement("code", null, "\\blank"), ", which lets a label span the next key position, and shortcuts such as ", /*#__PURE__*/React.createElement("code", null, "\\sqrt"), " for the symbols real cards use. All the fields, their alignment and ink options and the symbol table are in", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
+    className: "link-accent"
+  }, "reference/StateFileFormat.md"), ".")), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -1091,54 +1262,7 @@ Style: button`;
       display: "block",
       borderRadius: 8
     }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "panel",
-    style: {
-      padding: 20,
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement("pre", {
-    style: {
-      margin: 0,
-      padding: 16,
-      borderRadius: 8,
-      background: "var(--bg-inset)",
-      color: "var(--fg)",
-      overflowX: "auto",
-      lineHeight: 1.5,
-      fontSize: 13
-    }
-  }, cueCardRowExample)), /*#__PURE__*/React.createElement("div", {
-    className: "panel",
-    style: {
-      padding: 16,
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "/59/assets/cuecard-row-text.png",
-    alt: "CueCard titled Compound Interest, with a centered, boxed Row1 instruction line and left-aligned Row2 / right-aligned Row2R text below it",
-    style: {
-      width: "100%",
-      height: "auto",
-      display: "block",
-      borderRadius: 8
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "panel",
-    style: {
-      padding: 20,
-      lineHeight: 1.7,
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginTop: 0
-    }
-  }, "A short set of LaTeX-style shortcuts expand to the Unicode symbols real TI-59 cards use in labels, so you don't need a Unicode picker \u2014 for example ", /*#__PURE__*/React.createElement("code", null, "\\to"), " becomes an arrow, ", /*#__PURE__*/React.createElement("code", null, "\\sqrt"), " ", "becomes a root sign, ", /*#__PURE__*/React.createElement("code", null, "\\sum"), " becomes \u03A3, and", " ", /*#__PURE__*/React.createElement("code", null, "x^{2}"), " becomes ", /*#__PURE__*/React.createElement("code", null, "x\xB2"), ". The full token table is in ", /*#__PURE__*/React.createElement("strong", null, "reference/StateFileFormat.md"), "."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginBottom: 0
-    }
-  }, "To make one label visually span more than one key position, set the following cell(s) to ", /*#__PURE__*/React.createElement("code", null, "\\blank"), " \u2014 for example", " ", /*#__PURE__*/React.createElement("code", null, "D: \\blank"), " right after a filled-in ", /*#__PURE__*/React.createElement("strong", null, "C"), " ", "merges D into C's column so the C label reads across both keys.")), /*#__PURE__*/React.createElement("h2", {
+  })), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {
       marginTop: 24
@@ -1153,11 +1277,11 @@ Style: button`;
     style: {
       marginTop: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "From a preset"), " \u2014 tap ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and pick a ", /*#__PURE__*/React.createElement("code", null, ".ti59"), "/", /*#__PURE__*/React.createElement("code", null, ".ti58"), "/", /*#__PURE__*/React.createElement("code", null, ".ti58c"), " file with a CUECARD section; it's applied immediately and stays until you load something else or reset."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Onto a virtual magnetic card"), " \u2014 load a preset with the CUECARD you want active, then write a card on the TI-59 (press 2nd Write and insert a blank card with the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button): whatever cue card is on screen at that moment is saved into the card file along with the program or data. Loading that card back with the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button restores the label along with the contents."), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("strong", null, "From a preset"), " \u2014 tap ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and pick a ", /*#__PURE__*/React.createElement("code", null, ".ti59"), "/", /*#__PURE__*/React.createElement("code", null, ".ti58"), "/", /*#__PURE__*/React.createElement("code", null, ".ti58c"), " file with a CUECARD section; it's applied immediately and stays until you load something else or reset."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Onto a virtual magnetic card"), " \u2014 a card written by a preset gets that preset's CUECARD, with its full layout, in the card file along with the program or data. A fresh card from the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button starts with its file name as the title; edit the card file to add more. Fitting a card restores the label; pressing a corner reads the contents."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "By editing the card file directly"), " \u2014 virtual card files are plain text too (see the FAQ entry on where they live), with the same ", /*#__PURE__*/React.createElement("code", null, "CUECARD:"), " syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is read.")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("strong", null, "By editing the card file directly"), " \u2014 virtual card files are plain text too (see the FAQ entry on where they live), with the same ", /*#__PURE__*/React.createElement("code", null, "CUECARD:"), " syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is fitted.")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 24
     }
@@ -1488,9 +1612,9 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
     style: {
       marginBottom: 0
     }
-  }, "Load this file now and the card appears immediately \u2014 nothing on it does anything yet, because there's still no program behind the", " ", /*#__PURE__*/React.createElement("strong", null, "A"), " key. The full", " ", /*#__PURE__*/React.createElement("a", {
+  }, "Load this file now and the card appears immediately \u2014 nothing on it does anything yet, because there's still no program behind the", " ", /*#__PURE__*/React.createElement("strong", null, "A"), " key. The", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/#labeling-keys"
-  }, "CUECARD field reference"), " ", "covers every field, the math-notation shortcuts, and both templates in more depth.")), /*#__PURE__*/React.createElement(TutorialStep, {
+  }, "section on labeling keys"), " ", "explains the templates in more depth and links to the full field list.")), /*#__PURE__*/React.createElement(TutorialStep, {
     num: 4,
     title: "Program",
     code: step4,
@@ -1518,7 +1642,7 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
     }
   }, "To check that a value actually loaded, open the ", /*#__PURE__*/React.createElement("a", {
     href: "/59/debugger/"
-  }, "debugger"), " ", "and look at the register list \u2014 on Mac, Windows, Linux and on iPad in landscape it's visible right alongside the calculator; on iPhone (and iPad in portrait) swipe to it. The debugger has to be turned on first on iPhone/portrait iPad: enable ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), " ", "under ", /*#__PURE__*/React.createElement("strong", null, "Settings"), ", or it won't be there to swipe to.")), /*#__PURE__*/React.createElement(TutorialStep, {
+  }, "debugger"), " ", "and look at the register list \u2014 on Mac, Windows, Linux, on iPad in landscape and on iPhone Duo opened flat it's visible right alongside the calculator; on iPhone (and iPad in portrait) tap the chevron to reach it. The debugger has to be turned on first on iPhone/portrait iPad: enable ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), " ", "under ", /*#__PURE__*/React.createElement("strong", null, "Settings"), ", or it won't be there to turn to.")), /*#__PURE__*/React.createElement(TutorialStep, {
     num: 6,
     title: "Keystrokes",
     code: step6,
@@ -1675,7 +1799,7 @@ function DebuggerPage() {
       margin: "8px 0",
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE"), " \u2014 stops the CPU (in the CALCULATOR tab, at the next step)."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START (CALCULATOR tab)"), " \u2014 arms the debugger so it freezes right before the first program step runs, the same point STEP stops at. This is triggered by pressing R/S, launching a program via a label, or any similar action. Useful for catching the very start of a program run."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START (CPU tab)"), " \u2014 arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or when the calculator is reset. Useful for catching the very first ROM instruction of a key-press handler."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "ARMED"), " \u2014 shown in yellow when FREEZE ON START is active; click it to cancel."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "RESUME"), " \u2014 resumes execution from the frozen state."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "STEP"), " \u2014 advances one step (semantics differ per tab, see above).")), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE"), " \u2014 stops the CPU (in the CALCULATOR tab, at the next step)."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START (CALCULATOR tab)"), " \u2014 arms the debugger so it freezes right before the first program step runs, the same point STEP stops at. This is triggered by pressing R/S, launching a program via a label, or any similar action. Useful for catching the very start of a program run."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START (CPU tab)"), " \u2014 arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or on a Clean reset (on the TI-58C, any reset). Useful for catching the very first ROM instruction of a key-press handler."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "ARMED"), " \u2014 shown in yellow when FREEZE ON START is active; click it to cancel."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "RESUME"), " \u2014 resumes execution from the frozen state."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "STEP"), " \u2014 advances one step (semantics differ per tab, see above).")), /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 8,
       marginBottom: 0,
@@ -1698,12 +1822,12 @@ function DebuggerPage() {
     style: {
       marginTop: 0
     }
-  }, "On iPhone, the debugger is a page of its own in portrait (turn on Settings \u203A Debug Page in Portrait) and covers the calculator. This is different from iPad, the Mac, Windows and Linux, where both views are visible at the same time."), /*#__PURE__*/React.createElement("ul", {
+  }, "On iPhone, the debugger is a page of its own in portrait (turn on Settings \u203A Debug Page in Portrait) and covers the calculator. This is different from iPad in landscape, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time."), /*#__PURE__*/React.createElement("ul", {
     style: {
       margin: "8px 0 0",
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, "Switching to the ", /*#__PURE__*/React.createElement("strong", null, "CPU"), " tab resets the heat map, because the CPU trace was not running while CALCULATOR was visible. Exception: if the CPU is already frozen when you switch, the heat map is preserved."), /*#__PURE__*/React.createElement("li", null, "The selected tab (CALCULATOR, CPU, LOG) is remembered when you navigate away from the debugger and return."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START in CALCULATOR"), " works best in landscape or on iPad/Mac, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START in CPU"), " arms in the background and fires as soon as you press any key (or reset the calculator), regardless of which tab or screen is visible \u2014 the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction."))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("li", null, "Switching to the ", /*#__PURE__*/React.createElement("strong", null, "CPU"), " tab resets the heat map, because the CPU trace was not running while CALCULATOR was visible. Exception: if the CPU is already frozen when you switch, the heat map is preserved."), /*#__PURE__*/React.createElement("li", null, "The selected tab (CALCULATOR, CPU, LOG) is remembered when you navigate away from the debugger and return."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START in CALCULATOR"), " works best on iPad in landscape, on iPhone Duo opened flat or on a computer, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "FREEZE ON START in CPU"), " arms in the background and fires as soon as you press any key (or do a Clean reset; on the TI-58C, any reset), regardless of which tab or screen is visible \u2014 the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction."))), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -1725,7 +1849,7 @@ function DebuggerPage() {
       margin: "8px 0",
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Dumps"), " \u2014 the ", /*#__PURE__*/React.createElement("strong", null, "SCOM"), ", ", /*#__PURE__*/React.createElement("strong", null, "Memory"), ", ", /*#__PURE__*/React.createElement("strong", null, "Prog"), " and ", /*#__PURE__*/React.createElement("strong", null, "Vars"), " buttons write the scratch registers, the RAM, the program or the data registers to the log as raw values; the trash button clears it."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "TRACE toggle"), " \u2014 Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like the reset routine or key-processing flow.")), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Dumps"), " \u2014 the ", /*#__PURE__*/React.createElement("strong", null, "SCOM"), ", ", /*#__PURE__*/React.createElement("strong", null, "Memory"), ", ", /*#__PURE__*/React.createElement("strong", null, "Prog"), " and ", /*#__PURE__*/React.createElement("strong", null, "Vars"), " buttons write the scratch registers, the RAM, the program or the data registers to the log as raw values; the trash button clears it."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "TRACE toggle"), " \u2014 Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like a Clean reset's routine or key-processing flow.")), /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 12,
       marginBottom: 12
@@ -1735,7 +1859,7 @@ function DebuggerPage() {
       margin: 0,
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, "Switch to the LOG tab and toggle TRACE on."), /*#__PURE__*/React.createElement("li", null, "Perform the action you want to analyze (e.g., press ", /*#__PURE__*/React.createElement("strong", null, "Reset"), ", or execute a ROM subroutine)."), /*#__PURE__*/React.createElement("li", null, "Toggle TRACE off to stop recording."), /*#__PURE__*/React.createElement("li", null, "Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings \u203A Files; the ", /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("li", null, "Switch to the LOG tab and toggle TRACE on."), /*#__PURE__*/React.createElement("li", null, "Perform the action you want to analyze (e.g., press ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ", or execute a ROM subroutine)."), /*#__PURE__*/React.createElement("li", null, "Toggle TRACE off to stop recording."), /*#__PURE__*/React.createElement("li", null, "Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings \u203A Files; the ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
   }, "browser emulator"), " downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit."), /*#__PURE__*/React.createElement("li", null, "On a computer with Python, download or clone the ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59",
@@ -1769,7 +1893,7 @@ function DebuggerPage() {
       margin: 0,
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "CALCULATOR tab"), " \u2014 Stepping through your own program one step at a time, checking registers and flags at each step."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "CPU tab"), " \u2014 Tracing the ROM's internal instruction flow, reviewing jumps and subroutine calls, scrolling back through execution history."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "TRACE (in LOG)"), " \u2014 Capturing a complete ROM sequence for offline analysis (reset routine, memory writes, keyboard processing, etc.)."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Debug logging (in LOG)"), " \u2014 the LOG button cycles the level between Off, Info and Debug (grey, orange and red dot). It is mainly used by the developer for debugging specific issues. When enabled, you will see all memory writes and other hardware events. This has limited utility for regular app users."))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "CALCULATOR tab"), " \u2014 Stepping through your own program one step at a time, checking registers and flags at each step."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "CPU tab"), " \u2014 Tracing the ROM's internal instruction flow, reviewing jumps and subroutine calls, scrolling back through execution history."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "TRACE (in LOG)"), " \u2014 Capturing a complete ROM sequence for offline analysis (a Clean reset's routine, memory writes, keyboard processing, etc.)."), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Debug logging (in LOG)"), " \u2014 the LOG button cycles the level between Off, Info and Debug (grey, orange and red dot). It is mainly used by the developer for debugging specific issues. When enabled, you will see all memory writes and other hardware events. This has limited utility for regular app users."))), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 16,
       display: "grid",
@@ -1809,6 +1933,25 @@ function DebuggerPage() {
   }, "CALCULATOR tab \u2014 iPad"), /*#__PURE__*/React.createElement("img", {
     src: "/59/assets/ipad-13-2752x2064.png",
     alt: "iPad screenshot showing the CALCULATOR debug tab",
+    style: {
+      width: "100%",
+      height: "auto",
+      display: "block",
+      borderRadius: 8
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "panel",
+    style: {
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "sub",
+    style: {
+      margin: "0 0 10px"
+    }
+  }, "CALCULATOR tab \u2014 iPhone Duo, opened flat"), /*#__PURE__*/React.createElement("img", {
+    src: "/59/assets/iphone-duo-2852x2006.png",
+    alt: "iPhone Duo screenshot: calculator, a narrow printer tape and the CALCULATOR debug tab side by side",
     style: {
       width: "100%",
       height: "auto",
@@ -1865,7 +2008,7 @@ function ReferencePage() {
     style: {
       marginTop: 0
     }
-  }, "The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape, the layout mirrors the Mac view."), /*#__PURE__*/React.createElement("p", null, "The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation."), /*#__PURE__*/React.createElement("p", null, "Bottom bar on iPhone and iPad (left to right): ", /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: a clean reset that also wipes the memory), the ", /*#__PURE__*/React.createElement("strong", null, "model picker"), " (TI-59/TI-58/TI-58C), the two ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons (load a card; insert a blank card to write) and ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " \u2014 on the TI-59 only, the one with a card reader \u2014 then ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and ", /*#__PURE__*/React.createElement("strong", null, "Settings"), "."), /*#__PURE__*/React.createElement("p", null, "On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding ", /*#__PURE__*/React.createElement("strong", null, "\u2318"), " (Mac) or ", /*#__PURE__*/React.createElement("strong", null, "Ctrl"), " (Windows, Linux) turns Reset into ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ". On the Mac the model picker sits in the window's toolbar."), /*#__PURE__*/React.createElement("p", {
+  }, "The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape and on iPhone Duo opened flat, the layout mirrors the Mac view."), /*#__PURE__*/React.createElement("p", null, "The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation."), /*#__PURE__*/React.createElement("p", null, "Bottom bar on iPhone and iPad (left to right): ", /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: a clean reset that also wipes the memory), the ", /*#__PURE__*/React.createElement("strong", null, "model picker"), " (TI-59/TI-58/TI-58C), the two ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " buttons (fit a card; fit a fresh card), which ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " replaces while a side is passing \u2014 on the TI-59 only, the one with a card reader \u2014 then ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " and ", /*#__PURE__*/React.createElement("strong", null, "Settings"), "."), /*#__PURE__*/React.createElement("p", null, "On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding ", /*#__PURE__*/React.createElement("strong", null, "\u2318"), " (Mac) or ", /*#__PURE__*/React.createElement("strong", null, "Ctrl"), " (Windows, Linux) turns Reset into ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ". On the Mac the model picker sits in the window's toolbar."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -1923,7 +2066,7 @@ function ReferencePage() {
     style: {
       marginTop: 0
     }
-  }, "Settings choose the ", /*#__PURE__*/React.createElement("strong", null, "Startup Calculator"), " (a model, or Last Used), the ", /*#__PURE__*/React.createElement("strong", null, "Solid State Module"), ", the LED ", /*#__PURE__*/React.createElement("strong", null, "Segment Style"), " (Modernized or Classic), and the trace file's ", /*#__PURE__*/React.createElement("strong", null, "Maximum File Size"), ", so long debug sessions don't grow without bound. iPhone and iPad add ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " and ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), "."), /*#__PURE__*/React.createElement("p", {
+  }, "Settings choose the ", /*#__PURE__*/React.createElement("strong", null, "Startup Calculator"), " (a model, or Last Used), the ", /*#__PURE__*/React.createElement("strong", null, "Solid State Module"), ", the LED ", /*#__PURE__*/React.createElement("strong", null, "Segment Style"), " (Modernized or Classic), and the trace file's ", /*#__PURE__*/React.createElement("strong", null, "Maximum File Size"), ", so long debug sessions don't grow without bound. iPhone and iPad add ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " and ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), ". The web client's portrait layout (the installed app, and the browser emulator on a phone) has ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " too: Off or Click Sound."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -2119,7 +2262,7 @@ function ReferencePage() {
       color: "var(--fg-2)",
       fontSize: 14
     }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: clean reset, wipes the memory)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Model picker"), " (TI-59 / TI-58 / TI-58C)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Crd"), ": load a card (TI-59)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Crd"), ": insert a blank card to write (TI-59)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Preset")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Settings")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Swipe to printer"))))));
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Reset"), " (long press: clean reset, wipes the memory)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Model picker"), " (TI-59 / TI-58 / TI-58C)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Crd"), ": fit a card (TI-59)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Crd"), ": fit a fresh card (TI-59)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Preset")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Settings")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Chevron to the printer"))))));
 }
 
 /* =============================================================
@@ -2128,7 +2271,7 @@ function ReferencePage() {
 // Also the FAQ page's structured data (.seo/build.js).
 const FAQS = [{
   question: "Where do preset files live?",
-  answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); on Windows and Linux you can also drag one onto the window or double-click it (Windows); on iPhone and iPad, use the built-in file picker."
+  answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); you can also drag one onto the window, or double-click it on Windows; on iPhone and iPad, use the built-in file picker."
 }, {
   question: "Are there examples of preset files?",
   answer: "Yes. The GitHub repository includes an 'examples' folder with a selection of .ti59, .ti58, and .ti58c files, and the 'TI-59 Software Collection' page has downloadable copies. There's also a step-by-step tutorial that builds one from scratch."
@@ -2137,7 +2280,7 @@ const FAQS = [{
   answer: "This feature is still a bit experimental. You can load these examples in the ASM OVERLAY box under the debugger's CPU tab: Select File, then Run. Clear removes the overlay again."
 }, {
   question: "Where do virtual magnetic cards live?",
-  answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to load or save them. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another."
+  answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to pick or create one, as described under Printer and card reader. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another."
 }, {
   question: "Where is the TI-58C state file?",
   answer: "The TI-58C state file (ti58c.mem) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions."
@@ -2155,10 +2298,10 @@ const FAQS = [{
   answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss. The heat map also starts over on Reset, Clean reset, a model switch and loading a preset, since the calculator starts afresh."
 }, {
   question: "What does FREEZE ON START do in the CPU tab?",
-  answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because the calculator was reset. This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other."
+  answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because of a Clean reset (on the TI-58C, any reset). This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other."
 }, {
   question: "How can I step through the reset routine?",
-  answer: "Switch to the CPU tab and press FREEZE ON START. Then go to the calculator and press Reset — the CPU will freeze at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time."
+  answer: "Switch to the CPU tab and press FREEZE ON START. Then press Clean (hold ⌘ or Ctrl while you click Reset; long-press Reset on a touch screen), which wipes the memory, or plain Reset on the TI-58C. The CPU freezes at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time. A plain Reset on the TI-59 and TI-58 runs the routine out of sight, to keep the memory, so the freeze then waits for the next key."
 }, {
   question: "I used FREEZE ON START in the CPU tab, the freeze triggered on a keypress — but after RESUME the key seems lost. Why?",
   answer: "This is expected. The ROM's key-debouncing logic registers a keypress only for a very short window. When the freeze fires, the CPU freezes at the first instruction after the scan loop exits — but that window has already passed by the time you press RESUME or STEP. The key handler never sees the keypress and the calculator returns to idle. Use a TRACE capture instead: it records the full keystroke sequence without stopping the emulator, so the debounce window is never interrupted."
@@ -2167,7 +2310,7 @@ const FAQS = [{
   answer: "Yes. Copy or cut the output, and paste it into a text editor."
 }, {
   question: "How do I create the cards that label the A-E and A'-E' keys?",
-  answer: /*#__PURE__*/React.createElement(React.Fragment, null, "Add a ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section to a preset: set", " ", /*#__PURE__*/React.createElement("strong", null, "Template"), " to ", /*#__PURE__*/React.createElement("code", null, "MagnetCard"), " or", " ", /*#__PURE__*/React.createElement("code", null, "CueCard"), ", then fill in fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " ", "through ", /*#__PURE__*/React.createElement("strong", null, "E"), " and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through", " ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " for the two key rows. Load that file (or write it onto a virtual magnetic card to keep the label with the card) and it appears on screen. See", " ", /*#__PURE__*/React.createElement("a", {
+  answer: /*#__PURE__*/React.createElement(React.Fragment, null, "Add a ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section to a preset: set", " ", /*#__PURE__*/React.createElement("strong", null, "Template"), " to ", /*#__PURE__*/React.createElement("code", null, "MagnetCard"), " or", " ", /*#__PURE__*/React.createElement("code", null, "CueCard"), ", then fill in fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " ", "through ", /*#__PURE__*/React.createElement("strong", null, "E"), " and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through", " ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " for the two key rows. Load that file (a card the preset itself writes, with ", /*#__PURE__*/React.createElement("strong", null, "ArmCard:"), ", keeps the label) and it appears on screen. See", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/#labeling-keys",
     className: "link-accent"
   }, "Loading a preset \u2192 Labeling the A\u2013E and A\u2032\u2013E\u2032 keys"), " ", "for the format, the math shortcuts, and the loading options.")
@@ -2397,7 +2540,7 @@ function SoftwarePage() {
     }, {
       file: "calendar-05-vanderburgh.ti59",
       title: "Calendar Printer — Richard Vanderburgh (revised)",
-      description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to about 5½ minutes per year.",
+      description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to just under 5 minutes per year (4 min 53 s for 1978).",
       printer: true
     }, {
       file: "calendar-06-cargile.ti59",
@@ -2431,17 +2574,12 @@ function SoftwarePage() {
     }, {
       file: "characters-fastmode.ti59",
       title: "Print characters in Fast Mode",
-      description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980).",
+      description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). This program's way into Fast Mode (Pgm 02 SBR 239) clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.",
       printer: true
     }, {
-      file: "fast-grafik-3d-plot-part1.ti59",
-      title: "Fast-Grafik 3-D Plot — Part 1",
-      description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Load Part 2 after this one finishes, without resetting.",
-      printer: true
-    }, {
-      file: "fast-grafik-3d-plot-part2.ti59",
-      title: "Fast-Grafik 3-D Plot — Part 2",
-      description: "The second half of Poloczek's 3-D plotter. Requires Part 1 to have already run in the same session.",
+      file: "fast-grafik-3d-plot.ti59",
+      title: "Fast-Grafik 3-D Plot",
+      description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.",
       printer: true
     }, {
       file: "printer-quirks.ti59",
@@ -2452,6 +2590,16 @@ function SoftwarePage() {
       file: "printer-interrupt.ti59",
       title: "The printer interrupt, smallest form",
       description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.",
+      printer: true
+    }, {
+      file: "picard.ti59",
+      title: "Picard — printer-interrupt picture",
+      description: "A picture printed two dot rows per line with the printer interrupt. Its file header explains how to run it on a real TI-59.",
+      printer: true
+    }, {
+      file: "globe-print.ti59",
+      title: "Globe — printer-interrupt picture",
+      description: "A larger picture in three parts: the preset feeds the second and third from magnetic cards by itself. Its file header explains how to do it by hand on a real TI-59.",
       printer: true
     }, {
       file: "stars-and-stripes.ti59",
@@ -2472,6 +2620,41 @@ function SoftwarePage() {
       file: "trace-quirk.ti59",
       title: "Printer trace-mode quirk",
       description: "A keystroke sequence, found by a TI PPC club member, that puts a TI-58 or TI-59 into an undocumented trace mode once a printer is attached (TI PPC Notes V6N4-5, 1981).",
+      printer: true
+    }]
+  }, {
+    heading: "From the German magazine CHIP, 1979–1980",
+    intro: "CHIP printed TI-59 programs that readers keyed in by hand. These were transcribed from the magazine's listings; each file's header names the article.",
+    items: [{
+      file: "pdcm-card-tricks.ti59",
+      title: "PDCM — a card-swapping operating system",
+      description: "Horst Umlauf's system (“Karten-Tricks”, CHIP 8/1979, with his corrections from 10/1979) that manages a program's magnetic cards: it asks for the card it needs, checks it and reads it, so memory is limited only by the stack of cards. Includes a demo program; the guide is below."
+    }, {
+      file: "pdcm-make-cards.ti59",
+      title: "PDCM — write its two cards",
+      description: "Creates PDCM's two magnetic cards in your card folder, as if they had been keyed in and saved by hand. Run it once, then follow the emulator guide below."
+    }, {
+      file: "PDCM-Emulator.md",
+      title: "PDCM — guide for the emulator",
+      description: "The short way into PDCM: start from the cards the preset above writes. A Markdown text file."
+    }, {
+      file: "PDCM.md",
+      title: "PDCM — step-by-step guide",
+      description: "What PDCM is for and how to use it on a TI-59, from keying it in to a worked demo. Written by an AI from the two articles; the key sequences were run on the emulator, not on a real calculator. A Markdown text file."
+    }, {
+      file: "erdkundetest.ti59",
+      title: "Erdkundetest — geography quiz",
+      description: "Michael Hartstang's printer quiz (CHIP 1/1980), which prints questions and answers and keeps the score. The texts are in German. This file holds the article's first set of questions.",
+      printer: true
+    }, {
+      file: "erdkundetest-2.ti59",
+      title: "Erdkundetest — second set of questions",
+      description: "The same quiz with the second set from the article.",
+      printer: true
+    }, {
+      file: "life.ti59",
+      title: "LIFE — the Game of Life",
+      description: "Joachim Dörges' Game of Life on a 10 × 10 field (“Life auf dem TI-59”, CHIP 9/1980). It prints every generation, with optional random mutations; a generation takes minutes, as on the real calculator. Loading the file starts it with a glider, which is not from the article.",
       printer: true
     }]
   }, {
@@ -2508,7 +2691,7 @@ function SoftwarePage() {
     items: [{
       file: "fastmode.ti59",
       title: "Fast Mode factorial demo (TI-59)",
-      description: "Computes factorials in both normal and Fast Mode so the roughly 70% speed difference is directly comparable — 10! in about 4.6 seconds, 69! in about 31."
+      description: "Computes 69! in Fast Mode in about 24 seconds; the same program takes about 44 in normal mode, 85% longer (measured on the emulator)."
     }, {
       file: "fastmode.ti58",
       title: "Fast Mode factorial demo (TI-58)",
@@ -2520,7 +2703,7 @@ function SoftwarePage() {
     }, {
       file: "FastMode_Zero4.ti59",
       title: "Fast Mode zero-padding bug",
-      description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state. Kept as a regression case; it also uncovered a display-refresh bug in the emulator, fixed before v1.0.0."
+      description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state."
     }, {
       file: "firmware.ti59",
       title: "Firmware listing keystroke sequence",
@@ -2564,7 +2747,7 @@ function SoftwarePage() {
     }, {
       file: "assembly/Decoder.asm",
       title: "7-segment decoder edge case (known non-working)",
-      description: "A real-hardware timing edge case — a phase-shifted WAIT before SET IDLE exposes all 16 hex segment patterns on real silicon. Documented here for the CPU-emulation detail, but it does not reproduce on Calc-U 59: the emulator latches each display position at its own digit strobe, so CPU and display are always in phase and the timing quirk this program depends on has nothing to act on."
+      description: "A real-hardware timing edge case — a phase-shifted WAIT before SET IDLE exposes all 16 hex segment patterns on real silicon. Documented here for the CPU-emulation detail, but it does not reproduce on Calc-U 59."
     }]
   }];
   return /*#__PURE__*/React.createElement("main", {
@@ -2819,7 +3002,9 @@ function PlayPage() {
     className: "prose"
   }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original Texas Instruments ROMs. The model picker switches between the ", /*#__PURE__*/React.createElement("strong", null, "TI-59"), ", ", /*#__PURE__*/React.createElement("strong", null, "TI-58"), " and ", /*#__PURE__*/React.createElement("strong", null, "TI-58C"), ", and the ", /*#__PURE__*/React.createElement("strong", null, "PC-100C printer"), " is connected from the start. On a wide screen the printer and the full debugger sit beside the calculator, with the ASM overlay and trace downloads; on a phone the chevron in the corner turns to the printer's page and back."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default; ", /*#__PURE__*/React.createElement("strong", null, "Settings"), " switches modules (that resets the calculator, as swapping the real module did) and chooses the calculator the page starts with. ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " loads one of the bundled presets or your own", " ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file, and you can also drop a file onto the calculator \u2014 files are read entirely in your browser and never leave your machine. The TI-58C keeps its constant memory in your browser between visits. For more programs to try, see the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/software/"
-  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), then the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button that writes a blank card, and give the card a name. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " card file; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " takes a card out. Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
+  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button for a fresh card, give the card a name, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), and press its top-left or top-right corner to write that side. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " ", "card file, then press the corner of the side to read; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " stops a passing card; it stays fitted (", /*#__PURE__*/React.createElement("a", {
+    href: "/59/getting-started/printer/#magnetic-cards"
+  }, "more on cards"), "). Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/mac/"
   }, "Mac"), " and on", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/windows-linux/"
@@ -2831,7 +3016,7 @@ function PlayPage() {
     href: "/59/what-is-a-ti-59/"
   }, "start here"), "."), /*#__PURE__*/React.createElement("p", null, "Prefer this without the browser chrome? ", /*#__PURE__*/React.createElement("a", {
     href: "/59/calc/app/"
-  }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch. Once installed it runs all three calculators offline.")), /*#__PURE__*/React.createElement("h2", {
+  }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {
       marginTop: 32

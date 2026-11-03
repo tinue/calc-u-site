@@ -66,7 +66,7 @@
 <p><strong>Corrupting the buffer.</strong> Both methods leave the program source at 8 while the calculator is stopped just before step 8k. LRN then moves to 8k, a new block, and loads the buffer from ROM row 16 + k instead of RAM. For 008 the row starts with 04 65. Ins at 008 then gives:</p>
 <ul>
 <li>step 008: 23 − 04 = 1F (units 3 − 4 = F with a borrow, tens 2 − 0 − 1 = 1);</li>
-<li>step 009: 53 − 65 − 1 + 04 = 92, the RTN.</li>
+<li>step 009: 53 − 65 + 04 = 92, the RTN.</li>
 </ul>
 <p><strong>Setting the source to 8.</strong> The article's sequence gets there through a failed module call (<code>Pgm 12 SBR 444</code>), whose cleanup is incomplete. R/S then runs bytes of the module header. P→R finally writes source 8 and then gives up because its own step lies outside the small partition. The fast-mode hack writes the source directly: X = 1.000000000048 holds source 8 and step 004. A non-zero source starts a run. The buffer still holds the block with St flg, so steps 005–007 run the three steps after St flg: the first is swallowed, the 0 makes X displayable, and the R/S stops the run at step 007 with the source still 8.</p>
 <h2 id="limits">Limits</h2>
