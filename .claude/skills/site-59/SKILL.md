@@ -85,7 +85,8 @@ It compares file names: the examples sit in subfolders (`calendar/`,
 `historic/`), the site's `.ti59` files in one flat folder. Anything listed is
 missing here: copy it, add it to the matching category in `SoftwarePage`
 (`Pages.jsx`), rebuild. A changed example is not listed: compare the contents
-too (`cmp`). `examples/debug/` and
+too (`cmp`). The PDCM guides
+(`examples/historic/PDCM*.md`) are copied too; the check doesn't see them. `examples/debug/` and
 `examples/screentest/` are test fixtures and stay off the site. The
 `tutorial-files/` are the preset tutorial's own steps, not examples.
 

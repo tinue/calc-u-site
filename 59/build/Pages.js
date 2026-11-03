@@ -2631,7 +2631,7 @@ function SoftwarePage() {
     }, {
       file: "characters-fastmode.ti59",
       title: "Print characters in Fast Mode",
-      description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980).",
+      description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). The way into Fast Mode clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.",
       printer: true
     }, {
       file: "fast-grafik-3d-plot.ti59",
@@ -2677,6 +2677,41 @@ function SoftwarePage() {
       file: "trace-quirk.ti59",
       title: "Printer trace-mode quirk",
       description: "A keystroke sequence, found by a TI PPC club member, that puts a TI-58 or TI-59 into an undocumented trace mode once a printer is attached (TI PPC Notes V6N4-5, 1981).",
+      printer: true
+    }]
+  }, {
+    heading: "From the German magazine CHIP, 1979–1980",
+    intro: "CHIP printed TI-59 programs that readers keyed in by hand. These were transcribed from the magazine's listings; each file's header names the article.",
+    items: [{
+      file: "pdcm-card-tricks.ti59",
+      title: "PDCM — a card-swapping operating system",
+      description: "Horst Umlauf's system (“Karten-Tricks”, CHIP 8/1979, with his corrections from 10/1979) that manages a program's magnetic cards: it asks for the card it needs, checks it and reads it, so memory is limited only by the stack of cards. Includes a demo program; the guide is below."
+    }, {
+      file: "pdcm-make-cards.ti59",
+      title: "PDCM — write its two cards",
+      description: "Creates PDCM's two magnetic cards in your card folder, as if they had been keyed in and saved by hand. Run it once, then follow the emulator guide below."
+    }, {
+      file: "PDCM-Emulator.md",
+      title: "PDCM — guide for the emulator",
+      description: "The short way into PDCM: start from the cards the preset above writes. A Markdown text file."
+    }, {
+      file: "PDCM.md",
+      title: "PDCM — step-by-step guide",
+      description: "What PDCM is for and how to use it on a TI-59, from keying it in to a worked demo. Written by an AI from the two articles; the key sequences were run on the emulator, not on a real calculator. A Markdown text file."
+    }, {
+      file: "erdkundetest.ti59",
+      title: "Erdkundetest — geography quiz",
+      description: "Michael Hartstang's printer quiz (CHIP 1/1980), which prints questions and answers and keeps the score. The texts are in German. This file holds the article's first set of questions.",
+      printer: true
+    }, {
+      file: "erdkundetest-2.ti59",
+      title: "Erdkundetest — second set of questions",
+      description: "The same quiz with the second set from the article.",
+      printer: true
+    }, {
+      file: "life.ti59",
+      title: "LIFE — the Game of Life",
+      description: "Joachim Dörges' Game of Life on a 10 × 10 field (“Life auf dem TI-59”, CHIP 9/1980). It prints every generation, with optional random mutations; a generation takes minutes, as on the real calculator. Loading the file starts it with a glider, which is not from the article.",
       printer: true
     }]
   }, {
