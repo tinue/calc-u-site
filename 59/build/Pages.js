@@ -281,6 +281,54 @@ function HomePage() {
    here to land on. It orients a newcomer and hands them to the app; it is
    not a substitute for the TI Personal Programming manual.
    ============================================================= */
+// The TI-59's four card banks for each partition, n Op 17 with n = 0–10.
+// Memory is 120 register cells (8 steps each); bank b is cells 30(b−1)…30b−1.
+// The program takes cells from 0 up, Rnn is cell 119 − nn.
+function CardBankTable() {
+  const pad = (v, w) => String(v).padStart(w, "0");
+  const rows = [];
+  for (let n = 0; n <= 10; n++) {
+    const prog = 120 - 10 * n;
+    const display = `${prog * 8 - 1}.${n ? pad(10 * n - 1, 2) : ""}`;
+    const banks = [0, 1, 2, 3].map(b => {
+      const lo = 30 * b,
+        hi = lo + 29,
+        parts = [];
+      const progEnd = Math.min(hi, prog - 1);
+      if (progEnd >= lo) parts.push(["prog", progEnd - lo + 1, `${pad(8 * lo, 3)}–${pad(8 * progEnd + 7, 3)}`]);
+      const dataStart = Math.max(lo, prog);
+      if (dataStart <= hi) parts.push(["data", hi - dataStart + 1, `R${pad(119 - dataStart, 2)}–R${pad(119 - hi, 2)}`]);
+      return parts;
+    });
+    rows.push({
+      n,
+      display,
+      banks
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "bank-scroll"
+  }, /*#__PURE__*/React.createElement("table", {
+    className: "bank-table"
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "n Op 17"), /*#__PURE__*/React.createElement("th", null, "Partition"), /*#__PURE__*/React.createElement("th", null, "Bank 1"), /*#__PURE__*/React.createElement("th", null, "Bank 2"), /*#__PURE__*/React.createElement("th", null, "Bank 3"), /*#__PURE__*/React.createElement("th", null, "Bank 4"))), /*#__PURE__*/React.createElement("tbody", null, rows.map(r => /*#__PURE__*/React.createElement("tr", {
+    key: r.n,
+    className: r.n === 6 ? "bank-default" : undefined
+  }, /*#__PURE__*/React.createElement("th", null, r.n), /*#__PURE__*/React.createElement("td", {
+    className: "mono"
+  }, r.display), r.banks.map((parts, i) => /*#__PURE__*/React.createElement("td", {
+    key: i,
+    className: "bank-cell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bank-split"
+  }, parts.map(([kind, cells, label]) => /*#__PURE__*/React.createElement("span", {
+    key: kind,
+    className: `bank-${kind}`,
+    style: {
+      flexGrow: cells,
+      flexBasis: 0
+    }
+  }, label))))))))));
+}
 function AboutTi59Page() {
   const models = [{
     code: "TI-59",
@@ -395,7 +443,36 @@ function AboutTi59Page() {
     style: {
       marginBottom: 0
     }
-  }, "In the emulator, cards are files. They live in iCloud storage, so a program written on a Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the most failure-prone part of the original hardware, which is a reasonable argument for emulating one instead of restoring one.")), /*#__PURE__*/React.createElement("h2", {
+  }, "In the emulator, cards are files. They live in iCloud storage, so a program written on a Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the most failure-prone part of the original hardware, which is a reasonable argument for emulating one instead of restoring one.")), /*#__PURE__*/React.createElement("h3", {
+    id: "card-banks",
+    className: "sub"
+  }, "What each bank holds"), /*#__PURE__*/React.createElement("div", {
+    className: "prose panel",
+    style: {
+      padding: 20,
+      lineHeight: 1.7
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 0
+    }
+  }, "A card side holds one bank: a fixed quarter of the 960-step memory, 240 steps or 30 data registers' worth. Program steps fill the memory from the bottom, data registers from the top, so R00 is the last register in bank 4. ", /*#__PURE__*/React.createElement("strong", null, "n"), " ", /*#__PURE__*/React.createElement(K, {
+    tone: "dark"
+  }, "2nd"), " ", /*#__PURE__*/React.createElement(K, {
+    tone: "dark"
+  }, "Op"), " 17 moves the boundary between them in steps of ten registers (80 program steps), and a bank holds whatever falls into its quarter: steps, registers, or both. At the default partition, 479.59, banks 1 and 2 hold the program and banks 3 and 4 the registers."), /*#__PURE__*/React.createElement(CardBankTable, null), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginBottom: 0,
+      fontSize: 14,
+      color: "var(--fg-3)"
+    }
+  }, "Steps in ", /*#__PURE__*/React.createElement("span", {
+    className: "bank-prog bank-key"
+  }, "cream"), ", data registers in", " ", /*#__PURE__*/React.createElement("span", {
+    className: "bank-data bank-key"
+  }, "yellow"), ", each sized by its share of the bank. The display shows the partition as last step.last register. The layout comes from the calculator's ROM; the details are in the emulator's", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/CoreArchitecture.md"
+  }, "CoreArchitecture.md"), ".")), /*#__PURE__*/React.createElement("h2", {
     className: "section"
   }, "Solid State Software modules"), /*#__PURE__*/React.createElement("div", {
     className: "prose panel",
