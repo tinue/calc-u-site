@@ -8,15 +8,13 @@ const {
   useEffect: useAppEffect,
   useRef: useAppRef
 } = React;
-function viewportSize() {
-  const vv = window.visualViewport;
-  const root = document.getElementById("root");
+
+// The calculator's size: #root's content box, the viewport less the
+// safe-area padding (app.css).
+function rootSize(root) {
   const cs = getComputedStyle(root);
-  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-  const w = (vv ? vv.width : window.innerWidth) - padX;
-  const h = (vv ? vv.height : window.innerHeight) - padY;
-  // The whole screen of the device it was installed on.
+  const w = root.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const h = root.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
   return {
     width: Math.floor(w),
     height: Math.floor(h)
@@ -121,18 +119,24 @@ function InstallBanner({
   }, "\xD7"));
 }
 function StandaloneApp() {
-  const [size, setSize] = useAppState(viewportSize);
+  const [size, setSize] = useAppState(() => rootSize(document.getElementById("root")));
   const [installMode, install] = useInstallPrompt();
   const [dismissed, setDismissed] = useAppState(false);
+
+  // A ResizeObserver rather than resize events: it also sees the safe-area
+  // insets arrive or change after launch, which fire no resize.
   useAppEffect(() => {
-    function onResize() {
-      setSize(viewportSize());
-    }
-    window.addEventListener("resize", onResize);
-    window.addEventListener("orientationchange", onResize);
+    const root = document.getElementById("root");
+    const update = () => setSize(old => {
+      const s = rootSize(root);
+      return s.width === old.width && s.height === old.height ? old : s;
+    });
+    const observer = new ResizeObserver(update);
+    observer.observe(root);
+    window.addEventListener("pageshow", update);
     return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("orientationchange", onResize);
+      observer.disconnect();
+      window.removeEventListener("pageshow", update);
     };
   }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(PlayCalculator, {
