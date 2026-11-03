@@ -584,7 +584,7 @@ function InstallPcPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Windows</h3>
         <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>From the latest <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub release</a>, download <code>Calc-U-59-Setup.exe</code> (most PCs) or <code>Calc-U-59-Setup-arm64.exe</code> (Windows on ARM).</li>
+          <li>From the latest <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub release</a>, download <code>Calc-U-59-windows-x86_64.exe</code> (most PCs) or <code>Calc-U-59-windows-arm64.exe</code> (Windows on ARM).</li>
           <li>Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
           <li>Start Calc-U-59 from the Start menu.</li>
         </ol>

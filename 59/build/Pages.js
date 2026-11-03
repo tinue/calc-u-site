@@ -846,7 +846,7 @@ function InstallPcPage() {
   }, /*#__PURE__*/React.createElement("li", null, "From the latest ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/tinue/Calc-U-59/releases/latest",
     className: "link-accent"
-  }, "GitHub release"), ", download ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-Setup.exe"), " (most PCs) or ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-Setup-arm64.exe"), " (Windows on ARM)."), /*#__PURE__*/React.createElement("li", null, "Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose ", /*#__PURE__*/React.createElement("strong", null, "More info"), ", then ", /*#__PURE__*/React.createElement("strong", null, "Run anyway"), "."), /*#__PURE__*/React.createElement("li", null, "Start Calc-U-59 from the Start menu."))), /*#__PURE__*/React.createElement("div", {
+  }, "GitHub release"), ", download ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-windows-x86_64.exe"), " (most PCs) or ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-windows-arm64.exe"), " (Windows on ARM)."), /*#__PURE__*/React.createElement("li", null, "Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose ", /*#__PURE__*/React.createElement("strong", null, "More info"), ", then ", /*#__PURE__*/React.createElement("strong", null, "Run anyway"), "."), /*#__PURE__*/React.createElement("li", null, "Start Calc-U-59 from the Start menu."))), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
