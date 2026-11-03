@@ -1035,16 +1035,6 @@ B': \\xbar
 C': n
 D': \\blank
 E': \\blank`;
-  const cueCardRowExample = `CUECARD:
-Template: CueCard
-Title: Compound Interest
-Row1: Enter n, i, PV — press B for FV
-Row1Align: center
-Row2: RPN 5.1
-Row2R: p. 3
-Row2Align: left
-Row2RAlign: right
-Style: button`;
   const reloadExample = `PROGRAM:
 …                    # the program, loaded as usual
 KEYSTROKES:
@@ -1233,11 +1223,14 @@ ArmCard: Results        # ready for the program's own Write
     style: {
       marginTop: 0
     }
-  }, "The five plain keys (", /*#__PURE__*/React.createElement("strong", null, "A\u2013E"), ") and their 2nd-function row (", /*#__PURE__*/React.createElement("strong", null, "A\u2032\u2013E\u2032"), ") are exactly what real TI-59/58/58C cards label. A ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section can do the same thing on-screen \u2014 either as its own row of short per-key labels, or as one line of running text across the whole row."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Template"), " picks the card artwork and layout, and matches the real card it stands in for \u2014 ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " ", "and ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " look almost identical on screen, since both were the same front-side label design. The difference is on the back: a real magnetic card has a magnetic coating that stores the program; a cue card doesn't. Use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " if the preset is meant to end up written onto a magnetic card (it also shows the ", /*#__PURE__*/React.createElement("strong", null, "Banks"), " page badges; once written to a card file, the corners show the bank each side really holds). Cue cards shipped for TI-58, TI-58C ", /*#__PURE__*/React.createElement("em", null, "and"), " TI-59 owners, but TI-59 owners tended to skip them and just label whichever magnetic card already held the program instead; TI-58 and TI-58C, having no card reader at all, relied on cue cards since there was no magnetic card to label in the first place \u2014 use", " ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " for that case, or for any file that just wants an on-screen label without a magnetic-card connotation. Which of the two you pick for a given preset is mostly personal preference, except when the file is a step toward an actual magnetic card \u2014 then use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " to match.", " ", /*#__PURE__*/React.createElement("strong", null, "SolidStateCard"), " ", "reproduces the pre-printed cards that shipped with a Solid State Software module; real ones can't be edited by the module's user, and in the emulator they're normally only touched by the project's developer to document a built-in module \u2014 reach for it yourself only if you're prototyping your own module (it shows an", " ", /*#__PURE__*/React.createElement("strong", null, "ID"), " like ", /*#__PURE__*/React.createElement("code", null, "ML-01"), " instead of Banks)."), /*#__PURE__*/React.createElement("p", null, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "(a straight apostrophe also works: ", /*#__PURE__*/React.createElement("code", null, "A'"), ") for the 2nd-function row. Leaving ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " or ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " ", "out entirely is what makes that row show the label grid instead of a line of text \u2014 if you fill in Row1/Row2, the individual A\u2013E labels for that row are not shown."), /*#__PURE__*/React.createElement("p", {
+  }, "The five plain keys (", /*#__PURE__*/React.createElement("strong", null, "A\u2013E"), ") and their 2nd-function row (", /*#__PURE__*/React.createElement("strong", null, "A\u2032\u2013E\u2032"), ") are exactly what real TI-59/58/58C cards label. A ", /*#__PURE__*/React.createElement("strong", null, "CUECARD:"), " section can do the same thing on-screen \u2014 either as its own row of short per-key labels, or as one line of running text across the whole row."), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Template"), " picks the card artwork and layout, and matches the real card it stands in for \u2014 ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " ", "and ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " look almost identical on screen, since both were the same front-side label design. The difference is on the back: a real magnetic card has a magnetic coating that stores the program; a cue card doesn't. Use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " if the preset is meant to end up written onto a magnetic card (it also shows the ", /*#__PURE__*/React.createElement("strong", null, "Banks"), " page badges; once written to a card file, the corners show the bank each side really holds). Cue cards shipped for TI-58, TI-58C ", /*#__PURE__*/React.createElement("em", null, "and"), " TI-59 owners, but TI-59 owners tended to skip them and just label whichever magnetic card already held the program instead; TI-58 and TI-58C, having no card reader at all, relied on cue cards since there was no magnetic card to label in the first place \u2014 use", " ", /*#__PURE__*/React.createElement("strong", null, "CueCard"), " for that case, or for any file that just wants an on-screen label without a magnetic-card connotation. Which of the two you pick for a given preset is mostly personal preference, except when the file is a step toward an actual magnetic card \u2014 then use ", /*#__PURE__*/React.createElement("strong", null, "MagnetCard"), " to match.", " ", /*#__PURE__*/React.createElement("strong", null, "SolidStateCard"), " ", "reproduces the pre-printed cards that shipped with a Solid State Software module; real ones can't be edited by the module's user, and in the emulator they're normally only touched by the project's developer to document a built-in module \u2014 reach for it yourself only if you're prototyping your own module (it shows an", " ", /*#__PURE__*/React.createElement("strong", null, "ID"), " like ", /*#__PURE__*/React.createElement("code", null, "ML-01"), " instead of Banks)."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "Row1"), " replaces the A\u2032\u2013E\u2032 grid with one line of running text, and ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " does the same for the A\u2013E grid. ", /*#__PURE__*/React.createElement("strong", null, "Row2R"), " is a second piece of text placed on the same line as Row2, right-aligned against it \u2014 handy for something like a page number or units note that shouldn't compete with the main label for space. Each of the three has its own alignment field \u2014 ", /*#__PURE__*/React.createElement("strong", null, "Row1Align"), ", ", /*#__PURE__*/React.createElement("strong", null, "Row2Align"), ",", " ", /*#__PURE__*/React.createElement("strong", null, "Row2RAlign"), " \u2014 set to ", /*#__PURE__*/React.createElement("code", null, "left"), ",", " ", /*#__PURE__*/React.createElement("code", null, "center"), ", or ", /*#__PURE__*/React.createElement("code", null, "right"), ".", " ", "On a CueCard or MagnetCard, ", /*#__PURE__*/React.createElement("strong", null, "PencilColor"), " picks the ink: ", /*#__PURE__*/React.createElement("code", null, "black"), " (the default), ", /*#__PURE__*/React.createElement("code", null, "pencil"), " or", " ", /*#__PURE__*/React.createElement("code", null, "sharpie"), ".", " ", /*#__PURE__*/React.createElement("strong", null, "Style"), " is ", /*#__PURE__*/React.createElement("code", null, "none"), " by default, or", " ", /*#__PURE__*/React.createElement("code", null, "button"), " to draw a border around the Row1/Row2/Row2R text, mimicking the boxed instruction labels real cards use.")), /*#__PURE__*/React.createElement("div", {
+  }, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "for the 2nd-function row, as in the example below.", " ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " and ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " put one line of running text across a row instead. The example also shows", " ", /*#__PURE__*/React.createElement("code", null, "\\blank"), ", which lets a label span the next key position, and shortcuts such as ", /*#__PURE__*/React.createElement("code", null, "\\sqrt"), " for the symbols real cards use. All the fields, their alignment and ink options and the symbol table are in", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
+    className: "link-accent"
+  }, "reference/StateFileFormat.md"), ".")), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -1269,57 +1262,7 @@ ArmCard: Results        # ready for the program's own Write
       display: "block",
       borderRadius: 8
     }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "panel",
-    style: {
-      padding: 20,
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement("pre", {
-    style: {
-      margin: 0,
-      padding: 16,
-      borderRadius: 8,
-      background: "var(--bg-inset)",
-      color: "var(--fg)",
-      overflowX: "auto",
-      lineHeight: 1.5,
-      fontSize: 13
-    }
-  }, cueCardRowExample)), /*#__PURE__*/React.createElement("div", {
-    className: "panel",
-    style: {
-      padding: 16,
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "/59/assets/cuecard-row-text.png",
-    alt: "CueCard titled Compound Interest, with a centered, boxed Row1 instruction line and left-aligned Row2 / right-aligned Row2R text below it",
-    style: {
-      width: "100%",
-      height: "auto",
-      display: "block",
-      borderRadius: 8
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "panel",
-    style: {
-      padding: 20,
-      lineHeight: 1.7,
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginTop: 0
-    }
-  }, "A short set of LaTeX-style shortcuts expand to the Unicode symbols real TI-59 cards use in labels, so you don't need a Unicode picker \u2014 for example ", /*#__PURE__*/React.createElement("code", null, "\\to"), " becomes an arrow, ", /*#__PURE__*/React.createElement("code", null, "\\sqrt"), " ", "becomes a root sign, ", /*#__PURE__*/React.createElement("code", null, "\\sum"), " becomes \u03A3, and", " ", /*#__PURE__*/React.createElement("code", null, "x^{2}"), " becomes ", /*#__PURE__*/React.createElement("code", null, "x\xB2"), ". The full token table is in", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
-    className: "link-accent"
-  }, "reference/StateFileFormat.md"), "."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      marginBottom: 0
-    }
-  }, "To make one label visually span more than one key position, set the following cell(s) to ", /*#__PURE__*/React.createElement("code", null, "\\blank"), " \u2014 for example", " ", /*#__PURE__*/React.createElement("code", null, "D: \\blank"), " right after a filled-in ", /*#__PURE__*/React.createElement("strong", null, "C"), " ", "merges D into C's column so the C label reads across both keys.")), /*#__PURE__*/React.createElement("h2", {
+  })), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {
       marginTop: 24
@@ -1669,9 +1612,9 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
     style: {
       marginBottom: 0
     }
-  }, "Load this file now and the card appears immediately \u2014 nothing on it does anything yet, because there's still no program behind the", " ", /*#__PURE__*/React.createElement("strong", null, "A"), " key. The full", " ", /*#__PURE__*/React.createElement("a", {
+  }, "Load this file now and the card appears immediately \u2014 nothing on it does anything yet, because there's still no program behind the", " ", /*#__PURE__*/React.createElement("strong", null, "A"), " key. The", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/#labeling-keys"
-  }, "CUECARD field reference"), " ", "covers every field, the math-notation shortcuts, and both templates in more depth.")), /*#__PURE__*/React.createElement(TutorialStep, {
+  }, "section on labeling keys"), " ", "explains the templates in more depth and links to the full field list.")), /*#__PURE__*/React.createElement(TutorialStep, {
     num: 4,
     title: "Program",
     code: step4,

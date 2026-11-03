@@ -717,17 +717,6 @@ C': n
 D': \\blank
 E': \\blank`;
 
-  const cueCardRowExample = `CUECARD:
-Template: CueCard
-Title: Compound Interest
-Row1: Enter n, i, PV — press B for FV
-Row1Align: center
-Row2: RPN 5.1
-Row2R: p. 3
-Row2Align: left
-Row2RAlign: right
-Style: button`;
-
   const reloadExample = `PROGRAM:
 …                    # the program, loaded as usual
 KEYSTROKES:
@@ -896,31 +885,16 @@ ArmCard: Results        # ready for the program's own Write
           only if you're prototyping your own module (it shows an{" "}
           <strong>ID</strong> like <code>ML-01</code> instead of Banks).
         </p>
-        <p>
+        <p style={{ marginBottom: 0 }}>
           Set fields <strong>A</strong> through <strong>E</strong> for the
           plain-key row, and <strong>A′</strong> through <strong>E′</strong>{" "}
-          (a straight apostrophe also works: <code>A'</code>) for the
-          2nd-function row. Leaving <strong>Row1</strong> or <strong>Row2</strong>{" "}
-          out entirely is what makes that row show the label grid instead of a
-          line of text — if you fill in Row1/Row2, the individual A–E labels for
-          that row are not shown.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          <strong>Row1</strong> replaces the A′–E′ grid with one line of
-          running text, and <strong>Row2</strong> does the same for the A–E
-          grid. <strong>Row2R</strong> is a second piece of text placed on the
-          same line as Row2, right-aligned against it — handy for something
-          like a page number or units note that shouldn't compete with the
-          main label for space. Each of the three has its own alignment
-          field — <strong>Row1Align</strong>, <strong>Row2Align</strong>,{" "}
-          <strong>Row2RAlign</strong> — set to <code>left</code>,{" "}
-          <code>center</code>, or <code>right</code>.{" "}
-          On a CueCard or MagnetCard, <strong>PencilColor</strong> picks the
-          ink: <code>black</code> (the default), <code>pencil</code> or{" "}
-          <code>sharpie</code>.{" "}
-          <strong>Style</strong> is <code>none</code> by default, or{" "}
-          <code>button</code> to draw a border around the Row1/Row2/Row2R
-          text, mimicking the boxed instruction labels real cards use.
+          for the 2nd-function row, as in the example below.{" "}
+          <strong>Row1</strong> and <strong>Row2</strong> put one line of running
+          text across a row instead. The example also shows{" "}
+          <code>\blank</code>, which lets a label span the next key position,
+          and shortcuts such as <code>\sqrt</code> for the symbols real cards use.
+          All the fields, their alignment and ink options and the symbol table are in{" "}
+          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">reference/StateFileFormat.md</a>.
         </p>
       </div>
 
@@ -943,45 +917,6 @@ ArmCard: Results        # ready for the program's own Write
           alt="MagnetCard cue card titled Roots and Powers, with per-key labels on both the A′–E′ and A–E rows, including a merged x → y span"
           style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
         />
-      </div>
-
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{cueCardRowExample}</pre>
-      </div>
-
-      <div className="panel" style={{ padding: 16, marginTop: 12 }}>
-        <img
-          src="/59/assets/cuecard-row-text.png"
-          alt="CueCard titled Compound Interest, with a centered, boxed Row1 instruction line and left-aligned Row2 / right-aligned Row2R text below it"
-          style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-        />
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ marginTop: 0 }}>
-          A short set of LaTeX-style shortcuts expand to the Unicode symbols
-          real TI-59 cards use in labels, so you don't need a Unicode picker —
-          for example <code>\to</code> becomes an arrow, <code>\sqrt</code>{" "}
-          becomes a root sign, <code>\sum</code> becomes Σ, and{" "}
-          <code>{"x^{2}"}</code> becomes <code>x²</code>. The full token table
-          is in{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">reference/StateFileFormat.md</a>.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          To make one label visually span more than one key position, set the
-          following cell(s) to <code>\blank</code> — for example{" "}
-          <code>{"D: \\blank"}</code> right after a filled-in <strong>C</strong>{" "}
-          merges D into C's column so the C label reads across both keys.
-        </p>
       </div>
 
       <h2 className="section" style={{ marginTop: 24 }}>Loading a labeled card</h2>
@@ -1341,10 +1276,9 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
         <p style={{ marginBottom: 0 }}>
           Load this file now and the card appears immediately — nothing on
           it does anything yet, because there's still no program behind the{" "}
-          <strong>A</strong> key. The full{" "}
-          <a href="/59/presets/#labeling-keys">CUECARD field reference</a>{" "}
-          covers every field, the math-notation shortcuts, and both
-          templates in more depth.
+          <strong>A</strong> key. The{" "}
+          <a href="/59/presets/#labeling-keys">section on labeling keys</a>{" "}
+          explains the templates in more depth and links to the full field list.
         </p>
       </TutorialStep>
 
