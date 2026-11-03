@@ -534,7 +534,7 @@ function InstallMobilePage() {
           The app needs iOS or iPadOS 18 or later. There is no extra setup after install.
         </p>
         <p style={{ marginBottom: 0 }}>
-          On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you swipe to (the debugger only with Settings › Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.
+          On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you turn with the chevrons in the top corners (the debugger only with Settings › Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape, its print scaled down to fit, and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.
         </p>
       </div>
 
@@ -649,7 +649,7 @@ function InstallAndroidPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Offline and updates</h3>
         <p style={{ marginTop: 0, marginBottom: 0 }}>
-          Once installed, the app runs all three calculators without a connection, with module 01 (Master Library). Any other module needs the network the first time you load it. When a new version is out, the app updates itself.
+          Once installed, the app runs all three calculators without a connection, with every Solid State module and every preset in its list. When a new version is out, the app updates itself.
         </p>
       </div>
 
@@ -659,7 +659,7 @@ function InstallAndroidPage() {
           The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to fit it again.
         </p>
         <p style={{ marginBottom: 0 }}>
-          <strong>Preset</strong> opens a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage; files are read on the phone and never uploaded anywhere.
+          <strong>Preset</strong> offers the main examples from its list, and opens any other <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage, such as the historic and calendar programs from the Software Collection; files are read on the phone and never uploaded anywhere.
         </p>
       </div>
 
@@ -790,7 +790,7 @@ ArmCard: Results        # ready for the program's own Write
         <p><strong>KEYSTROKES:</strong> injects matrix codes after the file loads. Between keys, lines such as <strong>Wait:</strong>, <strong>FullSpeed:</strong> and <strong>RegularSpeed:</strong> control timing, and a few more (<strong>Trace:</strong>, <strong>ZeroElapseTime:</strong>, <strong>ReportElapseTime:</strong>) help with timing and debugging programs. To run a long program at full speed, put <strong>FullSpeed:</strong> before the key that starts it; <strong>Wait:</strong> pauses so you can see what the calculator shows. An unknown directive, or a <strong>Wait:</strong> without a unit, is reported as an error rather than read as keys.</p>
         <p><strong>CUECARD:</strong> defines the on-screen cue card that appears with the loaded file or module.</p>
         <p><strong>SOLID-STATE-MODULE:</strong> and <strong>PRINTER:</strong> let a file select the matching module and printer state automatically, and <strong>MODEL:</strong> switches to the calculator the file is for.</p>
-        <p>A <strong>KEYSTROKES:</strong> script can also work the controls around the calculator: <strong>PrinterTrace: on</strong> / <strong>off</strong> sets the printer's TRACE switch, <strong>CutPaper:</strong> cuts the paper, and <strong>DebugPanel:</strong>, <strong>Freeze:</strong>, <strong>FreezeOnStart:</strong>, <strong>Step:</strong> and <strong>Resume:</strong> do what the debugger's tabs and buttons do. While the debugger is frozen, the script's keys wait until it runs again.</p>
+        <p>A <strong>KEYSTROKES:</strong> script can also work the controls around the calculator: <strong>PrinterTrace: on</strong> / <strong>off</strong> sets the printer's TRACE switch, <strong>CutPaper:</strong> cuts the paper, and <strong>DebugPanel:</strong>, <strong>Freeze:</strong>, <strong>FreezeOnStart:</strong>, <strong>Step:</strong> and <strong>Resume:</strong> do what the debugger's tabs and buttons do. While the debugger is frozen, the script's keys wait until it runs again. Older presets using <strong>SKIP-RESET:</strong> or key 99 now get an error; a reload in the same file and <strong>PrinterTrace:</strong> replace them.</p>
         <p style={{ marginBottom: 0 }}>
           This page covers enough to load and tweak existing files. The complete
           grammar — matrix code table, 2nd-function presses, the CUECARD field
@@ -1385,9 +1385,9 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
           To check that a value actually loaded, open the <a href="/59/debugger/">debugger</a>{" "}
           and look at the register list — on Mac, Windows, Linux, on iPad
           in landscape and on iPhone Duo opened flat it's visible right alongside the calculator; on iPhone (and iPad in
-          portrait) swipe to it. The debugger has to be turned on first on
+          portrait) tap the chevron to reach it. The debugger has to be turned on first on
           iPhone/portrait iPad: enable <strong>Debug Page in Portrait</strong>{" "}
-          under <strong>Settings</strong>, or it won't be there to swipe to.
+          under <strong>Settings</strong>, or it won't be there to turn to.
         </p>
       </TutorialStep>
 
@@ -1505,7 +1505,7 @@ function DebuggerPage() {
         <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
           <li><strong>FREEZE</strong> — stops the CPU (in the CALCULATOR tab, at the next step).</li>
           <li><strong>FREEZE ON START (CALCULATOR tab)</strong> — arms the debugger so it freezes right before the first program step runs, the same point STEP stops at. This is triggered by pressing R/S, launching a program via a label, or any similar action. Useful for catching the very start of a program run.</li>
-          <li><strong>FREEZE ON START (CPU tab)</strong> — arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or when the calculator is reset. Useful for catching the very first ROM instruction of a key-press handler.</li>
+          <li><strong>FREEZE ON START (CPU tab)</strong> — arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or on a Clean reset (on the TI-58C, any reset). Useful for catching the very first ROM instruction of a key-press handler.</li>
           <li><strong>ARMED</strong> — shown in yellow when FREEZE ON START is active; click it to cancel.</li>
           <li><strong>RESUME</strong> — resumes execution from the frozen state.</li>
           <li><strong>STEP</strong> — advances one step (semantics differ per tab, see above).</li>
@@ -1518,13 +1518,13 @@ function DebuggerPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>iPhone behaviour</h3>
         <p style={{ marginTop: 0 }}>
-          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time.
+          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad in landscape, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time.
         </p>
         <ul style={{ margin: "8px 0 0", paddingLeft: 20 }}>
           <li>Switching to the <strong>CPU</strong> tab resets the heat map, because the CPU trace was not running while CALCULATOR was visible. Exception: if the CPU is already frozen when you switch, the heat map is preserved.</li>
           <li>The selected tab (CALCULATOR, CPU, LOG) is remembered when you navigate away from the debugger and return.</li>
-          <li><strong>FREEZE ON START in CALCULATOR</strong> works best in landscape or on iPad/Mac, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger.</li>
-          <li><strong>FREEZE ON START in CPU</strong> arms in the background and fires as soon as you press any key (or reset the calculator), regardless of which tab or screen is visible — the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction.</li>
+          <li><strong>FREEZE ON START in CALCULATOR</strong> works best on iPad in landscape, on iPhone Duo opened flat or on a computer, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger.</li>
+          <li><strong>FREEZE ON START in CPU</strong> arms in the background and fires as soon as you press any key (or do a Clean reset; on the TI-58C, any reset), regardless of which tab or screen is visible — the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction.</li>
         </ul>
       </div>
 
@@ -1535,7 +1535,7 @@ function DebuggerPage() {
         </p>
         <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
           <li><strong>Dumps</strong> — the <strong>SCOM</strong>, <strong>Memory</strong>, <strong>Prog</strong> and <strong>Vars</strong> buttons write the scratch registers, the RAM, the program or the data registers to the log as raw values; the trash button clears it.</li>
-          <li><strong>TRACE toggle</strong> — Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like the reset routine or key-processing flow.</li>
+          <li><strong>TRACE toggle</strong> — Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like a Clean reset's routine or key-processing flow.</li>
         </ul>
 
         <p style={{ marginTop: 12, marginBottom: 12 }}>
@@ -1543,7 +1543,7 @@ function DebuggerPage() {
         </p>
         <ol style={{ margin: 0, paddingLeft: 20 }}>
           <li>Switch to the LOG tab and toggle TRACE on.</li>
-          <li>Perform the action you want to analyze (e.g., press <strong>Reset</strong>, or execute a ROM subroutine).</li>
+          <li>Perform the action you want to analyze (e.g., press <strong>Clean</strong>, or execute a ROM subroutine).</li>
           <li>Toggle TRACE off to stop recording.</li>
           <li>Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings › Files; the <a href="/59/play/">browser emulator</a> downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit.</li>
           <li>On a computer with Python, download or clone the <a href="https://github.com/tinue/Calc-U-59" className="link-accent">Calc-U-59 repository</a>. Its <code>tools/read_trace.py</code> needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own.</li>
@@ -1561,7 +1561,7 @@ function DebuggerPage() {
         <ul style={{ margin: 0, paddingLeft: 20 }}>
           <li><strong>CALCULATOR tab</strong> — Stepping through your own program one step at a time, checking registers and flags at each step.</li>
           <li><strong>CPU tab</strong> — Tracing the ROM's internal instruction flow, reviewing jumps and subroutine calls, scrolling back through execution history.</li>
-          <li><strong>TRACE (in LOG)</strong> — Capturing a complete ROM sequence for offline analysis (reset routine, memory writes, keyboard processing, etc.).</li>
+          <li><strong>TRACE (in LOG)</strong> — Capturing a complete ROM sequence for offline analysis (a Clean reset's routine, memory writes, keyboard processing, etc.).</li>
           <li><strong>Debug logging (in LOG)</strong> — the LOG button cycles the level between Off, Info and Debug (grey, orange and red dot). It is mainly used by the developer for debugging specific issues. When enabled, you will see all memory writes and other hardware events. This has limited utility for regular app users.</li>
         </ul>
       </div>
@@ -1666,7 +1666,7 @@ function ReferencePage() {
         <h2 className="section">Settings</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The installable web app has <strong>Keyboard Feedback</strong> too: Off or Click Sound.
+            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The web client's portrait layout (the installed app, and the browser emulator on a phone) has <strong>Keyboard Feedback</strong> too: Off or Click Sound.
           </p>
           <p style={{ marginBottom: 0 }}>
             Where files go: on the Mac, the trace file's <strong>Save Location</strong> (local, iCloud or a folder you choose); on iPhone and iPad, traces go to the app's iCloud folder. On Windows and Linux, <strong>Files</strong> sets the preset, card and trace folders.
@@ -1707,7 +1707,7 @@ function ReferencePage() {
             <li><strong>Crd</strong>: fit a fresh card (TI-59)</li>
             <li><strong>Preset</strong></li>
             <li><strong>Settings</strong></li>
-            <li><strong>Swipe to printer</strong></li>
+            <li><strong>Chevron to the printer</strong></li>
           </ol>
         </div>
       </div>
@@ -1758,11 +1758,11 @@ const FAQS = [
   },
   {
     question: "What does FREEZE ON START do in the CPU tab?",
-    answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because the calculator was reset. This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other.",
+    answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because of a Clean reset (on the TI-58C, any reset). This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other.",
   },
   {
     question: "How can I step through the reset routine?",
-    answer: "Switch to the CPU tab and press FREEZE ON START. Then go to the calculator and press Reset — the CPU will freeze at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time.",
+    answer: "Switch to the CPU tab and press FREEZE ON START. Then press Clean (hold ⌘ or Ctrl while you click Reset; long-press Reset on a touch screen), which wipes the memory, or plain Reset on the TI-58C. The CPU freezes at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time. A plain Reset on the TI-59 and TI-58 runs the routine out of sight, to keep the memory, so the freeze then waits for the next key.",
   },
   {
     question: "I used FREEZE ON START in the CPU tab, the freeze triggered on a keypress — but after RESUME the key seems lost. Why?",
@@ -1780,9 +1780,8 @@ const FAQS = [
         <strong>Template</strong> to <code>MagnetCard</code> or{" "}
         <code>CueCard</code>, then fill in fields <strong>A</strong>{" "}
         through <strong>E</strong> and <strong>A′</strong> through{" "}
-        <strong>E′</strong> for the two key rows. Load that file (or write it
-        onto a virtual magnetic card to keep the label with the card) and it
-        appears on screen. See{" "}
+        <strong>E′</strong> for the two key rows. Load that file (a card the preset itself writes, with <strong>ArmCard:</strong>,
+        keeps the label) and it appears on screen. See{" "}
         <a href="/59/presets/#labeling-keys" className="link-accent">
           Loading a preset → Labeling the A–E and A′–E′ keys
         </a>{" "}
@@ -1936,7 +1935,7 @@ function SoftwarePage() {
         { file: "calendar-02-cargile.ti59", title: "Calendar Printer — Lou Cargile", description: "A second V3N5 entry, Lou Cargile's first attempt at the calendar problem.", printer: true },
         { file: "calendar-03-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh", description: "A third V3N5 entry, checking for the ML module and warning the user if it's missing.", printer: true },
         { file: "calendar-04-skillman.ti59", title: "Calendar Printer — Bill Skillman", description: "V3N6: a faster print-buffer packing approach, down to about 7½ minutes per year.", printer: true },
-        { file: "calendar-05-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh (revised)", description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to about 5½ minutes per year.", printer: true },
+        { file: "calendar-05-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh (revised)", description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to just under 5 minutes per year (4 min 53 s for 1978).", printer: true },
         { file: "calendar-06-cargile.ti59", title: "Calendar Printer — Lou Cargile (bugfix)", description: "V3N7: a correction to an earlier entry — a missing CLR' meant the 1st of a month could fail to print if it fell on a Thursday.", printer: true },
         { file: "calendar-07-calidas.ti59", title: "Calendar Printer — Panos Galidas", description: "V3N9: the fastest of the 1978 entries, averaging 2 minutes 38.6 seconds per year over a five-year test span.", printer: true },
         { file: "calendar-08-acosta.ti59", title: "Calendar Printer — Patrick Acosta", description: "TI PPC Notes V9N2: the 1981 program that ended the race, using Fast Mode to print the worst-case year 2000 in 1 minute 23 seconds.", printer: true },
@@ -1949,7 +1948,7 @@ function SoftwarePage() {
       article: "printer-interrupt",
       items: [
         { file: "characters.ti59", title: "Print character table", description: "Prints the full TI-59 print-code table with row and column headers." },
-        { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). The way into Fast Mode clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.", printer: true },
+        { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). This program's way into Fast Mode (Pgm 02 SBR 239) clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.", printer: true },
         { file: "fast-grafik-3d-plot.ti59", title: "Fast-Grafik 3-D Plot", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.", printer: true },
         { file: "printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
         { file: "printer-interrupt.ti59", title: "The printer interrupt, smallest form", description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.", printer: true },
@@ -1993,7 +1992,7 @@ function SoftwarePage() {
         { file: "fastmode.ti59", title: "Fast Mode factorial demo (TI-59)", description: "Computes 69! in Fast Mode in about 24 seconds; the same program takes about 44 in normal mode, 85% longer (measured on the emulator)." },
         { file: "fastmode.ti58", title: "Fast Mode factorial demo (TI-58)", description: "The same Fast Mode factorial comparison, for the TI-58/TI-58C." },
         { file: "fastmode-sst.ti59", title: "The shortest way into Fast Mode", description: "A new, shorter Fast Mode entry, found by tracing the ROM in 2026; computes 69! like the factorial demo. Loading the file runs the entry sequence automatically." },
-        { file: "FastMode_Zero4.ti59", title: "Fast Mode zero-padding bug", description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state. Kept as a regression case; it also uncovered a display-refresh bug in the emulator, fixed before v1.0.0." },
+        { file: "FastMode_Zero4.ti59", title: "Fast Mode zero-padding bug", description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state." },
         { file: "firmware.ti59", title: "Firmware listing keystroke sequence", description: "An unusual keyboard sequence, originally described by TI PPC Notes editor Maurice Swinnen, that puts the TI-59 into a mode where the ROM firmware itself can be listed." },
         { file: "keycodes.ti59", title: "Print all keycodes", description: "Jared Weinberger's routine for generating and printing every TI-59 key code, using dynamic program-code modification (TI PPC Notes V5N4-5, 1980)." },
       ],
@@ -2014,7 +2013,7 @@ function SoftwarePage() {
         { file: "assembly/simple_count.asm", title: "Simple counter", description: "The smallest useful ASM overlay example: increments a counter on the display in a tight loop, about 1185 times a second." },
         { file: "assembly/stopwatch.asm", title: "Stopwatch", description: "A precisely timed stopwatch built on the WAIT Dn instruction rather than counting cycles — 222 increments per second, 4.5011 ms each." },
         { file: "assembly/DPT.asm", title: "Decimal-point test", description: "Cycles the decimal point across every digit position. The emulator shows the display as the eye sees it, so — as on the real calculator — all the points look lit at once." },
-        { file: "assembly/Decoder.asm", title: "7-segment decoder edge case (known non-working)", description: "A real-hardware timing edge case — a phase-shifted WAIT before SET IDLE exposes all 16 hex segment patterns on real silicon. Documented here for the CPU-emulation detail, but it does not reproduce on Calc-U 59: the emulator latches each display position at its own digit strobe, so CPU and display are always in phase and the timing quirk this program depends on has nothing to act on." },
+        { file: "assembly/Decoder.asm", title: "7-segment decoder edge case (known non-working)", description: "A real-hardware timing edge case — a phase-shifted WAIT before SET IDLE exposes all 16 hex segment patterns on real silicon. Documented here for the CPU-emulation detail, but it does not reproduce on Calc-U 59." },
       ],
     },
   ];
@@ -2193,8 +2192,8 @@ function PlayPage() {
             card a name, press <strong>2nd Write</strong> (bank 1:{" "}
             <strong>1 2nd Write</strong>), and press its top-left or top-right corner to write that side. To load it back,
             press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
-            card file, then press the corner of the side to read; <strong>Eject Card</strong> takes a
-            passing card out (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
+            card file, then press the corner of the side to read; <strong>Eject Card</strong> stops a
+            passing card; it stays fitted (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
             Cards last until you close the page — download one from the card list to keep it.
           </p>
           <p>
@@ -2209,7 +2208,7 @@ function PlayPage() {
           <p>
             Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
             same calculator alone at its own address, installable to your phone's home screen for a
-            one-tap, full-screen launch. Once installed it runs all three calculators offline.
+            one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list.
           </p>
         </div>
 

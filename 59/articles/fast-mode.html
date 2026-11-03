@@ -42,7 +42,7 @@
 <li>The run loop asks only "is it non-zero?". If so, it takes the fast path.</li>
 <li>The step fetch tests single bits. Bit 0 means fetch from the module, bit 3 means fetch from ROM, and anything else means fetch from RAM.</li>
 </ul>
-<p>The values 2, 4 and 6 are never set by TI's code. They pass the first test but match neither bit of the second. With one of them in place, a user program in RAM runs on the fast path. No normal key writes this digit, so getting such a value there takes a firmware bug. TI-59 users' clubs found and published such bugs.</p>
+<p>TI's code never leaves 2, 4 or 6 there while a program runs: 2 appears only for a few instructions inside a RTN back into a module. They pass the first test but match neither bit of the second. With one of them in place, a user program in RAM runs on the fast path. No normal key writes this digit, so getting such a value there takes a firmware bug. TI-59 users' clubs found and published such bugs.</p>
 <h2 id="rules-for-fast-mode-programs">Rules for fast-mode programs</h2>
 <p><strong>Allowed:</strong></p>
 <ul>
@@ -88,7 +88,7 @@
 </ul>
 <p><strong>Cards.</strong> <code>n Write</code> and <code>n INV Write</code> in a fast-mode program work and stay in fast mode. A card read at a stop makes the program go on, as Neef says: on a real TI-59 and on the emulator, a card with <code>CLR R/S</code> at step 040 leaves 0 on the display instead of the bank number. In our emulator runs, the rest of the current 8-step block ran from the old buffer ("Why the program starts at step 008"); that part is an inference.</p>
 <h2 id="ways-in">Ways in</h2>
-<p>All methods put X = 1.000000000002 (or …04, …06) on the display first; <code>1 + 2 EE 12 +/- =</code> produces it exactly.</p>
+<p>All methods except the LRN entry put X = 1.000000000002 (or …04, …06) on the display first; <code>1 + 2 EE 12 +/- =</code> produces it exactly.</p>
 <ul>
 <li><strong>SST</strong> (shortest; <a href="https://calc-u.org/59/software/#fastmode-sst-ti59">fastmode-sst.ti59</a>). Put a St flg step at step 007 (the last step of the first 8-step block; see "How the hack works") and start the real program at step 008. Key <code>GTO 007 SST 0 STO</code>.</li>
 <li><strong>St flg at the end of the partition</strong> (TI PPC Notes V9N3P5; <a href="https://calc-u.org/59/software/#fastmode-ti59">fastmode.ti59</a>). The program ends with St flg on the last step and halts with a flashing display. Key <code>7 EE</code>.</li>
