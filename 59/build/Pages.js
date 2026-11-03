@@ -2748,7 +2748,7 @@ function SoftwarePage() {
     items: [{
       file: "fastmode.ti59",
       title: "Fast Mode factorial demo (TI-59)",
-      description: "Computes factorials in both normal and Fast Mode so the roughly 70% speed difference is directly comparable — 10! in about 4.6 seconds, 69! in about 31."
+      description: "Computes 69! in Fast Mode in about 24 seconds; the same program takes about 44 in normal mode, 85% longer (measured on the emulator)."
     }, {
       file: "fastmode.ti58",
       title: "Fast Mode factorial demo (TI-58)",

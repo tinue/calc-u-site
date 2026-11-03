@@ -35,7 +35,7 @@
 <li><strong>No trace printing.</strong> Neither the printer's TRACE switch nor flag 9 prints the steps.</li>
 <li><strong>No error stop.</strong> An error does not halt the program, even with flag 8 set.</li>
 </ul>
-<p>For a ROM routine such as P→R this is exactly right: 20–40 internal steps should look like a single operation, with no flicker and no way to interrupt them halfway. The same steps run in about 40 % less time.</p>
+<p>For a ROM routine such as P→R this is exactly right: 20–40 internal steps should look like a single operation, with no flicker and no way to interrupt them halfway. The same steps run in 40–50 % less time, depending on the program. Martin Neef's 69! (CHIP 10/1980, p. 49) took 29.2 s in normal mode and 14.6 s in fast mode on his calculator; the emulator takes 29.0 s and 14.3 s.</p>
 <h2 id="the-hack">The hack</h2>
 <p>The firmware keeps a <em>program source</em> digit that says where the running program comes from: 0 for RAM, 1 for the module, 8 for the ROM routines. The digit is tested in two different ways:</p>
 <ul>
@@ -62,23 +62,49 @@
 <ul>
 <li>The display is frozen, and R/S cannot stop the program.</li>
 <li>Errors never stop the program, and nothing is traced.</li>
-<li>INV SBR with nothing to return to does not stop the program.</li>
+<li>RTN in a program started with a keyboard SBR does not stop the program, and fast mode stays on. Neef (CHIP 10/1980) says RTN ends fast mode, but a real TI-59 behaves as the emulator does here (<code>SBR 042</code> over <code>5 RTN 6 R/S</code> shows 6, and <code>=</code> then runs on). Other ways of starting the program were not tried.</li>
 </ul>
-<p><strong>Ending the program.</strong> This is where most fast-mode programs go wrong. The program must end with RST or R/S, and at that moment X must be 0, a number still being typed, or a value just shown by Pause or Prt. If X holds any other result, the calculator hangs with a dark display, and only switching it off helps. Switching off erases the program.</p>
+<p><strong>Ending the program.</strong> This is where most fast-mode programs go wrong. The program must end with RST or R/S, and at that moment X must be 0, a number still being typed, a value just shown by Pause or Prt, or a value that has been through <code>EE INV EE</code>. If X holds any other result, the calculator hangs with a dark display, and only switching it off helps. Switching off erases the program.</p>
 <ul>
-<li>Safe endings: <code>CLR RST</code>, <code>0 RST</code>, <code>RCL nn Pause RST</code>.</li>
+<li>Safe endings: <code>CLR RST</code>, <code>0 RST</code>, <code>RCL nn Pause RST</code>, <code>CLR R/S</code>, <code>RCL nn EE INV EE R/S</code>.</li>
 <li>Hanging endings: <code>RCL nn RST</code>, <code>… = RST</code>, <code>RCL nn R/S</code>.</li>
-<li>A good pattern: store the result, end with <code>CLR RST</code>, and let a normal-mode <code>RCL nn R/S</code> at step 000 show it.</li>
-<li><code>RCL nn Pause R/S</code> stops with the result on the display, but the calculator is still in fast mode. Pressing any operation key quietly continues the program. Press RST first.</li>
+<li><code>EE INV EE R/S</code> shows a result without the delay of a Pause and stays in fast mode (Neef's recommendation). X now counts as being typed: a digit is appended (10.5 becomes 10.55). For new input, press CLR first.</li>
+<li><code>RCL nn Pause R/S</code> also stops with the result on the display, still in fast mode.</li>
 </ul>
+<p><strong>The keyboard during a stop</strong> (after a program R/S, still in fast mode; Neef's list, checked on the emulator):</p>
+<ul>
+<li>Digits, EE, INV, CE and CLR only enter data.</li>
+<li>RST and CP end fast mode. In a program, only RST does; a programmed CP stays in fast mode.</li>
+<li>A function without operand runs and then the program goes on: <code>5 =</code> continues at the next step.</li>
+<li>An operation with operand takes the next program step as its operand: <code>5 STO</code>, with a 7 as the next step, stores into R07.</li>
+<li><code>SBR nnn</code> starts the program at nnn and stays in fast mode, although a programmed SBR is not allowed. <code>SBR nn LRN</code> (two digits) and <code>SBR Ind n LRN</code> go to a step in LRN mode without starting.</li>
+<li>After a card has been read in this state, R/S ended fast mode in our run; <code>SBR nnn</code> did not.</li>
+</ul>
+<p><strong>LRN during a stop.</strong> A program entered this way is unreliable:</p>
+<ul>
+<li>RTN ends fast mode at once, and the Ind forms that merge (STO, RCL, GTO and Op Ind) at the next key. <code>SBR Ind</code> does not merge and does no harm.</li>
+<li>Leaving LRN starts the program after <code>SBR nn LRN</code>, but not after a plain stop.</li>
+<li>With a non-zero nibble 9 in the status register, every keycode is stored shifted ("Why keycodes can come out shifted").</li>
+</ul>
+<p><strong>Cards.</strong> <code>n Write</code> and <code>n INV Write</code> in a fast-mode program work and stay in fast mode. A card read at a stop makes the program go on, as Neef says: on a real TI-59 and on the emulator, a card with <code>CLR R/S</code> at step 040 leaves 0 on the display instead of the bank number. In our emulator runs, the rest of the current 8-step block ran from the old buffer ("Why the program starts at step 008"); that part is an inference.</p>
 <h2 id="ways-in">Ways in</h2>
 <p>All methods put X = 1.000000000002 (or …04, …06) on the display first; <code>1 + 2 EE 12 +/- =</code> produces it exactly.</p>
 <ul>
 <li><strong>SST</strong> (shortest; <a href="https://calc-u.org/59/software/#fastmode-sst-ti59">fastmode-sst.ti59</a>). Put a St flg step at step 007 (the last step of the first 8-step block; see "How the hack works") and start the real program at step 008. Key <code>GTO 007 SST 0 STO</code>.</li>
 <li><strong>St flg at the end of the partition</strong> (TI PPC Notes V9N3P5; <a href="https://calc-u.org/59/software/#fastmode-ti59">fastmode.ti59</a>). The program ends with St flg on the last step and halts with a flashing display. Key <code>7 EE</code>.</li>
 <li><strong>Acosta's "hi2"</strong> (<a href="https://calc-u.org/59/software/#calendar-08-acosta-ti59">calendar-08-acosta.ti59</a>). The trigger is built into the program with a manufactured pseudo-keycode, so a single key starts it.</li>
-<li><strong>LRN inside a module program</strong> (<code>Pgm 02 SBR 239</code>; <a href="https://calc-u.org/59/software/#FastMode_Zero4-ti59">FastMode_Zero4.ti59</a>). This is an unrelated bug that reaches the same state.</li>
+<li><strong>LRN inside a module program</strong> (<code>Pgm 02 SBR 239</code>; <a href="https://calc-u.org/59/software/#characters-fastmode-ti59">characters-fastmode.ti59</a>, <a href="https://calc-u.org/59/software/#FastMode_Zero4-ti59">FastMode_Zero4.ti59</a>). This is an unrelated bug that reaches the same state, and <strong>it clears the whole memory</strong> (below).</li>
 </ul>
+<h3 id="the-lrn-entry">The LRN entry</h3>
+<p>The program is <code>00000 Pgm 02 SBR 239</code>, or Neef's form <code>240 STO 00 Pgm 02 SBR Ind 00</code> (CHIP 10/1980; 239 works too). Both need the Master Library module, and RST R/S starts them.</p>
+<ul>
+<li><strong>Program and data registers are gone afterwards.</strong> The entry ends in the reset routine, whose RAM clear takes the whole RAM. HIR registers, t and Eng stay, as Neef says. Checked on a real TI-59: program steps, R01, R29 and R59 cleared, t kept, about 0.6 s. Meusch's recipe therefore reads the card, runs RST R/S, and reads the card again (TI PPC Notes V5N9-10), which also starts the program.</li>
+<li><strong>The first step must lie on a multiple of 8</strong> (Neef, CHIP 12/1980, p. 10). Five steps before <code>Pgm</code> make steps 008–015 the RAM register that becomes the status register. Other starts give other sources, or none. Checked on the emulator: 0, 8, 16, 24 and 40 work, 1, 4 and 5 do not.</li>
+<li><strong>It runs only once per card.</strong> The module records keycode 42 into step 009; run again without reloading, it stays in the module. The tens digit of this 42 is the source 4.</li>
+<li><strong>Neef's <code>Dsz 99 Prt</code></strong> at steps 010–012 is not needed to get into fast mode. It is keyed as <code>Dsz 0 Prt BST BST Prt</code> and has one effect we can see: the shift below. It also leaves the start step out of range (7999), and in our run a card read at this point stopped without reaching the program. What he meant it for is open.</li>
+</ul>
+<h3 id="why-keycodes-can-come-out-shifted">Why keycodes can come out shifted</h3>
+<p>The steps 008–015 of the entry land in the status register, two digits per step. Later on, a keyboard SBR rewrites the step counter there and clears one of the two digits of step 012, but the other stays. It sits just where the code that stores a key in LRN adds the keycode, so it adds to the keycode's tens digit. So with Neef's 99 at step 012, a key in LRN stores its keycode − 10: CLR as 15, R/S as 81, 7 as 97. Without it they are stored correctly. Both results checked on a real TI-59 (<code>SBR 48 LRN CLR BST</code> shows <code>048 15</code> with <code>Dsz 99 Prt</code>, <code>048 25</code> without). This makes Neef's recipe for entering a program in fast mode (<code>CLR R/S</code>) fail with his own entry, which suggests the program is meant to be entered before fast mode.</p>
 <h2 id="flags-and-fix-after-entry">Flags and Fix after entry</h2>
 <p>Entry overwrites all ten user flags and the Fix setting. Set any flags you need inside the fast-mode program.</p>
 <ul>
@@ -117,8 +143,9 @@
 <li><strong>The ROM routines</strong> (Σ+, P→R, …) are called the same way, so they fail the same way.</li>
 <li><strong>The display</strong> is never formatted. When the program stops, the firmware shows X, but X is still in internal format. The routine that lays out the digits then waits for a condition that never occurs. A typed number, 0, or a value just shown by Pause or Prt is already in display format, so these endings are safe.</li>
 </ul>
-<h2 id="limits">Limits</h2>
-<p>Everything here was observed on Calc-U-59, which runs the original TI-59 ROM unmodified, and not on a real TI-59. Op 09 and card reading or writing were not tested in fast mode.</p>
+<h2 id="sources-and-limits">Sources and limits</h2>
+<p>Martin Neef, "Verdoppelung der Rechengeschwindigkeit beim TI-58/59", CHIP 10/1980, p. 49, and his corrections in CHIP 12/1980, p. 10; K-J Meusch in TI PPC Notes V5N9-10.</p>
+<p>Unless a paragraph says otherwise, everything here was observed on Calc-U-59, which runs the original TI-59 ROM unmodified, and not on a real TI-59. The real calculator was checked for the memory clear and the keycode shift of the LRN entry, for RTN after a keyboard SBR, for the program going on after a card read, and for <code>=</code> resuming a stopped program. Op 09 was not tested in fast mode, and no TI-58 was available: the LRN entry on it is assumed to behave the same.</p>
 </main>
 </body>
 </html>
