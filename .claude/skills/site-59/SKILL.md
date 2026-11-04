@@ -65,6 +65,10 @@ attached to each release as `Calc-U-59-web.zip`.
   there first). `check.js` then fails on purpose until the pinned build is
   reinstalled with `node .seo/fetch-web-client.js` — never commit a local
   build.
+- **Previewing the next release:** `node .seo/fetch-web-client.js --beta <url>`
+  installs a `-pre` zip into `59/beta/`, served at `/59/beta/app/`. It is the
+  one place for a `-pre` asset; nothing re-downloads it. Remove it with the
+  release (`59/.seo/README.md` § "The beta").
 - The site only sizes it: `PlayPage` in `Pages.jsx` passes `layout`, `width` and
   `keyboard`. Its styles come with it (`calc/calc.css`, tokens scoped to
   `.calcu-client`); don't restyle it from the site's CSS.
@@ -92,7 +96,8 @@ too (`cmp`). The PDCM guides
 
 ## After a Calc-U-59 release
 
-1. Pin the release's `Calc-U-59-web.zip` (above).
+1. Pin the release's `Calc-U-59-web.zip` (above), and remove `59/beta/` if it
+   previewed this version.
 2. Read the release's `CHANGELOG.md` entry in Calc-U-59 and update the pages
    for anything user-facing: settings, modules, install steps (Mac, iOS,
    Windows, Linux), preset directives (mention them, link to

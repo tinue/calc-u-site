@@ -56,6 +56,35 @@ sizes it (`usePlayLayout`) and passes `layout`, `width` and
 loads before the site's CSS: both declare the same font families, and the
 site's declarations win.
 
+## The beta (`beta/`)
+
+`/beta/app/` previews the next release's standalone app, built from a
+pre-release asset. `beta/` is that zip, unpacked unchanged next to `calc/`
+(not inside it: an install replaces `calc/` as a whole, and `check.js` fails
+on extra files). No page loads its scripts; `/play/` links to it, and
+`robots.txt` blocks it.
+
+```bash
+node .seo/fetch-web-client.js --beta <url of the -pre Calc-U-59-web.zip>
+node .seo/build.js && node .seo/check.js && tests/run-tests.sh
+```
+
+`beta-client.json` records what was installed, but unlike `web-client.json`
+nothing downloads it again, here or in CI: a `-pre` asset is rebuilt and its
+tag is deleted on promotion, which would fail every later push. This is the
+one place a `-pre` asset may be used. `check.js` proves that `beta/` matches
+its `MANIFEST.json` and the recorded build.
+
+The client works from any folder, and its service worker and caches are per
+folder, but `localStorage` belongs to the origin: the beta and the released
+client share settings and the TI-58C's constant memory.
+
+**When the version is released**, remove it in the commit that pins the
+release: delete `beta/` and `beta-client.json`, and the paragraph in
+`PlayPage`. `check.js` fails while the link is still there. Keep
+`Disallow: /59/beta/` in `robots.txt`: it does no harm, and the next preview
+needs it.
+
 ## Serving it locally
 
 The site is not viewable from the filesystem — every page references its
@@ -108,7 +137,7 @@ Each piece has one home, and `check.js` asserts the result:
 | Open Graph / Twitter | `renderPage()` in `build.js`, from the same title and description. |
 | Structured data | `build.js`: `SoftwareApplication` on the home page, `FAQPage` on `/faq/` (parsed out of `Pages.jsx` so markup and JSON-LD cannot disagree), `BreadcrumbList` everywhere else. |
 | `sitemap.xml` | Generated from `ROUTES` — self-canonical pages only. |
-| `robots.txt` | At the repository root, not generated. It blocks `/59/calc/app/`, the client's demo page `/59/calc/index.html` and `/59/preview/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
+| `robots.txt` | At the repository root, not generated. It blocks `/59/calc/app/`, the client's demo page `/59/calc/index.html`, `/59/preview/` and `/59/beta/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
 | `404.html` | At the repository root, not generated: GitHub Pages only serves the root one. |
 
 Two rules are easy to break by accident:
@@ -162,6 +191,7 @@ stay legal, because `rel=canonical` and `og:url` have to be absolute.
 | `.seo/fetch-web-client.js`, `.seo/webclient.js` | Install and verify the web client in `calc/`. |
 | `web-client.json` | Which web client build `calc/` must be. |
 | `calc/` | The web client. Imported; never edit. |
+| `beta/`, `beta-client.json` | The next release's preview, while there is one. Imported; never edit. |
 | `tests/` | Playwright: navigation, fonts, the embedded calculator. `tests/run-tests.sh` after a build. |
 | `routes.js` | The URL map. Shared by the browser router and the build. |
 | `site.jsx` | Client router. |
@@ -175,7 +205,7 @@ Generated and safe to delete before a rebuild: `build/`, `index.html`,
 
 Hand-written and never touched by the build: every `.jsx`, `styles.css`,
 `colors_and_type.css`, `assets/`, `fonts/`, `software-files/`,
-`tutorial-files/`. Imported: `calc/`.
+`tutorial-files/`. Imported: `calc/`, `beta/`.
 
 ## Articles (`articles/`)
 

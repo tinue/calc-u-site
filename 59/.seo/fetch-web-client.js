@@ -5,6 +5,7 @@
 //   node .seo/fetch-web-client.js               the build web-client.json pins
 //   node .seo/fetch-web-client.js --pin <url>   pin another release asset, install it
 //   node .seo/fetch-web-client.js --local <dir> a local Web/dist/, for testing only
+//   node .seo/fetch-web-client.js --beta <url>  a pre-release asset, into beta/
 //
 // The client is built in the Calc-U-59 repository (Web/build.sh, CI attaches
 // it to each release as Calc-U-59-web.zip) and unpacked here unchanged.
@@ -14,13 +15,16 @@
 // --local leaves web-client.json alone, so check.js fails until a pinned
 // build is installed again: a local build cannot be published by accident.
 //
+// --beta records the build in beta-client.json, and nothing downloads it
+// again: a -pre asset changes and disappears (.seo/README.md, "The beta").
+//
 // Needs node 18+ (fetch) and unzip.
 
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { execFileSync } = require("child_process");
-const { CLIENT_DIR, LOCK, sha256, verifyTree, readLock } = require("./webclient.js");
+const { CLIENT_DIR, LOCK, BETA_DIR, BETA_LOCK, sha256, verifyTree, readLock } = require("./webclient.js");
 
 function fail(msg) {
   console.error(`fetch-web-client: ${msg}`);
@@ -33,12 +37,12 @@ async function download(url, file) {
   fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
 }
 
-function install(dir) {
+function install(dir, target = CLIENT_DIR) {
   const { manifest, problems } = verifyTree(dir);
   if (problems.length) fail(`build does not match its MANIFEST.json:\n  ${problems.join("\n  ")}`);
-  fs.rmSync(CLIENT_DIR, { recursive: true, force: true });
-  fs.cpSync(dir, CLIENT_DIR, { recursive: true });
-  console.log(`installed ${manifest.name} ${manifest.version} (${manifest.commit}) into calc/`);
+  fs.rmSync(target, { recursive: true, force: true });
+  fs.cpSync(dir, target, { recursive: true });
+  console.log(`installed ${manifest.name} ${manifest.version} (${manifest.commit}) into ${path.basename(target)}/`);
   return manifest;
 }
 
@@ -54,8 +58,9 @@ async function main() {
     }
 
     let lock;
-    if (args[0] === "--pin") {
-      if (!args[1]) fail("--pin needs the URL of a Calc-U-59-web.zip release asset");
+    const pinning = args[0] === "--pin" || args[0] === "--beta";
+    if (pinning) {
+      if (!args[1]) fail(`${args[0]} needs the URL of a Calc-U-59-web.zip release asset`);
       lock = { url: args[1] };
     } else if (args.length === 0) {
       lock = readLock();
@@ -72,12 +77,14 @@ async function main() {
     }
     const unpacked = path.join(tmp, "dist");
     execFileSync("unzip", ["-q", zip, "-d", unpacked]);
-    const manifest = install(unpacked);
+    const beta = args[0] === "--beta";
+    const manifest = install(unpacked, beta ? BETA_DIR : CLIENT_DIR);
 
-    if (args[0] === "--pin") {
+    if (pinning) {
       const pinned = { url: lock.url, sha256: hash, version: manifest.version, commit: manifest.commit };
-      fs.writeFileSync(LOCK, JSON.stringify(pinned, null, 2) + "\n");
-      console.log(`pinned in ${path.basename(LOCK)}`);
+      const lockFile = beta ? BETA_LOCK : LOCK;
+      fs.writeFileSync(lockFile, JSON.stringify(pinned, null, 2) + "\n");
+      console.log(`pinned in ${path.basename(lockFile)}`);
     }
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
