@@ -21,7 +21,7 @@ const path = require("path");
 const SEO = __dirname;
 const DOCS = path.join(SEO, "..");
 const { ROUTES, ORIGIN, BASE, url, normalizePath } = require(path.join(DOCS, "routes.js"));
-const { CLIENT_DIR, verifyTree, readLock } = require(path.join(SEO, "webclient.js"));
+const { CLIENT_DIR, BETA_DIR, BETA_LOCK, verifyTree, readLock } = require(path.join(SEO, "webclient.js"));
 
 // The site lives under BASE ("/59"), so every root-relative URL it names
 // must start with BASE + "/". Addresses → site paths and files on disk:
@@ -102,6 +102,8 @@ section("internal links");
 const ARTICLES = fs.readdirSync(path.join(DOCS, "articles")).filter((f) => f.endsWith(".md")).map((f) => f.slice(0, -3));
 const STATIC_TARGETS = {
   "/calc/app/": path.join(DOCS, "calc", "app", "index.html"),
+  // The next release's preview: a link left behind when beta/ goes fails here.
+  "/beta/app/": path.join(BETA_DIR, "app", "index.html"),
   ...Object.fromEntries(ARTICLES.map((a) => [`/articles/${a}.html`, path.join(DOCS, "articles", `${a}.html`)])),
 };
 for (const [p, html] of built) {
@@ -188,6 +190,26 @@ section("web client");
   ok(manifest && manifest.commit === lock.commit && manifest.version === lock.version,
      `calc/ is ${manifest ? manifest.version + " (" + manifest.commit + ")" : "missing"}, ` +
      `web-client.json pins ${lock.version} (${lock.commit})`);
+}
+
+/* ---- the beta, if there is one, is its recorded build, unchanged --- *
+ *
+ * beta/ is optional and imported like calc/. Its zip is not downloaded again,
+ * here or in CI: a -pre asset changes and disappears (.seo/README.md).
+ */
+section("beta client");
+if (fs.existsSync(BETA_DIR) || fs.existsSync(BETA_LOCK)) {
+  ok(fs.existsSync(BETA_DIR) && fs.existsSync(BETA_LOCK), "beta/ and beta-client.json must come and go together");
+  if (fs.existsSync(BETA_DIR) && fs.existsSync(BETA_LOCK)) {
+    const { manifest, problems } = verifyTree(BETA_DIR);
+    for (const p of problems) ok(false, `beta/: ${p} — beta/ is imported, reinstall with fetch-web-client.js --beta`);
+    const lock = JSON.parse(fs.readFileSync(BETA_LOCK, "utf8"));
+    ok(manifest && manifest.commit === lock.commit && manifest.version === lock.version,
+       `beta/ is ${manifest ? manifest.version + " (" + manifest.commit + ")" : "missing"}, ` +
+       `beta-client.json records ${lock.version} (${lock.commit})`);
+    ok(/^Disallow: \/59\/beta\/$/m.test(fs.readFileSync(path.join(DOCS, "..", "robots.txt"), "utf8")),
+       "robots.txt must block /59/beta/");
+  }
 }
 
 /* ---- nothing is fetched from a third party ------------------------ *

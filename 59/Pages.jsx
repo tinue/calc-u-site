@@ -2144,6 +2144,11 @@ function PlayPage() {
             same calculator alone at its own address, installable to your phone's home screen for a
             one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list.
           </p>
+          <p>
+            Curious what comes next? <a href="/59/beta/app/">Try the 2.3.0 preview</a>, the standalone
+            app of the next version, before its release. It may change without notice. It shares its
+            settings and the TI-58C's constant memory with the calculator on this page.
+          </p>
         </div>
 
         <h2 className="section" style={{ marginTop: 32 }}>Use your keyboard</h2>

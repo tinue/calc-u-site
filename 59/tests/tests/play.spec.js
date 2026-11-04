@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const { test, expect } = require('@playwright/test');
 
 // The calculator itself is tested in the Calc-U-59 repository (Web/tests/).
@@ -88,6 +90,14 @@ test('client-side navigation to /play/ mounts the calculator', async ({ page }) 
 test('the standalone app opens', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/59/calc/app/');
+  await ready(page);
+  expect(errors, `Console/page errors:\n${errors.join('\n')}`).toHaveLength(0);
+});
+
+test('the beta app opens', async ({ page }) => {
+  test.skip(!fs.existsSync(path.join(__dirname, '..', '..', 'beta')), 'no beta/ at the moment');
+  const errors = collectErrors(page);
+  await page.goto('/59/beta/app/');
   await ready(page);
   expect(errors, `Console/page errors:\n${errors.join('\n')}`).toHaveLength(0);
 });

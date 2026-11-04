@@ -17,6 +17,9 @@ const crypto = require("crypto");
 const DOCS = path.join(__dirname, "..");
 const CLIENT_DIR = path.join(DOCS, "calc");
 const LOCK = path.join(DOCS, "web-client.json");
+// The preview of the next release (.seo/README.md, "The beta"). Optional.
+const BETA_DIR = path.join(DOCS, "beta");
+const BETA_LOCK = path.join(DOCS, "beta-client.json");
 
 const sha256 = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 
@@ -51,4 +54,4 @@ function verifyTree(dir) {
 
 const readLock = () => JSON.parse(fs.readFileSync(LOCK, "utf8"));
 
-module.exports = { CLIENT_DIR, LOCK, sha256, listFiles, verifyTree, readLock };
+module.exports = { CLIENT_DIR, LOCK, BETA_DIR, BETA_LOCK, sha256, listFiles, verifyTree, readLock };
