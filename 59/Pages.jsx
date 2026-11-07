@@ -1600,7 +1600,7 @@ function ReferencePage() {
         <h2 className="section">Settings</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The web client's portrait layout (the installed app, and the browser emulator on a phone) has <strong>Keyboard Feedback</strong> too: Off or Click Sound. Its wide layout, and the installed app in landscape, offer the <strong>Maximum File Size</strong> for traces.
+            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The installed web app, in either orientation, and the browser emulator's portrait layout on a phone have <strong>Keyboard Feedback</strong> too: Off or Click Sound. Its wide layout, and the installed app in landscape, offer the <strong>Maximum File Size</strong> for traces.
           </p>
           <p style={{ marginBottom: 0 }}>
             Where files go: on the Mac, the trace file's <strong>Save Location</strong> (local, iCloud or a folder you choose); on iPhone and iPad, traces go to the app's iCloud folder. On Windows and Linux, <strong>Files</strong> sets the preset, card and trace folders.
@@ -1680,7 +1680,7 @@ const FAQS = [
   },
   {
     question: "How do I get a trace file?",
-    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, wherever it shows the debugger (its wide layout, or the installed app on a tablet in landscape), downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you.",
+    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, wherever it shows the debugger (its wide layout, or the installed app in landscape on a tablet, an unfolded foldable or a large window), downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you.",
   },
   {
     question: "What can I do with a trace file?",
@@ -1942,7 +1942,7 @@ function SoftwarePage() {
     },
     {
       heading: "CPU-level assembly examples",
-      intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client wherever it shows the debugger: its wide layout, or the installed app on a tablet in landscape.",
+      intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client wherever it shows the debugger: its wide layout, or the installed app in landscape on a tablet, an unfolded foldable or a large window.",
       items: [
         { file: "assembly/simple_count.asm", title: "Simple counter", description: "The smallest useful ASM overlay example: increments a counter on the display in a tight loop, about 1185 times a second." },
         { file: "assembly/stopwatch.asm", title: "Stopwatch", description: "A precisely timed stopwatch built on the WAIT Dn instruction rather than counting cycles — 222 increments per second, 4.5011 ms each." },
