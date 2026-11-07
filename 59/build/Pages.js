@@ -947,7 +947,7 @@ function InstallAndroidPage() {
     }
   }, "The installed app is the ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
-  }, "browser emulator"), " in the iPhone app's portrait layout: the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings. The debugger is not in it; it needs the wide layout of the browser emulator on a computer, or the full app.")), /*#__PURE__*/React.createElement("div", {
+  }, "browser emulator"), ", laid out like the iPhone and iPad app, and it follows the device's rotation. Held upright, the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. In landscape, a phone shows the calculator and the printer side by side; a tablet, an unfolded foldable or a large window adds the debugger beside them. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings.")), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -2066,7 +2066,7 @@ function ReferencePage() {
     style: {
       marginTop: 0
     }
-  }, "Settings choose the ", /*#__PURE__*/React.createElement("strong", null, "Startup Calculator"), " (a model, or Last Used), the ", /*#__PURE__*/React.createElement("strong", null, "Solid State Module"), ", the LED ", /*#__PURE__*/React.createElement("strong", null, "Segment Style"), " (Modernized or Classic), and the trace file's ", /*#__PURE__*/React.createElement("strong", null, "Maximum File Size"), ", so long debug sessions don't grow without bound. iPhone and iPad add ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " and ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), ". The web client's portrait layout (the installed app, and the browser emulator on a phone) has ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " too: Off or Click Sound."), /*#__PURE__*/React.createElement("p", {
+  }, "Settings choose the ", /*#__PURE__*/React.createElement("strong", null, "Startup Calculator"), " (a model, or Last Used), the ", /*#__PURE__*/React.createElement("strong", null, "Solid State Module"), ", the LED ", /*#__PURE__*/React.createElement("strong", null, "Segment Style"), " (Modernized or Classic), and the trace file's ", /*#__PURE__*/React.createElement("strong", null, "Maximum File Size"), ", so long debug sessions don't grow without bound. iPhone and iPad add ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " and ", /*#__PURE__*/React.createElement("strong", null, "Debug Page in Portrait"), ". The web client's portrait layout (the installed app, and the browser emulator on a phone) has ", /*#__PURE__*/React.createElement("strong", null, "Keyboard Feedback"), " too: Off or Click Sound. Its wide layout, and the installed app in landscape, offer the ", /*#__PURE__*/React.createElement("strong", null, "Maximum File Size"), " for traces."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -2289,10 +2289,10 @@ const FAQS = [{
   answer: "Yes. Use the debug pane: CALCULATOR for program state and registers, CPU for the ROM instruction trace, and LOG for text output plus trace controls."
 }, {
   question: "How do I get a trace file?",
-  answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, in its wide layout, downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you."
+  answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, wherever it shows the debugger (its wide layout, or the installed app on a tablet in landscape), downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you."
 }, {
   question: "What can I do with a trace file?",
-  answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, in its wide layout, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"
+  answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"
 }, {
   question: "Why does switching to the CPU tab reset the heat map?",
   answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss. The heat map also starts over on Reset, Clean reset, a model switch and loading a preset, since the calculator starts afresh."
@@ -2731,7 +2731,7 @@ function SoftwarePage() {
     }]
   }, {
     heading: "CPU-level assembly examples",
-    intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client when it is shown in its wide layout, next to the debugger.",
+    intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client wherever it shows the debugger: its wide layout, or the installed app on a tablet in landscape.",
     items: [{
       file: "assembly/simple_count.asm",
       title: "Simple counter",

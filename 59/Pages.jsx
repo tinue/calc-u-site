@@ -642,7 +642,7 @@ function InstallAndroidPage() {
           Other browsers, such as Samsung Internet, Firefox and Edge, have a similar <strong>Add to Home screen</strong> or <strong>Install</strong> command in their menu.
         </p>
         <p style={{ marginBottom: 0 }}>
-          The installed app is the <a href="/59/play/">browser emulator</a> in the iPhone app's portrait layout: the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings. The debugger is not in it; it needs the wide layout of the browser emulator on a computer, or the full app.
+          The installed app is the <a href="/59/play/">browser emulator</a>, laid out like the iPhone and iPad app, and it follows the device's rotation. Held upright, the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. In landscape, a phone shows the calculator and the printer side by side; a tablet, an unfolded foldable or a large window adds the debugger beside them. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings.
         </p>
       </div>
 
@@ -1600,7 +1600,7 @@ function ReferencePage() {
         <h2 className="section">Settings</h2>
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The web client's portrait layout (the installed app, and the browser emulator on a phone) has <strong>Keyboard Feedback</strong> too: Off or Click Sound.
+            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The web client's portrait layout (the installed app, and the browser emulator on a phone) has <strong>Keyboard Feedback</strong> too: Off or Click Sound. Its wide layout, and the installed app in landscape, offer the <strong>Maximum File Size</strong> for traces.
           </p>
           <p style={{ marginBottom: 0 }}>
             Where files go: on the Mac, the trace file's <strong>Save Location</strong> (local, iCloud or a folder you choose); on iPhone and iPad, traces go to the app's iCloud folder. On Windows and Linux, <strong>Files</strong> sets the preset, card and trace folders.
@@ -1680,11 +1680,11 @@ const FAQS = [
   },
   {
     question: "How do I get a trace file?",
-    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, in its wide layout, downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you.",
+    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, wherever it shows the debugger (its wide layout, or the installed app on a tablet in landscape), downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you.",
   },
   {
     question: "What can I do with a trace file?",
-    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, in its wide layout, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt",
+    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt",
   },
   {
     question: "Why does switching to the CPU tab reset the heat map?",
@@ -1942,7 +1942,7 @@ function SoftwarePage() {
     },
     {
       heading: "CPU-level assembly examples",
-      intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client when it is shown in its wide layout, next to the debugger.",
+      intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client wherever it shows the debugger: its wide layout, or the installed app on a tablet in landscape.",
       items: [
         { file: "assembly/simple_count.asm", title: "Simple counter", description: "The smallest useful ASM overlay example: increments a counter on the display in a tight loop, about 1185 times a second." },
         { file: "assembly/stopwatch.asm", title: "Stopwatch", description: "A precisely timed stopwatch built on the WAIT Dn instruction rather than counting cycles — 222 increments per second, 4.5011 ms each." },
