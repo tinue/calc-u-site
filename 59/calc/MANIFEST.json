@@ -1,17 +1,18 @@
 {
   "name": "Calc-U-59-web",
-  "version": "2.2.0",
-  "commit": "0f8f731845257dec69399e93664d14feb7a5f829",
+  "version": "2.3.0",
+  "commit": "915a2b584f93efb6b80cd318bb56c28707a7daf1",
   "files": {
     "app/app.css": "fa6533c2d3806c2c5d4e0006d4899a78c4e57dd1ed10a4a2d35ce48e9fd2ca7c",
-    "app/app.js": "d12a2bd242be4acd4d4ccfd8d5c01795a55d96ef92f68c81981fc8d130a7a8dc",
+    "app/app.js": "f8e18a78bb9ea80bde461014fc9578f4a7b80e028cf7a780be3c4b73ad50d4ee",
+    "app/engine-worker.js": "fd69094cccd664eeb088d9e17eebfd13c9daf72f72bf857318f4e2c44353d144",
     "app/icon.png": "0aacbf51f7d4ab2c0bb2820b614257ba7dbfea13c129444e43face920160e100",
     "app/index.html": "f47fa252dca2b3493df52e837b538ed18cafb357d1b501b372f90c4f56b9037d",
-    "app/manifest.json": "577fd34cd5a7871468780d9176583b41524344ea4165d4599b367985a3d81b22",
-    "app/sw.js": "44097b57c205e73ff0788b950e62127cae3d761c14c1bdffc84f001b09914718",
-    "calc-engine-worker.js": "524f2de07d467088d9bbc0ffcd13aab5aebf2bfc9e2855ebebccab907e7debf2",
-    "calc.css": "8602b811545accf61d51cf1e93ac1b0f8bc14f1032447967c744af2750ddb4b4",
-    "calc.js": "bf11fd54122b395c2e379f9cec19671815e67b295211396b9b863f451fb85937",
+    "app/manifest.json": "907c0fe69ab718b6cd92d828fcfabcadb398ff4829831e31d01fef0ed9f0df93",
+    "app/sw.js": "78c240ac20de6fafe7cca66db4e1e312091c973157155b64380e874815ffe4d4",
+    "calc-engine-worker.js": "c6139b11b05576bf0a768cc7bb2ae3b5d0eeee5a7fe7a316cfc094c6908c112d",
+    "calc.css": "dcb649a7aa4640744b6dd3357486b2d49d9b0f78353e2e3e929437db38c40d66",
+    "calc.js": "20689ab5b4aff3c502d95fd54f8c81abba7cfa07052699b05c7b73312fbd1edf",
     "fonts/Archivo-OFL.txt": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
     "fonts/archivo-400.woff2": "07f9160163da2ec0f6376ef9d27a2bb8163f98019ba798da4baafb154e30056e",
     "fonts/archivo-700.woff2": "abada6cd4c92a9a706f6d7ed3189f322ff43dd78b9402c7d1137465b861d2a04",
@@ -59,7 +60,7 @@
     "wasm/roms/TMC0583-CONST-K.txt": "bda4ac42985d2802bbe16b1cf53c066d20dd72dcea886eb21aff2a2a432cdf1d",
     "wasm/roms/TMC0583.txt": "269fdb103cba80a055efd274180e4efeb2ae6e2a63b3b8c5489fee98e63cb353",
     "wasm/roms/cuecards.txt": "834f95142c1f16a993324203129f6135accdc128adc209928a632934e8af9d0e",
-    "wasm/ti59-core.js": "cfa70f7eea1f62df7cc6362b4e14eb6e7afbf22dc1bdf3cdcb35fdda4078bd86",
-    "wasm/ti59-core.wasm": "b43d7f76e4176d1fb458c9d8d0ee18c5e91fead9e09c7d05ef6d8694e1776750"
+    "wasm/ti59-core.js": "981a9e298a8de78a80961c7522f555489eaf9138cd7b6801860095a8d0253af8",
+    "wasm/ti59-core.wasm": "a905c5d370a45ed22fe1186f95b4270fcf0a91264e6907446e10badc547db39e"
   }
 }
