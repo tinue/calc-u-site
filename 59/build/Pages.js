@@ -3016,9 +3016,7 @@ function PlayPage() {
     href: "/59/what-is-a-ti-59/"
   }, "start here"), "."), /*#__PURE__*/React.createElement("p", null, "Prefer this without the browser chrome? ", /*#__PURE__*/React.createElement("a", {
     href: "/59/calc/app/"
-  }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list."), /*#__PURE__*/React.createElement("p", null, "Curious what comes next? ", /*#__PURE__*/React.createElement("a", {
-    href: "/59/beta/app/"
-  }, "Try the 2.3.0 preview"), ", the standalone app of the next version, before its release. It may change without notice. It shares its settings and the TI-58C's constant memory with the calculator on this page.")), /*#__PURE__*/React.createElement("h2", {
+  }, "Open the standalone app"), " \u2014 the same calculator alone at its own address, installable to your phone's home screen for a one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list.")), /*#__PURE__*/React.createElement("h2", {
     className: "section",
     style: {
       marginTop: 32

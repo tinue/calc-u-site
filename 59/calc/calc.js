@@ -114,7 +114,8 @@ const INITIAL_STATE = {
 };
 function createEngine({
   model,
-  module
+  module,
+  workerUrl
 }) {
   let state = INITIAL_STATE;
   const listeners = new Set();
@@ -133,7 +134,7 @@ function createEngine({
     };
     listeners.forEach(l => l());
   };
-  const worker = new Worker(`${CALC_BASE}calc-engine-worker.js`);
+  const worker = new Worker(workerUrl || `${CALC_BASE}calc-engine-worker.js`);
   const post = msg => worker.postMessage(msg);
   worker.onmessage = e => {
     const m = e.data;
@@ -999,7 +1000,7 @@ function ControlBar({
 // and file upload), Settings (Qt6/app/SettingsDialog, App/Views/
 // SettingsView) and About.
 
-const CALC_VERSION = "2.2.0";
+const CALC_VERSION = "2.3.0";
 const HELP_URL = "https://calc-u.org/59/";
 function Dialog({
   title,
@@ -1193,7 +1194,8 @@ function PresetPicker({
 
 function Settings({
   engine,
-  portrait,
+  feedbackSetting,
+  traceSetting,
   onClose,
   onAbout
 }) {
@@ -1207,7 +1209,7 @@ function Settings({
   const close = () => {
     if (model && moduleID !== model.moduleID) engine.call("changeModule", moduleID);
     const mb = Number(traceMB);
-    if (!portrait && mb > 0 && mb !== settings.traceMaxMB) engine.call("setTraceMaxMB", mb);
+    if (traceSetting && mb > 0 && mb !== settings.traceMaxMB) engine.call("setTraceMaxMB", mb);
     onClose();
   };
   return /*#__PURE__*/React.createElement(Dialog, {
@@ -1234,14 +1236,14 @@ function Settings({
   }, (data ? data.modules : []).map(m => /*#__PURE__*/React.createElement("option", {
     key: m.id,
     value: m.id
-  }, m.menuTitle)))), portrait && /*#__PURE__*/React.createElement("label", null, "Keyboard Feedback", /*#__PURE__*/React.createElement("select", {
+  }, m.menuTitle)))), feedbackSetting && /*#__PURE__*/React.createElement("label", null, "Keyboard Feedback", /*#__PURE__*/React.createElement("select", {
     value: settings.keyboardFeedback === 2 ? 2 : 0,
     onChange: e => engine.call("setKeyboardFeedback", Number(e.target.value))
   }, "  ", /*#__PURE__*/React.createElement("option", {
     value: 0
   }, "Off"), /*#__PURE__*/React.createElement("option", {
     value: 2
-  }, "Click Sound"))), !portrait && /*#__PURE__*/React.createElement("label", null, "Maximum Trace File Size (MB)", /*#__PURE__*/React.createElement("input", {
+  }, "Click Sound"))), traceSetting && /*#__PURE__*/React.createElement("label", null, "Maximum Trace File Size (MB)", /*#__PURE__*/React.createElement("input", {
     type: "number",
     min: "1",
     max: "1000",
@@ -1284,7 +1286,8 @@ function DialogHost({
   engine,
   dialog,
   setDialog,
-  portrait
+  feedbackSetting,
+  traceSetting
 }) {
   const close = () => setDialog(null);
   switch (dialog) {
@@ -1308,7 +1311,8 @@ function DialogHost({
     case "settings":
       return /*#__PURE__*/React.createElement(Settings, {
         engine: engine,
-        portrait: portrait,
+        feedbackSetting: feedbackSetting,
+        traceSetting: traceSetting,
         onClose: close,
         onAbout: () => setDialog("about")
       });
@@ -1458,7 +1462,8 @@ function HoldButton({
   }, rest), children);
 }
 function Printer({
-  engine
+  engine,
+  compactBar
 }) {
   const data = useEngine(engine, s => s.data);
   const printer = useEngine(engine, s => s.printer);
@@ -1504,11 +1509,11 @@ function Printer({
   }), data && textView && /*#__PURE__*/React.createElement(PaperText, {
     printer: printer
   }), /*#__PURE__*/React.createElement("div", {
-    className: "calcu-printer-bar"
+    className: `calcu-printer-bar${compactBar ? " calcu-printer-bar-compact" : ""}`
   }, /*#__PURE__*/React.createElement(HoldButton, {
     className: "calcu-pill",
     onHold: p => engine.call("pressPrinterPrint", p)
-  }, narrow ? "PRN" : "PRINT"), /*#__PURE__*/React.createElement("button", {
+  }, narrow || compactBar ? "PRN" : "PRINT"), /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "calcu-pill",
     "aria-pressed": printer.trace,
@@ -2057,7 +2062,8 @@ function Debugger({
 }
 /* === PlayCalculator.jsx === */
 // PlayCalculator — the web client, and the one global calc.js exposes
-// (reference/WebClient.md has the props). Two layouts:
+// (reference/WebClient.md has the props). Two layouts, and layout="auto" (the
+// PWA) picks between them by the window's size, with Shared's iOS rules:
 //   wide     — calculator | printer | debugger, as the macOS window and the
 //              Qt MainWindow (resizable dividers between the columns);
 //   portrait — one page at a time, calculator or printer, switched with the
@@ -2077,6 +2083,7 @@ const FACE_MIN = {
   wide: 400,
   portrait: 264
 };
+const FACE_MIN_AUTO = 120; // layout="auto": whatever a landscape phone's height leaves
 const SPLITTERS = 1 + 5; // the line after the calculator, the divider before the debugger
 
 /// The artwork's width that `height` leaves room for, and the column height for an artwork width.
@@ -2170,12 +2177,13 @@ function CalculatorColumn({
   compact,
   showSettings,
   onDialog,
-  feedback
+  feedback,
+  width
 }) {
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-calc",
     style: {
-      width: faceWidth + 2 * FACE_PADDING
+      width: width || faceWidth + 2 * FACE_PADDING
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-face-pad"
@@ -2214,19 +2222,44 @@ function Divider({
     }
   });
 }
+
+/// The rules of the embedded layout="wide": the artwork's size follows the
+/// window, within limits, and the debugger is always there.
+const EMBEDDED_WIDE = {
+  embedded: true,
+  printerMin: PRINTER_MIN,
+  printerMax: PRINTER_MAX,
+  printerStart: 260,
+  debugger: true,
+  barLabels: true,
+  compactPrinterBar: false
+};
+
+/// `rules` is EMBEDDED_WIDE or (layout="auto") bindings.cpp mobileRules: the
+/// artwork fills the height, whatever its size, the bar and the printer follow
+/// the iOS app, and the debugger may be left out. A bar wider than the artwork
+/// widens the column.
 function WideLayout({
   engine,
   width,
   height,
   showSettings,
   onDialog,
-  feedback
+  feedback,
+  rules
 }) {
-  const faceWidth = Math.max(FACE_MIN.wide, Math.min(height ? faceWidthFor(height) : 420, width * 0.4));
+  const faceWidth = rules.embedded ? Math.max(FACE_MIN.wide, Math.min(height ? faceWidthFor(height) : 420, width * 0.4)) : Math.max(FACE_MIN_AUTO, faceWidthFor(height));
+  const compact = !rules.barLabels || faceWidth < FACE_MIN.wide;
+  const columnWidth = Math.max(faceWidth + 2 * FACE_PADDING, compact ? minimumWidth(true) : 0);
   const total = columnHeight(faceWidth, height);
-  const [printerWidth, setPrinterWidth] = React.useState(260);
-  const room = width - faceWidth - 2 * FACE_PADDING - 2;
-  const pw = Math.max(PRINTER_MIN, Math.min(PRINTER_MAX, printerWidth, room - DEBUG_MIN));
+  const {
+    printerMin,
+    printerMax,
+    debugger: hasDebugger
+  } = rules;
+  const [printerWidth, setPrinterWidth] = React.useState(rules.printerStart ?? printerMax);
+  const room = width - columnWidth - 2;
+  const pw = Math.max(printerMin, Math.min(printerMax, printerWidth, room - (hasDebugger ? DEBUG_MIN : 0)));
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-wide",
     style: {
@@ -2235,6 +2268,8 @@ function WideLayout({
   }, /*#__PURE__*/React.createElement(CalculatorColumn, {
     engine: engine,
     faceWidth: faceWidth,
+    width: columnWidth,
+    compact: compact,
     showSettings: showSettings,
     onDialog: onDialog,
     feedback: feedback
@@ -2247,10 +2282,11 @@ function WideLayout({
       display: "flex"
     }
   }, /*#__PURE__*/React.createElement(Printer, {
-    engine: engine
-  })), /*#__PURE__*/React.createElement(Divider, {
-    onDrag: dx => setPrinterWidth(Math.max(PRINTER_MIN, Math.min(PRINTER_MAX, pw + dx)))
-  }), /*#__PURE__*/React.createElement(Debugger, {
+    engine: engine,
+    compactBar: rules.compactPrinterBar
+  })), hasDebugger && /*#__PURE__*/React.createElement(Divider, {
+    onDrag: dx => setPrinterWidth(Math.max(printerMin, Math.min(printerMax, pw + dx)))
+  }), hasDebugger && /*#__PURE__*/React.createElement(Debugger, {
     engine: engine
   }));
 }
@@ -2307,17 +2343,21 @@ function PlayCalculator({
   settings = true,
   model,
   module,
-  preset
+  preset,
+  workerUrl
 }) {
   const [engine, setEngine] = React.useState(null);
   const [dialog, setDialog] = React.useState(null);
   const rootRef = React.useRef(null);
   const [measured, setMeasured] = React.useState(0);
-  const portrait = layout !== "wide";
+  const auto = layout === "auto";
+  const [rules, setRules] = React.useState(null);
+  const portrait = auto ? !rules || rules.paged : layout !== "wide";
   React.useEffect(() => {
     const e = createEngine({
       model,
-      module
+      module,
+      workerUrl
     });
     setEngine(e);
     if (preset) {
@@ -2325,6 +2365,18 @@ function PlayCalculator({
     }
     return () => e.destroy();
   }, []);
+
+  // layout="auto": the rules for this size come from the worker.
+  React.useEffect(() => {
+    if (!auto || !engine) return undefined;
+    let current = true;
+    engine.request("mobileRules", width, height).then(r => {
+      if (current) setRules(r);
+    });
+    return () => {
+      current = false;
+    };
+  }, [auto, engine, width, height]);
 
   // Without a width the client fills its container.
   React.useEffect(() => {
@@ -2334,8 +2386,11 @@ function PlayCalculator({
     ro.observe(el);
     return () => ro.disconnect();
   }, [width]);
-  const w = Math.max(minimumWidth(portrait), width || measured || (portrait ? 360 : 1100));
-  const feedback = React.useMemo(() => makeFeedback(engine, portrait), [engine, portrait]);
+  const w = Math.max(minimumWidth(auto || portrait), width || measured || (portrait ? 360 : 1100));
+
+  // Keyboard feedback is for touch screens: portrait, and the PWA in any layout.
+  const touch = layout !== "wide";
+  const feedback = React.useMemo(() => makeFeedback(engine, touch), [engine, touch]);
 
   // ── Physical keyboard ────────────────────────────────────────────────
   // Only with keyboard={true}, and only while the calculator itself has
@@ -2363,10 +2418,15 @@ function PlayCalculator({
     engine.call("keyUp", k.key, k.produced, k.isLetter, k.shift, k.command);
   };
   const onBlur = e => {
+    if (e.target === rootRef.current) delete rootRef.current.dataset.pointerFocus;
     if (engine && !rootRef.current.contains(e.relatedTarget)) engine.call("blur");
   };
+  // Marked, as this focus is for the keys and no reason to outline the client:
+  // WebKit counts any focus from script as focus-visible.
   const focusForKeys = e => {
-    if (keyboard && e.target.closest && e.target.closest(".calcu-face")) rootRef.current.focus({
+    if (!keyboard || !e.target.closest || !e.target.closest(".calcu-face")) return;
+    rootRef.current.dataset.pointerFocus = "";
+    rootRef.current.focus({
       preventScroll: true
     });
   };
@@ -2397,13 +2457,14 @@ function PlayCalculator({
     onPointerDownCapture: focusForKeys,
     onDragOver: onDragOver,
     onDrop: onDrop
-  }, /*#__PURE__*/React.createElement(Layout, {
+  }, (!auto || rules) && /*#__PURE__*/React.createElement(Layout, {
     engine: engine,
     width: w,
     height: height,
     showSettings: settings,
     onDialog: setDialog,
-    feedback: feedback
+    feedback: feedback,
+    rules: rules || EMBEDDED_WIDE
   }), /*#__PURE__*/React.createElement(StatusLine, {
     engine: engine
   }), /*#__PURE__*/React.createElement(KeyFeedback, {
@@ -2413,7 +2474,8 @@ function PlayCalculator({
     engine: engine,
     dialog: dialog,
     setDialog: setDialog,
-    portrait: portrait
+    feedbackSetting: touch,
+    traceSetting: !portrait
   }));
 }
 
