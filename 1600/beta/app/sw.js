@@ -10,11 +10,12 @@
 //
 // A new release: the first install takes over at once;
 // a later one waits until no window of the app is open, so a running app
-// never mixes the files of two releases. Its activate removes the older
+// never mixes the files of two releases, or until a page asks it to take
+// over (`skip-waiting`, the page's Reload), and then every page reloads. Its activate removes the older
 // caches of this app; the fetch handler answers from this release's cache
 // only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calc-u-1600-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "880eb4881d38bb8b";
+const CACHE_NAME = CACHE_PREFIX + "435e413cfef01e88";
 
 const ASSETS = [
   "./",
@@ -60,7 +61,9 @@ const ASSETS = [
   "../bundle/PC1600-P1-B5-CE1600P-OR-F-old.bin",
   "../bundle/PC1600-P2-B6-new.bin",
   "../bundle/PC1600-P2-B6-old.bin",
+  "../bundle/blank.cassette.yaml",
   "../bundle/blank.floppy.yaml",
+  "../bundle/blank.wav",
   "../bundle/ce151.module.yaml",
   "../bundle/ce155.module.yaml",
   "../bundle/ce1600m.module.yaml",
@@ -68,8 +71,6 @@ const ASSETS = [
   "../bundle/ce161.module.yaml",
   "../bundle/ce1638.module.yaml",
   "../bundle/ce163f.module.yaml",
-  "../bundle/empty.cassette.yaml",
-  "../bundle/empty.wav",
   "../bundle/formatted.floppy.yaml",
   "../bundle/superram.module.yaml",
   "../presets/basic/hanoi.bas",
@@ -95,6 +96,7 @@ const ASSETS = [
 ];
 
 let firstInstall = false;
+let askedToTakeOver = false;
 
 self.addEventListener("install", (event) => {
   firstInstall = !self.registration.active;
@@ -111,8 +113,14 @@ self.addEventListener("activate", (event) => {
       .then((keys) => Promise.all(
         keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map((key) => caches.delete(key))
       ))
-      .then(() => (firstInstall ? self.clients.claim() : undefined))
+      .then(() => (firstInstall || askedToTakeOver ? self.clients.claim() : undefined))
   );
+});
+
+self.addEventListener("message", (event) => {
+  if (!event.data || event.data.type !== "skip-waiting") return;
+  askedToTakeOver = true;
+  self.skipWaiting();
 });
 
 // Cache-first from this release's cache: the files are versioned by

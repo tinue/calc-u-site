@@ -1,8 +1,8 @@
 # Calc-U-1600 cassette
 format: cassette
 format-version: 1
-cassette-name: "Empty"
+cassette-name: "Blank"
 description: "A blank cassette"
 template: true
-audio: { file: "empty.wav" }
+audio: { file: "blank.wav" }
 position: 0

@@ -22,7 +22,9 @@
     "PC1600-P1-B5-CE1600P-OR-F-old.bin",
     "PC1600-P2-B6-new.bin",
     "PC1600-P2-B6-old.bin",
+    "blank.cassette.yaml",
     "blank.floppy.yaml",
+    "blank.wav",
     "ce151.module.yaml",
     "ce155.module.yaml",
     "ce1600m.module.yaml",
@@ -30,8 +32,6 @@
     "ce161.module.yaml",
     "ce1638.module.yaml",
     "ce163f.module.yaml",
-    "empty.cassette.yaml",
-    "empty.wav",
     "formatted.floppy.yaml",
     "superram.module.yaml"
   ],
