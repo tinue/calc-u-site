@@ -4668,10 +4668,12 @@ function CalcU1600(props) {
   const showInspector = panelRoom && !view.panelsAlone && (view.debuggerFits || !(showPaper || showPrinter));
   const anyPanel = showInspector || showPaper || showPrinter;
   // The panels alone: the paper over the whole width; the keys are too
-  // small to use there, so the calculator is used turned.
+  // small to use there, so the calculator is used turned. The bar goes
+  // with the faceplate: turned, the calculator has it.
   const panelsOnly = view.panelsAlone && anyPanel;
   const romsMissing = !!s.romsMissing && !s.started;
   const failed = start === "failed";
+  const faceHidden = panelsOnly && !romsMissing && !failed;
   return /*#__PURE__*/React.createElement("div", _extends({
     className: "calcu-client",
     ref: rootRef,
@@ -4713,7 +4715,7 @@ function CalcU1600(props) {
     shell: shell
   }), /*#__PURE__*/React.createElement("div", {
     className: "calcu-face-row",
-    style: panelsOnly && !romsMissing && !failed ? {
+    style: faceHidden ? {
       display: "none"
     } : undefined
   }, romsMissing && /*#__PURE__*/React.createElement(ShellRomsMissing, {
@@ -4731,7 +4733,10 @@ function CalcU1600(props) {
   })), /*#__PURE__*/React.createElement(C1600Bar.Provider, {
     value: bar
   }, /*#__PURE__*/React.createElement("div", {
-    className: "calcu-controlbar"
+    className: "calcu-controlbar",
+    style: faceHidden ? {
+      display: "none"
+    } : undefined
   }, /*#__PURE__*/React.createElement(ShellControlBar, {
     shell: s,
     slotPicker: SlotControls,
@@ -4760,6 +4765,6 @@ function CalcU1600(props) {
   }), dialogs.element);
 }
 CalcU1600.version = "0.9.0";
-CalcU1600.build = "pre-aaa56b8d"; // tools/build-id.cmake
+CalcU1600.build = "pre-dee9b0fc"; // tools/build-id.cmake
 if (typeof window !== "undefined") window.CalcU1600 = CalcU1600;
 })();
