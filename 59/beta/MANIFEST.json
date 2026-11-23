@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-59-web",
   "version": "3.0.0",
-  "commit": "aaa56b8d9506c740e5be56f37b63ec279c2fb5e8",
+  "commit": "0af4f90e56e6ff74128983b73e5d4dd76b705393",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "cb5d82f7c401ee21c015e0f8f48ac60cf5ecc156b612b7787be07667150a5196",
@@ -9,7 +9,7 @@
     "app/icon.png": "0aacbf51f7d4ab2c0bb2820b614257ba7dbfea13c129444e43face920160e100",
     "app/index.html": "d21594f1d6e1f7eb64eba4daa2fe7ec179c334ab81834e37b5feb73000127e6a",
     "app/manifest.json": "577fd34cd5a7871468780d9176583b41524344ea4165d4599b367985a3d81b22",
-    "app/sw.js": "ff406a5d2c41ecd4fbf1f7c4935486d6637443c845e474fa94d71db488f3d824",
+    "app/sw.js": "ebe27ef653e5b705d56429a76d58f35090ef8480c279a67ed686a1dcd1d05df8",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
     "bundle/AG.rom.yaml": "6a5fcea872b5bb70257a6957274c5013d7cea5ddd955137a48d29c555fe93bcf",
     "bundle/AV.rom.yaml": "dc162859a750d3dbc56692ebe2392f53ccf425a2ec1dbd1f303ac9b98922516a",
@@ -36,8 +36,8 @@
     "bundle/TMC0583-CONST-K.txt": "bda4ac42985d2802bbe16b1cf53c066d20dd72dcea886eb21aff2a2a432cdf1d",
     "bundle/TMC0583.txt": "269fdb103cba80a055efd274180e4efeb2ae6e2a63b3b8c5489fee98e63cb353",
     "calc-engine-worker.js": "af154211f802129fc5e84ec135808e6efead82f19ac0233fd3305326ecfe25a9",
-    "calc.css": "6459784b743f0dfb90c126751d21ef731eb9dcce745b040f06b7bfc7c09c9762",
-    "calc.js": "0f40c865b742bd8f140288ccc5bc226e40aeb7979c2680e1db1954f8d3abc7dc",
+    "calc.css": "40d3b301a803581565d5363bba40f8f3c1c4cb4f1cd18e284314235a0b2789a4",
+    "calc.js": "ec54d0ca54b353dbda6b7adcb18565992d19568634dcd1361259b925cb400d33",
     "files.json": "a39d49317b8347d20db62bc6ff564fed04b31e88010babea1aa464cb26553f63",
     "fonts/Archivo-OFL.txt": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
     "fonts/archivo-400.woff2": "07f9160163da2ec0f6376ef9d27a2bb8163f98019ba798da4baafb154e30056e",
@@ -65,7 +65,7 @@
     "presets/switzerland.ti59": "7db56b75b7e9e06dda7759d4fe02220ad103d9560f7e977f347da3f3f0b0fa78",
     "vendor/react-dom.production.min.js": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
     "vendor/react.production.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
-    "wasm/calcu59-core.js": "c8bacc735be9dc1c104eb3df2cd8450eddef182b37c68bbd0582df77a852d428",
-    "wasm/calcu59-core.wasm": "c4e548d245be61cf9094da17af85f6711ed9b84059af8f706cab5e23a017118a"
+    "wasm/calcu59-core.js": "427b1c950582023b69bc0099c2378b5dec026654b5a6080f7d0df0b0affba20b",
+    "wasm/calcu59-core.wasm": "a72358312cf4c4a5a28794fc77d8399ea00e37aa0bd93424a562289174a6089c"
   }
 }
