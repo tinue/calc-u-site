@@ -19,12 +19,14 @@ emulator release, named `<site folder>/<emulator version>`:
 
 | Branch | Holds | Merged into `main` |
 |---|---|---|
-| `59/<current>`, e.g. `59/2.1.0` | Fixes and additions for the released Calc-U-59 version | Any time |
-| `59/<next>`, e.g. `59/2.2.0` | Documentation of features not yet released | When Calc-U-59 tags `v<next>` |
+| `59/<current>`, e.g. `59/2.3.0` | Fixes and additions for the released Calc-U-59 version | Any time |
+| `59/<next>`, e.g. `59/3.0.0` | Documentation of features not yet released | When Calc-U-59 tags `calc-u-59-v<next>` |
 | `1600/<current>`, `1600/<next>` | The same for Calc-U-1600 | The same |
 
-- The version is the emulator's own (Calc-U-59 tag `v2.2.0`, branch
-  `dev-2.2.0`). Check the emulator repository for which version is released.
+- The version is the emulator's own: the source repository tinue/calc-u
+  tags each product's releases with its prefix (`calc-u-59-v3.0.0`,
+  `calc-u-1600-v0.9.0`; `-pre` for a pre-release). Check its releases for
+  which version is released.
 - A `59/…` branch changes only `59/` (and root files when needed); a `1600/…`
   branch only `1600/`.
 - Create a branch only when there is work for it; at most four exist.
@@ -42,8 +44,9 @@ emulator release, named `<site folder>/<emulator version>`:
   `.github/workflows/site.yml` re-checks every push to `main` but fixes
   nothing. Release branches may be pushed to `origin` at any time.
 - **This repository holds the end-user documentation only.** The emulators'
-  code and developer documentation stay in their own repositories
-  (`../Calc-U-59`, `../../sharp/Calc-U-1600`).
+  code and developer documentation stay in their source repository,
+  tinue/calc-u (`../Calc-U`): `products/calc-u-59/`,
+  `products/calc-u-1600/`, the formats in `docs/formats/`.
 - **Code that ships with an emulator is imported, never edited here.**
   `59/calc/` is Calc-U-59's web client, installed by
   `59/.seo/fetch-web-client.js` from a release asset; `check.js` fails on any
