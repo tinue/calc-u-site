@@ -1,6 +1,5 @@
 {
-  "url": "https://github.com/tinue/calc-u/releases/download/calc-u-59-v3.0.0-pre/Calc-U-59-web.zip",
-  "sha256": "9a0a7aa9d5b70a63105ba0af5f7629fd0b727e32e9e22b8060bbb6a77b347365",
+  "url": "local build (frontends/web/build.sh --release)",
   "version": "3.0.0",
-  "commit": "0af4f90e56e6ff74128983b73e5d4dd76b705393"
+  "commit": "fb8819bc99ae9a31ebf0f385cf4f135cd1eabf58"
 }
