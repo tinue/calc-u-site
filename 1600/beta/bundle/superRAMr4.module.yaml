@@ -1,6 +1,6 @@
 # superRAM r4 -- 1 MB vertically-banked SRAM module, PC-1600 Slot 2 only.
 #
-# The superRAM r4 is the latest revison in a series of RAM modules by
+# The superRAM r4 is the latest revision in a series of RAM modules by
 # spellbound and has up to 1MB of contiguously addressable space.
 # For initialization the program SRAMINIT.BIN is needed, which is bundled
 # with the module.
