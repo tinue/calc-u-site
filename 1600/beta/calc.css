@@ -455,6 +455,7 @@
   --calcu-menu-border: GrayText;
   --calcu-menu-hover: Highlight;
   --calcu-menu-hover-text: HighlightText;
+  --calcu-link: LinkText;
   --calcu-scrim: transparent;
   --calcu-shadow: transparent;
   --calcu-alert: CanvasText;
@@ -580,6 +581,7 @@
 }
 .calcu-client .calcu-shell-modal-body p { margin: 0; }
 .calcu-client .calcu-shell-modal-body small { opacity: 0.7; }
+.calcu-client .calcu-shell-modal-body a { color: var(--calcu-link); }
 .calcu-client .calcu-shell-modal-body tt { font-family: ui-monospace, Menlo, Consolas, monospace; }
 .calcu-client .calcu-shell-notice-text { white-space: pre-wrap; }
 .calcu-client .calcu-shell-problem { color: var(--calcu-alert); }
