@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-1600-web",
   "version": "0.9.0",
-  "commit": "fb8819bc99ae9a31ebf0f385cf4f135cd1eabf58",
+  "commit": "59c507bfa8db7923be95a8c761809259ea0f3f02",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "836f96bb3df5d7b85e5c39b238d093dcf9cdf58270042df480d093cd011d2e6e",
@@ -9,7 +9,7 @@
     "app/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "app/index.html": "16798cfba0124f2a0d2ab7a08bea85a81120444593c42a5163bf9c45612409d5",
     "app/manifest.json": "1b77068e0b12a1f4c67aa65df7b385c6b835e01bf0b6cbd8b8e1b28e1d3eed60",
-    "app/sw.js": "b5ee74dd1b5260cee35f1bc387173dfc583efde6721e58134fa9136e8de6ef9b",
+    "app/sw.js": "e80622fd714e7bbc88b96565d6bd796f98600ebda3a7c0e8df3aaba1187af682",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
     "bundle/256k-custom.module.yaml": "be809b278b08934dc6bd58e647172a357d98edc2caf2037de13cdf47933b13b4",
     "bundle/CE-150.ROM": "0815e97d6794e1b106d1652f919294eb729d770c4bee9c27d08a6b8e87da0a6b",
@@ -47,8 +47,8 @@
     "bundle/formatted.floppy.yaml": "2307d0dc780d2932c73eba8bdf35c95d47185bc8aa519a32c6764bd83a19455b",
     "bundle/superRAMr4.module.yaml": "905d7baa0ce1e45d87d96f2b9cd6c0903d96eda170429e1b1043e91a2267aacb",
     "calc-engine-worker.js": "9e983a29c8525dacf5bf41bf38ef152c39fd6a48162351d0617aeb86634d774d",
-    "calc.css": "399099387b01f59359cda22d25b244a8e6217a78c972e71264bb8f89a0ddfca6",
-    "calc.js": "909268629bc7bf24d4c35e0b4a45ac47ff24589c63fa3c023de7124d11e6103a",
+    "calc.css": "5f1baec3f3e5d1c9595ca049088cb57aed05d587211299d011c054763c478438",
+    "calc.js": "90398d5cadac11103ac4896a079982fbc4114b153d531052fd207d6edaf547d4",
     "files.json": "04c211764c8cd839a318c55c8c338c6480c85c8e8b62a70034f435b6d18eb671",
     "img/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "img/pc1500.png": "a4342bc0c84a3bef9cc9b06daed48e23fc4befe8906b563020324c99fb9f4821",
