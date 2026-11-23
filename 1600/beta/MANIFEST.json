@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-1600-web",
   "version": "0.9.0",
-  "commit": "aaa56b8d9506c740e5be56f37b63ec279c2fb5e8",
+  "commit": "dee9b0fcf38871b479bb5bb0667f51491d601647",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "836f96bb3df5d7b85e5c39b238d093dcf9cdf58270042df480d093cd011d2e6e",
@@ -9,7 +9,7 @@
     "app/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "app/index.html": "16798cfba0124f2a0d2ab7a08bea85a81120444593c42a5163bf9c45612409d5",
     "app/manifest.json": "1b77068e0b12a1f4c67aa65df7b385c6b835e01bf0b6cbd8b8e1b28e1d3eed60",
-    "app/sw.js": "aac532c8539271381a5a3f31e3925ba655aec098947839acfea764a5cf412e90",
+    "app/sw.js": "8830bbdac3a19dce940d38f4cf837026cfb74c15ff968586447f230ba0398f9e",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
     "bundle/CE-150.ROM": "0815e97d6794e1b106d1652f919294eb729d770c4bee9c27d08a6b8e87da0a6b",
     "bundle/CE-158.ROM": "ae75a570b1558a509eb0f35dcbbcb93bff34f952e25ef9a150d2991125e4d8dd",
@@ -47,7 +47,7 @@
     "bundle/superram.module.yaml": "06b3a582bfbf9bb76ec3bf0fee8bd8d18c3b51e26c6dc07b5a1bec1154c787e7",
     "calc-engine-worker.js": "9e983a29c8525dacf5bf41bf38ef152c39fd6a48162351d0617aeb86634d774d",
     "calc.css": "5a837b9d5e5c1350f62438dc91e0507d630311e9f323782c327a15b56f961029",
-    "calc.js": "516b4d23e0307849f9656f4088abbcd05144bb68e0031303936be46dc3115974",
+    "calc.js": "a36140fc028aea3249ce9d0d649c245767d1aa48678176385686d32d159ac564",
     "files.json": "aff8e68bc51ac27370f982f685cd74261d046bd4d71cc8a146a7c2e2c9f6d4ea",
     "img/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "img/pc1500.png": "a4342bc0c84a3bef9cc9b06daed48e23fc4befe8906b563020324c99fb9f4821",
