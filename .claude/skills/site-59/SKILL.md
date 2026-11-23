@@ -101,7 +101,7 @@ too (`cmp`). The PDCM guides
 2. Read the release's `CHANGELOG.md` entry in Calc-U-59 and update the pages
    for anything user-facing: settings, modules, install steps (Mac, iOS,
    Windows, Linux), preset directives (mention them, link to
-   `reference/StateFileFormat.md` for the grammar).
+   `docs/formats/preset.md` of the Calc-U repository for the grammar).
 3. Run the software sync check.
 4. Build, check, test, commit.
 

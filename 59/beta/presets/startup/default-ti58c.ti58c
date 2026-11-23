@@ -1,0 +1,12 @@
+# Startup preset for the TI-58C: the TI-58C with
+# the Master Library module and the PC-100C. Set it as the TI-58C's startup
+# preset ([preset] TI-58C in Calc-U-59.ini). Like every preset it cold boots
+# the machine: the constant memory of ti58c.memory.yaml does not come back
+# while it is set.
+
+format-version: 2
+model: TI-58C
+preset-name: TI-58C
+description: The TI-58C with the Master Library module and the PC-100C
+slot-1: { name: ML }
+printer: PC-100C
