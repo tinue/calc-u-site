@@ -337,7 +337,7 @@ function AboutTi59Page() {
           <span className="bank-data bank-key">yellow</span>, each sized by its share of the bank.
           The display shows the partition as last step.last register. The layout comes from
           the calculator's ROM; the details are in the emulator's{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/CoreArchitecture.md">CoreArchitecture.md</a>.
+          <a href="https://github.com/tinue/calc-u/blob/main/products/calc-u-59/docs/developer/Core-Architecture.md">Core-Architecture.md</a>.
         </p>
       </div>
 

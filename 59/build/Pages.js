@@ -473,8 +473,8 @@ function AboutTi59Page() {
   }, "cream"), ", data registers in", " ", /*#__PURE__*/React.createElement("span", {
     className: "bank-data bank-key"
   }, "yellow"), ", each sized by its share of the bank. The display shows the partition as last step.last register. The layout comes from the calculator's ROM; the details are in the emulator's", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/CoreArchitecture.md"
-  }, "CoreArchitecture.md"), ".")), /*#__PURE__*/React.createElement("h2", {
+    href: "https://github.com/tinue/calc-u/blob/main/products/calc-u-59/docs/developer/Core-Architecture.md"
+  }, "Core-Architecture.md"), ".")), /*#__PURE__*/React.createElement("h2", {
     className: "section"
   }, "Solid State Software modules"), /*#__PURE__*/React.createElement("div", {
     className: "prose panel",
