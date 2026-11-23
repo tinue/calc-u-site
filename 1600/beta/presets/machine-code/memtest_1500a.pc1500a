@@ -1,0 +1,26 @@
+# PC-1500A memory test. Loads into the fixed machine-language area, which
+# is present regardless of any memory module -- no module needed here.
+# Starts with:
+#  X=2 (for 2 passes)
+#  CALL &7C01,X
+# When finished, check X for the test result.
+
+format-version: 2
+preset-name: Memory test
+description: Memory test in the machine-language area
+model: PC-1500A
+
+keys:
+  - key: cl
+  - type: NEW0
+  - key: mode
+
+program:
+  file: memtest_1500a.bin
+  address: 0x7C01
+
+keys:
+  - type: X=2
+  - type: CALL&7C01,X
+  - type: X
+  - wait: 5s

@@ -1,0 +1,16 @@
+# Calc-U-1600 CE-1600F floppy disk image
+format: ce1600f-floppy
+format-version: 2
+disk-name: "Blank"
+description: "Unformatted; INIT it before use"
+template: true
+saved: 2026-09-19T10:36:00Z
+sides:
+  0:
+    encoding: addressed-hex
+    bytes: |
+      $0000: 00...
+  1:
+    encoding: addressed-hex
+    bytes: |
+      $0000: 00...

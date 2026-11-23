@@ -1,0 +1,36 @@
+# PC-1600 plotter program -- plots a biorhythm chart (physical/psychical/
+# intellectual cycles) for a given name and birth date on the CE-1600P.
+# Program found on https://www.sharp-pc-1600.de
+
+format-version: 2
+preset-name: Biorhythm
+description: Biorhythm chart on the CE-1600P
+model: PC-1600
+
+# CE-1600P pen-plotter attached.
+printer: CE-1600P
+
+# After reset, a NEW0 is required in PRO mode (PC-1600 starts up in RUN)
+keys:
+  - key: mode
+  - type: NEW0
+
+# A `.bas` listing is tokenized while it loads -- much faster than typing
+# it in.
+program:
+  file: biorhythmus_1600.bas
+
+# After loading, switch to RUN mode and start the program. Answer the
+# input parameters and then wait for finish.
+keys:
+  - key: mode
+  - type: RUN
+  - wait: 20s
+  - type: Martin
+  - type: 6
+  - type: 8
+  - type: 1965
+  - wait: 1s
+  - type: 9
+  - type: 2026
+  - let-it-finish:

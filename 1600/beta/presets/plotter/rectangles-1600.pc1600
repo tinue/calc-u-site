@@ -1,0 +1,24 @@
+# PC-1600 plotter test -- four nested rectangles on the CE-1600P, one
+# per pen, from large to small: quick to plot, and every colour used.
+
+format-version: 2
+preset-name: Rectangles 4 pens
+description: Four nested rectangles on the CE-1600P, one in each colour
+model: PC-1600
+
+# CE-1600P pen-plotter attached.
+printer: CE-1600P
+
+# After reset, a NEW0 is required in PRO mode (PC-1600 starts up in RUN)
+keys:
+  - key: mode
+  - type: NEW0
+
+program:
+  file: rectangles-1600.bas
+
+# Back to RUN mode, then run it -- the rectangles plot on the virtual paper.
+keys:
+  - key: mode
+  - type: RUN
+  - let-it-finish:

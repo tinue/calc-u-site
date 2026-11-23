@@ -18,3 +18,7 @@ from Calc-U-59's releases (`59/.seo/README.md`).
 
 Working on it with Claude Code: `CLAUDE.md`, and the skills in
 `.claude/skills/`.
+
+`1600/beta/` is Calc-U-1600's `Calc-U-1600-web.zip` from a pre-release,
+unpacked unchanged (its `MANIFEST.json` lists every file); `1600/beta-client.json`
+records which asset it is.

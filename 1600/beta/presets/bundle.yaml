@@ -1,0 +1,42 @@
+# What Calc-U-1600 bundles from examples/ (docs/formats/bundle.md): the
+# startup presets offered under Settings ▸ Startup presets, and the
+# examples of File ▸ Examples, in groups. Each entry lists every file its
+# preset needs; nothing else of this folder is bundled.
+
+format: example-bundle
+format-version: 1
+startup:
+  - preset: { file: startup/default-pc1500.pc1500 }
+  - preset: { file: startup/default-pc1500a.pc1500a }
+  - preset: { file: startup/default-pc1600.pc1600 }
+groups:
+  - group: BASIC
+    examples:
+      - preset: { file: basic/hanoi.pc1600 }
+        files:
+          - { file: basic/hanoi.bas }
+  - group: Plotter
+    examples:
+      - preset: { file: plotter/lissajou-1500.pc1500a }
+        files:
+          - { file: plotter/lissajou-1500.bas }
+      - preset: { file: plotter/lissajou-1600.pc1600 }
+        files:
+          - { file: plotter/lissajou-1600.bas }
+      - preset: { file: plotter/rectangles-1600.pc1600 }
+        files:
+          - { file: plotter/rectangles-1600.bas }
+      - preset: { file: plotter/globus.pc1600 }
+        files:
+          - { file: plotter/globus.bas }
+      - preset: { file: plotter/biorhythmus_1600.pc1600 }
+        files:
+          - { file: plotter/biorhythmus_1600.bas }
+      - preset: { file: plotter/ascii.pc1600 }
+        files:
+          - { file: plotter/ascii.bas }
+  - group: Machine code
+    examples:
+      - preset: { file: machine-code/memtest_1500a.pc1500a }
+        files:
+          - { file: machine-code/memtest_1500a.bin }

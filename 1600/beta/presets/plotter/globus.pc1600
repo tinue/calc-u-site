@@ -1,0 +1,41 @@
+# PC-1600 plotter test -- draws a globe of the earth on the CE-1600P.
+# Program found on https://www.sharp-pc-1600.de
+
+format-version: 2
+preset-name: Globe
+description: Globe of the earth on the CE-1600P
+model: PC-1600
+
+# CE-1600P pen-plotter attached.
+printer: CE-1600P
+
+# After reset, a NEW0 is required in PRO mode (PC-1600 starts up in RUN)
+keys:
+  - key: mode
+  - type: NEW0
+
+# A `.bas` listing is tokenized while it loads -- much faster than typing
+# it in.
+program:
+  file: globus.bas
+
+# After loading, switch to RUN mode and start the program. Answer the
+# input parameters and then wait for finish.
+keys:
+  - key: mode
+  - type: RUN
+  - type: 90
+  - type: 20
+  - type: 0
+  - type: 0
+  - type: 45
+  - type: 6
+  # The program asks J/N with an INKEY$ loop: a running program, not a key
+  # wait, so the step is not waited for; the answer comes a second later.
+  - skip-wait:
+  - wait: 1s
+  - type: N
+  - skip-wait:
+  - wait: 1s
+  - type: J
+  - let-it-finish:
