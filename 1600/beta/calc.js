@@ -4768,6 +4768,6 @@ function CalcU1600(props) {
   }), dialogs.element);
 }
 CalcU1600.version = "0.9.0";
-CalcU1600.build = "pre-a912211"; // tools/build-id.cmake
+CalcU1600.build = "pre-84825e8"; // tools/build-id.cmake
 if (typeof window !== "undefined") window.CalcU1600 = CalcU1600;
 })();

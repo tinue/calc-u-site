@@ -1,0 +1,148 @@
+# 256K custom -- 256 KB vertically-banked SRAM module, PC-1600 Slot 2 only.
+#
+# A RAM module of no particular make with the whole Slot 2 range Sharp's
+# own scheme reaches: the CE-1601M's mechanism with all 8 vertical banks
+# fitted (the size of Sharp's CE-1650M):
+#
+#   * VERTICAL BANK -- which 32 KB sits behind the 8000-BFFF window. The
+#     host picks it with `OUT (28H), A`; the module's latch samples the
+#     DATA bus on that write strobe (D0-D2, banks 0-7) and holds it until
+#     the next one. TRIGGER-BASED latch (help/09-module-definitions.md
+#     section 6), source-domain data.
+#
+#   * HALF-SELECT within the current 32 KB bank -- PVOUT (pin 5), the
+#     host's Port 31H b4, picks the low or high 16 KB.
+#
+# RAM1 (pin 4) is a bare enable strobe gated by the host to the 8000-BFFF
+# window, so no address-range term is needed.
+#
+# Slot 2 only: the Port 28H strobe (K0-K2) has no wiring on Slot 1.
+#
+# Ships initialised: formatted by the PC-1600's own INIT"S2:","F", then
+# INIT"S2:","M" -- vertical bank 0 is expansion memory (MEM +32 KB), banks
+# 1-7 the RAM disk S2:.
+
+format: memory-module
+format-version: 1
+module-name: "256K custom"
+description: "256 KB battery-backed RAM, banked, initialised (Slot 2)"
+template: true   # read-only starting point; Name & Save copies it
+compatible-hosts: [PC-1600-Slot-2]
+definition-terminology: PC-1600-Slot-2
+battery: true
+
+regions:
+  - name: vram-256k
+    pc1600-module-class: plain-ram-no-header
+    content:
+      kind: regular
+      writable: true
+      power-up-fill: 0x00
+    # Region-level "is this a banked access at all" -- a pure gate, no
+    # span/maps-to. The module's whole enable is RAM1 (host-gated to the
+    # 8000-BFFF window); the real slice mapping lives in bank-window.
+    addressing:
+      chip-select: RAM1
+    banking:
+      latch:
+        type: trigger-based
+        trigger: { io-port: 0x28 }         # OUT (28H) -- the Port 28H vertical-bank write
+        sampled-lines: [D0, D1, D2]        # bank number = the byte written (first line = LSB)
+        source-domain: data
+      bank-count: 8                         # 8 x 32 KB vertical banks = 256 KB
+      bank-size: 0x8000                     # 32 KB per vertical bank (Z-80 Bank 2 + Bank 3)
+      bank-window:
+        any-of:
+          # PVOUT low -> low 16 KB half of the current 32 KB bank.
+          - all-of:
+              - chip-select: RAM1
+              - signal-negated: PVOUT
+            span: 0x4000
+            maps-to: 0x0000
+          # PVOUT high -> high 16 KB half.
+          - all-of:
+              - chip-select: RAM1
+              - signal: PVOUT
+            span: 0x4000
+            maps-to: 0x4000
+
+    # As the PC-1600's INIT"S2:","F" then INIT"S2:","M" leave a blank card
+    # (written out by the harness): MEM 44602 with no other module,
+    # DSKF("S2:") 220160 -- 7 x 32 KB RAM disk, bank 0 expansion memory.
+    initial-content:
+      blocks:
+        - bank: 0
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: FF FF FF FF FF FF FF FF  F8 00 02 0F 04 01 02 01
+            $0010: 00 02 FE 14 00 F7 00 01  03 00 08 00 00 00 00 00
+            $0020: 00...
+            $00C0: 00 00 00 00 00 FF 00 00  00 00 00 00 00 00 00 00
+            $00D0: 00...
+            $0200: F8 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0210: 00...
+            $0FF0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 FF
+            $1000: 00...
+            $1FF0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 FF
+            $2000: 00...
+            $2800: FF...
+        - bank: 1
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 55 80 B2 00 00 00 00 81  F7 00 02 0F 04 01 02 01
+            $0010: 00 02 F0 12 00 D8 00 01  03 00 08 00 00 00 00 00
+            $0020: 00...
+            $0200: F7 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0210: 00...
+            $4000: 03 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
+        - bank: 2
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 04 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0010: 00...
+            $4000: 05 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
+        - bank: 3
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 06 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0010: 00...
+            $4000: 07 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
+        - bank: 4
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 08 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0010: 00...
+            $4000: 09 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
+        - bank: 5
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 0A 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0010: 00...
+            $4000: 0B 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
+        - bank: 6
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 0C 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0010: 00...
+            $4000: 0D 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
+        - bank: 7
+          offset: 0x0000
+          encoding: addressed-hex
+          bytes: |
+            $0000: 0E 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $0010: 00...
+            $4000: 0F 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+            $4010: 00...
