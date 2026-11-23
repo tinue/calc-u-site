@@ -66,6 +66,8 @@ on extra files). No page loads its scripts; `/play/` links to it, and
 
 ```bash
 node .seo/fetch-web-client.js --beta <url of the -pre Calc-U-59-web.zip>
+# or a local build of the source repository (build.sh --release; CALCU_WEB_DIST=<dir>):
+node .seo/fetch-web-client.js --beta <dir>
 node .seo/build.js && node .seo/check.js && tests/run-tests.sh
 ```
 

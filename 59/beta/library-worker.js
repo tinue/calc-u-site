@@ -168,11 +168,38 @@ async function calcuOpenStorage(Module, config, onRefused) {
     postStart("failed", why);
   }
 
+  let lastTick = null;
+  // The pace of the calls, once a second, once the page asks for it (its
+  // `?pace=1` line, shell.js): ticks, the time spent in them, the longest gap.
+  let measurePace = false;
+  const pace = { since: null, ticks: 0, busy: 0, longest: 0 };
   function tick() {
+    if (!measurePace) {
+      try {
+        host.call();
+      } catch (e) {
+        fail(errorText(e));
+      }
+      return;
+    }
+    const start = performance.now();
+    if (lastTick !== null) pace.longest = Math.max(pace.longest, start - lastTick);
+    lastTick = start;
     try {
       host.call();
     } catch (e) {
       fail(errorText(e));
+    }
+    const end = performance.now();
+    pace.ticks += 1;
+    pace.busy += end - start;
+    if (pace.since === null) pace.since = start;
+    if (end - pace.since >= 1000) {
+      const secs = (end - pace.since) / 1000;
+      postMessage({ kind: "state", topic: "web.pace", value: {
+        ticksPerSecond: Math.round(pace.ticks / secs),
+        busyPercent: Math.round(pace.busy / (end - pace.since) * 100), longestGapMs: Math.round(pace.longest) } });
+      Object.assign(pace, { since: end, ticks: 0, busy: 0, longest: 0 });
     }
   }
 
@@ -183,6 +210,7 @@ async function calcuOpenStorage(Module, config, onRefused) {
   // A message from the page: to the host; suspend and continue also stop and
   // start the calls, the command first.
   function handle(m) {
+    if (m.kind === "pace") { measurePace = true; return; }
     if (!host) return;
     try {
       host.receive(m);
@@ -256,6 +284,8 @@ async function calcuOpenStorage(Module, config, onRefused) {
       product: CONFIG.name,
       dirs: { settingsBase: `${CONFIG.mount}/settings`, saveFolder: `${CONFIG.mount}/${CONFIG.name}`, home: "" },
       storage,
+      // `?bare=1` on the worker's URL: a fresh install starts bare (the demo and test pages).
+      bare: /[?&]bare=1\b/.test(self.location.search),
       post: (message, transfer) => postMessage(message, transfer),
     });
     const why = host.failure();

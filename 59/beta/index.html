@@ -45,6 +45,8 @@
     reactRoot.render(React.createElement(CalcU59, {
       layout, keyboard: true, ...size(),
       model: q.get("model") || undefined, preset: q.get("preset") || undefined,
+      // The demo and test page: a fresh start is bare (no startup presets).
+      workerUrl: new URL("calc-engine-worker.js?bare=1", location.href).href,
     }));
   }
   new ResizeObserver(render).observe(root);

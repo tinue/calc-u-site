@@ -6,6 +6,7 @@
 //   node .seo/fetch-web-client.js --pin <url>   pin another release asset, install it
 //   node .seo/fetch-web-client.js --local <dir> a local Web/dist/, for testing only
 //   node .seo/fetch-web-client.js --beta <url>  a pre-release asset, into beta/
+//   node .seo/fetch-web-client.js --beta <dir>  a local --release dist/, into beta/
 //
 // The client is built in the Calc-U-59 repository (Web/build.sh, CI attaches
 // it to each release as Calc-U-59-web.zip) and unpacked here unchanged.
@@ -54,6 +55,14 @@ async function main() {
       if (!args[1]) fail("--local needs the path of a Web/dist/ folder");
       install(path.resolve(args[1]));
       console.log("not pinned: check.js fails until a pinned build is installed again");
+      return;
+    }
+
+    if (args[0] === "--beta" && args[1] && fs.existsSync(args[1]) && fs.statSync(args[1]).isDirectory()) {
+      const manifest = install(path.resolve(args[1]), BETA_DIR);
+      const recorded = { url: "local build (frontends/web/build.sh --release)", version: manifest.version, commit: manifest.commit };
+      fs.writeFileSync(BETA_LOCK, JSON.stringify(recorded, null, 2) + "\n");
+      console.log(`recorded in ${path.basename(BETA_LOCK)}`);
       return;
     }
 
