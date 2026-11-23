@@ -1,5 +1,5 @@
 {
   "url": "local build (frontends/web/build.sh --release)",
   "version": "3.0.0",
-  "commit": "fb8819bc99ae9a31ebf0f385cf4f135cd1eabf58"
+  "commit": "59c507bfa8db7923be95a8c761809259ea0f3f02"
 }

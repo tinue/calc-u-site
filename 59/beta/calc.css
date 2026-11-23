@@ -476,20 +476,28 @@
   z-index: 30;
 }
 .calcu-client .calcu-shell-menu-items .calcu-shell-menu-items { top: -5px; left: 100%; }
-.calcu-client .calcu-shell-item {
-  position: relative;
+.calcu-client .calcu-shell-item { position: relative; cursor: default; }
+.calcu-client .calcu-shell-row {
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 3px 12px 3px 4px;
   white-space: nowrap;
-  cursor: default;
 }
-.calcu-client .calcu-shell-item:hover { background: var(--calcu-menu-hover); color: var(--calcu-menu-hover-text); }
+/* Only the row under the pointer is lit, never the item around an open
+   submenu, and only where there is a pointer: a touch screen keeps the
+   last tap's hover, which would light whatever slid under it. A menu
+   bar's submenu keeps its item lit while it is open beside it. */
+@media (hover: hover) {
+  .calcu-client .calcu-shell-row:hover,
+  .calcu-client .calcu-shell-menu > .calcu-shell-menu-items .calcu-shell-sub-open > .calcu-shell-row {
+    background: var(--calcu-menu-hover); color: var(--calcu-menu-hover-text);
+  }
+}
 /* A disabled item dims the menu's own text: the chrome's dim text is for
    its columns, which may be dark where the menu is light. */
 .calcu-client .calcu-shell-disabled { color: var(--calcu-menu-text); opacity: 0.4; }
-.calcu-client .calcu-shell-disabled:hover { background: transparent; }
+.calcu-client .calcu-shell-disabled > .calcu-shell-row:hover { background: transparent; color: inherit; }
 .calcu-client .calcu-shell-check { width: 14px; text-align: center; }
 .calcu-client .calcu-shell-label { flex: 1 1 auto; }
 /* A menu's name in More: small and dimmed, above its items. */
@@ -633,15 +641,26 @@
   touch-action: pan-y;
 }
 .calcu-client .calcu-shell-more-popup > .calcu-shell-menu-items { position: static; min-width: 180px; }
-.calcu-client .calcu-shell-more-popup .calcu-shell-item { flex-wrap: wrap; white-space: normal; }
+.calcu-client .calcu-shell-more-popup .calcu-shell-row { white-space: normal; }
 .calcu-client .calcu-shell-more-popup .calcu-shell-menu-items .calcu-shell-menu-items {
   position: static;
-  flex: 1 0 100%;
   min-width: 0;
   border: 0;
   box-shadow: none;
+  background: transparent;
   padding: 0 0 0 12px;
 }
+/* The More popup with every submenu open, unseen, unwrapped: its width is
+   the popup's. */
+.calcu-client .calcu-shell-more-sizer {
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
+  width: max-content;
+  overflow: visible;
+}
+.calcu-client .calcu-shell-more-sizer .calcu-shell-row { white-space: nowrap; }
 .calcu-client .calcu-shell-destructive { color: var(--calcu-alert); }
 .calcu-client .calcu-shell-storage-banner {
   flex: none;

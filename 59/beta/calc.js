@@ -2246,12 +2246,20 @@ function ShellDialogs({
 
 // `prefix`: the items' names ("item-"; the More menu's "more-item-");
 // `onChoose`: in place of s.choose (the More menu asks first).
+// `inline`: the More popup's way. A submenu opens below its item and
+// pushes the items after it down, so it opens and closes by a click or a
+// tap only: opened by hovering, the items would move under the pointer.
+// The menu bar's submenus fly out beside their item and open on hover.
+// `sizer`: every submenu open, no names, no handlers; the More popup
+// measures its width with it.
 function ShellMenuItems({
   s,
   items,
   onDone,
   prefix = "item-",
-  onChoose
+  onChoose,
+  inline = false,
+  sizer = false
 }) {
   const [sub, setSub] = React.useState(null);
   const ref = React.useRef(null);
@@ -2259,13 +2267,13 @@ function ShellMenuItems({
   // popup scrolls; a low window shows only part of it).
   React.useEffect(() => {
     const ul = ref.current;
-    if (ul && ul.parentElement && ul.parentElement.closest(".calcu-shell-more-popup") && ul.parentElement.tagName === "LI") ul.scrollIntoView({
+    if (!sizer && inline && ul && ul.parentElement && ul.parentElement.tagName === "LI") ul.scrollIntoView({
       block: "nearest"
     });
   }, []);
   return /*#__PURE__*/React.createElement("ul", {
     className: "calcu-shell-menu-items",
-    role: "menu",
+    role: sizer ? undefined : "menu",
     ref: ref
   }, items.map((item, i) => {
     if (item.kind === "separator") return /*#__PURE__*/React.createElement("li", {
@@ -2277,41 +2285,58 @@ function ShellMenuItems({
       key: item.id,
       className: "calcu-shell-heading",
       role: "presentation",
-      "data-calcu": `${prefix}${item.id}`
+      "data-calcu": sizer ? undefined : `${prefix}${item.id}`
     }, item.label);
     const disabled = item.enabled === false;
     const isSub = item.kind === "submenu";
-    return /*#__PURE__*/React.createElement("li", {
-      key: item.id,
-      className: "calcu-shell-item" + (disabled ? " calcu-shell-disabled" : ""),
-      role: "menuitem",
-      "data-calcu": `${prefix}${item.id}`,
-      "aria-disabled": disabled ? "true" : undefined,
-      "aria-checked": item.checkable ? String(!!item.checked) : undefined,
-      title: disabled && item.reason ? item.reason : undefined,
-      onMouseEnter: () => setSub(isSub ? item.id : null),
-      onClick: e => {
-        e.stopPropagation();
-        if (disabled) return;
-        if (isSub) {
-          setSub(item.id);
-          return;
-        } // opens it (a hover may have opened it already)
-        onDone();
-        (onChoose || s.choose)(item);
-      }
+    const open = isSub && (sizer || sub === item.id);
+    const row = /*#__PURE__*/React.createElement("div", {
+      className: "calcu-shell-row"
     }, /*#__PURE__*/React.createElement("span", {
       className: "calcu-shell-check"
     }, item.checkable && item.checked ? "✓" : ""), /*#__PURE__*/React.createElement("span", {
       className: "calcu-shell-label"
     }, item.label), isSub && /*#__PURE__*/React.createElement("span", {
       className: "calcu-shell-arrow"
-    }, "\u25B8"), isSub && sub === item.id && /*#__PURE__*/React.createElement(ShellMenuItems, {
+    }, inline && open ? "▾" : "▸"));
+    if (sizer) return /*#__PURE__*/React.createElement("li", {
+      key: item.id,
+      className: "calcu-shell-item"
+    }, row, open && /*#__PURE__*/React.createElement(ShellMenuItems, {
+      s: s,
+      items: item.children,
+      inline: true,
+      sizer: true
+    }));
+    return /*#__PURE__*/React.createElement("li", {
+      key: item.id,
+      className: "calcu-shell-item" + (disabled ? " calcu-shell-disabled" : "") + (open ? " calcu-shell-sub-open" : ""),
+      role: "menuitem",
+      "data-calcu": `${prefix}${item.id}`,
+      "aria-disabled": disabled ? "true" : undefined,
+      "aria-haspopup": isSub ? "true" : undefined,
+      "aria-expanded": isSub ? open : undefined,
+      "aria-checked": item.checkable ? String(!!item.checked) : undefined,
+      title: disabled && item.reason ? item.reason : undefined,
+      onMouseEnter: inline ? undefined : () => setSub(isSub ? item.id : null),
+      onClick: e => {
+        e.stopPropagation();
+        if (disabled) return;
+        // Inline a click opens or closes it; beside, it opens it (a hover may have already).
+        if (isSub) {
+          setSub(inline && sub === item.id ? null : item.id);
+          return;
+        }
+        onDone();
+        (onChoose || s.choose)(item);
+      }
+    }, row, open && /*#__PURE__*/React.createElement(ShellMenuItems, {
       s: s,
       items: item.children,
       onDone: onDone,
       prefix: prefix,
-      onChoose: onChoose
+      onChoose: onChoose,
+      inline: inline
     }));
   }));
 }
@@ -2901,7 +2926,8 @@ function ShellRomsMissing({
 // ShellMoreMenu -- the More button at the end of every bar: the button
 // (its icon; its label, a bar label: unseen on a compact bar, and measured
 // with the others) opens a popup of the menus' items (ShellMenuItems)
-// anchored to it, kept inside the client's width; an item
+// anchored to it, kept inside the client's width, its submenus opening
+// inline (ShellMenuItems `inline`); an item
 // with `confirm` asks first in a ShellModal with the item's label and
 // Cancel. The items are the bar model's `choices`, computed again at
 // every change of an input. Names: bar-more, more-menu,
@@ -2942,7 +2968,12 @@ function ShellMoreMenu({
     const c = client.getBoundingClientRect();
     const b = ref.current.getBoundingClientRect();
     const p = popup.getBoundingClientRect();
-    const width = Math.min(p.width, c.width - 8);
+    // As wide as its widest entry with every submenu open, measured once:
+    // opening a submenu then neither wraps its entries nor moves the popup's
+    // left edge.
+    const sizer = ref.current.querySelector(".calcu-shell-more-sizer");
+    const natural = sizer ? Math.ceil(sizer.getBoundingClientRect().width) : 0;
+    const width = Math.min(Math.max(p.width, natural), c.width - 8);
     const left = Math.max(c.left + 4, Math.min(b.right, c.right - 4) - width);
     // Below the button, or above it when the window has no room below (the
     // bar sits at the bottom of the calculator); as high as that room, the
@@ -2955,7 +2986,7 @@ function ShellMoreMenu({
     setPlace({
       left,
       top,
-      maxWidth: c.width - 8,
+      width,
       maxHeight
     });
   }, [open]);
@@ -2969,7 +3000,7 @@ function ShellMoreMenu({
   const style = place ? {
     left: place.left,
     top: place.top,
-    maxWidth: place.maxWidth,
+    width: place.width,
     maxHeight: place.maxHeight
   } : {
     visibility: "hidden"
@@ -3000,7 +3031,16 @@ function ShellMoreMenu({
     items: items,
     prefix: "more-item-",
     onChoose: choose,
-    onDone: () => setOpen(false)
+    onDone: () => setOpen(false),
+    inline: true
+  })), open && !place && /*#__PURE__*/React.createElement("div", {
+    className: "calcu-shell-more-popup calcu-shell-more-sizer",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement(ShellMenuItems, {
+    s: s,
+    items: items,
+    inline: true,
+    sizer: true
   })), asking && /*#__PURE__*/React.createElement(ShellModal, {
     name: "more-confirm",
     onClose: () => setAsking(null),
@@ -4754,7 +4794,7 @@ const FACE_MIN_AUTO = 120; // layout="auto": whatever a landscape phone's height
 const SPLITTERS = 1 + 5; // the line after the calculator, the divider before the debugger
 const MENU_HEIGHT = 26;
 const CALC_VERSION = "3.0.0";
-const CALC_BUILD = "pre-fb8819bc"; // tools/build-id.cmake
+const CALC_BUILD = "pre-59c507bf"; // tools/build-id.cmake
 
 /// The artwork's width that `height` leaves room for, and the column height for an artwork width.
 const faceWidthFor = height => (height - CHROME_SIZES.barHeight - 2 * FACE_PADDING) * CANVAS_ASPECT;

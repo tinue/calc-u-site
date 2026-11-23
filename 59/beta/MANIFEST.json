@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-59-web",
   "version": "3.0.0",
-  "commit": "fb8819bc99ae9a31ebf0f385cf4f135cd1eabf58",
+  "commit": "59c507bfa8db7923be95a8c761809259ea0f3f02",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "cb5d82f7c401ee21c015e0f8f48ac60cf5ecc156b612b7787be07667150a5196",
@@ -9,7 +9,7 @@
     "app/icon.png": "0aacbf51f7d4ab2c0bb2820b614257ba7dbfea13c129444e43face920160e100",
     "app/index.html": "d21594f1d6e1f7eb64eba4daa2fe7ec179c334ab81834e37b5feb73000127e6a",
     "app/manifest.json": "577fd34cd5a7871468780d9176583b41524344ea4165d4599b367985a3d81b22",
-    "app/sw.js": "cb9ecd0672ac2f5a8cf40622bb33d0554898824bbb4d04264bea08054ebadc8f",
+    "app/sw.js": "f5023aa6d53948d7f9986a828b2bbb9114bdf232946f2b5504e01e2e04b48b9d",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
     "bundle/AG.rom.yaml": "6a5fcea872b5bb70257a6957274c5013d7cea5ddd955137a48d29c555fe93bcf",
     "bundle/AV.rom.yaml": "dc162859a750d3dbc56692ebe2392f53ccf425a2ec1dbd1f303ac9b98922516a",
@@ -36,8 +36,8 @@
     "bundle/TMC0583-CONST-K.txt": "bda4ac42985d2802bbe16b1cf53c066d20dd72dcea886eb21aff2a2a432cdf1d",
     "bundle/TMC0583.txt": "269fdb103cba80a055efd274180e4efeb2ae6e2a63b3b8c5489fee98e63cb353",
     "calc-engine-worker.js": "af154211f802129fc5e84ec135808e6efead82f19ac0233fd3305326ecfe25a9",
-    "calc.css": "8ee041c7e2a2a0d6c60405873e654e922f6f275a7f6563fd3aef36d5fdea54a9",
-    "calc.js": "9ec0ef452bbe2dd3f1c0c3a27adacfda8232a0a09671ea1fe019de9c334ef326",
+    "calc.css": "d6e6ed842dba7f1055465cbcdaeafc740d73a002ec08898dc15f6ddb68a2e658",
+    "calc.js": "abbebdc74049944b5a2b587c0cfcf09589eb145623a96567b60cd746a30f84be",
     "files.json": "a39d49317b8347d20db62bc6ff564fed04b31e88010babea1aa464cb26553f63",
     "fonts/Archivo-OFL.txt": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
     "fonts/archivo-400.woff2": "07f9160163da2ec0f6376ef9d27a2bb8163f98019ba798da4baafb154e30056e",
