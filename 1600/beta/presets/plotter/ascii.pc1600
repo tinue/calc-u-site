@@ -1,0 +1,32 @@
+# PC-1600 plotter test -- prints an ASCII/hex character chart on the
+# CE-1600P (font size, border colour and font colour are asked for at
+# start, answered below as size 2 / border 1 / font 0).
+# Program found on https://www.sharp-pc-1600.de
+
+format-version: 2
+preset-name: Character chart
+description: ASCII/hex character chart on the CE-1600P
+model: PC-1600
+
+# CE-1600P pen-plotter attached.
+printer: CE-1600P
+
+# After reset, a NEW0 is required in PRO mode (PC-1600 starts up in RUN)
+keys:
+  - key: mode
+  - type: NEW0
+
+# A `.bas` listing is tokenized while it loads -- much faster than typing
+# it in.
+program:
+  file: ascii.bas
+
+# Back to RUN mode, then run it -- answers the size/colour prompts and
+# prints the chart to the virtual paper.
+keys:
+  - key: mode
+  - type: RUN
+  - type: 2
+  - type: 1
+  - type: 0
+  - let-it-finish:

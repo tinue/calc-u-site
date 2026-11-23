@@ -1,0 +1,24 @@
+# Calc-U-1600 CE-1600F floppy disk image
+format: ce1600f-floppy
+format-version: 2
+disk-name: "Formatted"
+description: "Formatted, both sides empty"
+template: true
+saved: 2026-09-19T10:17:46Z
+sides:
+  0:
+    encoding: addressed-hex
+    bytes: |
+      $0000: 00...
+      $0200: F2 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+      $0210: 00...
+      $0400: F2 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+      $0410: 00...
+  1:
+    encoding: addressed-hex
+    bytes: |
+      $0000: 00...
+      $0200: F2 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+      $0210: 00...
+      $0400: F2 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+      $0410: 00...

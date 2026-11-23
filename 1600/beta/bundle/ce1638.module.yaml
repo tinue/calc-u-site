@@ -1,0 +1,62 @@
+# CE-1638 -- 128 KB banked SRAM module for the PC-1500 family.
+#
+# The real Sharp-compatible module. One banked 16 KB window at Y0 (&0000-&3FFF), 8 banks, 128 KB total, same
+# trigger-based mechanism as CE-163 (help/09-module-definitions.md §6): a
+# write strobe on physical pin 18 (S3 on the PC-1500, S5 on the PC-1500A)
+# latches a bank number sampled from the *address* lines of that same
+# write, not the data bus.
+#
+# Bank select samples A0-A2, as reported for the real CE-1638. 3 bits exactly
+# cover the 8 banks, so unlike the CE-163 family's 4-bit (A0-A3) sampling
+# used elsewhere for a hypothetical 16-bank module, no mod-wrap is needed
+# here.
+#
+# PC-1600 slot: plugs into a MemorySlotConnector pin-for-pin, decoding
+# purely from pins like every other card here. Pin 4's chip select is
+# &8000-&BFFF on a PC-1600 slot rather than a PC-1500's &0000-&3FFF Y0, so
+# the bank window's `span`/low-address-bits offsetting handles that for
+# free -- no per-host branch needed.
+#
+# Slot 1 caveat: pin 18 carries S3 there, which the PC-1600
+# mainboard pulses on every &B000-&B7FF write, so the boot ROM's
+# RAM-sizing scan keeps tripping the bank latch and the module doesn't
+# size in as expected. Use *Slot 2*, where pins 16-18 carry the dormant
+# K0-K2 lines, so the strobe never fires and the module presents bank 0 as
+# a plain unbanked 16K, sized correctly by the boot ROM. Declared
+# compatible with both slots anyway (compatible-hosts is a pin/
+# electrical-compatibility list, not a "works well" guarantee) -- see
+# docs/developer/PC1600-Core-Limitations.md ("CE-1638 / CE-163F only work
+# in Slot 2 on a PC-1600") for the full writeup.
+
+format: memory-module
+format-version: 1
+module-name: "CE-1638"
+description: "128 KB battery-backed RAM, 8 banks of 16 KB"
+template: true   # read-only starting point; Name & Save copies it
+compatible-hosts: [PC-1500, PC-1500A, PC-1600-Slot-1, PC-1600-Slot-2]
+definition-terminology: PC-1500
+battery: true
+
+regions:
+  - name: sram-128k
+    content:
+      kind: regular
+      writable: true
+      power-up-fill: 0x00
+    # Region-level "is this a banked access at all" -- a pure gate, no
+    # span/maps-to. The whole enable is Y0; the real slice mapping lives
+    # in bank-window.
+    addressing:
+      chip-select: Y0
+    banking:
+      latch:
+        type: trigger-based
+        trigger: { pin: 18 }         # S3 (PC-1500) / S5 (PC-1500A) write strobe
+        sampled-lines: [A0, A1, A2]  # bank number from the triggering write's address
+        source-domain: address
+      bank-count: 8
+      bank-size: 0x4000              # 16 KB, exactly the Y0 window
+      bank-window:
+        chip-select: Y0
+        span: 0x4000
+        maps-to: 0x0000

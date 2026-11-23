@@ -1,0 +1,18 @@
+# Startup preset for the PC-1500 -- choose it under Settings >
+# Startup presets (PC-1500) to have it applied whenever the PC-1500 is
+# selected: CE-150 plotter + an unnamed CE-163F in the expansion slot.
+
+format-version: 2
+preset-name: CE-150 + CE-163F
+description: PC-1500 with the CE-150 plotter and a CE-163F
+model: PC-1500
+
+printer: CE-150
+
+slot-1: { name: CE-163F }
+
+# Clear memory and go to RUN mode
+keys:
+  - type: NEW0
+  - type: NEW&112
+  - key: mode

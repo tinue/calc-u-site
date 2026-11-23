@@ -1,0 +1,610 @@
+/* The web client's styles, all scoped to .calcu-client so a host page's
+   own styles and this client's don't meet. Colours follow the desktop app
+   on macOS: a white window, grey rounded controls, the docked panels'
+   chrome (Qt6/app/ChromeColors.hpp) -- light or dark with the system. */
+
+.calcu-client {
+  --calcu-window: #ffffff;
+  --calcu-text: #1d1d1f;
+  --calcu-text-dim: rgba(0, 0, 0, 0.35);
+  --calcu-control: #ebebeb;
+  --calcu-control-hover: #e2e2e2;
+  --calcu-control-pressed: #d4d4d4;
+  --calcu-separator: #c8c8c8;
+  --calcu-accent: #007bff;
+  --calcu-menu: rgba(246, 246, 246, 0.98);
+  --calcu-menu-border: rgba(0, 0, 0, 0.12);
+  --calcu-menu-hover: #007bff;
+  /* ChromeColors::light() */
+  --calcu-header-bg: rgb(204, 204, 204);
+  --calcu-header-text: rgba(0, 0, 0, 0.55);
+  --calcu-output-bg: rgb(247, 247, 247);
+  --calcu-output-text: rgba(0, 0, 0, 0.8);
+  --calcu-output-border: rgb(153, 153, 153);
+  --calcu-buttonbar-bg: rgb(217, 217, 217);
+  --calcu-pill-bg: rgb(173, 173, 173);
+  --calcu-pill-off: rgb(199, 199, 199);
+  --calcu-pill-text: rgba(0, 0, 0, 0.8);
+  --calcu-lamp-off: #888888;
+  --calcu-lamp-on: #2ecc40;
+  --calcu-mono: "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--calcu-window);
+  color: var(--calcu-text);
+  font: 13px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", sans-serif;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .calcu-client {
+    --calcu-window: #1e1e1e;
+    --calcu-text: #e8e8e8;
+    --calcu-text-dim: rgba(255, 255, 255, 0.35);
+    --calcu-control: #3a3a3a;
+    --calcu-control-hover: #454545;
+    --calcu-control-pressed: #505050;
+    --calcu-separator: #4a4a4a;
+    --calcu-menu: rgba(44, 44, 46, 0.98);
+    --calcu-menu-border: rgba(255, 255, 255, 0.12);
+    /* ChromeColors::dark() */
+    --calcu-header-bg: rgb(60, 60, 60);
+    --calcu-header-text: rgba(255, 255, 255, 0.59);
+    --calcu-output-bg: rgb(32, 32, 32);
+    --calcu-output-text: rgba(255, 255, 255, 0.82);
+    --calcu-output-border: rgb(90, 90, 90);
+    --calcu-buttonbar-bg: rgb(48, 48, 48);
+    --calcu-pill-bg: rgb(120, 120, 120);
+    --calcu-pill-off: rgb(66, 66, 66);
+    --calcu-pill-text: rgba(255, 255, 255, 0.86);
+  }
+}
+
+.calcu-client *,
+.calcu-client *::before,
+.calcu-client *::after { box-sizing: border-box; }
+
+/* ── Menu bar ─────────────────────────────────────────────────────── */
+.calcu-client .calcu-menubar {
+  flex: none;
+  display: flex;
+  height: 26px;
+  padding: 0 6px;
+  align-items: stretch;
+  border-bottom: 1px solid var(--calcu-separator);
+  background: var(--calcu-window);
+  z-index: 20;
+}
+.calcu-client .calcu-menubar-item { position: relative; display: flex; }
+.calcu-client .calcu-menubar-item > button {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  padding: 0 9px;
+  border-radius: 4px;
+  margin: 2px 0;
+  cursor: default;
+}
+.calcu-client .calcu-menubar-item.open > button,
+.calcu-client .calcu-menubar-item > button:hover { background: var(--calcu-control); }
+.calcu-client .calcu-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  padding: 5px;
+  color: var(--calcu-text);
+  background: var(--calcu-menu);
+  border: 1px solid var(--calcu-menu-border);
+  border-radius: 7px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  z-index: 30;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.calcu-client .calcu-submenu { top: -6px; left: 100%; }
+.calcu-client .calcu-menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 3px 8px 3px 2px;
+  border-radius: 4px;
+  white-space: nowrap;
+  cursor: default;
+}
+.calcu-client .calcu-menu-item:hover:not(.disabled),
+.calcu-client .calcu-menu-item.open:not(.disabled) { background: var(--calcu-menu-hover); color: #fff; }
+/* Touch screens: a taller bar and taller rows. In landscape, iOS Safari
+   takes a tap at the very top of the page to bring back its toolbar, so a
+   26 px bar is nearly untappable there; this one has a lower part Safari
+   leaves to the page. */
+@media (pointer: coarse) {
+  .calcu-client .calcu-menubar { height: 40px; }
+  .calcu-client .calcu-menubar-item > button { padding: 0 14px; }
+  .calcu-client .calcu-menu-item { padding-top: 8px; padding-bottom: 8px; }
+}
+.calcu-client .calcu-menu-item.disabled { color: var(--calcu-text-dim); }
+.calcu-client .calcu-menu-check { width: 18px; text-align: center; flex: none; }
+.calcu-client .calcu-menu-label { flex: 1; }
+.calcu-client .calcu-menu-shortcut { margin-left: 24px; opacity: 0.6; }
+.calcu-client .calcu-menu-separator { height: 1px; margin: 5px 8px; background: var(--calcu-menu-border); }
+.calcu-client .calcu-menu-heading { padding: 4px 8px 2px 20px; font-size: 11px; font-weight: 600; opacity: 0.55; }
+
+.calcu-client .calcu-shell-storage-banner { border-bottom: 1px solid #e6d27a; }   /* the shell's */
+
+/* ── Faceplate ────────────────────────────────────────────────────── */
+.calcu-client .calcu-face-row { flex: none; display: flex; justify-content: center; }
+.calcu-client .calcu-face { position: relative; touch-action: none; cursor: default; }
+.calcu-client .calcu-face-art { position: absolute; left: 0; top: 0; }
+.calcu-client .calcu-lcd { position: absolute; }
+.calcu-client .calcu-key {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  pointer-events: none;
+}
+.calcu-client .calcu-key[aria-pressed="true"] { background: rgba(255, 255, 255, 0.25); }
+
+/* ── Control bar ──────────────────────────────────────────────────── */
+.calcu-client .calcu-controlbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 11px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.calcu-client .calcu-bar-stretch { flex: 1; }
+.calcu-client .calcu-bar-separator { flex: none; width: 1px; height: 22px; background: var(--calcu-separator); margin: 0 2px; }
+.calcu-client .calcu-bar-label { flex: none; }
+.calcu-client .calcu-combo {
+  height: 22px;
+  padding: 0 24px 0 9px;
+  border: none;
+  border-radius: 6px;
+  background: var(--calcu-control) no-repeat right 7px center / 7px 11px
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 11'><path d='M1 4l2.5-2.5L6 4M1 7l2.5 2.5L6 7' fill='none' stroke='%23555' stroke-width='1.3'/></svg>");
+  color: inherit;
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  max-width: 14em;
+  text-overflow: ellipsis;
+}
+.calcu-client .calcu-combo:disabled { color: var(--calcu-text-dim); opacity: 0.7; }
+.calcu-client .calcu-combo.calcu-wide { width: 100%; max-width: none; }
+.calcu-client .calcu-button,
+.calcu-client .calcu-toggle,
+.calcu-client .calcu-iconbutton {
+  height: 22px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--calcu-control);
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+.calcu-client .calcu-button:hover:not(:disabled),
+.calcu-client .calcu-toggle:hover:not(:disabled),
+.calcu-client .calcu-iconbutton:hover:not(:disabled) { background: var(--calcu-control-hover); }
+.calcu-client .calcu-button:active:not(:disabled),
+.calcu-client .calcu-toggle:active:not(:disabled),
+.calcu-client .calcu-iconbutton:active:not(:disabled) { background: var(--calcu-control-pressed); }
+.calcu-client .calcu-button:disabled,
+.calcu-client .calcu-toggle:disabled,
+.calcu-client .calcu-iconbutton:disabled { color: var(--calcu-text-dim); }
+.calcu-client .calcu-iconbutton:disabled .calcu-save-icon { opacity: 0.4; }
+.calcu-client .calcu-toggle.checked { background: var(--calcu-accent); color: #fff; }
+.calcu-client .calcu-toggle.checked:disabled { opacity: 0.55; }
+.calcu-client .calcu-iconbutton { width: 33px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+.calcu-client .calcu-compact { width: 26px; padding: 0; }
+.calcu-client .calcu-save-icon { width: 16px; height: 16px; }
+.calcu-client .calcu-lamp { flex: none; width: 14px; text-align: center; color: var(--calcu-lamp-off); }
+.calcu-client .calcu-lamp.on,
+.calcu-client .calcu-tape-counter.on { color: var(--calcu-lamp-on); }
+.calcu-client .calcu-tape-counter { flex: none; min-width: 4.5em; font-variant-numeric: tabular-nums; }
+
+/* ── Docked panels ────────────────────────────────────────────────── */
+.calcu-client .calcu-panels { flex: 1; min-height: 0; display: flex; gap: 6px; padding: 0 6px 6px; }
+.calcu-client .calcu-panel { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.calcu-client .calcu-inspector { flex: 2; }
+.calcu-client .calcu-paper,
+.calcu-client .calcu-printer { flex: 1; }
+.calcu-client .calcu-panel-header {
+  flex: none;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--calcu-header-bg);
+  color: var(--calcu-header-text);
+}
+.calcu-client .calcu-panel-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--calcu-output-bg);
+  border: 1px solid var(--calcu-output-border);
+  border-top: none;
+}
+.calcu-client .calcu-panel-buttons {
+  flex: none;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--calcu-buttonbar-bg);
+}
+.calcu-client .calcu-pill {
+  height: 24px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: var(--calcu-pill-bg);
+  color: var(--calcu-pill-text);
+  font: inherit;
+  cursor: default;
+}
+.calcu-client .calcu-pill:hover:not(:disabled) { filter: brightness(1.12); }
+.calcu-client .calcu-pill:active:not(:disabled) { filter: brightness(0.77); }
+.calcu-client .calcu-pill:disabled { background: var(--calcu-pill-off); }
+.calcu-client .calcu-pill-icon { width: 30px; display: inline-flex; align-items: center; justify-content: center; }
+.calcu-client .calcu-pill-icon svg { width: 14px; height: 14px; }
+.calcu-client .calcu-pill-arrow { font-size: 9px; opacity: 0.7; }
+.calcu-client .calcu-pillmenu { position: relative; }
+.calcu-client .calcu-pillmenu-list { top: auto; bottom: 100%; margin-bottom: 4px; }
+.calcu-client .calcu-inspector-output,
+.calcu-client .calcu-printer-output {
+  flex: 1;
+  margin: 0;
+  padding: 6px 8px;
+  overflow: auto;
+  font: 11px/1.35 var(--calcu-mono);
+  color: var(--calcu-output-text);
+  white-space: pre;
+  user-select: text;
+  -webkit-user-select: text;
+}
+.calcu-client .calcu-printer-output { white-space: pre-wrap; }
+.calcu-client .calcu-printer-serial { flex: none; padding: 4px 8px; font-size: 11px; opacity: 0.7; border-bottom: 1px solid var(--calcu-output-border); }
+.calcu-client .calcu-paper > .calcu-paper-panel { flex: 1; }
+
+/* ── Dialogs ──────────────────────────────────────────────────────── */
+.calcu-client .calcu-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 60px;
+  background: rgba(0, 0, 0, 0.12);
+}
+.calcu-client .calcu-modal {
+  min-width: 320px;
+  max-width: min(560px, 92%);
+  max-height: 85%;
+  display: flex;
+  flex-direction: column;
+  background: var(--calcu-window);
+  color: var(--calcu-text);
+  border: 1px solid var(--calcu-menu-border);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  user-select: text;
+  -webkit-user-select: text;
+}
+.calcu-client .calcu-modal-title { padding: 14px 18px 4px; font-weight: 700; }
+.calcu-client .calcu-modal-body { padding: 6px 18px; overflow: auto; }
+.calcu-client .calcu-modal-text { margin: 6px 0; white-space: pre-wrap; }
+.calcu-client .calcu-modal-text small { opacity: 0.7; }
+.calcu-client .calcu-modal-text tt { font-family: var(--calcu-mono); }
+.calcu-client .calcu-hint { color: #b45309; }
+.calcu-client .calcu-modal-buttons { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px 16px; }
+.calcu-client .calcu-modal-buttons .calcu-button { min-width: 72px; }
+.calcu-client .calcu-button.default:not(:disabled) { background: var(--calcu-accent); color: #fff; }
+.calcu-client .calcu-form { display: flex; flex-direction: column; gap: 6px; }
+.calcu-client .calcu-form-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+.calcu-client .calcu-form-row > span:first-child { min-width: 110px; }
+.calcu-client .calcu-form-row input[type=text] {
+  flex: 1;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--calcu-separator);
+  border-radius: 5px;
+  background: var(--calcu-window);
+  color: inherit;
+  font: inherit;
+}
+.calcu-client .calcu-settings-section { margin: 12px 0 2px; font-size: 12px; font-weight: 700; opacity: 0.7; }
+.calcu-client .calcu-about { display: flex; gap: 16px; align-items: flex-start; }
+.calcu-client .calcu-small { font-size: 11px; opacity: 0.7; }
+.calcu-client .calcu-media { min-width: 440px; }
+.calcu-client .calcu-media-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.calcu-client .calcu-media-name { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.calcu-client .calcu-media-inuse { font-size: 11px; opacity: 0.6; }
+
+.calcu-client .calcu-busy {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: var(--calcu-menu);
+  border: 1px solid var(--calcu-menu-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+.calcu-client .calcu-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--calcu-separator);
+  border-top-color: var(--calcu-accent);
+  border-radius: 50%;
+  animation: calcu-spin 0.8s linear infinite;
+}
+@keyframes calcu-spin { to { transform: rotate(360deg); } }
+
+/* NamedCombo (Dialogs.jsx): a combo button with a menu of long labels. */
+
+/* ── The shell of the React set in this page ─────────────────────────── */
+/* The menu bar is as tall as the layout counts it (MENU_HEIGHT). */
+.calcu-client .calcu-shell-menubar { flex: none; height: 26px; align-items: center; padding: 0 4px; }
+@media (pointer: coarse) {
+  .calcu-client .calcu-shell-menubar { height: 40px; }
+  .calcu-client .calcu-shell-menu-title { padding: 0 14px; height: 40px; }
+  .calcu-client .calcu-shell-item { padding-top: 8px; padding-bottom: 8px; }
+}
+/* The shell's bar fills the page's 40 px row, on one line. */
+.calcu-client .calcu-controlbar > .calcu-shell-bar { flex: 1; flex-wrap: nowrap; padding: 0; gap: 10px; overflow: hidden; }
+.calcu-client .calcu-bar-fieldset {
+  display: inline-flex; align-items: center; gap: 4px; margin: 0; padding: 0; border: 0; min-width: 0;
+}
+.calcu-client .calcu-shell-panels { flex: 1; min-height: 0; gap: 6px; }
+.calcu-client .calcu-shell-panels > .calcu-inspector { flex: 2 1 0; }
+.calcu-client .calcu-shell-roms-missing { flex: 1; }
+
+/* The paper panel of the React component set: every selector inside
+   .calcu-client (build/dist.js checks it). No scroll bar is drawn: the paper
+   scrolls with the wheel or by touch. */
+.calcu-client .calcu-paper-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #e8e8e8;
+}
+.calcu-client .calcu-paper-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  min-height: 24px;
+}
+.calcu-client .calcu-paper-owner { font-weight: 600; margin-right: auto; }
+.calcu-client .calcu-paper-actions { display: inline-flex; gap: 4px; }
+.calcu-client .calcu-paper-control.calcu-paper-down { box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); background: #cccccc; }
+.calcu-client .calcu-paper-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  background: #ffffff;
+  touch-action: pan-y;
+}
+.calcu-client .calcu-paper-scroll::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.calcu-client .calcu-paper-sheet { position: relative; overflow: hidden; }
+.calcu-client .calcu-paper-canvas { position: absolute; left: 0; display: block; }
+.calcu-client .calcu-paper-text {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 8px;
+  overflow: auto;
+  background: #ffffff;
+  font-family: ui-monospace, Menlo, Consolas, "Courier New", monospace;
+  user-select: text;
+  -webkit-user-select: text;
+  white-space: pre;
+}
+.calcu-client .calcu-paper-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  pointer-events: none;
+}
+
+/* The media components of the React component set: every selector inside
+   .calcu-client (build/dist.js checks it). */
+.calcu-client .calcu-media-picker { max-width: 16em; }
+.calcu-client .calcu-media-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  min-width: 18em;
+}
+.calcu-client .calcu-media-row { display: flex; align-items: center; gap: 6px; }
+.calcu-client .calcu-media-buttons { display: flex; justify-content: flex-end; gap: 6px; }
+.calcu-client .calcu-media-problem { color: #a00000; }
+.calcu-client .calcu-media-table { border-collapse: collapse; }
+.calcu-client .calcu-media-table td { padding: 2px 6px; }
+.calcu-client .calcu-media-none { font-style: italic; }
+
+/* The shell of the React component set: every selector inside .calcu-client
+   (build/dist.js checks it). */
+.calcu-client .calcu-shell-menubar {
+  display: flex;
+  gap: 2px;
+  padding: 2px 4px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #cccccc;
+  font: 13px system-ui, sans-serif;
+  position: relative;
+  z-index: 20;
+}
+.calcu-client .calcu-shell-menu { position: relative; }
+.calcu-client .calcu-shell-menu-title {
+  border: 0;
+  background: transparent;
+  padding: 3px 8px;
+  font: inherit;
+  cursor: default;
+}
+.calcu-client .calcu-shell-open > .calcu-shell-menu-title { background: #d8d8d8; }
+.calcu-client .calcu-shell-menu-items {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #ffffff;
+  border: 1px solid #bbbbbb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+}
+.calcu-client .calcu-shell-menu-items .calcu-shell-menu-items { top: -5px; left: 100%; }
+.calcu-client .calcu-shell-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 12px 3px 4px;
+  white-space: nowrap;
+  cursor: default;
+}
+.calcu-client .calcu-shell-item:hover { background: #e4ecf7; }
+.calcu-client .calcu-shell-disabled { color: #999999; }
+.calcu-client .calcu-shell-disabled:hover { background: transparent; }
+.calcu-client .calcu-shell-check { width: 14px; text-align: center; }
+.calcu-client .calcu-shell-label { flex: 1 1 auto; }
+.calcu-client .calcu-shell-separator { height: 1px; margin: 4px 0; background: #dddddd; }
+.calcu-client .calcu-shell-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  font: 13px system-ui, sans-serif;
+}
+.calcu-client .calcu-shell-bar-group { display: inline-flex; align-items: center; gap: 4px; }
+.calcu-client .calcu-shell-slot { display: inline-flex; align-items: center; gap: 2px; }
+.calcu-client .calcu-shell-place.calcu-shell-plugged { box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); background: #cccccc; }
+.calcu-client .calcu-shell-place[aria-disabled="true"] { color: #999999; }
+.calcu-client .calcu-shell-panels { display: flex; min-height: 0; }
+.calcu-client .calcu-shell-panels > * { flex: 1 1 0; min-width: 0; }
+.calcu-client .calcu-shell-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 50;
+}
+.calcu-client .calcu-shell-modal {
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  font: 13px system-ui, sans-serif;
+}
+.calcu-client .calcu-shell-modal-title { font-weight: 600; margin-bottom: 8px; }
+.calcu-client .calcu-shell-modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.calcu-client .calcu-shell-section { margin: 0 0 8px; border: 1px solid #dddddd; }
+.calcu-client .calcu-shell-setting { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+.calcu-client .calcu-shell-setting-label { min-width: 160px; }
+.calcu-client .calcu-shell-folder { display: inline-flex; align-items: center; gap: 6px; }
+.calcu-client .calcu-shell-loading {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 40;
+  font: 13px system-ui, sans-serif;
+}
+.calcu-client .calcu-shell-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #999999;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: calcu-shell-spin 0.8s linear infinite;
+}
+@keyframes calcu-shell-spin { to { transform: rotate(360deg); } }
+.calcu-client .calcu-shell-roms-missing { padding: 24px; white-space: pre-wrap; }
+
+/* The bar's actions and the More button of
+   a window without a menu bar, its popup inside the client (submenus open
+   inline, as a narrow portrait has no room beside), the storage banner. */
+.calcu-client .calcu-shell-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+}
+.calcu-client .calcu-shell-action[aria-disabled="true"] { color: #999999; }
+.calcu-client .calcu-shell-action-icon { font-size: 15px; line-height: 1; }
+.calcu-client .calcu-shell-more { display: inline-flex; }
+.calcu-client .calcu-shell-more-popup {
+  position: fixed;
+  z-index: 30;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+.calcu-client .calcu-shell-more-popup > .calcu-shell-menu-items { position: static; min-width: 180px; }
+.calcu-client .calcu-shell-more-popup .calcu-shell-item { flex-wrap: wrap; white-space: normal; }
+.calcu-client .calcu-shell-more-popup .calcu-shell-menu-items .calcu-shell-menu-items {
+  position: static;
+  flex: 1 0 100%;
+  min-width: 0;
+  border: 0;
+  box-shadow: none;
+  padding: 0 0 0 12px;
+}
+.calcu-client .calcu-shell-destructive { color: #b00020; }
+.calcu-client .calcu-shell-storage-banner {
+  flex: none;
+  padding: 5px 12px;
+  background: #fff4c2;
+  color: #5c4a00;
+  font: 12px system-ui, sans-serif;
+}

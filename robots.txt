@@ -13,4 +13,7 @@ Disallow: /59/calc/$
 Disallow: /59/preview/
 Disallow: /59/beta/
 
+# Calc-U-1600: the preview of its first release, until /1600/ has pages.
+Disallow: /1600/beta/
+
 Sitemap: https://calc-u.org/59/sitemap.xml

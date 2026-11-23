@@ -1,0 +1,56 @@
+# Startup preset for the PC-1600 -- choose it under Settings >
+# Startup presets (PC-1600) to have it applied whenever the PC-1600 is
+# selected: CE-1600P plotter (with its CE-1600F floppy and the bundled
+# "Formatted" disk), a CE-1600M in slot 1 and a CE-1601M in slot 2, set up
+# as a RAM disk.
+
+format-version: 2
+preset-name: CE-1600P + modules
+description: PC-1600 with the CE-1600P, a floppy and two modules
+model: PC-1600
+
+printer: CE-1600P
+
+slot-1: { name: CE-1600M }
+slot-2: { name: CE-1601M }
+
+# The bundled "Formatted" disk, then NEW after reset
+keys:
+  - floppy: { name: Formatted }
+  - key: mode
+  - type: NEW0
+  - key: mode
+# Initialize and partition the memory card
+  - type: INIT"S2:","F"
+  - type: INIT"S2:","M"
+# Setup the com port for 9600, no flow control:
+  - type: SETCOM "COM1:",9600,8,N,1,N,N
+  - type: OUTSTAT "COM1:"
+  - type: SNDSTAT "COM1:",28
+  - type: RCVSTAT "COM1:",28
+  - type: INIT "COM1:",8192
+# Reserve Area II for LOAD and SAVE
+  - key: shift
+  - key: mode
+  - type: NEW
+  - key: rsv
+  - type: "SAVE LOAD"
+  - key: f1
+  - type: SAVE"COM1:"@
+  - key: f2
+  - type: LOAD"COM1:"@
+  - key: mode
+  - key: rsv
+  - key: rsv
+# Collect some information:
+  - type: M=MEM
+  - type: S=DSKF"S2:"
+  - type: X=DSKF"X:"
+# Clear the display
+  - key: shift
+  - key: cl
+# Print the information
+  - type: PRINT"Memory:  ";M;"           Diskette:";X;"           Slot2:   ";S
+  - key: enter
+# Sync clock again
+  - sync-clock:
