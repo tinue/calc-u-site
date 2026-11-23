@@ -4794,7 +4794,7 @@ const FACE_MIN_AUTO = 120; // layout="auto": whatever a landscape phone's height
 const SPLITTERS = 1 + 5; // the line after the calculator, the divider before the debugger
 const MENU_HEIGHT = 26;
 const CALC_VERSION = "3.0.0";
-const CALC_BUILD = "pre-59c507bf"; // tools/build-id.cmake
+const CALC_BUILD = "pre-949c2403"; // tools/build-id.cmake
 
 /// The artwork's width that `height` leaves room for, and the column height for an artwork width.
 const faceWidthFor = height => (height - CHROME_SIZES.barHeight - 2 * FACE_PADDING) * CANVAS_ASPECT;

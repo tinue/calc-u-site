@@ -1,5 +1,5 @@
 # What Calc-U-59 bundles from examples/ (docs/formats/bundle.md): the three
-# startup presets and ten examples in three groups. Every distribution (Qt6,
+# startup presets and eleven examples in three groups. Every distribution (Qt6,
 # Swift, Web) bundles exactly the files listed here.
 
 format: example-bundle
@@ -19,6 +19,7 @@ groups:
       - preset: { file: sum.ti59 }
       - preset: { file: characters.ti59 }
       - preset: { file: fastmode-sst.ti59 }
+      - preset: { file: historic/life.ti59 }
   - group: Printer pictures
     examples:
       - preset: { file: printer-interrupt.ti59 }
