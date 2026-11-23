@@ -15,7 +15,7 @@
 // caches of this app; the fetch handler answers from this release's cache
 // only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calcu59-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "f49ea8c00e625762";
+const CACHE_NAME = CACHE_PREFIX + "1f2625e1c55bedb7";
 
 const ASSETS = [
   "./",
@@ -73,6 +73,7 @@ const ASSETS = [
   "../presets/diag.ti59",
   "../presets/fastmode-sst.ti59",
   "../presets/globe-print.ti59",
+  "../presets/historic/life.ti59",
   "../presets/picard.ti59",
   "../presets/printer-interrupt.ti59",
   "../presets/ram_test.ti59",

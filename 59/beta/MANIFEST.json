@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-59-web",
   "version": "3.0.0",
-  "commit": "59c507bfa8db7923be95a8c761809259ea0f3f02",
+  "commit": "949c24036995dc38d9576633a3df0f09ce072d04",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "cb5d82f7c401ee21c015e0f8f48ac60cf5ecc156b612b7787be07667150a5196",
@@ -9,7 +9,7 @@
     "app/icon.png": "0aacbf51f7d4ab2c0bb2820b614257ba7dbfea13c129444e43face920160e100",
     "app/index.html": "d21594f1d6e1f7eb64eba4daa2fe7ec179c334ab81834e37b5feb73000127e6a",
     "app/manifest.json": "577fd34cd5a7871468780d9176583b41524344ea4165d4599b367985a3d81b22",
-    "app/sw.js": "f5023aa6d53948d7f9986a828b2bbb9114bdf232946f2b5504e01e2e04b48b9d",
+    "app/sw.js": "759868aa306c2f903ae07bca75fb9337c4e183ab67eecf2f8d46d4bc53b65c64",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
     "bundle/AG.rom.yaml": "6a5fcea872b5bb70257a6957274c5013d7cea5ddd955137a48d29c555fe93bcf",
     "bundle/AV.rom.yaml": "dc162859a750d3dbc56692ebe2392f53ccf425a2ec1dbd1f303ac9b98922516a",
@@ -36,9 +36,9 @@
     "bundle/TMC0583-CONST-K.txt": "bda4ac42985d2802bbe16b1cf53c066d20dd72dcea886eb21aff2a2a432cdf1d",
     "bundle/TMC0583.txt": "269fdb103cba80a055efd274180e4efeb2ae6e2a63b3b8c5489fee98e63cb353",
     "calc-engine-worker.js": "af154211f802129fc5e84ec135808e6efead82f19ac0233fd3305326ecfe25a9",
-    "calc.css": "d6e6ed842dba7f1055465cbcdaeafc740d73a002ec08898dc15f6ddb68a2e658",
-    "calc.js": "abbebdc74049944b5a2b587c0cfcf09589eb145623a96567b60cd746a30f84be",
-    "files.json": "a39d49317b8347d20db62bc6ff564fed04b31e88010babea1aa464cb26553f63",
+    "calc.css": "f4dd350f4c892dc187883b1b8f5daad75eef6b607525e3fff2d56af6cafff882",
+    "calc.js": "e8e23bb335505cab702c2d23b3f918ee0642b09010321c7c7d038bc57571c57d",
+    "files.json": "72a8fb3b0fb1ec168640af5566d2d01a67300ba857a39d97b1de09f333ce6a9a",
     "fonts/Archivo-OFL.txt": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
     "fonts/archivo-400.woff2": "07f9160163da2ec0f6376ef9d27a2bb8163f98019ba798da4baafb154e30056e",
     "fonts/archivo-700.woff2": "abada6cd4c92a9a706f6d7ed3189f322ff43dd78b9402c7d1137465b861d2a04",
@@ -49,12 +49,13 @@
     "img/ti59_base.png": "c141afad98b97bacd1900a8073b823ac9c283dce2d2d49e3219771371a39eb38",
     "index.html": "8debae1bba89d499f164dc9bae47e536f5bd703e72bd0b9c2e70770bfa9d54ec",
     "library-worker.js": "172393dca6db6350161616f902976e2ac91abe3eab55248ddbb3e7dac0aa2ab8",
-    "presets/bundle.yaml": "5b9259d831988f6a5751dbfda99d524f0d6823ddd593495dc64a3f5aeba2485d",
+    "presets/bundle.yaml": "31b408e132441650949f6dcb552ea1e7385d082f0768b7d24f6c17018ea19662",
     "presets/characters.ti59": "baafd10cb4d7b5134951e778d01701d5b488ef101649b2b15ae7066f256bed71",
     "presets/diag.ti58": "cc86390fc153cd73238f5434324be464d8974ae8479bac9c7780db85d7b3d568",
     "presets/diag.ti59": "a47ae8492a1f291d0e27f80f92ee6e094d46787b73aebb1e92ad6d81e93db572",
     "presets/fastmode-sst.ti59": "084eeca9610f07d064f0fef0bab7f3d1cd06600abc27f2b61b5eaa92983723c8",
     "presets/globe-print.ti59": "d58872ce6bb3c9e5cca63c4a90b9a66e1a5f90aa4b5b7938eb9d22a410d7a123",
+    "presets/historic/life.ti59": "66160b47105a37487559e58c33713b526a64441214ab5101c43e619a5e7e1d24",
     "presets/picard.ti59": "2e3e744422823e6b4066b6fdda7b7b376e12d2c3b95d0f59884b413088597337",
     "presets/printer-interrupt.ti59": "410e67d24c773a4617ad60d413d075c7e1b6ceae8a15144ce87409cf4c596551",
     "presets/ram_test.ti59": "93084afe3f6e1a00116369256302a74d89089953952b0cec05651c9f22944681",
@@ -65,7 +66,7 @@
     "presets/switzerland.ti59": "7db56b75b7e9e06dda7759d4fe02220ad103d9560f7e977f347da3f3f0b0fa78",
     "vendor/react-dom.production.min.js": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
     "vendor/react.production.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
-    "wasm/calcu59-core.js": "0e4c3dd41434a30d36cf76db9d8e081e7ace78056f61dd1e0ca9678163f84f55",
-    "wasm/calcu59-core.wasm": "d5bbb03c8b04d8ed11c5fe00d2d37153d17b179498d8a2a3d5952ad092fa00ef"
+    "wasm/calcu59-core.js": "7474ac324578eb9ab4e6d424a9dd4d36c6b857611a584f2db222a111c3fab1fc",
+    "wasm/calcu59-core.wasm": "9b139b23fb7ba3fff0a9bfd7807a35cb0d6c2c75199bf1f41e2a8482721acc45"
   }
 }
