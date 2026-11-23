@@ -1,6 +1,6 @@
 # Startup preset for the TI-59: the TI-59 with the
 # Master Library module and the PC-100C. Set it as the TI-59's startup
-# preset ([preset] TI-59 in Calc-U-59.ini) to start with the printer.
+# preset ([preset] TI-59 in Calc-U-59.ini; a fresh install has it set) to start with the printer.
 
 format-version: 2
 model: TI-59

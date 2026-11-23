@@ -10,11 +10,12 @@
 //
 // A new release: the first install takes over at once;
 // a later one waits until no window of the app is open, so a running app
-// never mixes the files of two releases. Its activate removes the older
+// never mixes the files of two releases, or until a page asks it to take
+// over (`skip-waiting`, the page's Reload), and then every page reloads. Its activate removes the older
 // caches of this app; the fetch handler answers from this release's cache
 // only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calcu59-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "e7f8ddd4d4a756f0";
+const CACHE_NAME = CACHE_PREFIX + "281f229c17610cf9";
 
 const ASSETS = [
   "./",
@@ -83,6 +84,7 @@ const ASSETS = [
 ];
 
 let firstInstall = false;
+let askedToTakeOver = false;
 
 self.addEventListener("install", (event) => {
   firstInstall = !self.registration.active;
@@ -99,8 +101,14 @@ self.addEventListener("activate", (event) => {
       .then((keys) => Promise.all(
         keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map((key) => caches.delete(key))
       ))
-      .then(() => (firstInstall ? self.clients.claim() : undefined))
+      .then(() => (firstInstall || askedToTakeOver ? self.clients.claim() : undefined))
   );
+});
+
+self.addEventListener("message", (event) => {
+  if (!event.data || event.data.type !== "skip-waiting") return;
+  askedToTakeOver = true;
+  self.skipWaiting();
 });
 
 // Cache-first from this release's cache: the files are versioned by
