@@ -1689,11 +1689,13 @@ function calcuShellPaperRowCompact(sizes, rowWidth) {
 // allows, its proportions kept; the room left over lies "beside" it (the
 // window relatively wider) or "below" it, and picks the view. The panels go
 // there only when that room is at least their minimum on that side (0: no
-// panels there); else the product's fallback. On mobile with the room below,
-// panelsAloneOnMobileBelow gives the panels alone.
+// panels there); else the product's fallback. A window in the faceplate's
+// orientation always shows it; a mobile one turned the other way shows the
+// panels alone where the faceplate would be narrower than
+// faceplateUsableWidth (a phone).
 // inputs: {width, height, faceplateAspect, fixedWidth, fixedHeight,
 // panelsMinWidth, panelsMinHeight, debuggerMinWidth, debuggerMinHeight, mobile,
-// panelsAloneOnMobileBelow}; debuggerFits: the debugger beside the panels.
+// faceplateUsableWidth}; debuggerFits: the debugger beside the panels.
 function calcuShellView(inputs) {
   const i = inputs;
   const boxWidth = Math.max(0, i.width - (i.fixedWidth || 0));
@@ -1705,9 +1707,10 @@ function calcuShellView(inputs) {
   const room = side === "beside" ? boxWidth - faceplateWidth : boxHeight - faceplateHeight;
   const least = (side === "beside" ? i.panelsMinWidth : i.panelsMinHeight) || 0;
   const panelsFit = least > 0 && room >= least;
-  // Only where the room below takes the panels: a sliver of it (a phone in
-  // landscape whose safe area narrows the window) keeps the calculator.
-  const panelsAlone = !!i.panelsAloneOnMobileBelow && !!i.mobile && side === "below" && panelsFit;
+  // The natural orientation always shows the faceplate; turned, only a
+  // faceplate too narrow to use gives way to the panels.
+  const turned = aspect >= 1 !== i.width >= i.height;
+  const panelsAlone = !!i.mobile && turned && side === "below" && panelsFit && faceplateWidth < (i.faceplateUsableWidth || 0);
   const across = side === "beside" ? room : i.width;
   const debuggerFits = panelsFit && !panelsAlone && (i.debuggerMinWidth || 0) > 0 && across >= (i.panelsMinWidth || 0) + i.debuggerMinWidth && i.height >= (i.debuggerMinHeight || 0);
   return {
@@ -4753,8 +4756,8 @@ function CalcU1600(props) {
   const menuHeight = mobile ? 0 : MENU_HEIGHT; // mobile has no menu bar
   // The library's view rule on app/'s chrome: the faceplate as large as
   // the window allows; the panels' row below it where the room below takes
-  // it, else the calculator alone (a phone in landscape); on mobile with the
-  // room below (a phone in portrait) the panels alone.
+  // it, else the calculator alone (a phone in landscape); a phone upright
+  // (mobile, the faceplate too narrow to use) the panels alone.
   const sizes = chrome && chrome.sizes || {};
   const view = calcuShellView({
     width: W,
@@ -4766,7 +4769,7 @@ function CalcU1600(props) {
     debuggerMinWidth: sizes.debuggerMinWidth || 0,
     debuggerMinHeight: sizes.debuggerMinHeight || 0,
     mobile,
-    panelsAloneOnMobileBelow: true
+    faceplateUsableWidth: sizes.faceplateUsableWidth || 0
   });
   const faceWidth = Math.max(200, view.faceplateWidth);
   // The bar below the faceplate by the library's rule: its labels
@@ -4887,6 +4890,6 @@ function CalcU1600(props) {
   }), dialogs.element);
 }
 CalcU1600.version = "0.9.0";
-CalcU1600.build = "pre-949c2403"; // tools/build-id.cmake
+CalcU1600.build = "pre-b090bdeb"; // tools/build-id.cmake
 if (typeof window !== "undefined") window.CalcU1600 = CalcU1600;
 })();
