@@ -928,25 +928,31 @@ function calcuPaintMarks(ctx, description, marks, scale, top, bottom) {
 // any paper from its marks and names no printer; the shell places it in its
 // area for panels.
 //
-//   <CalcuPaperPanel shell={shell} owner={peripheralId | null}
-//                    controls={[{id, form: "key" | "switch", on}]} send={fn?}
-//                    places={[bar control]} onChoose={fn} />
+//   <CalcuPaperPanel shell={shell} owner={peripheralId | null} ownerPlace={place | null}
+//                    hint={text} controls={[{id, form: "key" | "switch", on, label?, shortLabel?}]?}
+//                    send={fn?} places={[bar control]} onChoose={fn} />
 //
-// owner: the printer plugged in, from the control state; controls:
-// that printer's controls; places: the shell's place controls on the paper
+// owner, ownerPlace: the printer plugged in and its place, from the control
+// state's panel; hint: what shows where the paper would start while there is
+// none (the panel model's); controls: that printer's controls, by default the
+// control state's of the owner on its place; places: the shell's place controls on the paper
 // (the panel model's), first in the header, onChoose(item) carrying out
 // their choice (the shell's choose); send(command, args) defaults to
 // shell.send. The header holds the places left, the owner's name centred
-// and the view control right; below the paper, the owner's controls left
-// and Copy and Cut right. Copy and Cut arm the clipboard inside the click (armClipboard,
-// hostServices.js) and send `paper.copy` / `paper.cut {copy: true}`.
+// and the view control right; below the paper one row that never wraps: the
+// owner's controls left, labelled as the control state labels them (the
+// short labels where the row is compact: calcuShellPaperRowCompact on the
+// panel's width and the chrome's --calcu-paper-row-compact-width), a switch
+// with the dot of its position; Copy and Cut right as icons. Copy and Cut
+// arm the clipboard inside the click (armClipboard, hostServices.js) and
+// send `paper.copy` / `paper.cut {copy: true}`.
 // Elements carry data-calcu names for the tests: paper-panel, paper-owner,
 // paper-view, paper-copy, paper-cut, paper-toast, paper-text,
 // paper-control-<id>, paper-scroll, paper-canvas.
 
 const CALCU_PAPER_FOLLOW = 64; // points from the end within which the view follows
 const CALCU_PAPER_BLANK = 8; // blank above and below the paper
-const CALCU_PAPER_TOAST_MS = 1800; // how long "Copied to clipboard" shows
+const CALCU_PAPER_TOAST_MS = 1800; // how long a Copy's outcome shows
 
 function useCalcuPaper(shell) {
   const store = calcuPaperStore(shell);
@@ -958,11 +964,50 @@ function useCalcuPaper(shell) {
   }).current;
   return React.useSyncExternalStore(store ? store.subscribe : () => () => {}, store ? store.getState : () => none, () => none);
 }
+
+// Copy (two sheets) and Cut (scissors), drawn in the button's text colour.
+function CalcuPaperIcon({
+  kind
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    className: "calcu-paper-icon",
+    viewBox: "0 0 16 16",
+    width: "16",
+    height: "16",
+    "aria-hidden": "true",
+    focusable: "false",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.4",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, kind === "copy" ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+    x: "5.5",
+    y: "1.5",
+    width: "8",
+    height: "10",
+    rx: "1.5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M5.5 4.5H2.5V14.5H10.5V11.5"
+  })) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+    cx: "4",
+    cy: "12",
+    r: "2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M5.4 10.6L11.5 1.5M10.6 10.6L4.5 1.5"
+  })));
+}
 function CalcuPaperControl({
   control,
+  compact,
   onSet
 }) {
   const [held, setHeld] = React.useState(false);
+  const label = (compact ? control.shortLabel : control.label) || control.label || control.id;
   if (control.form === "key") {
     const down = held || !!control.on;
     const release = () => {
@@ -987,25 +1032,34 @@ function CalcuPaperControl({
       onPointerUp: release,
       onPointerCancel: release,
       onLostPointerCapture: release
-    }, control.id);
+    }, label);
   }
+  // A switch: its label and the dot of its position.
   return /*#__PURE__*/React.createElement("button", {
     type: "button",
-    className: "calcu-paper-control" + (control.on ? " calcu-paper-down" : ""),
+    className: "calcu-paper-control calcu-paper-switch",
     "data-calcu": `paper-control-${control.id}`,
     "aria-pressed": !!control.on,
     onClick: () => onSet(control.id, !control.on)
-  }, control.id);
+  }, label, /*#__PURE__*/React.createElement("span", {
+    className: "calcu-paper-dot" + (control.on ? " calcu-paper-dot-on" : ""),
+    "aria-hidden": "true"
+  }));
 }
+const CALCU_PAPER_NO_CONTROLS = [];
 function CalcuPaperPanel({
   shell,
   owner,
-  controls,
+  ownerPlace,
+  hint,
+  controls: given,
   send,
   places,
   onChoose
 }) {
   const state = useCalcuPaper(shell);
+  const all = useTopic(shell, "control-state", cs => cs && cs.controls || CALCU_PAPER_NO_CONTROLS);
+  const controls = given || all.filter(c => c.peripheral === owner && c.place === ownerPlace);
   const entry = calcuPaperOf(state.papers, owner);
   const name = entry ? entry.owner : "";
   const description = entry ? entry.description : null;
@@ -1017,6 +1071,25 @@ function CalcuPaperPanel({
   const sendTo = send || ((n, a) => shell ? shell.send(n, a) : Promise.resolve({
     done: false
   }));
+
+  // The row's rule on the panel's width (the page measures it).
+  const panelRef = React.useRef(null);
+  const [compact, setCompact] = React.useState(false);
+  React.useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return undefined;
+    const update = () => {
+      const width = parseFloat(getComputedStyle(el).getPropertyValue("--calcu-paper-row-compact-width")) || 0;
+      setCompact(calcuShellPaperRowCompact({
+        paperRowCompactWidth: width
+      }, el.clientWidth));
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") return undefined;
+    const o = new ResizeObserver(update);
+    o.observe(el);
+    return () => o.disconnect();
+  }, []);
   const scrollRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const lastHeight = React.useRef(null); // the scroll height the last follow saw
@@ -1089,7 +1162,7 @@ function CalcuPaperPanel({
   const copy = state.copy;
   React.useEffect(() => {
     if (!copy || !name || copy.owner !== name) return undefined;
-    setToast(copy.outcome === "failed" ? "Copy failed" : "Copied to clipboard");
+    setToast(copy.text);
     const t = setTimeout(() => setToast(null), CALCU_PAPER_TOAST_MS);
     return () => clearTimeout(t);
   }, [copy && copy.seq]);
@@ -1107,8 +1180,10 @@ function CalcuPaperPanel({
     on
   });
   return /*#__PURE__*/React.createElement("div", {
-    className: "calcu-paper-panel",
-    "data-calcu": "paper-panel"
+    className: "calcu-paper-panel" + (compact ? " calcu-paper-compact" : ""),
+    "data-calcu": "paper-panel",
+    "data-compact": compact ? "true" : "false",
+    ref: panelRef
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-paper-header"
   }, /*#__PURE__*/React.createElement("span", {
@@ -1140,7 +1215,7 @@ function CalcuPaperPanel({
   }, !owner && /*#__PURE__*/React.createElement("p", {
     className: "calcu-paper-hint",
     "data-calcu": "paper-hint"
-  }, "No printer attached."), /*#__PURE__*/React.createElement("div", {
+  }, hint), /*#__PURE__*/React.createElement("div", {
     className: "calcu-paper-sheet",
     style: {
       height: contentHeight
@@ -1159,25 +1234,36 @@ function CalcuPaperPanel({
   }, entry && (controls || []).map(c => /*#__PURE__*/React.createElement(CalcuPaperControl, {
     key: c.id,
     control: c,
+    compact: compact,
     onSet: setControl
   })), /*#__PURE__*/React.createElement("span", {
     className: "calcu-paper-actions"
   }, /*#__PURE__*/React.createElement("button", {
     type: "button",
+    className: "calcu-paper-action",
     "data-calcu": "paper-copy",
     disabled: !usable,
+    title: "Copy",
+    "aria-label": "Copy",
     onClick: () => copyOrCut("paper.copy", {
       owner: name
     })
-  }, "Copy"), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement(CalcuPaperIcon, {
+    kind: "copy"
+  })), /*#__PURE__*/React.createElement("button", {
     type: "button",
+    className: "calcu-paper-action",
     "data-calcu": "paper-cut",
     disabled: !usable,
+    title: "Cut",
+    "aria-label": "Cut",
     onClick: () => copyOrCut("paper.cut", {
       owner: name,
       copy: true
     })
-  }, "Cut"))), toast && /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(CalcuPaperIcon, {
+    kind: "cut"
+  })))), toast && /*#__PURE__*/React.createElement("div", {
     className: "calcu-paper-toast",
     "data-calcu": "paper-toast",
     role: "status"
@@ -1528,7 +1614,7 @@ function CalcuSavedMediaDialog({
 }
 /* === shellModel.js === */
 // The shell's rules that run on the page's own clock and measurements, in
-// plain JS: the same rules as library/shell/ (barFit, view, LoadingRule,
+// plain JS: the same rules as library/shell/ (barFit, paperRowCompact, view, LoadingRule,
 // NoticeQueue, the hit rule, PointerTracker, about), rule by rule. The
 // menus, the bar, the panels and the settings dialog are the C++ models',
 // which the worker serves (topic `web.shell`, shell::ModelHost). No React,
@@ -1537,9 +1623,11 @@ function CalcuSavedMediaDialog({
 // set's closure; every top-level name starts with `calcuShell` or `CALCU_SHELL`.
 //
 //   calcuShellBarFit(faceplate, withoutLabels, withLabels, room?) → {width, labels}
+//   calcuShellPaperRowCompact(sizes, rowWidth) → bool
 //   calcuShellView(inputs) → {side, panelsFit, panelsAlone, faceplateWidth, faceplateHeight, room}
 //   calcuShellLoading() → {busy(runs, full, now), shown(now), due()}
-//   calcuShellNotices() → {push, refusal, current, close, answer, waiting}
+//   calcuShellNotices() → {push, refusal, current, close, answer, waiting}; current() is
+//     {seq, text, question, command}, seq numbering the notices queued
 //   calcuShellKeyAt(map, scale, x, y); calcuShellPointer(map, scale) → {down, move, up, releaseAll}
 //   calcuShellAbout(product)
 //   calcuShellList, calcuShellText, calcuShellAvailability: reading the topics' Values
@@ -1552,7 +1640,8 @@ const CALCU_SHELL_ACTIONS = {
   copyScreen: "copy-screen",
   pasteText: "paste-text",
   help: "help",
-  about: "about"
+  about: "about",
+  nameAndSavePrefix: "media-name-and-save-"
 };
 const CALCU_SHELL_LOADING_MS = 500;
 // The notice queue's question rule, as shell::kAsksPrefix (Notices.cpp): "asks:"
@@ -1587,6 +1676,13 @@ function calcuShellBarFit(faceplate, withoutLabels, withLabels, room = Infinity)
     labels,
     width: Math.min(room, Math.max(faceplate, labels ? withLabels : withoutLabels))
   };
+}
+
+// The paper panel's control row (C++ shell::paperRowCompact): compact below
+// the chrome's paperRowCompactWidth; 0: never.
+function calcuShellPaperRowCompact(sizes, rowWidth) {
+  const least = sizes && sizes.paperRowCompactWidth || 0;
+  return least > 0 && rowWidth < least;
 }
 
 // The view rule (C++ shell::view): the faceplate as large as the window
@@ -1649,9 +1745,11 @@ function calcuShellLoading() {
 function calcuShellNotices() {
   const queue = [];
   let last = "";
+  let seq = 0;
   const push = sentence => {
     last = sentence;
     queue.push({
+      seq: ++seq,
       text: sentence,
       question: false,
       command: null
@@ -1663,6 +1761,7 @@ function calcuShellNotices() {
       const r = reason || "";
       if (r.startsWith(CALCU_SHELL_ASKS)) {
         queue.push({
+          seq: ++seq,
           text: r.slice(CALCU_SHELL_ASKS.length).replace(/^ +/, ""),
           question: true,
           command: sent || null
@@ -1817,6 +1916,7 @@ function calcuShellAbout(product) {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     calcuShellBarFit,
+    calcuShellPaperRowCompact,
     calcuShellView,
     calcuShellLoading,
     calcuShellNotices,
@@ -1839,14 +1939,21 @@ if (typeof module !== "undefined" && module.exports) {
 //   page is mobile when CALCU_SHELL_MOBILE. shellArgs: the product's own
 //   args of its shell, as its Web part reads them.)
 //   s.menus, s.bar, s.panels, s.dialog (the settings rows), s.loading, s.notice,
-//   s.started, s.romsMissing, s.open ("settings" | "about" | "saved-media" | null)
+//   s.started, s.romsMissing, s.open ("settings" | "about" | "saved-media" |
+//   "name-and-save" | null), s.naming (the place Name & Save is open for),
+//   s.nameAndSavePrompts ({place: prompt}, the models' nameAndSave)
 //   s.choose(item), s.setSetting(section, key, value), s.closeNotice(yes), s.close()
+//   s.notify(text): a notice of the page's own, queued with the session's
+//   s.nameAndSave(place): the Name & Save dialog of a media place (ShellDialogs),
+//   for the place's submenu, the slot pickers' buttons and the product's own
+//   media controls
 //
 // `product` is the page's form of the product's data (`*.shell-product`):
 // its name, help address and About, `product.loadPreset` (optional) in
 // place of the shell's Load Preset… (a product that opens the picked files
-// through the session's `open`), `copyScreen`, `nameAndSave(place)` and its
-// items' acts by id.
+// through the session's `open`), `copyScreen`, `nameAndSave` ({slotButtons}:
+// ShellProduct::nameAndSave) and its items' acts by id. The Name & Save
+// prompts by place are the models' (`s.nameAndSavePrompts`).
 
 // Whether the page is mobile, fixed while it is open: true for the
 // installed app and for a browser that asks for the mobile site, else
@@ -1875,7 +1982,8 @@ const CALCU_SHELL_NO_MODELS = {
   menus: [],
   bar: [],
   panels: [],
-  dialog: []
+  dialog: [],
+  nameAndSave: {}
 };
 function calcuShellNow() {
   return typeof performance !== "undefined" ? performance.now() : Date.now();
@@ -1891,6 +1999,7 @@ function useCalcuShell(shell, product, traits, shellArgs) {
   const media = useTopic(shell, "media");
   const models = useTopic(shell, "web.shell") || CALCU_SHELL_NO_MODELS;
   const [open, setOpen] = React.useState(null);
+  const [naming, setNaming] = React.useState(null);
   const [, setVersion] = React.useState(0);
   const rerender = React.useCallback(() => setVersion(v => v + 1), []);
   const notices = React.useRef(null);
@@ -1942,6 +2051,7 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     panels,
     dialog
   } = models;
+  const nameAndSavePrompts = models.nameAndSave || {};
   const sendChecked = (name, args) => {
     if (!shell) return Promise.resolve({
       done: false
@@ -1968,6 +2078,10 @@ function useCalcuShell(shell, product, traits, shellArgs) {
       });
     });
   };
+  const nameAndSave = place => {
+    setNaming(place);
+    setOpen("name-and-save");
+  };
   const choose = item => {
     if (!item || item.enabled === false) return;
     if (item.command) {
@@ -1976,9 +2090,7 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     }
     const a = CALCU_SHELL_ACTIONS;
     if (item.id === a.loadPreset) (product.loadPreset || loadPreset)(); // a product may open the files itself
-    else if (item.id === a.settings) setOpen("settings");else if (item.id === a.about) setOpen("about");else if (item.id === a.savedMedia) setOpen("saved-media");else if (item.id.startsWith("media-name-and-save-")) {
-      if (product.nameAndSave) product.nameAndSave(item.args.place);
-    } else if (item.id === a.help) calcuWebHostServices().answer("open-url", {
+    else if (item.id === a.settings) setOpen("settings");else if (item.id === a.about) setOpen("about");else if (item.id === a.savedMedia) setOpen("saved-media");else if (item.id.startsWith(a.nameAndSavePrefix)) nameAndSave(item.args.place);else if (item.id === a.help) calcuWebHostServices().answer("open-url", {
       url: product.helpUrl
     }); // its result is ignored
     else if (item.id === a.copyScreen) {
@@ -2004,12 +2116,15 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     panels,
     dialog,
     open,
+    naming,
+    nameAndSavePrompts,
     started: !!controlState,
     romsMissing: romsMissing || null,
     loading: loading.current.shown(calcuShellNow()),
     notice: current,
     choose,
     sendChecked,
+    nameAndSave,
     setSetting: (section, key, value) => sendChecked("set-setting", {
       section,
       key,
@@ -2018,6 +2133,10 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     closeNotice: yes => {
       const again = notices.current.answer(!!yes);
       if (again) sendChecked(again.name, again.args);
+      rerender();
+    },
+    notify: text => {
+      notices.current.push(text);
       rerender();
     },
     close: () => setOpen(null)
@@ -2031,7 +2150,9 @@ function useCalcuShell(shell, product, traits, shellArgs) {
 // Opened, it takes the focus unless a child took it (autoFocus): the
 // default button (`calcu-shell-default`), else the dialog itself, so that
 // Escape always reaches it. And ShellDialogs, which shows
-// the settings dialog, About, the notice and "Loading…" of useCalcuShell.
+// the settings dialog, About, Name & Save (the library's CalcuNameAndSaveDialog
+// with the product's prompt for the place, data-calcu="name-and-save"), the
+// notice and "Loading…" of useCalcuShell.
 //
 //   <ShellModal name="settings-dialog" title="Settings" onClose={fn} buttons={…}>…</ShellModal>
 //   <ShellDialogs shell={s} savedMedia={Component?} />
@@ -2077,6 +2198,24 @@ function ShellModal({
     className: "calcu-shell-modal-buttons"
   }, buttons)));
 }
+
+// The place's prompt from the worker's models (`web.shell`'s nameAndSave).
+function ShellNameAndSave({
+  shell
+}) {
+  const s = shell;
+  const prompt = (s.nameAndSavePrompts || {})[s.naming];
+  return /*#__PURE__*/React.createElement(ShellModal, {
+    title: "Name & Save",
+    name: "name-and-save",
+    onClose: s.close
+  }, /*#__PURE__*/React.createElement(CalcuNameAndSaveDialog, {
+    place: calcuMediaPlace(s.inputs.media, s.naming),
+    prompt: prompt,
+    send: (c, a) => s.shell.send(c, a),
+    onClose: s.close
+  }));
+}
 function ShellDialogs({
   shell,
   savedMedia
@@ -2090,6 +2229,8 @@ function ShellDialogs({
   }), s.open === "saved-media" && Saved && /*#__PURE__*/React.createElement(Saved, {
     shell: s.shell,
     onClose: s.close
+  }), s.open === "name-and-save" && /*#__PURE__*/React.createElement(ShellNameAndSave, {
+    shell: s
   }), s.notice && /*#__PURE__*/React.createElement(ShellNotice, {
     shell: s
   }));
@@ -2555,17 +2696,14 @@ function ShellAbout({
 // ShellNotice -- a notice or a question of the React set: the sentence as it is, no title, OK; a
 // question (`asks:`) with Yes and No. Modal: it must be closed before the
 // component can be used again, while the machine and a running operation go
-// on behind it. Names: notice, notice-ok, notice-yes, notice-no.
+// on behind it. Each notice is a modal of its own, so the modal's focus rule
+// gives each its default button. Names: notice, notice-ok, notice-yes, notice-no.
 
 function ShellNotice({
   shell
 }) {
   const s = shell;
   const n = s.notice;
-  const ok = React.useRef(null);
-  React.useEffect(() => {
-    if (ok.current) ok.current.focus();
-  }, [n]);
   if (!n) return null;
   const buttons = n.question ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     type: "button",
@@ -2575,16 +2713,15 @@ function ShellNotice({
     type: "button",
     className: "calcu-shell-default",
     "data-calcu": "notice-yes",
-    ref: ok,
     onClick: () => s.closeNotice(true)
   }, "Yes")) : /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "calcu-shell-default",
     "data-calcu": "notice-ok",
-    ref: ok,
     onClick: () => s.closeNotice(true)
   }, "OK");
   return /*#__PURE__*/React.createElement(ShellModal, {
+    key: n.seq,
     name: "notice",
     onClose: () => s.closeNotice(false),
     buttons: buttons
@@ -2619,7 +2756,7 @@ function ShellLoading() {
 //
 //   <ShellPanelArea shell={s} panels={{paper: Component?}}>{product panels}</ShellPanelArea>
 //
-// A component of `panels` gets {shell: s.shell, owner, ownerPlace, places,
+// A component of `panels` gets {shell: s.shell, owner, ownerPlace, hint, places,
 // onChoose} (places: the place controls on the paper, s.choose for them).
 
 function ShellPanelArea({
@@ -2640,7 +2777,7 @@ function ShellPanelArea({
       shell: s.shell,
       owner: p.owner || null,
       ownerPlace: p.ownerPlace || null,
-      controls: [],
+      hint: p.hint,
       places: p.places,
       onChoose: s.choose
     });
@@ -3005,7 +3142,7 @@ if (typeof module !== "undefined" && module.exports) {
 // A product page's glue to its session, the same for both products' pages.
 //
 //   useShellProduct(shell, {request, args, fallback, version, build,
-//                   copyScreen, openFiles, acts, nameAndSave}) → {product, ready, chrome}
+//                   copyScreen, openFiles, acts}) → {product, ready, chrome}
 //     the product's data: `request` (`<prefix>.shell-product`) with
 //     `args`, once per distinct `args` while the session runs, its answer
 //     {product, chrome} kept; `fallback` (the shell's frame with nothing of
@@ -3013,8 +3150,8 @@ if (typeof module !== "undefined" && module.exports) {
 //     page's `version` and `build`, Copy Screen (`copyScreen`, or null:
 //     none), Load Preset… (the files picked by the product's
 //     `presetUploads`: the preset with the files it names, through
-//     `openFiles(files, "dialog")`), the items' acts (`acts`, by id) and
-//     Name & Save of a media place from More (`nameAndSave(place)`). copyScreen, openFiles and acts are read
+//     `openFiles(files, "dialog")`) and the items' acts (`acts`, by id); its
+//     `nameAndSave` the shell carries out. copyScreen, openFiles and acts are read
 //     when used, so they may be new closures at each render. `chrome`: the
 //     answer's chrome (the product's app/ Chrome in shell/Chrome's form),
 //     null until it came.
@@ -3065,9 +3202,6 @@ function useShellProduct(shell, options) {
       version: options.version,
       build: options.build,
       copyScreen: hasCopyScreen ? () => latest.current.copyScreen() : null,
-      nameAndSave: place => {
-        if (latest.current.nameAndSave) latest.current.nameAndSave(place);
-      },
       loadPreset: async () => {
         const files = await calcuPickFiles(p.presetUploads || "", true);
         if (files.length) latest.current.openFiles(files, "dialog");
@@ -3113,6 +3247,9 @@ function calcuChromeStyle(chrome, dark) {
   style["--calcu-bar-height"] = px(s.barHeight);
   style["--calcu-bar-gap"] = px(s.barGap);
   if (s.slotPickerEm) style["--calcu-slot-picker-width"] = `${s.slotPickerEm}em`;
+  style["--calcu-paper-row-compact-width"] = String(s.paperRowCompactWidth);
+  style["--calcu-paper-row-gap"] = px(s.paperRowGap);
+  style["--calcu-paper-row-compact-gap"] = px(s.paperRowCompactGap);
   if (s.printerMaxWidth) {
     style["--calcu-printer-min-width"] = px(s.printerMinWidth);
     style["--calcu-printer-max-width"] = px(s.printerMaxWidth);
@@ -3168,12 +3305,19 @@ function calcuFileDrop(open) {
 //     File ▸ Saved Media…: the library's list (CalcuSavedMediaDialog) in the
 //     shell's modal (data-calcu="saved-media")
 //   <ShellControlBar slotPicker={Component} />, where the component draws
-//   <ShellSlotPicker shell={s} entry={entry} label={text?} nameAndSave={fn?} icon={element?} short={bool?} />
+//   <ShellSlotPicker shell={s} entry={entry} label={text?} icon={element?} short={bool?} />
 //     the library's module picker of a slot (the shell's slot picker),
 //     disabled with the place's reason while it cannot be used (`empty`);
-//     `label` names the fieldset; with `nameAndSave(word)` a Name & Save
-//     button (`icon` its glyph; data-calcu="name-and-save-<place>"), usable
-//     while the place's medium can be named and saved
+//     `label` names the fieldset; where the product asks for it
+//     (nameAndSave.slotButtons) a Name & Save button (`icon` its glyph;
+//     data-calcu="name-and-save-<place>"), usable while the place's medium
+//     can be named and saved, which opens the shell's dialog
+//   <ShellNameAndSaveButton shell={s} place={word} label={text?} icon={element} />
+//     the Name & Save button of a media place, for the slot pickers and a
+//     product's own media controls: usable while the place's medium can be
+//     named and saved, it opens the shell's dialog; `label` names the place
+//     in the button's accessible name (default: the place's word);
+//     data-calcu="name-and-save-<place>"
 
 function ShellSavedMedia({
   shell,
@@ -3194,11 +3338,11 @@ function ShellSlotPicker({
   shell,
   entry,
   label,
-  nameAndSave,
   icon,
   short
 }) {
   const word = calcuShellText(entry, "place");
+  const button = !!(shell.product && shell.product.nameAndSave && shell.product.nameAndSave.slotButtons);
   const place = calcuMediaPlace(shell.inputs.media, word);
   const ok = calcuShellAvailability(entry, "empty");
   return /*#__PURE__*/React.createElement("fieldset", {
@@ -3210,15 +3354,28 @@ function ShellSlotPicker({
     place: place,
     send: (c, a) => shell.shell.send(c, a),
     short: short
-  }), nameAndSave && /*#__PURE__*/React.createElement("button", {
+  }), button && /*#__PURE__*/React.createElement(ShellNameAndSaveButton, {
+    shell: shell,
+    place: word,
+    icon: icon
+  }));
+}
+function ShellNameAndSaveButton({
+  shell,
+  place,
+  label,
+  icon
+}) {
+  const medium = calcuMediaPlace(shell.inputs.media, place);
+  return /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "calcu-iconbutton",
-    disabled: !place || !place.nameAndSave,
+    disabled: !medium || !medium.nameAndSave,
     title: "Name & Save",
-    "data-calcu": `name-and-save-${word}`,
-    "aria-label": `Name & Save ${word.replace("-", " ")}`,
-    onClick: () => nameAndSave(word)
-  }, icon));
+    "data-calcu": `name-and-save-${place}`,
+    "aria-label": `Name & Save ${label || place.replace("-", " ")}`,
+    onClick: () => shell.nameAndSave(place)
+  }, icon);
 }
 /* === page.jsx === */
 // What the page's components share: the library's shell (its useShell,
@@ -3914,40 +4071,27 @@ function CardPicker({
 // PC-100C while it is plugged into `printer`, else none). The
 // PC-100C is attached and detached by its button at the left of the
 // panel's header (the shell's place control, `places`). Its controls are
-// the PC-100C's PRINT and ADV (keys) and TRACE (a switch), with their
-// positions, as the control state lists them (`controls`).
+// the PC-100C's PRINT and ADV (keys) and TRACE (a switch), which the panel
+// takes from the control state with their positions and labels.
 // Copy and Cut are the panel's: the session's paper.copy / paper.cut through
 // the page's clipboard service.
 
-const NO_CONTROLS = [];
-const PRINTER_PLACE = "printer"; // kTIPrinterPlace (core/TICatalogue.hpp)
-
-// `owner`: the paper panel's owner of the control state ("PC-100C" or "");
-// `places`, `onChoose`: the shell's place controls on the paper and its choose.
+// `paper`: the shell's paper panel ({owner, ownerPlace, hint, places});
+// `onChoose`: the shell's choose, for the place controls on the paper.
 function PaperPane({
   shell,
-  owner,
-  places,
+  paper,
   onChoose
 }) {
-  const all = useTopic(shell, "control-state", cs => cs && cs.controls || NO_CONTROLS);
-  const controls = all.filter(c => c.place === PRINTER_PLACE).map(({
-    id,
-    form,
-    on
-  }) => ({
-    id,
-    form,
-    on
-  }));
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-printer",
     "data-panel": "paper"
   }, /*#__PURE__*/React.createElement(CalcuPaperPanel, {
     shell: shell,
-    owner: owner || null,
-    controls: controls,
-    places: places,
+    owner: paper.owner || null,
+    ownerPlace: paper.ownerPlace || null,
+    hint: paper.hint,
+    places: paper.places || [],
     onChoose: onChoose
   }));
 }
@@ -4610,7 +4754,7 @@ const FACE_MIN_AUTO = 120; // layout="auto": whatever a landscape phone's height
 const SPLITTERS = 1 + 5; // the line after the calculator, the divider before the debugger
 const MENU_HEIGHT = 26;
 const CALC_VERSION = "3.0.0";
-const CALC_BUILD = "pre-0af4f90"; // tools/build-id.cmake
+const CALC_BUILD = "pre-fb8819bc"; // tools/build-id.cmake
 
 /// The artwork's width that `height` leaves room for, and the column height for an artwork width.
 const faceWidthFor = height => (height - CHROME_SIZES.barHeight - 2 * FACE_PADDING) * CANVAS_ASPECT;
@@ -4671,7 +4815,6 @@ const SlotPicker = props => /*#__PURE__*/React.createElement(ShellSlotPicker, _e
 function BarButton({
   icon,
   label,
-  compact,
   title,
   name,
   className = "",
@@ -4691,42 +4834,39 @@ function BarButton({
 }
 
 // The card controls, the media controls of the kind
-// `magnetic-card` on the shell's bar: Arm Card and Arm Fresh Card (both
-// "Crd") while no card passes, Eject Card while one does; disabled with the
-// media place's reason while it cannot be used (`insert`).
-const C59_BAR = React.createContext(null);
+// `magnetic-card` on the shell's bar, as the control state declares them
+// (`c59.card-controls`): Arm Card and Arm Fresh Card (both "Crd") while no
+// card passes, Eject Card while one does; disabled with the reason as their
+// tooltip while they cannot be used. Arm Card and Arm Fresh Card are the
+// product items of the same names (their dialogs).
 function CardControls({
-  shell,
-  entry
+  shell
 }) {
-  const bar = React.useContext(C59_BAR);
-  const reader = cardReaderOf(shell.inputs.media);
-  const swiping = !!reader && reader.passing !== undefined && reader.passing !== null;
-  const ok = calcuShellAvailability(entry, "insert");
-  if (swiping) return /*#__PURE__*/React.createElement(BarButton, {
-    icon: "\u23CF",
-    label: "Eject Card",
-    compact: bar.compact,
-    onClick: () => shell.shell.send("media.eject", {
+  const cs = shell.inputs.controlState;
+  const entry = cs && cs.product ? cs.product["c59.card-controls"] : null;
+  const acts = {
+    "arm-card": () => shell.choose({
+      id: "arm-card"
+    }),
+    "arm-fresh-card": () => shell.choose({
+      id: "arm-fresh-card"
+    }),
+    "eject-card": () => shell.shell.send("media.eject", {
       place: "card-reader"
     })
-  });
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(BarButton, {
-    icon: "\u2913",
-    label: "Crd",
-    name: "Arm Card",
-    compact: bar.compact,
-    disabled: !ok.now,
-    title: ok.now ? "Arm Card" : ok.reason,
-    onClick: () => bar.cardDialog("arm")
-  }), /*#__PURE__*/React.createElement(BarButton, {
-    icon: "\uFF0B",
-    label: "Crd",
-    name: "Arm Fresh Card",
-    compact: bar.compact,
-    disabled: !ok.now,
-    title: ok.now ? "Arm Fresh Card" : ok.reason,
-    onClick: () => bar.cardDialog("fresh")
+  };
+  return /*#__PURE__*/React.createElement(React.Fragment, null, calcuShellList(entry, "controls").map(c => {
+    const ok = calcuShellAvailability(c);
+    const name = calcuShellText(c, "name");
+    return /*#__PURE__*/React.createElement(BarButton, {
+      key: c.id,
+      icon: calcuShellText(c, "icon"),
+      label: calcuShellText(c, "label"),
+      name: name,
+      disabled: !ok.now,
+      title: ok.now ? name : ok.reason,
+      onClick: acts[c.id]
+    });
   }));
 }
 const C59_MEDIA_CONTROLS = {
@@ -4746,7 +4886,6 @@ function CalculatorColumn({
   const barRef = React.useRef(null);
   const body = faceWidth + 2 * FACE_PADDING; // the calculator's body, the bar's width where it fits
   const fit = useShellBarFit(barRef, body); // the labels ("Crd", "Preset") and the width
-  const compact = !fit.labels;
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-calc",
     style: {
@@ -4761,18 +4900,13 @@ function CalculatorColumn({
     width: faceWidth
   })), /*#__PURE__*/React.createElement("div", {
     ref: barRef,
-    className: "calcu-bar" + (compact ? " calcu-compact" : "")
-  }, /*#__PURE__*/React.createElement(C59_BAR.Provider, {
-    value: {
-      compact,
-      cardDialog: page.cardDialog
-    }
+    className: "calcu-bar"
   }, /*#__PURE__*/React.createElement(ShellControlBar, {
     shell: s,
-    compact: compact,
+    compact: !fit.labels,
     slotPicker: SlotPicker,
     mediaControls: C59_MEDIA_CONTROLS
-  }))));
+  })));
 }
 
 /// A draggable divider that changes the width before it by the drag.
@@ -4876,8 +5010,7 @@ function WideLayout({
     }
   }, /*#__PURE__*/React.createElement(PaperPane, {
     shell: page.shell,
-    owner: page.paperOwner,
-    places: page.paperPlaces,
+    paper: page.paper,
     onChoose: page.s.choose
   })), hasDebugger && /*#__PURE__*/React.createElement(Divider, {
     onDrag: dx => setPrinterWidth(Math.max(printerMin, Math.min(printerMax, pw + dx)))
@@ -4920,8 +5053,7 @@ function PortraitLayout({
     className: "calcu-page calcu-page-printer"
   }, /*#__PURE__*/React.createElement(PaperPane, {
     shell: page.shell,
-    owner: page.paperOwner,
-    places: page.paperPlaces,
+    paper: page.paper,
     onChoose: page.s.choose
   })), view === "calc" ? chevron("right") : chevron("left")));
 }
@@ -5045,14 +5177,14 @@ function CalcU59(props) {
 
   // Keyboard feedback is for touch screens: portrait, and the PWA in any layout.
   const touch = layout !== "wide";
-  const modalOpen = !!s.open || !!s.notice || !!cardDialog;
 
   // ── Physical keyboard ────────────────────────────────────────────────
   // Only with keyboard={true}, and only while the calculator itself has
-  // focus (not a control in it): Tab keeps working as Tab. A key with
+  // focus (not a control in it, nor a dialog, which keeps its keys):
+  // Tab keeps working as Tab. A key with
   // Control, Alt or Command is the browser's; the product's keyboard map in
   // the worker (app/TITyping's TIKeyboardMap) decides what the others press.
-  const ownsKeys = e => keyboard && shell && s.started && !modalOpen && (e.target === rootRef.current || e.target.classList && e.target.classList.contains("calcu-key"));
+  const ownsKeys = e => keyboard && shell && s.started && (e.target === rootRef.current || e.target.classList && e.target.classList.contains("calcu-key"));
   const claimed = e => {
     if (!ownsKeys(e) || e.ctrlKey || e.altKey || e.metaKey) return false;
     const k = calcuHostKeyEvent(e);
@@ -5092,15 +5224,12 @@ function CalcU59(props) {
   // ── Drag and drop any file: the session's `open {way: drop, upload}` ─
   const drop = calcuFileDrop(shell ? openFiles : null);
   const paper = s.panels.find(p => p.kind === "paper") || {};
-  const paperOwner = paper.owner || "";
   const page = {
     shell,
     s,
     faceplate: maps[model] || null,
     model,
-    paperOwner,
-    paperPlaces: paper.places || [],
-    cardDialog: setCardDialog,
+    paper,
     menuHeight: menuBar ? MENU_HEIGHT : 0
   };
   const romsMissing = !!s.romsMissing && !s.started;
