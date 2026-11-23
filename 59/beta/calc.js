@@ -624,6 +624,7 @@ function calcuPaceOverlay(p, busy) {
 //   useShellState(shell, select)   a slice of the shell's state
 //   useTopic(shell, name, select)  the last state of a topic
 //   useStream(shell, name)         what a stream topic appended since its last reset
+//   calcuStreamAfter(items, marker)  a stream's items after an item taken before
 //
 // embedProps only names and defaults the props; whether a model or a
 // preset names something is the session's start.
@@ -733,6 +734,16 @@ function useTopic(shell, name, select) {
 }
 function useStream(shell, name) {
   return useShellState(shell, st => st.streams[name] || CALCU_NO_ITEMS);
+}
+
+// The items of a stream after `marker`, an item of it taken before. Items
+// are told apart by identity: each comes once over postMessage, so no item of
+// a reset or a later one is the marker. A marker no longer among the items
+// (a reset, or more than CALCU_STREAM_KEEP items since) leaves them all.
+function calcuStreamAfter(items, marker) {
+  if (!marker) return items;
+  const i = items.lastIndexOf(marker);
+  return i < 0 ? items : items.slice(i + 1);
 }
 /* === paper.js === */
 // The page side of paper output: the papers of
@@ -2013,13 +2024,16 @@ function useCalcuShell(shell, product, traits, shellArgs) {
   };
 }
 /* === ShellModal.jsx === */
-// ShellModal -- the one modal frame of the React set:
-// a dialog over the component, which takes the pointer while it is open
-// (a notice must be closed before the window can be used again); and
-// ShellDialogs, which shows the settings dialog, About, the notice and
-// "Loading…" of useCalcuShell.
+// ShellModal -- the one modal frame of the React set, the shell's dialogs'
+// and the products' own: a dialog over the component, which takes the
+// pointer while it is open (a notice must be closed before the window can be
+// used again) and keeps every key from the calculator; Escape is onClose.
+// Opened, it takes the focus unless a child took it (autoFocus): the
+// default button (`calcu-shell-default`), else the dialog itself, so that
+// Escape always reaches it. And ShellDialogs, which shows
+// the settings dialog, About, the notice and "Loading…" of useCalcuShell.
 //
-//   <ShellModal name="settings-dialog" title="Settings" onClose={fn}>…</ShellModal>
+//   <ShellModal name="settings-dialog" title="Settings" onClose={fn} buttons={…}>…</ShellModal>
 //   <ShellDialogs shell={s} savedMedia={Component?} />
 //
 // savedMedia: the library's saved media dialog (CalcuSavedMediaDialog), shown for
@@ -2032,6 +2046,15 @@ function ShellModal({
   children,
   buttons
 }) {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || el.contains(document.activeElement)) return;
+    const button = el.querySelector("button.calcu-shell-default:not(:disabled)");
+    (button || el).focus({
+      preventScroll: true
+    });
+  }, []);
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-modal-backdrop"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2040,14 +2063,17 @@ function ShellModal({
     "aria-modal": "true",
     "aria-label": title || undefined,
     "data-calcu": name,
+    ref: ref,
+    tabIndex: -1,
     onKeyDown: e => {
+      e.stopPropagation();
       if (e.key === "Escape" && onClose) onClose();
     }
   }, title && /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-modal-title"
   }, title), /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-modal-body"
-  }, children), /*#__PURE__*/React.createElement("div", {
+  }, children), buttons && /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-modal-buttons"
   }, buttons)));
 }
@@ -2195,7 +2221,7 @@ function ShellMenuBar({
 // without a control takes no room. Names: control-bar,
 // bar-model, bar-slot-<place>, bar-place-<place>, bar-media-<media place>.
 // End holds the More button at the right edge of every bar (bar-more,
-// ShellMoreMenu; `compact`: its icon alone).
+// ShellMoreMenu; `compact`: the bar's labels, More's too, unseen).
 //
 //   <ShellControlBar shell={s} slotPicker={Component?} mediaControls={{kind: Component}}
 //                    extra={{AfterModel|Slots|Places|Media|End: [elements]}} compact={bool} />
@@ -2309,8 +2335,7 @@ function ShellControlBar({
           shell: s,
           items: c.choices,
           label: c.label,
-          icon: c.icon,
-          compact: compact
+          icon: c.icon
         });
       case "media":
         {
@@ -2340,6 +2365,61 @@ function ShellControlBar({
       "data-calcu": `bar-group-${g.group}`
     }, shown, own);
   }));
+}
+
+// useShellBarFit -- the bar below a faceplate, fitted by the library's rule
+// (calcuShellBarFit, C++ shell::barFit). `ref` is the element that holds
+// the bar (its padding counted); the bar is measured with and without its
+// labels (`.calcu-bar-label`; a compact bar keeps them unseen and out of
+// the flow), and the rule gives the labels and the bar's width: as wide as
+// the faceplate, wider only where the controls need more, never wider than
+// `room` (default: none set). The product draws the bar with
+// `compact={!fit.labels}` and `fit.width`.
+//
+//   useShellBarFit(ref, faceplate, room?) → {labels, width}
+
+function useShellBarFit(ref, faceplate, room) {
+  const [m, setM] = React.useState({
+    without: 0,
+    with: 0
+  });
+  const measure = React.useCallback(() => {
+    const host = ref.current;
+    const bar = host && host.querySelector(".calcu-shell-bar");
+    if (!bar) return;
+    const style = getComputedStyle(host),
+      barStyle = getComputedStyle(bar);
+    const gap = parseFloat(barStyle.columnGap) || 0;
+    const groups = Array.from(bar.children);
+    let content = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(barStyle.paddingLeft) + parseFloat(barStyle.paddingRight) + gap * Math.max(0, groups.length - 1);
+    for (const g of groups) content += g.scrollWidth;
+    let labels = 0; // each label and the gap before it in its control
+    for (const l of bar.querySelectorAll(".calcu-bar-label")) labels += l.offsetWidth + (parseFloat(getComputedStyle(l.parentElement).columnGap) || 0);
+    const compact = bar.classList.contains("calcu-shell-compact");
+    const next = compact ? {
+      without: content,
+      with: content + labels
+    } : {
+      without: content - labels,
+      with: content
+    };
+    // The two measurements (labels shown, labels unseen) differ by rounding;
+    // a change smaller than that is no change, or a faceplate as wide as
+    // that difference would switch the labels at every render.
+    setM(old => Math.abs(old.without - next.without) < 4 && Math.abs(old.with - next.with) < 4 ? old : next);
+  }, [ref]);
+  React.useLayoutEffect(measure);
+  React.useEffect(() => {
+    if (typeof ResizeObserver === "undefined" || !ref.current) return undefined;
+    const o = new ResizeObserver(measure);
+    o.observe(ref.current);
+    return () => o.disconnect();
+  }, [measure]);
+  const limit = room === undefined || room === null ? Infinity : room;
+  return m.with ? calcuShellBarFit(faceplate, m.without, m.with, limit) : {
+    labels: true,
+    width: Math.min(limit, faceplate)
+  };
 }
 /* === ShellSettings.jsx === */
 // ShellSettings -- the settings dialog of the React set: titled "Settings",
@@ -2451,6 +2531,7 @@ function ShellAbout({
     onClose: s.close,
     buttons: /*#__PURE__*/React.createElement("button", {
       type: "button",
+      className: "calcu-shell-default",
       "data-calcu": "about-close",
       onClick: s.close
     }, "OK")
@@ -2492,11 +2573,13 @@ function ShellNotice({
     onClick: () => s.closeNotice(false)
   }, "No"), /*#__PURE__*/React.createElement("button", {
     type: "button",
+    className: "calcu-shell-default",
     "data-calcu": "notice-yes",
     ref: ok,
     onClick: () => s.closeNotice(true)
   }, "Yes")) : /*#__PURE__*/React.createElement("button", {
     type: "button",
+    className: "calcu-shell-default",
     "data-calcu": "notice-ok",
     ref: ok,
     onClick: () => s.closeNotice(true)
@@ -2679,21 +2762,21 @@ function ShellRomsMissing({
 }
 /* === ShellMoreMenu.jsx === */
 // ShellMoreMenu -- the More button at the end of every bar: the button
-// (its icon, its label unless `compact`) opens a popup of the menus' items
-// (ShellMenuItems) anchored to it, kept inside the client's width; an item
+// (its icon; its label, a bar label: unseen on a compact bar, and measured
+// with the others) opens a popup of the menus' items (ShellMenuItems)
+// anchored to it, kept inside the client's width; an item
 // with `confirm` asks first in a ShellModal with the item's label and
 // Cancel. The items are the bar model's `choices`, computed again at
 // every change of an input. Names: bar-more, more-menu,
 // more-item-<id>, more-confirm, more-confirm-yes, more-confirm-no.
 //
-//   <ShellMoreMenu shell={s} items={control.choices} label="More" icon="⋯" compact={bool} />
+//   <ShellMoreMenu shell={s} items={control.choices} label="More" icon="⋯" />
 
 function ShellMoreMenu({
   shell,
   items,
   label,
-  icon,
-  compact
+  icon
 }) {
   const s = shell;
   const [open, setOpen] = React.useState(false);
@@ -2769,8 +2852,8 @@ function ShellMoreMenu({
   }, /*#__PURE__*/React.createElement("span", {
     className: "calcu-shell-action-icon",
     "aria-hidden": "true"
-  }, icon), !compact && /*#__PURE__*/React.createElement("span", {
-    className: "calcu-shell-action-label"
+  }, icon), /*#__PURE__*/React.createElement("span", {
+    className: "calcu-shell-action-label calcu-bar-label"
   }, label)), open && /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-more-popup",
     "data-calcu": "more-menu",
@@ -2791,7 +2874,7 @@ function ShellMoreMenu({
     }, "Cancel"), /*#__PURE__*/React.createElement("button", {
       type: "button",
       "data-calcu": "more-confirm-yes",
-      className: asking.destructive ? "calcu-shell-destructive" : undefined,
+      className: asking.destructive ? "calcu-shell-default calcu-shell-destructive" : "calcu-shell-default",
       onClick: () => {
         const item = asking;
         setAsking(null);
@@ -3706,43 +3789,10 @@ function CalculatorFace({
 // has no window of ours to open): the card dialogs (Qt6: app/
 // CardPickerDialog, on the library's media topic), opened by the product
 // items Arm Card… and Arm Fresh Card… (File menu, or the bar's card
-// controls). The preset picker, Settings and About are the shell's: Load
-// Preset… and Examples ▸, ShellSettings, ShellAbout; File ▸ Saved Media…
-// is the library's ShellSavedMedia.
+// controls), in the React set's ShellModal. The preset picker, Settings and
+// About are the shell's: Load Preset… and Examples ▸, ShellSettings,
+// ShellAbout; File ▸ Saved Media… is the library's ShellSavedMedia.
 
-function Dialog({
-  title,
-  onClose,
-  children,
-  footer
-}) {
-  React.useEffect(() => {
-    const onKey = e => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
-  }, [onClose]);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "calcu-modal",
-    onPointerDown: e => {
-      if (e.target === e.currentTarget) onClose();
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "calcu-dialog",
-    role: "dialog",
-    "aria-label": title
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "calcu-dialog-title"
-  }, title), /*#__PURE__*/React.createElement("div", {
-    className: "calcu-dialog-body"
-  }, children), footer && /*#__PURE__*/React.createElement("div", {
-    className: "calcu-dialog-footer"
-  }, footer)));
-}
 function readFileInput(e, as) {
   const file = e.target.files && e.target.files[0];
   e.target.value = "";
@@ -3795,28 +3845,31 @@ function CardPicker({
       if (r.done) onClose();else if (question !== null) setAsking(question);else setProblem(r.reason || "");
     });
   };
-  return /*#__PURE__*/React.createElement(Dialog, {
+  return /*#__PURE__*/React.createElement(ShellModal, {
+    name: "card-picker",
     title: fresh ? "Arm Fresh Card" : "Arm Card",
     onClose: onClose,
-    footer: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    buttons: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: onClose
     }, "Cancel"), asking ? /*#__PURE__*/React.createElement("button", {
       type: "button",
-      className: "calcu-primary",
+      className: "calcu-shell-default",
       onClick: () => start(true)
     }, "Replace") : /*#__PURE__*/React.createElement("button", {
       type: "button",
-      className: "calcu-primary",
+      className: "calcu-shell-default",
       disabled: fresh ? !name.trim() : !selected,
       onClick: fresh ? () => start(false) : () => arm(selected)
     }, "Arm"))
   }, asking && /*#__PURE__*/React.createElement("p", {
-    role: "alert"
+    role: "alert",
+    className: "calcu-shell-notice-text"
   }, asking), problem && /*#__PURE__*/React.createElement("p", {
-    role: "alert"
+    role: "alert",
+    className: "calcu-shell-problem"
   }, problem), fresh && /*#__PURE__*/React.createElement("input", {
-    className: "calcu-textfield",
+    type: "text",
     "aria-label": "Card name",
     value: name,
     autoFocus: true,
@@ -4263,13 +4316,17 @@ function CpuInspector({
   } = usePage();
   const rows = useTopic(shell, "c59.cpu-debug") || NO_ROWS;
   const frozen = useRun(shell).frozen;
-  const [picked, setPicked] = React.useState(-1);
+  // A row picked holds only for the rows it was picked from: new rows (a
+  // STEP shifts them) select the current instruction anew, as in Qt and Swift.
+  const [picked, setPicked] = React.useState({
+    rows: null,
+    index: -1
+  });
   const listRef = React.useRef(null);
   const current = rows.findIndex(r => r.current);
   // Running: follow the newest; frozen: the current instruction, unless one was picked.
   const auto = frozen ? current : rows.length - 1;
-  React.useEffect(() => setPicked(-1), [frozen]);
-  const selected = frozen && picked >= 0 && picked < rows.length ? picked : auto;
+  const selected = frozen && picked.rows === rows && picked.index < rows.length ? picked.index : auto;
   useScrollTo(listRef, selected, frozen ? "center" : "bottom", [rows]);
   // Running, only the newest row carries registers (bindings.cpp postCpu).
   const f = rows[selected] && rows[selected].registers ? rows[selected] : undefined;
@@ -4287,8 +4344,12 @@ function CpuInspector({
     ref: listRef
   }, rows.map((r, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
-    onClick: () => setPicked(i),
+    onClick: () => setPicked({
+      rows,
+      index: i
+    }),
     className: i === selected ? "calcu-cpu-selected" : "",
+    "data-current": r.current ? "true" : undefined,
     style: {
       color: grey(r.history ? 0.9 : 0.35),
       background: r.current ? tint("green", 0.35) : undefined
@@ -4549,7 +4610,7 @@ const FACE_MIN_AUTO = 120; // layout="auto": whatever a landscape phone's height
 const SPLITTERS = 1 + 5; // the line after the calculator, the divider before the debugger
 const MENU_HEIGHT = 26;
 const CALC_VERSION = "3.0.0";
-const CALC_BUILD = "pre-aaa56b8d"; // tools/build-id.cmake
+const CALC_BUILD = "pre-0af4f90"; // tools/build-id.cmake
 
 /// The artwork's width that `height` leaves room for, and the column height for an artwork width.
 const faceWidthFor = height => (height - CHROME_SIZES.barHeight - 2 * FACE_PADDING) * CANVAS_ASPECT;
@@ -4671,49 +4732,6 @@ function CardControls({
 const C59_MEDIA_CONTROLS = {
   "magnetic-card": CardControls
 };
-
-// The bar measured with and without its labels ("Crd", "Preset"; a
-// compact bar keeps them unseen and out of the flow), and the library's rule
-// (calcuShellBarFit) decides: the labels, and the bar's width.
-function useBarFit(ref, faceplate) {
-  const [m, setM] = React.useState({
-    without: 0,
-    with: 0
-  });
-  const measure = React.useCallback(() => {
-    const host = ref.current;
-    const bar = host && host.querySelector(".calcu-shell-bar");
-    if (!bar) return;
-    const style = getComputedStyle(host),
-      barStyle = getComputedStyle(bar);
-    const gap = parseFloat(barStyle.columnGap) || 0;
-    const groups = Array.from(bar.children);
-    let content = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + gap * Math.max(0, groups.length - 1);
-    for (const g of groups) content += g.scrollWidth;
-    let labels = 0;
-    for (const l of bar.querySelectorAll(".calcu-bar-label")) labels += l.offsetWidth + 4; // the label and its gap
-    const compact = bar.classList.contains("calcu-shell-compact");
-    const next = compact ? {
-      without: content,
-      with: content + labels
-    } : {
-      without: content - labels,
-      with: content
-    };
-    setM(old => Math.abs(old.without - next.without) < 1 && Math.abs(old.with - next.with) < 1 ? old : next);
-  }, [ref]);
-  React.useLayoutEffect(measure);
-  React.useEffect(() => {
-    if (typeof ResizeObserver === "undefined" || !ref.current) return undefined;
-    const o = new ResizeObserver(measure);
-    o.observe(ref.current);
-    return () => o.disconnect();
-  }, [measure]);
-  return m.with ? calcuShellBarFit(faceplate, m.without, m.with) : {
-    labels: true,
-    width: faceplate
-  };
-}
 function CalculatorColumn({
   page,
   faceWidth,
@@ -4727,7 +4745,7 @@ function CalculatorColumn({
   } = page;
   const barRef = React.useRef(null);
   const body = faceWidth + 2 * FACE_PADDING; // the calculator's body, the bar's width where it fits
-  const fit = useBarFit(barRef, body);
+  const fit = useShellBarFit(barRef, body); // the labels ("Crd", "Preset") and the width
   const compact = !fit.labels;
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-calc",

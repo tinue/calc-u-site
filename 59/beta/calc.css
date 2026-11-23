@@ -32,12 +32,6 @@
   --calcu-green: CanvasText;
   --calcu-hover: Highlight;
   --calcu-log-text: CanvasText;
-  --calcu-dialog: Canvas;
-  --calcu-dialog-footer: Canvas;
-  --calcu-field: Field;
-  --calcu-field-border: GrayText;
-  --calcu-list-line: GrayText;
-  --calcu-highlight: Highlight;
   --calcu-toast: Canvas;
   --calcu-chevron: ButtonFace;
   --calcu-font:         -apple-system, BlinkMacSystemFont, "Segoe UI", "Calc-U Archivo", Roboto, Helvetica, Arial, sans-serif;
@@ -226,41 +220,20 @@
 }
 .calcu-client .calcu-status > span { flex: 1; }
 
-/* ---------- Dialogs -------------------------------------------------------- */
-.calcu-client .calcu-modal {
-  position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
-  padding: 16px; background: var(--calcu-scrim);
+/* ---------- The card dialogs (Dialogs.jsx): the saved cards in the shell's modal -- */
+.calcu-client .calcu-list {
+  list-style: none; margin: 0; padding: 0; max-height: 260px; overflow-y: auto;
+  border: 1px solid var(--calcu-menu-border); border-radius: 6px;
 }
-.calcu-client .calcu-dialog {
-  width: 100%; max-width: 400px; max-height: 100%; display: flex; flex-direction: column;
-  background: var(--calcu-dialog); border-radius: 12px; box-shadow: 0 10px 40px var(--calcu-shadow); overflow: hidden;
-}
-.calcu-client .calcu-dialog-title { padding: 12px 16px 8px; font-weight: 700; font-size: 15px; }
-.calcu-client .calcu-dialog-body { padding: 0 16px 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.calcu-client .calcu-dialog-body p { margin: 0; }
-.calcu-client .calcu-dialog-body a { color: var(--calcu-blue); }
-.calcu-client .calcu-dialog-footer {
-  display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 16px; background: var(--calcu-dialog-footer);
-}
-.calcu-client .calcu-dialog-footer button {
-  border: none; border-radius: 6px; padding: 5px 12px; background: var(--calcu-pill); cursor: pointer;
-}
-.calcu-client .calcu-dialog-footer .calcu-primary { background: var(--calcu-highlight); }
-.calcu-client .calcu-dialog-footer button:disabled { opacity: 0.4; cursor: default; }
-.calcu-client .calcu-list { list-style: none; margin: 0; padding: 0; border-radius: 8px; background: var(--calcu-field); max-height: 260px; overflow-y: auto; }
-.calcu-client .calcu-list li { display: flex; align-items: center; border-bottom: 1px solid var(--calcu-list-line); }
+.calcu-client .calcu-list li { display: flex; align-items: center; border-bottom: 1px solid var(--calcu-menu-border); }
 .calcu-client .calcu-list li:last-child { border-bottom: none; }
-.calcu-client .calcu-list li.calcu-selected { background: var(--calcu-highlight); }
+.calcu-client .calcu-list li.calcu-selected { background: var(--calcu-menu-hover); color: var(--calcu-menu-hover-text); }
 .calcu-client .calcu-listitem {
   flex: 1; display: flex; justify-content: space-between; gap: 8px; border: none; background: none;
-  padding: 7px 10px; text-align: left; cursor: pointer;
+  padding: 7px 10px; color: inherit; font: inherit; text-align: left; cursor: pointer;
 }
-.calcu-client .calcu-empty { padding: 8px 10px; color: color-mix(in srgb, var(--calcu-text) 45%, transparent); }
-.calcu-client .calcu-textfield { padding: 6px 8px; border-radius: 6px; border: 1px solid var(--calcu-field-border); background: var(--calcu-field); }
-.calcu-client .calcu-form { display: flex; flex-direction: column; gap: 10px; }
-.calcu-client .calcu-form label, .calcu-client .calcu-form-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.calcu-client .calcu-form select, .calcu-client .calcu-form input { background: var(--calcu-field); border: 1px solid var(--calcu-field-border); border-radius: 6px; padding: 3px 6px; max-width: 55%; }
-.calcu-client .calcu-form input[type=number] { width: 90px; }
+.calcu-client .calcu-listitem:disabled { opacity: 0.4; cursor: default; }
+.calcu-client .calcu-empty { padding: 8px 10px; opacity: 0.6; }
 
 /* ---------- The React set's shell ------------------------------------------ */
 /* The shell's own stylesheet (library/web/components/shell.css) is light;
@@ -403,6 +376,8 @@
 .calcu-client .calcu-media-table { border-collapse: collapse; }
 .calcu-client .calcu-media-table td { padding: 2px 6px; }
 .calcu-client .calcu-media-none { font-style: italic; }
+/* Inside a modal (ShellModal) the modal gives the room around it. */
+.calcu-client .calcu-shell-modal-body > .calcu-media-dialog { padding: 0; min-width: 0; }
 
 /* The shell of the React component set: every selector inside .calcu-client
    (build/dist.js checks it). Colours are the product's chrome only: the
@@ -521,19 +496,69 @@
   background: var(--calcu-scrim);
   z-index: 50;
 }
+/* Every dialog of both products: the shell's and the products' own. */
 .calcu-client .calcu-shell-modal {
-  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  min-width: min(300px, 90%);
+  max-width: min(560px, 90%);
   max-height: 90%;
-  overflow: auto;
-  padding: 12px 16px;
+  padding: 14px 18px;
   background: var(--calcu-menu);
-  border-radius: 6px;
-  box-shadow: 0 4px 16px var(--calcu-shadow);
+  border: 1px solid var(--calcu-menu-border);
+  border-radius: 10px;
+  box-shadow: 0 10px 32px var(--calcu-shadow);
   font: 13px system-ui, sans-serif;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
 }
-.calcu-client .calcu-shell-modal-title { font-weight: 600; margin-bottom: 8px; }
-.calcu-client .calcu-shell-modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
-.calcu-client .calcu-shell-section { margin: 0 0 8px; border: 1px solid var(--calcu-menu-border); }
+.calcu-client .calcu-shell-modal-title { flex: none; font-weight: 600; margin-bottom: 10px; }
+.calcu-client .calcu-shell-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+}
+.calcu-client .calcu-shell-modal-body p { margin: 0; }
+.calcu-client .calcu-shell-modal-body small { opacity: 0.7; }
+.calcu-client .calcu-shell-modal-body tt { font-family: ui-monospace, Menlo, Consolas, monospace; }
+.calcu-client .calcu-shell-notice-text { white-space: pre-wrap; }
+.calcu-client .calcu-shell-problem { color: var(--calcu-alert); }
+.calcu-client .calcu-shell-modal-buttons { flex: none; display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+/* The buttons, fields and pickers in a dialog: the menu's colours, the
+   default button (calcu-shell-default) in the highlighted item's. */
+.calcu-client .calcu-shell-modal-buttons button,
+.calcu-client .calcu-shell-modal .calcu-media-buttons button,
+.calcu-client .calcu-shell-modal input[type=text],
+.calcu-client .calcu-shell-modal input[type=number],
+.calcu-client .calcu-shell-modal input:not([type]),
+.calcu-client .calcu-shell-modal select {
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--calcu-menu-border);
+  border-radius: 6px;
+  background: var(--calcu-menu);
+  color: var(--calcu-menu-text);
+  font: inherit;
+}
+.calcu-client .calcu-shell-modal-buttons button,
+.calcu-client .calcu-shell-modal .calcu-media-buttons button { min-width: 72px; padding: 0 12px; cursor: pointer; }
+.calcu-client .calcu-shell-modal .calcu-shell-default:not(:disabled) {
+  border-color: transparent;
+  background: var(--calcu-menu-hover);
+  color: var(--calcu-menu-hover-text);
+}
+.calcu-client .calcu-shell-modal .calcu-shell-default.calcu-shell-destructive:not(:disabled) {
+  background: var(--calcu-alert);
+  color: var(--calcu-menu);
+}
+.calcu-client .calcu-shell-modal button:disabled { opacity: 0.4; cursor: default; }
+.calcu-client .calcu-shell-modal select { min-width: 0; max-width: 100%; }
+.calcu-client .calcu-shell-modal input[type=text],
+.calcu-client .calcu-shell-modal input:not([type]) { flex: 1 1 auto; min-width: 0; }
+.calcu-client .calcu-shell-section { margin: 0; min-width: 0; border: 1px solid var(--calcu-menu-border); }
 .calcu-client .calcu-shell-setting { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
 .calcu-client .calcu-shell-setting-label { min-width: 160px; }
 .calcu-client .calcu-shell-folder { display: inline-flex; align-items: center; gap: 6px; }
