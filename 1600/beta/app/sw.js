@@ -15,7 +15,7 @@
 // caches of this app; the fetch handler answers from this release's cache
 // only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calc-u-1600-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "f78ed28eda66bd5c";
+const CACHE_NAME = CACHE_PREFIX + "d06c95b623f356c1";
 
 const ASSETS = [
   "./",
@@ -39,6 +39,7 @@ const ASSETS = [
   "../library-worker.js",
   "../audio-worklet.js",
   "../files.json",
+  "../bundle/256k-custom.module.yaml",
   "../bundle/CE-150.ROM",
   "../bundle/CE-158.ROM",
   "../bundle/CE-502B.module.yaml",
@@ -72,7 +73,7 @@ const ASSETS = [
   "../bundle/ce1638.module.yaml",
   "../bundle/ce163f.module.yaml",
   "../bundle/formatted.floppy.yaml",
-  "../bundle/superram.module.yaml",
+  "../bundle/superRAMr4.module.yaml",
   "../presets/basic/hanoi.bas",
   "../presets/basic/hanoi.pc1600",
   "../presets/bundle.yaml",

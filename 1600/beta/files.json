@@ -1,5 +1,6 @@
 {
   "bundle": [
+    "256k-custom.module.yaml",
     "CE-150.ROM",
     "CE-158.ROM",
     "CE-502B.module.yaml",
@@ -33,7 +34,7 @@
     "ce1638.module.yaml",
     "ce163f.module.yaml",
     "formatted.floppy.yaml",
-    "superram.module.yaml"
+    "superRAMr4.module.yaml"
   ],
   "presets": [
     "basic/hanoi.bas",

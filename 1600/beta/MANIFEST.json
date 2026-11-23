@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-1600-web",
   "version": "0.9.0",
-  "commit": "a9122110c88a63407f0e822a8a6e99a0838091b5",
+  "commit": "84825e86800cd5a34917e489a61afd66bc605236",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "836f96bb3df5d7b85e5c39b238d093dcf9cdf58270042df480d093cd011d2e6e",
@@ -9,8 +9,9 @@
     "app/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "app/index.html": "16798cfba0124f2a0d2ab7a08bea85a81120444593c42a5163bf9c45612409d5",
     "app/manifest.json": "1b77068e0b12a1f4c67aa65df7b385c6b835e01bf0b6cbd8b8e1b28e1d3eed60",
-    "app/sw.js": "ec472373108a53367843cea5818dca6b6bfdbd4638002e5a7ae258a6fcd65d33",
+    "app/sw.js": "1ab5ea875163e598420b26749c75abac0b1e19c5cc59d754e3ab5d8abac93c82",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
+    "bundle/256k-custom.module.yaml": "be809b278b08934dc6bd58e647172a357d98edc2caf2037de13cdf47933b13b4",
     "bundle/CE-150.ROM": "0815e97d6794e1b106d1652f919294eb729d770c4bee9c27d08a6b8e87da0a6b",
     "bundle/CE-158.ROM": "ae75a570b1558a509eb0f35dcbbcb93bff34f952e25ef9a150d2991125e4d8dd",
     "bundle/CE-502B.module.yaml": "d54c27d48d0981954d91d5fe02e1683c7c42a6e96f8b2b6898f2ae425ee28527",
@@ -44,11 +45,11 @@
     "bundle/ce1638.module.yaml": "2b01267e9c71770e42e4d50b6128ff2c69d69bdea39306d19e936bd1dbed9609",
     "bundle/ce163f.module.yaml": "5ce9bf1b368951d2961a4cb89340000d62fe4f51167c9c23681d929aa72c787d",
     "bundle/formatted.floppy.yaml": "2307d0dc780d2932c73eba8bdf35c95d47185bc8aa519a32c6764bd83a19455b",
-    "bundle/superram.module.yaml": "06b3a582bfbf9bb76ec3bf0fee8bd8d18c3b51e26c6dc07b5a1bec1154c787e7",
+    "bundle/superRAMr4.module.yaml": "1080ac1d0cd8da788c9b082878e29e9fde2c63cd9816c82caefdc16939dacf85",
     "calc-engine-worker.js": "9e983a29c8525dacf5bf41bf38ef152c39fd6a48162351d0617aeb86634d774d",
     "calc.css": "795520765e26a94cc40fe4353f6406a211f3037aab74e45b7235753ee09f7998",
-    "calc.js": "2b16f1e5d67e5b0ff2c232b52b59549c744c04a033a8fd270facff8d0ae01a38",
-    "files.json": "aff8e68bc51ac27370f982f685cd74261d046bd4d71cc8a146a7c2e2c9f6d4ea",
+    "calc.js": "f094561a79ef7336c8118b4a7b5dbc36f478fb61e65f6524c63d2212d4a33682",
+    "files.json": "04c211764c8cd839a318c55c8c338c6480c85c8e8b62a70034f435b6d18eb671",
     "img/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "img/pc1500.png": "a4342bc0c84a3bef9cc9b06daed48e23fc4befe8906b563020324c99fb9f4821",
     "img/pc1500A.png": "0cf0b68b561c2bf02eae80583a2c336f233c16d916b3d57319b359c1c21701ee",
@@ -78,6 +79,6 @@
     "vendor/react-dom.production.min.js": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
     "vendor/react.production.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
     "wasm/calcu1600-core.js": "4a8f7b9af92f064df2a9575de8632f965ccd673ecdab7a3c9010302a688dda5e",
-    "wasm/calcu1600-core.wasm": "2252e26ae090885ed113a15ae2187077553b5aeb489d1bf5bf5bd90caa30abec"
+    "wasm/calcu1600-core.wasm": "661af0d1fbe501694a2ddaef96f0bd3e83480f4f9f89a5dcd0847649fae0604a"
   }
 }

@@ -1,0 +1,70 @@
+# superRAM r4 -- 1 MB vertically-banked SRAM module, PC-1600 Slot 2 only.
+#
+# The superRAM r4 is the latest revison in a series of RAM modules by
+# spellbound and has up to 1MB of contiguously addressable space.
+# For initialization the program SRAMINIT.BIN is needed, which is bundled
+# with the module.
+#
+# The emulator does not bundle SRAMINIT.BIN: it comes with the module.
+#
+# Mechanically the CE-1601M's scheme with a wider vertical-bank latch:
+#
+#   * VERTICAL BANK -- which 32 KB sits behind the 8000-BFFF window. The
+#     host picks it with `OUT (28H), A`; the module's latch samples the
+#     DATA bus on that write strobe -- D0-D4, banks 0-31 -- and holds it
+#     until the next one. TRIGGER-BASED latch (help/09-module-definitions.md
+#     section 6), source-domain data.
+#
+#   * HALF-SELECT within the current 32 KB bank -- PVOUT (pin 5), the
+#     host's Port 31H b4, picks the low or high 16 KB.
+#
+# RAM1 (pin 4) is a bare enable strobe gated by the host to the 8000-BFFF
+# window, so no address-range term is needed.
+#
+# Slot 2 only: the Port 28H strobe (K0-K2) has no wiring on Slot 1.
+#
+# Ships blank (plain-ram-no-header), not initialised.
+
+format: memory-module
+format-version: 1
+module-name: "superRAM r4"
+description: "1 MB battery-backed RAM, banked, blank (Slot 2)"
+template: true   # read-only starting point; Name & Save copies it
+compatible-hosts: [PC-1600-Slot-2]
+definition-terminology: PC-1600-Slot-2
+battery: true
+
+regions:
+  - name: vram-1m
+    pc1600-module-class: plain-ram-no-header
+    content:
+      kind: regular
+      writable: true
+      power-up-fill: 0x00
+    # Region-level "is this a banked access at all" -- a pure gate, no
+    # span/maps-to. The module's whole enable is RAM1 (host-gated to the
+    # 8000-BFFF window); the real slice mapping lives in bank-window.
+    addressing:
+      chip-select: RAM1
+    banking:
+      latch:
+        type: trigger-based
+        trigger: { io-port: 0x28 }         # OUT (28H) -- the Port 28H vertical-bank write
+        sampled-lines: [D0, D1, D2, D3, D4] # bank number = the byte written (first line = LSB)
+        source-domain: data
+      bank-count: 32                        # 32 x 32 KB vertical banks = 1 MB
+      bank-size: 0x8000                     # 32 KB per vertical bank (Z-80 Bank 2 + Bank 3)
+      bank-window:
+        any-of:
+          # PVOUT low -> low 16 KB half of the current 32 KB bank.
+          - all-of:
+              - chip-select: RAM1
+              - signal-negated: PVOUT
+            span: 0x4000
+            maps-to: 0x0000
+          # PVOUT high -> high 16 KB half.
+          - all-of:
+              - chip-select: RAM1
+              - signal: PVOUT
+            span: 0x4000
+            maps-to: 0x4000
