@@ -76,8 +76,11 @@ test('/play/ computes through the engine', async ({ page }) => {
 test('/play/ offers the presets from calc/presets/', async ({ page }) => {
   await page.goto('/59/play/');
   await ready(page);
-  await page.getByRole('button', { name: 'Preset' }).click();
-  await expect(page.locator('.calcu-dialog').getByRole('button', { name: 'Calculator diagnostic diag.ti59' })).toHaveCount(1);
+  // File ▸ Examples ▸ lists the bundle's presets (calc/presets/bundle.yaml).
+  await page.locator('[data-calcu="menu-file"]').click();
+  await page.locator('[data-calcu="item-examples"]').click();
+  await page.locator('[data-calcu="item-examples-Diagnostics"]').click();
+  await expect(page.locator('[data-calcu="item-example-examples:diag.ti59"]')).toHaveCount(1);
 });
 
 test('client-side navigation to /play/ mounts the calculator', async ({ page }) => {

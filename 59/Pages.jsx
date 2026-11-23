@@ -22,7 +22,7 @@ const STARTED_SECTIONS = [
   { title: "Help", items: [
     { id: "faq", label: "FAQ", href: "/59/faq/" },
     // The README lives on GitHub: an ordinary outbound link.
-    { id: "readme", label: "Main README", href: "https://github.com/tinue/Calc-U-59/blob/main/README.md", external: true },
+    { id: "readme", label: "Main README", href: "https://github.com/tinue/calc-u/blob/main/products/calc-u-59/README.md", external: true },
   ]},
 ];
 
@@ -146,10 +146,10 @@ function HomePage() {
           <div>
             <h3 className="sub" style={{ margin: "0 0 4px" }}>Available now</h3>
             <p style={{ margin: 0, fontSize: 14 }}>
-              The Mac, Windows and Linux builds ship free from <a href="https://github.com/tinue/Calc-U-59/releases/latest">GitHub Releases</a>.
+              The Mac, Windows and Linux builds ship free from <a href="https://github.com/tinue/calc-u/releases/tag/calc-u-59-v3.0.0">GitHub Releases</a>.
               The iPhone and iPad build is on the <a href="https://apps.apple.com/us/app/calc-u-59/id6761413142">App Store</a>.
               On Android, the web app <a href="/59/install/android/">installs from the browser</a>.
-              Calc-U 59 is free software under the GNU GPL version 3; the source code is on <a href="https://github.com/tinue/Calc-U-59">GitHub</a>.
+              Calc-U 59 is free software under the GNU GPL version 3; the source code is on <a href="https://github.com/tinue/calc-u">GitHub</a>.
             </p>
           </div>
         </div>
@@ -488,7 +488,7 @@ const TOPICS = {
         <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <h3 className="sub" style={{ margin: "0 0 6px" }}>Where card files live</h3>
           <p style={{ margin: 0 }}>
-            Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can <a href="/59/presets/#sessions">feed them</a> or <a href="/59/presets/#labeling-keys">label them</a>; the format is in <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files" className="link-accent">reference/StateFileFormat.md</a>.
+            Card files (.magnetcard.yaml) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .magnetcard.yaml file to fit it, and download a card to keep it. They are plain text, and a preset can <a href="/59/presets/#sessions">feed them</a> or <a href="/59/presets/#labeling-keys">label them</a>; the format is in <a href="https://github.com/tinue/calc-u/blob/main/docs/formats/media.md#1-magnetic-card" className="link-accent">docs/formats/media.md</a>.
           </p>
         </div>
       </div>
@@ -554,7 +554,7 @@ function InstallMacPage() {
 
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
         <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>Download the latest release DMG from <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub</a>.</li>
+          <li>Download the release DMG from <a href="https://github.com/tinue/calc-u/releases/tag/calc-u-59-v3.0.0" className="link-accent">GitHub</a>.</li>
           <li>Double-click the DMG file to open it and show the installer window.</li>
           <li>Drag Calc-U-59.app to the Applications folder.</li>
           <li>Eject the disk image and launch the app from Applications.</li>
@@ -584,7 +584,7 @@ function InstallPcPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Windows</h3>
         <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>From the latest <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub release</a>, download <code>Calc-U-59-windows-x86_64.exe</code> (most PCs) or <code>Calc-U-59-windows-arm64.exe</code> (Windows on ARM).</li>
+          <li>From the <a href="https://github.com/tinue/calc-u/releases/tag/calc-u-59-v3.0.0" className="link-accent">GitHub release</a>, download <code>Calc-U-59-windows-x86_64.exe</code> (most PCs) or <code>Calc-U-59-windows-arm64.exe</code> (Windows on ARM).</li>
           <li>Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
           <li>Start Calc-U-59 from the Start menu.</li>
         </ol>
@@ -601,10 +601,10 @@ function InstallPcPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
         <p style={{ marginTop: 0 }}>
-          Cards and the TI-58C's constant memory (<code>ti58c.mem</code>) are kept in <code>Calc-U-59</code> in your home folder; debugger traces go there too. Settings › Files changes the card folder, the trace folder and the folder <strong>Open Preset</strong> starts in.
+          Cards and the TI-58C's constant memory (<code>ti58c.memory.yaml</code>) are kept in <code>Calc-U-59</code> in your home folder; debugger traces go there too. Settings › Files changes the card folder, the trace folder and the folder <strong>Open Preset</strong> starts in.
         </p>
         <p style={{ marginBottom: 0 }}>
-          There is no iCloud on these platforms, so cards don't sync with the Apple apps — copy the .U59 files across if you want them there.
+          There is no iCloud on these platforms, so cards don't sync with the Apple apps — copy the .magnetcard.yaml files across if you want them there.
         </p>
       </div>
 
@@ -656,7 +656,7 @@ function InstallAndroidPage() {
       <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
         <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
         <p style={{ marginTop: 0 }}>
-          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to fit it again.
+          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.magnetcard.yaml</strong> file to fit it again.
         </p>
         <p style={{ marginBottom: 0 }}>
           <strong>Preset</strong> offers the main examples from its list, and opens any other <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage, such as the historic and calendar programs from the Software Collection; files are read on the phone and never uploaded anywhere.
@@ -785,8 +785,8 @@ ArmCard: Results        # ready for the program's own Write
           grammar — matrix code table, 2nd-function presses, the CUECARD field
           list, and the math-notation shorthand used in cue cards — is developer
           documentation kept in the GitHub repository:{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">
-            reference/StateFileFormat.md →
+          <a href="https://github.com/tinue/calc-u/blob/main/docs/formats/preset.md" className="link-accent">
+            docs/formats/preset.md →
           </a>
         </p>
       </div>
@@ -894,7 +894,7 @@ ArmCard: Results        # ready for the program's own Write
           <code>\blank</code>, which lets a label span the next key position,
           and shortcuts such as <code>\sqrt</code> for the symbols real cards use.
           All the fields, their alignment and ink options and the symbol table are in{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">reference/StateFileFormat.md</a>.
+          <a href="https://github.com/tinue/calc-u/blob/main/docs/formats/cue-card.md" className="link-accent">docs/formats/cue-card.md</a>.
         </p>
       </div>
 
@@ -1354,8 +1354,8 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
           section in one place, and the complete grammar — the full matrix
           code table, 2nd-function key codes, and the CUECARD field list —
           is developer documentation in the GitHub repository:{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">
-            reference/StateFileFormat.md →
+          <a href="https://github.com/tinue/calc-u/blob/main/docs/formats/preset.md" className="link-accent">
+            docs/formats/preset.md →
           </a>
         </p>
         <p style={{ marginBottom: 0 }}>
@@ -1480,8 +1480,8 @@ function DebuggerPage() {
           <li>Perform the action you want to analyze (e.g., press <strong>Clean</strong>, or execute a ROM subroutine).</li>
           <li>Toggle TRACE off to stop recording.</li>
           <li>Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings › Files; the <a href="/59/play/">browser emulator</a> downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit.</li>
-          <li>On a computer with Python, download or clone the <a href="https://github.com/tinue/Calc-U-59" className="link-accent">Calc-U-59 repository</a>. Its <code>tools/read_trace.py</code> needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own.</li>
-          <li>From the repository's root folder, run: <code style={{ background: "var(--bg-inset)", padding: "2px 6px", borderRadius: 4 }}>python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin &gt; CALCU59_TRACE.txt</code> (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin).</li>
+          <li>On a computer with Python, download or clone the <a href="https://github.com/tinue/calc-u" className="link-accent">Calc-U repository</a>. Its <code>products/calc-u-59/tools/read_trace.py</code> needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own.</li>
+          <li>From the repository's root folder, run: <code style={{ background: "var(--bg-inset)", padding: "2px 6px", borderRadius: 4 }}>python3 products/calc-u-59/tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin &gt; CALCU59_TRACE.txt</code> (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin).</li>
           <li>Open the resulting text file to see the full execution trace as human-readable disassembly.</li>
         </ol>
 
@@ -1672,7 +1672,7 @@ const FAQS = [
   },
   {
     question: "Where is the TI-58C state file?",
-    answer: "The TI-58C state file (ti58c.mem) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions.",
+    answer: "The TI-58C state file (ti58c.memory.yaml) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions.",
   },
   {
     question: "Can I see what the emulator is doing internally?",
@@ -1684,7 +1684,7 @@ const FAQS = [
   },
   {
     question: "What can I do with a trace file?",
-    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt",
+    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U repository from GitHub (products/calc-u-59/tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 products/calc-u-59/tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt",
   },
   {
     question: "Why does switching to the CPU tab reset the heat map?",
@@ -2030,8 +2030,8 @@ function SoftwarePage() {
       <h2 className="section">Source and format</h2>
       <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}>
-          These files are maintained in the <a href="https://github.com/tinue/Calc-U-59/tree/main/examples">
-          examples/ directory</a> of the Calc-U 59 repository — its name predates this collection outgrowing
+          These files are maintained in the <a href="https://github.com/tinue/calc-u/tree/main/products/calc-u-59/examples">
+          examples/ directory</a> of Calc-U 59 in the Calc-U repository — its name predates this collection outgrowing
           "examples" — together with a few internal debugging and screenshot-test files not listed here. The{" "}
           <a href="/59/presets/">preset file format</a> is documented if you want to write your own — the{" "}
           <a href="/59/presets/tutorial/">tutorial</a> walks through building one from scratch — and the
@@ -2087,8 +2087,8 @@ function PlayPage() {
     <main className="wrap">
       <div ref={holderRef} style={{ display: "flex", justifyContent: "center" }}>
         {wide
-          ? <PlayCalculator layout="wide" width={width} keyboard />
-          : <PlayCalculator layout="portrait" width={Math.min(width, PORTRAIT_MAX_WIDTH)} keyboard />}
+          ? <CalcU59 width={width} keyboard layout="wide" />
+          : <CalcU59 width={Math.min(width, PORTRAIT_MAX_WIDTH)} keyboard layout="portrait" />}
       </div>
       <div style={{ textAlign: "center", marginTop: 12 }}>
         <a className="btn secondary" href="/59/calc/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
@@ -2125,7 +2125,7 @@ function PlayPage() {
             The TI-59 has a card reader. To save a program, press the <strong>Crd</strong> button for a fresh card, give the
             card a name, press <strong>2nd Write</strong> (bank 1:{" "}
             <strong>1 2nd Write</strong>), and press its top-left or top-right corner to write that side. To load it back,
-            press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
+            press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.magnetcard.yaml</strong>{" "}
             card file, then press the corner of the side to read; <strong>Eject Card</strong> stops a
             passing card; it stays fitted (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
             Cards last until you close the page — download one from the card list to keep it.

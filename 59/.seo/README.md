@@ -53,7 +53,7 @@ then commit `calc/`, `web-client.json` and the rebuilt pages together.
 How the site uses it: every page loads `calc/calc.css` and `calc/calc.js`
 (37 KB; loaded everywhere so client-side navigation to `/play/` works), and
 `build.js` evaluates `calc.js` with the site's own components, so `/play/`
-prerenders with the real `PlayCalculator`. `PlayPage` in `Pages.jsx` only
+prerenders with the real `CalcU59`. `PlayPage` in `Pages.jsx` only
 sizes it (`usePlayLayout`) and passes `layout`, `width` and
 `keyboard`: wide where the container is at least 862 px, portrait below. `calc.css`
 loads before the site's CSS: both declare the same font families, and the

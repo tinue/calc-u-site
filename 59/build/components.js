@@ -94,7 +94,7 @@ function SiteHeader({
     href: i.href,
     className: page === i.id ? "active" : ""
   }, i.label)), /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59"
+    href: "https://github.com/tinue/calc-u"
   }, "GitHub")), /*#__PURE__*/React.createElement("a", {
     className: "nav-cta",
     href: "https://apps.apple.com/us/app/calc-u-59/id6761413142",
@@ -126,11 +126,11 @@ function SiteFooter() {
   }, "TI-59 Software Collection"), /*#__PURE__*/React.createElement("a", {
     href: "/59/calc/app/"
   }, "Install the web app"), /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59"
+    href: "https://github.com/tinue/calc-u"
   }, "GitHub"), /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/CHANGELOG.md"
+    href: "https://github.com/tinue/calc-u/blob/main/products/calc-u-59/CHANGELOG.md"
   }, "Release notes"), /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/PRIVACY.md"
+    href: "https://github.com/tinue/calc-u/blob/main/products/calc-u-59/PRIVACY.md"
   }, "Privacy"), /*#__PURE__*/React.createElement("span", {
     className: "credits"
   }, "\xA9 2026 \xB7 TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad"), /*#__PURE__*/React.createElement("p", {

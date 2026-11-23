@@ -23,7 +23,7 @@ The visual language is sampled directly from the running application (see `asset
 |---|---|---|
 | iPhone screenshot of the running app | `assets/app-screenshot.png` | ✅ canonical visual reference |
 | App icon (1024×1024) | `assets/app-icon.png` | ✅ used for header, brand cards, hero |
-| GitHub repository | <https://github.com/tinue/Calc-U-59> | ⚠️ not reachable from the sandbox; visuals are reconstructed from the screenshot. Browse the repo yourself to expand the system. |
+| GitHub repository | <https://github.com/tinue/calc-u> | ⚠️ not reachable from the sandbox; visuals are reconstructed from the screenshot. Browse the repo yourself to expand the system. |
 | Related emulator (sibling reference) | <https://github.com/TurboGit/ti5x_android> | optional — same hardware, different platform |
 
 ---
@@ -142,7 +142,7 @@ The brand uses **no general-purpose icon library**. Here is the system's full ic
 - **No emoji.** Not in prose, not in nav, not in callouts.
 - **No Unicode-as-icon hacks** (`▶`, `⚙`, `✓`, `⚠`). Use Barlow Condensed labels instead.
 - **No external icon CDNs** (Lucide / Heroicons / Feather / Font Awesome). The vocabulary above is the whole vocabulary.
-- **No SVG illustrations of the calculator hardware.** Show the real one: the playable `<PlayCalculator>` or a screenshot.
+- **No SVG illustrations of the calculator hardware.** Show the real one: the playable `<CalcU59>` or a screenshot.
 
 If a future page truly needs a glyph the system doesn't cover (e.g. a download-availability chip), commission a specific monochrome SVG with 1.6px stroke, no fills, square line caps — to match `SymbolShare` (in the web client, Calc-U-59 `Web/src/Calculator.jsx`).
 
@@ -170,8 +170,8 @@ styles.css, colors_and_type.css · site CSS and the design tokens
 fonts/, vendor/, assets/        · self-hosted fonts, React/Babel, images
 
 ── Imported (never edit) ──────────────────────────────────────
-calc/                           · the web client from Calc-U-59 (Web/): /play/'s
-                                  PlayCalculator and the installable app calc/app/
+calc/                           · Calc-U-59's web client (tinue/calc-u): /play/'s
+                                  CalcU59 and the installable app calc/app/
 web-client.json                 · which build calc/ must be
 
 ── Build and tests ────────────────────────────────────────────

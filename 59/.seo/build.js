@@ -128,7 +128,7 @@ const JSX = [
   "site.jsx",
 ];
 
-// The web client: exposes PlayCalculator, which Pages.jsx's PlayPage uses.
+// The web client: exposes CalcU59, which Pages.jsx's PlayPage uses.
 // It finds the rest of calc/ from its own URL, so it is loaded from calc/
 // rather than copied into build/.
 const CLIENT_JS = path.join(DOCS, "calc", "calc.js");
@@ -193,7 +193,7 @@ function renderRoute(route) {
  * 4. <head> and structured data
  * ------------------------------------------------------------------ */
 const APP_STORE = "https://apps.apple.com/us/app/calc-u-59/id6761413142";
-const REPO = "https://github.com/tinue/Calc-U-59";
+const REPO = "https://github.com/tinue/calc-u";
 const OG_IMAGE = ORIGIN + url("/assets/app-icon.png");
 
 const esc = (s) =>

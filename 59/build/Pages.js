@@ -56,7 +56,7 @@ const STARTED_SECTIONS = [{
   {
     id: "readme",
     label: "Main README",
-    href: "https://github.com/tinue/Calc-U-59/blob/main/README.md",
+    href: "https://github.com/tinue/calc-u/blob/main/products/calc-u-59/README.md",
     external: true
   }]
 }];
@@ -261,13 +261,13 @@ function HomePage() {
       fontSize: 14
     }
   }, "The Mac, Windows and Linux builds ship free from ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/releases/latest"
+    href: "https://github.com/tinue/calc-u/releases/tag/calc-u-59-v3.0.0"
   }, "GitHub Releases"), ". The iPhone and iPad build is on the ", /*#__PURE__*/React.createElement("a", {
     href: "https://apps.apple.com/us/app/calc-u-59/id6761413142"
   }, "App Store"), ". On Android, the web app ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/android/"
   }, "installs from the browser"), ". Calc-U 59 is free software under the GNU GPL version 3; the source code is on ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59"
+    href: "https://github.com/tinue/calc-u"
   }, "GitHub"), ".")))));
 }
 
@@ -696,16 +696,16 @@ const TOPICS = {
       style: {
         margin: 0
       }
-    }, "Card files (.U59) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
+    }, "Card files (.magnetcard.yaml) live in the app's card storage \u2014 iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), ", /*#__PURE__*/React.createElement("code", null, "~/Calc-U-59"), " on Windows and Linux. The picker lists only card files. In the ", /*#__PURE__*/React.createElement("a", {
       href: "/59/play/"
-    }, "browser emulator"), ", cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can ", /*#__PURE__*/React.createElement("a", {
+    }, "browser emulator"), ", cards last until you close the page: upload a .magnetcard.yaml file to fit it, and download a card to keep it. They are plain text, and a preset can ", /*#__PURE__*/React.createElement("a", {
       href: "/59/presets/#sessions"
     }, "feed them"), " or ", /*#__PURE__*/React.createElement("a", {
       href: "/59/presets/#labeling-keys"
     }, "label them"), "; the format is in ", /*#__PURE__*/React.createElement("a", {
-      href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files",
+      href: "https://github.com/tinue/calc-u/blob/main/docs/formats/media.md#1-magnetic-card",
       className: "link-accent"
-    }, "reference/StateFileFormat.md"), ".")))
+    }, "docs/formats/media.md"), ".")))
   }
 };
 function GettingStartedPage({
@@ -797,8 +797,8 @@ function InstallMacPage() {
       margin: 0,
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, "Download the latest release DMG from ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/releases/latest",
+  }, /*#__PURE__*/React.createElement("li", null, "Download the release DMG from ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/calc-u/releases/tag/calc-u-59-v3.0.0",
     className: "link-accent"
   }, "GitHub"), "."), /*#__PURE__*/React.createElement("li", null, "Double-click the DMG file to open it and show the installer window."), /*#__PURE__*/React.createElement("li", null, "Drag Calc-U-59.app to the Applications folder."), /*#__PURE__*/React.createElement("li", null, "Eject the disk image and launch the app from Applications."))), /*#__PURE__*/React.createElement("div", {
     className: "panel",
@@ -843,8 +843,8 @@ function InstallPcPage() {
       margin: 0,
       paddingLeft: 20
     }
-  }, /*#__PURE__*/React.createElement("li", null, "From the latest ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/releases/latest",
+  }, /*#__PURE__*/React.createElement("li", null, "From the ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/calc-u/releases/tag/calc-u-59-v3.0.0",
     className: "link-accent"
   }, "GitHub release"), ", download ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-windows-x86_64.exe"), " (most PCs) or ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59-windows-arm64.exe"), " (Windows on ARM)."), /*#__PURE__*/React.createElement("li", null, "Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose ", /*#__PURE__*/React.createElement("strong", null, "More info"), ", then ", /*#__PURE__*/React.createElement("strong", null, "Run anyway"), "."), /*#__PURE__*/React.createElement("li", null, "Start Calc-U-59 from the Start menu."))), /*#__PURE__*/React.createElement("div", {
     className: "panel",
@@ -879,11 +879,11 @@ function InstallPcPage() {
     style: {
       marginTop: 0
     }
-  }, "Cards and the TI-58C's constant memory (", /*#__PURE__*/React.createElement("code", null, "ti58c.mem"), ") are kept in ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59"), " in your home folder; debugger traces go there too. Settings \u203A Files changes the card folder, the trace folder and the folder ", /*#__PURE__*/React.createElement("strong", null, "Open Preset"), " starts in."), /*#__PURE__*/React.createElement("p", {
+  }, "Cards and the TI-58C's constant memory (", /*#__PURE__*/React.createElement("code", null, "ti58c.memory.yaml"), ") are kept in ", /*#__PURE__*/React.createElement("code", null, "Calc-U-59"), " in your home folder; debugger traces go there too. Settings \u203A Files changes the card folder, the trace folder and the folder ", /*#__PURE__*/React.createElement("strong", null, "Open Preset"), " starts in."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
-  }, "There is no iCloud on these platforms, so cards don't sync with the Apple apps \u2014 copy the .U59 files across if you want them there.")), /*#__PURE__*/React.createElement("div", {
+  }, "There is no iCloud on these platforms, so cards don't sync with the Apple apps \u2014 copy the .magnetcard.yaml files across if you want them there.")), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -980,7 +980,7 @@ function InstallAndroidPage() {
     style: {
       marginTop: 0
     }
-  }, "The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " file to fit it again."), /*#__PURE__*/React.createElement("p", {
+  }, "The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a ", /*#__PURE__*/React.createElement("strong", null, ".magnetcard.yaml"), " file to fit it again."), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -1135,9 +1135,9 @@ ArmCard: Results        # ready for the program's own Write
       marginBottom: 0
     }
   }, "This page covers enough to load and tweak existing files. The complete grammar \u2014 matrix code table, 2nd-function presses, the CUECARD field list, and the math-notation shorthand used in cue cards \u2014 is developer documentation kept in the GitHub repository:", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
+    href: "https://github.com/tinue/calc-u/blob/main/docs/formats/preset.md",
     className: "link-accent"
-  }, "reference/StateFileFormat.md \u2192"))), /*#__PURE__*/React.createElement("h2", {
+  }, "docs/formats/preset.md \u2192"))), /*#__PURE__*/React.createElement("h2", {
     id: "sessions",
     className: "section",
     style: {
@@ -1228,9 +1228,9 @@ ArmCard: Results        # ready for the program's own Write
       marginBottom: 0
     }
   }, "Set fields ", /*#__PURE__*/React.createElement("strong", null, "A"), " through ", /*#__PURE__*/React.createElement("strong", null, "E"), " for the plain-key row, and ", /*#__PURE__*/React.createElement("strong", null, "A\u2032"), " through ", /*#__PURE__*/React.createElement("strong", null, "E\u2032"), " ", "for the 2nd-function row, as in the example below.", " ", /*#__PURE__*/React.createElement("strong", null, "Row1"), " and ", /*#__PURE__*/React.createElement("strong", null, "Row2"), " put one line of running text across a row instead. The example also shows", " ", /*#__PURE__*/React.createElement("code", null, "\\blank"), ", which lets a label span the next key position, and shortcuts such as ", /*#__PURE__*/React.createElement("code", null, "\\sqrt"), " for the symbols real cards use. All the fields, their alignment and ink options and the symbol table are in", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
+    href: "https://github.com/tinue/calc-u/blob/main/docs/formats/cue-card.md",
     className: "link-accent"
-  }, "reference/StateFileFormat.md"), ".")), /*#__PURE__*/React.createElement("div", {
+  }, "docs/formats/cue-card.md"), ".")), /*#__PURE__*/React.createElement("div", {
     className: "panel",
     style: {
       padding: 20,
@@ -1670,9 +1670,9 @@ Wait: 2s        # The display only shows "3.", because there are not enough digi
   }, "That covers enough to write your own preset from scratch. The", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/"
   }, "preset reference page"), " documents every section in one place, and the complete grammar \u2014 the full matrix code table, 2nd-function key codes, and the CUECARD field list \u2014 is developer documentation in the GitHub repository:", " ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md",
+    href: "https://github.com/tinue/calc-u/blob/main/docs/formats/preset.md",
     className: "link-accent"
-  }, "reference/StateFileFormat.md \u2192")), /*#__PURE__*/React.createElement("p", {
+  }, "docs/formats/preset.md \u2192")), /*#__PURE__*/React.createElement("p", {
     style: {
       marginBottom: 0
     }
@@ -1862,15 +1862,15 @@ function DebuggerPage() {
   }, /*#__PURE__*/React.createElement("li", null, "Switch to the LOG tab and toggle TRACE on."), /*#__PURE__*/React.createElement("li", null, "Perform the action you want to analyze (e.g., press ", /*#__PURE__*/React.createElement("strong", null, "Clean"), ", or execute a ROM subroutine)."), /*#__PURE__*/React.createElement("li", null, "Toggle TRACE off to stop recording."), /*#__PURE__*/React.createElement("li", null, "Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings \u203A Files; the ", /*#__PURE__*/React.createElement("a", {
     href: "/59/play/"
   }, "browser emulator"), " downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit."), /*#__PURE__*/React.createElement("li", null, "On a computer with Python, download or clone the ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59",
+    href: "https://github.com/tinue/calc-u",
     className: "link-accent"
-  }, "Calc-U-59 repository"), ". Its ", /*#__PURE__*/React.createElement("code", null, "tools/read_trace.py"), " needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own."), /*#__PURE__*/React.createElement("li", null, "From the repository's root folder, run: ", /*#__PURE__*/React.createElement("code", {
+  }, "Calc-U repository"), ". Its ", /*#__PURE__*/React.createElement("code", null, "products/calc-u-59/tools/read_trace.py"), " needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own."), /*#__PURE__*/React.createElement("li", null, "From the repository's root folder, run: ", /*#__PURE__*/React.createElement("code", {
     style: {
       background: "var(--bg-inset)",
       padding: "2px 6px",
       borderRadius: 4
     }
-  }, "python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"), " (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin)."), /*#__PURE__*/React.createElement("li", null, "Open the resulting text file to see the full execution trace as human-readable disassembly.")), /*#__PURE__*/React.createElement("p", {
+  }, "python3 products/calc-u-59/tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"), " (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin)."), /*#__PURE__*/React.createElement("li", null, "Open the resulting text file to see the full execution trace as human-readable disassembly.")), /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 12,
       marginBottom: 0
@@ -2283,7 +2283,7 @@ const FAQS = [{
   answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to pick or create one, as described under Printer and card reader. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another."
 }, {
   question: "Where is the TI-58C state file?",
-  answer: "The TI-58C state file (ti58c.mem) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions."
+  answer: "The TI-58C state file (ti58c.memory.yaml) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions."
 }, {
   question: "Can I see what the emulator is doing internally?",
   answer: "Yes. Use the debug pane: CALCULATOR for program state and registers, CPU for the ROM instruction trace, and LOG for text output plus trace controls."
@@ -2292,7 +2292,7 @@ const FAQS = [{
   answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, wherever it shows the debugger (its wide layout, or the installed app in landscape on a tablet, an unfolded foldable or a large window), downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you."
 }, {
   question: "What can I do with a trace file?",
-  answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"
+  answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U repository from GitHub (products/calc-u-59/tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 products/calc-u-59/tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt"
 }, {
   question: "Why does switching to the CPU tab reset the heat map?",
   answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss. The heat map also starts over on Reset, Clean reset, a model switch and loading a preset, since the calculator starts afresh."
@@ -2903,8 +2903,8 @@ function SoftwarePage() {
       marginTop: 0
     }
   }, "These files are maintained in the ", /*#__PURE__*/React.createElement("a", {
-    href: "https://github.com/tinue/Calc-U-59/tree/main/examples"
-  }, "examples/ directory"), " of the Calc-U 59 repository \u2014 its name predates this collection outgrowing \"examples\" \u2014 together with a few internal debugging and screenshot-test files not listed here. The", " ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/tinue/calc-u/tree/main/products/calc-u-59/examples"
+  }, "examples/ directory"), " of Calc-U 59 in the Calc-U repository \u2014 its name predates this collection outgrowing \"examples\" \u2014 together with a few internal debugging and screenshot-test files not listed here. The", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/"
   }, "preset file format"), " is documented if you want to write your own \u2014 the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/presets/tutorial/"
@@ -2968,14 +2968,14 @@ function PlayPage() {
       display: "flex",
       justifyContent: "center"
     }
-  }, wide ? /*#__PURE__*/React.createElement(PlayCalculator, {
-    layout: "wide",
+  }, wide ? /*#__PURE__*/React.createElement(CalcU59, {
     width: width,
-    keyboard: true
-  }) : /*#__PURE__*/React.createElement(PlayCalculator, {
-    layout: "portrait",
+    keyboard: true,
+    layout: "wide"
+  }) : /*#__PURE__*/React.createElement(CalcU59, {
     width: Math.min(width, PORTRAIT_MAX_WIDTH),
-    keyboard: true
+    keyboard: true,
+    layout: "portrait"
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
@@ -3002,7 +3002,7 @@ function PlayPage() {
     className: "prose"
   }, /*#__PURE__*/React.createElement("p", null, "The calculator above is a working ", /*#__PURE__*/React.createElement("strong", null, "Texas Instruments TI-59 emulator running in your browser"), " \u2014 no install, no account, nothing to download. It is the Calc-U 59 app's own emulator \u2014 the same code the Mac, Windows and Linux apps run \u2014 compiled to WebAssembly, executing the original Texas Instruments ROMs. The model picker switches between the ", /*#__PURE__*/React.createElement("strong", null, "TI-59"), ", ", /*#__PURE__*/React.createElement("strong", null, "TI-58"), " and ", /*#__PURE__*/React.createElement("strong", null, "TI-58C"), ", and the ", /*#__PURE__*/React.createElement("strong", null, "PC-100C printer"), " is connected from the start. On a wide screen the printer and the full debugger sit beside the calculator, with the ASM overlay and trace downloads; on a phone the chevron in the corner turns to the printer's page and back."), /*#__PURE__*/React.createElement("p", null, "Module 01 (Master Library) is loaded by default; ", /*#__PURE__*/React.createElement("strong", null, "Settings"), " switches modules (that resets the calculator, as swapping the real module did) and chooses the calculator the page starts with. ", /*#__PURE__*/React.createElement("strong", null, "Preset"), " loads one of the bundled presets or your own", " ", /*#__PURE__*/React.createElement("strong", null, ".ti59"), ", ", /*#__PURE__*/React.createElement("strong", null, ".ti58"), " or ", /*#__PURE__*/React.createElement("strong", null, ".ti58c"), " file, and you can also drop a file onto the calculator \u2014 files are read entirely in your browser and never leave your machine. The TI-58C keeps its constant memory in your browser between visits. For more programs to try, see the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/software/"
-  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button for a fresh card, give the card a name, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), and press its top-left or top-right corner to write that side. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".U59"), " ", "card file, then press the corner of the side to read; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " stops a passing card; it stays fitted (", /*#__PURE__*/React.createElement("a", {
+  }, "TI-59 Software Collection"), "."), /*#__PURE__*/React.createElement("p", null, "Press ", /*#__PURE__*/React.createElement("strong", null, "2nd"), " then ", /*#__PURE__*/React.createElement("strong", null, "Pgm"), " then a two-digit program number to bring up that program's cue card, the same way it works on the module itself."), /*#__PURE__*/React.createElement("p", null, "The TI-59 has a card reader. To save a program, press the ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button for a fresh card, give the card a name, press ", /*#__PURE__*/React.createElement("strong", null, "2nd Write"), " (bank 1:", " ", /*#__PURE__*/React.createElement("strong", null, "1 2nd Write"), "), and press its top-left or top-right corner to write that side. To load it back, press the other ", /*#__PURE__*/React.createElement("strong", null, "Crd"), " button and pick the card, or upload a ", /*#__PURE__*/React.createElement("strong", null, ".magnetcard.yaml"), " ", "card file, then press the corner of the side to read; ", /*#__PURE__*/React.createElement("strong", null, "Eject Card"), " stops a passing card; it stays fitted (", /*#__PURE__*/React.createElement("a", {
     href: "/59/getting-started/printer/#magnetic-cards"
   }, "more on cards"), "). Cards last until you close the page \u2014 download one from the card list to keep it."), /*#__PURE__*/React.createElement("p", null, "The full app adds a card folder that stays (synced through iCloud on Apple devices), traces saved to disk and the Modernized LED style; it is free on the", " ", /*#__PURE__*/React.createElement("a", {
     href: "/59/install/mac/"

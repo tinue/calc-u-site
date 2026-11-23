@@ -60,7 +60,7 @@ function SiteHeader({ page }) {
                 {i.label}
               </a>
             ))}
-            <a href="https://github.com/tinue/Calc-U-59">GitHub</a>
+            <a href="https://github.com/tinue/calc-u">GitHub</a>
           </nav>
           <a className="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a>
         </div>
@@ -91,9 +91,9 @@ function SiteFooter() {
             robots.txt's crawl on purpose (see the Disallow comment there):
             it would otherwise compete with /play/ for the same searches. */}
         <a href="/59/calc/app/">Install the web app</a>
-        <a href="https://github.com/tinue/Calc-U-59">GitHub</a>
-        <a href="https://github.com/tinue/Calc-U-59/blob/main/CHANGELOG.md">Release notes</a>
-        <a href="https://github.com/tinue/Calc-U-59/blob/main/PRIVACY.md">Privacy</a>
+        <a href="https://github.com/tinue/calc-u">GitHub</a>
+        <a href="https://github.com/tinue/calc-u/blob/main/products/calc-u-59/CHANGELOG.md">Release notes</a>
+        <a href="https://github.com/tinue/calc-u/blob/main/products/calc-u-59/PRIVACY.md">Privacy</a>
         <span className="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span>
         <p className="disclaimer">
           Calc-U 59 is an independent project and is not affiliated with, authorized,
