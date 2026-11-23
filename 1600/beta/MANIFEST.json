@@ -1,7 +1,7 @@
 {
   "name": "Calc-U-1600-web",
   "version": "0.9.0",
-  "commit": "dee9b0fcf38871b479bb5bb0667f51491d601647",
+  "commit": "a9122110c88a63407f0e822a8a6e99a0838091b5",
   "files": {
     "app/app.css": "f16943bbb707222847d38d22bacb2cc3fb2a6326228e938df3a48a2d29b62225",
     "app/app.js": "836f96bb3df5d7b85e5c39b238d093dcf9cdf58270042df480d093cd011d2e6e",
@@ -9,7 +9,7 @@
     "app/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "app/index.html": "16798cfba0124f2a0d2ab7a08bea85a81120444593c42a5163bf9c45612409d5",
     "app/manifest.json": "1b77068e0b12a1f4c67aa65df7b385c6b835e01bf0b6cbd8b8e1b28e1d3eed60",
-    "app/sw.js": "8830bbdac3a19dce940d38f4cf837026cfb74c15ff968586447f230ba0398f9e",
+    "app/sw.js": "ec472373108a53367843cea5818dca6b6bfdbd4638002e5a7ae258a6fcd65d33",
     "audio-worklet.js": "d91d899f9e9b5d1978716237909ce525a68371be49ea6b0307781a5d532a58d3",
     "bundle/CE-150.ROM": "0815e97d6794e1b106d1652f919294eb729d770c4bee9c27d08a6b8e87da0a6b",
     "bundle/CE-158.ROM": "ae75a570b1558a509eb0f35dcbbcb93bff34f952e25ef9a150d2991125e4d8dd",
@@ -46,8 +46,8 @@
     "bundle/formatted.floppy.yaml": "2307d0dc780d2932c73eba8bdf35c95d47185bc8aa519a32c6764bd83a19455b",
     "bundle/superram.module.yaml": "06b3a582bfbf9bb76ec3bf0fee8bd8d18c3b51e26c6dc07b5a1bec1154c787e7",
     "calc-engine-worker.js": "9e983a29c8525dacf5bf41bf38ef152c39fd6a48162351d0617aeb86634d774d",
-    "calc.css": "5a837b9d5e5c1350f62438dc91e0507d630311e9f323782c327a15b56f961029",
-    "calc.js": "a36140fc028aea3249ce9d0d649c245767d1aa48678176385686d32d159ac564",
+    "calc.css": "795520765e26a94cc40fe4353f6406a211f3037aab74e45b7235753ee09f7998",
+    "calc.js": "2b16f1e5d67e5b0ff2c232b52b59549c744c04a033a8fd270facff8d0ae01a38",
     "files.json": "aff8e68bc51ac27370f982f685cd74261d046bd4d71cc8a146a7c2e2c9f6d4ea",
     "img/icon.png": "1ee435271201cdcf5dd3236e695e4e8f5fbcdd8f31fce94905df0a8e4af91a32",
     "img/pc1500.png": "a4342bc0c84a3bef9cc9b06daed48e23fc4befe8906b563020324c99fb9f4821",
@@ -77,7 +77,7 @@
     "presets/startup/default-pc1600.pc1600": "67cf29a6b6bd1779e5687424249612521d8bca5afb11250634c7fc1eb53b6712",
     "vendor/react-dom.production.min.js": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
     "vendor/react.production.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
-    "wasm/calcu1600-core.js": "fac628d75a1feee907ca5feb3dd185268972c1247c47885ab4a21c8c45ae250d",
-    "wasm/calcu1600-core.wasm": "a72a73d08eefeb20d8c7e8bfe2538807893ae2db24c57ccd06b359a7d8a9ebef"
+    "wasm/calcu1600-core.js": "4a8f7b9af92f064df2a9575de8632f965ccd673ecdab7a3c9010302a688dda5e",
+    "wasm/calcu1600-core.wasm": "2252e26ae090885ed113a15ae2187077553b5aeb489d1bf5bf5bd90caa30abec"
   }
 }

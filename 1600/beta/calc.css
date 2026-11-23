@@ -17,9 +17,7 @@
   --calcu-accent-text: HighlightText;
   --calcu-lamp-off: GrayText;
   --calcu-lamp-on: Highlight;
-  --calcu-hint: CanvasText;
   --calcu-key-pressed: transparent;
-  --calcu-modal-shadow: transparent;
   --calcu-banner-border: GrayText;
   --calcu-mono: "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
 
@@ -126,7 +124,6 @@
 .calcu-client .calcu-bar-label { flex: none; }
 /* The pickers (the shell's on the control bar too) and the buttons in the
    desktop app's look (Qt6 on macOS): rounded, the control colour. */
-.calcu-client .calcu-combo,
 .calcu-client .calcu-controlbar .calcu-shell-picker,
 .calcu-client .calcu-controlbar .calcu-media-picker {
   height: 22px;
@@ -146,10 +143,8 @@
   max-width: 14em;
   text-overflow: ellipsis;
 }
-.calcu-client .calcu-combo:disabled,
 .calcu-client .calcu-controlbar .calcu-shell-picker:disabled,
 .calcu-client .calcu-controlbar .calcu-media-picker:disabled { color: var(--calcu-text-dim); opacity: 0.7; }
-.calcu-client .calcu-combo.calcu-wide { width: 100%; max-width: none; }
 .calcu-client .calcu-button,
 .calcu-client .calcu-iconbutton,
 .calcu-client .calcu-controlbar .calcu-shell-place,
@@ -265,59 +260,6 @@
 .calcu-client .calcu-printer-output { white-space: pre-wrap; }
 .calcu-client .calcu-printer-serial { flex: none; padding: 4px 8px; font-size: 11px; opacity: 0.7; border-bottom: 1px solid var(--calcu-output-border); }
 .calcu-client .calcu-paper > .calcu-paper-panel { flex: 1; }
-
-/* ── Dialogs ──────────────────────────────────────────────────────── */
-.calcu-client .calcu-modal-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 60px;
-  background: var(--calcu-scrim);
-}
-.calcu-client .calcu-modal {
-  min-width: 320px;
-  max-width: min(560px, 92%);
-  max-height: 85%;
-  display: flex;
-  flex-direction: column;
-  background: var(--calcu-window);
-  color: var(--calcu-text);
-  border: 1px solid var(--calcu-menu-border);
-  border-radius: 12px;
-  box-shadow: 0 16px 48px var(--calcu-modal-shadow);
-  user-select: text;
-  -webkit-user-select: text;
-}
-.calcu-client .calcu-modal-title { padding: 14px 18px 4px; font-weight: 700; }
-.calcu-client .calcu-modal-body { padding: 6px 18px; overflow: auto; }
-.calcu-client .calcu-modal-text { margin: 6px 0; white-space: pre-wrap; }
-.calcu-client .calcu-modal-text small { opacity: 0.7; }
-.calcu-client .calcu-modal-text tt { font-family: var(--calcu-mono); }
-.calcu-client .calcu-hint { color: var(--calcu-hint); }
-.calcu-client .calcu-modal-buttons { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px 16px; }
-.calcu-client .calcu-modal-buttons .calcu-button { min-width: 72px; }
-.calcu-client .calcu-button.default:not(:disabled) { background: var(--calcu-accent); color: var(--calcu-accent-text); }
-.calcu-client .calcu-form { display: flex; flex-direction: column; gap: 6px; }
-.calcu-client .calcu-form-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
-.calcu-client .calcu-form-row > span:first-child { min-width: 110px; }
-.calcu-client .calcu-form-row input[type=text] {
-  flex: 1;
-  height: 24px;
-  padding: 0 8px;
-  border: 1px solid var(--calcu-separator);
-  border-radius: 5px;
-  background: var(--calcu-window);
-  color: inherit;
-  font: inherit;
-}
-.calcu-client .calcu-media-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-
-@keyframes calcu-spin { to { transform: rotate(360deg); } }
-
-/* NamedCombo (Dialogs.jsx): a combo button with a menu of long labels. */
 
 /* ── The shell of the React set in this page ─────────────────────────── */
 /* The menu bar is as tall as the layout counts it (MENU_HEIGHT). */
@@ -463,6 +405,8 @@
 .calcu-client .calcu-media-table { border-collapse: collapse; }
 .calcu-client .calcu-media-table td { padding: 2px 6px; }
 .calcu-client .calcu-media-none { font-style: italic; }
+/* Inside a modal (ShellModal) the modal gives the room around it. */
+.calcu-client .calcu-shell-modal-body > .calcu-media-dialog { padding: 0; min-width: 0; }
 
 /* The shell of the React component set: every selector inside .calcu-client
    (build/dist.js checks it). Colours are the product's chrome only: the
@@ -581,19 +525,69 @@
   background: var(--calcu-scrim);
   z-index: 50;
 }
+/* Every dialog of both products: the shell's and the products' own. */
 .calcu-client .calcu-shell-modal {
-  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  min-width: min(300px, 90%);
+  max-width: min(560px, 90%);
   max-height: 90%;
-  overflow: auto;
-  padding: 12px 16px;
+  padding: 14px 18px;
   background: var(--calcu-menu);
-  border-radius: 6px;
-  box-shadow: 0 4px 16px var(--calcu-shadow);
+  border: 1px solid var(--calcu-menu-border);
+  border-radius: 10px;
+  box-shadow: 0 10px 32px var(--calcu-shadow);
   font: 13px system-ui, sans-serif;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
 }
-.calcu-client .calcu-shell-modal-title { font-weight: 600; margin-bottom: 8px; }
-.calcu-client .calcu-shell-modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
-.calcu-client .calcu-shell-section { margin: 0 0 8px; border: 1px solid var(--calcu-menu-border); }
+.calcu-client .calcu-shell-modal-title { flex: none; font-weight: 600; margin-bottom: 10px; }
+.calcu-client .calcu-shell-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+}
+.calcu-client .calcu-shell-modal-body p { margin: 0; }
+.calcu-client .calcu-shell-modal-body small { opacity: 0.7; }
+.calcu-client .calcu-shell-modal-body tt { font-family: ui-monospace, Menlo, Consolas, monospace; }
+.calcu-client .calcu-shell-notice-text { white-space: pre-wrap; }
+.calcu-client .calcu-shell-problem { color: var(--calcu-alert); }
+.calcu-client .calcu-shell-modal-buttons { flex: none; display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+/* The buttons, fields and pickers in a dialog: the menu's colours, the
+   default button (calcu-shell-default) in the highlighted item's. */
+.calcu-client .calcu-shell-modal-buttons button,
+.calcu-client .calcu-shell-modal .calcu-media-buttons button,
+.calcu-client .calcu-shell-modal input[type=text],
+.calcu-client .calcu-shell-modal input[type=number],
+.calcu-client .calcu-shell-modal input:not([type]),
+.calcu-client .calcu-shell-modal select {
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--calcu-menu-border);
+  border-radius: 6px;
+  background: var(--calcu-menu);
+  color: var(--calcu-menu-text);
+  font: inherit;
+}
+.calcu-client .calcu-shell-modal-buttons button,
+.calcu-client .calcu-shell-modal .calcu-media-buttons button { min-width: 72px; padding: 0 12px; cursor: pointer; }
+.calcu-client .calcu-shell-modal .calcu-shell-default:not(:disabled) {
+  border-color: transparent;
+  background: var(--calcu-menu-hover);
+  color: var(--calcu-menu-hover-text);
+}
+.calcu-client .calcu-shell-modal .calcu-shell-default.calcu-shell-destructive:not(:disabled) {
+  background: var(--calcu-alert);
+  color: var(--calcu-menu);
+}
+.calcu-client .calcu-shell-modal button:disabled { opacity: 0.4; cursor: default; }
+.calcu-client .calcu-shell-modal select { min-width: 0; max-width: 100%; }
+.calcu-client .calcu-shell-modal input[type=text],
+.calcu-client .calcu-shell-modal input:not([type]) { flex: 1 1 auto; min-width: 0; }
+.calcu-client .calcu-shell-section { margin: 0; min-width: 0; border: 1px solid var(--calcu-menu-border); }
 .calcu-client .calcu-shell-setting { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
 .calcu-client .calcu-shell-setting-label { min-width: 160px; }
 .calcu-client .calcu-shell-folder { display: inline-flex; align-items: center; gap: 6px; }
