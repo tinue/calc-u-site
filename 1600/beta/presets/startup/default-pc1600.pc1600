@@ -1,5 +1,5 @@
-# Startup preset for the PC-1600 -- choose it under Settings >
-# Startup presets (PC-1600) to have it applied whenever the PC-1600 is
+# Startup preset for the PC-1600 -- set under Settings > Startup presets
+# (PC-1600) on a fresh install, applied whenever the PC-1600 is
 # selected: CE-1600P plotter (with its CE-1600F floppy and the bundled
 # "Formatted" disk), a CE-1600M in slot 1 and a CE-1601M in slot 2, set up
 # as a RAM disk.

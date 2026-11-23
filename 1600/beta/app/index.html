@@ -14,6 +14,20 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="stylesheet" href="../calc.css">
 <link rel="stylesheet" href="app.css">
+<style>
+  /* The page around the client (library/web/app/app.css): light or dark
+     with the system, as the chrome. */
+  :root {
+    --calcu-app-background: #ffffff;
+    --calcu-app-banner: rgba(240, 240, 240, .95);
+    --calcu-app-banner-border: #ccc;
+    --calcu-app-banner-text: #222;
+    --calcu-app-banner-dim: #777;
+    --calcu-app-action: #0a84ff;
+    --calcu-app-action-text: #fff;
+  }
+  @media (prefers-color-scheme: dark) { :root { --calcu-app-background: #1e1e1e; } }
+</style>
 </head>
 <body>
 <div id="root"></div>
