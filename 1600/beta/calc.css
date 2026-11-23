@@ -311,6 +311,7 @@
    controls left, Copy and Cut right. Each cell keeps its place whatever
    the others hold. */
 .calcu-client .calcu-paper-header {
+  flex: none;   /* a short panel shrinks the paper, never the header */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -336,6 +337,7 @@
 .calcu-client .calcu-paper-owner { font-weight: 600; white-space: nowrap; }
 .calcu-client .calcu-paper-views { display: inline-flex; justify-self: end; }
 .calcu-client .calcu-paper-footer {
+  flex: none;   /* nor the control row */
   display: flex;
   flex-wrap: nowrap;
   align-items: center;

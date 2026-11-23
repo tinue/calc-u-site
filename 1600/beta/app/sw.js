@@ -15,7 +15,7 @@
 // caches of this app; the fetch handler answers from this release's cache
 // only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calc-u-1600-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "118ecc69676f6b6a";
+const CACHE_NAME = CACHE_PREFIX + "6fab993ea94c532a";
 
 const ASSETS = [
   "./",
