@@ -56,6 +56,8 @@ function calcImage(name, onLoad) {
 const CALCU_SENTENCES = {
   // The page shows it instead of going on with "starting".
   startFailed: (product, why) => `${product} could not start${why ? `: ${why}` : "."}`,
+  // The same, for a failure once it ran.
+  stopped: (product, why) => `${product} stopped${why ? `: ${why}` : "."}`,
   starting: product => `Starting ${product}…`,
   // Another copy of the product holds the store.
   secondCopy: product => `${product} is open in another tab or window: what you save here is not kept.`,
@@ -77,9 +79,15 @@ function calcuCreateAudio() {
   let node = null;
   let rate = 48000;
   let starting = null;
+  let warned = false; // once: every key would try again
+  const warnOnce = (what, e) => {
+    if (warned) return;
+    warned = true;
+    calcuAppLog("warn", `audio: the sound could not be ${what}: ${calcuErrorText(e)}`);
+  };
   const unlock = () => {
     if (context || starting || typeof AudioContext === "undefined") {
-      if (context && context.state === "suspended") context.resume();
+      if (context && context.state === "suspended") context.resume().catch(e => warnOnce("resumed", e));
       return;
     }
     const ctx = new AudioContext({
@@ -94,7 +102,7 @@ function calcuCreateAudio() {
         rate
       });
       context = ctx;
-    }).catch(() => {/* no audio */}).finally(() => {
+    }).catch(e => warnOnce("started", e)).finally(() => {
       starting = null;
     });
   };
@@ -168,6 +176,14 @@ function calcuPickFiles(accept, multiple) {
   });
 }
 
+// Files (picked or dropped) as the session takes them: [{name, bytes}].
+function calcuNamedFiles(files) {
+  return Promise.all(Array.from(files).map(async f => ({
+    name: f.name,
+    bytes: new Uint8Array(await f.arrayBuffer())
+  })));
+}
+
 // Both products' downloadBytes.
 function calcuDownload(name, bytes, type) {
   const url = URL.createObjectURL(new Blob([bytes], {
@@ -182,24 +198,30 @@ function calcuDownload(name, bytes, type) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// The clipboard written inside the user's gesture (a click on
-// Copy or Cut), with promises the clipboard-image answer resolves, because
-// the picture is made in the worker and its ask reaches the page after the
-// gesture (WebKit allows a write only within one). {text}: whether a text
-// entry comes too. A later arm, or calcuDisarmClipboard (the command was
-// refused), rejects the one before.
+// The clipboard written inside the user's gesture (a click on Copy, Cut
+// or Copy Screen), with promises calcuCopyPicture resolves, because the
+// picture comes from the worker after the gesture (WebKit allows a write
+// only within one). {text}: whether a text entry comes too. A later arm,
+// or calcuDisarmClipboard (the copy was refused), rejects the one before.
 let calcuArmedClipboard = null;
 function calcuDisarmClipboard() {
   const armed = calcuArmedClipboard;
   calcuArmedClipboard = null;
   if (armed) armed.reject(new Error("The copy was not made."));
 }
+
+// {view}: the window of the gesture (the paper's own window), whose
+// clipboard takes the entry; the page's by default.
 function armClipboard({
-  text = false
+  text = false,
+  view = null
 } = {}) {
   calcuDisarmClipboard();
-  const clip = typeof navigator !== "undefined" ? navigator.clipboard : null;
-  if (!clip || !clip.write || typeof ClipboardItem === "undefined") return null;
+  const w = view || (typeof window !== "undefined" ? window : null);
+  const nav = w ? w.navigator : typeof navigator !== "undefined" ? navigator : null;
+  const Item = w && w.ClipboardItem || (typeof ClipboardItem !== "undefined" ? ClipboardItem : undefined);
+  const clip = nav ? nav.clipboard : null;
+  if (!clip || !clip.write || typeof Item === "undefined") return null;
   const deferred = () => {
     const d = {};
     d.promise = new Promise((resolve, reject) => {
@@ -217,7 +239,7 @@ function armClipboard({
   if (txt) items["text/plain"] = txt.promise;
   let written;
   try {
-    written = Promise.resolve(clip.write([new ClipboardItem(items)]));
+    written = Promise.resolve(clip.write([new Item(items)]));
   } catch (e) {
     written = Promise.reject(e);
   }
@@ -238,8 +260,10 @@ function armClipboard({
   return armed;
 }
 
-// clipboard-image with text, name, dotsPerInch.
-async function calcuCopyPicture(a, given, refused) {
+// clipboard-image with text, name, dotsPerInch; also the page's own copy
+// of a picture (Copy Screen), with `whose` for the app log ("The
+// screen's"); given(value) and refused(reason) make the outcome.
+async function calcuCopyPicture(a, given, refused, whose = "The paper's") {
   const pngBlob = new Blob([a.bytes || new Uint8Array(0)], {
     type: "image/png"
   });
@@ -263,16 +287,24 @@ async function calcuCopyPicture(a, given, refused) {
     }
     return given();
   } catch (e) {
+    // The browser's own error is told here only: the refusal's reason stays
+    // short, for the user.
+    const why = `${whose} picture was not copied: ${calcuErrorText(e)}`;
+    let textError = null;
     if (hasText) {
       try {
         await navigator.clipboard.writeText(a.text);
+        calcuAppLog("warn", `${why}; its text was copied alone.`);
         return given({
           textOnly: true
         });
-      } catch (_) {/* the download below */}
+      } catch (t) {
+        textError = t;
+      }
     }
+    calcuAppLog("warn", `${why}; ${textError ? `its text was not copied either: ${calcuErrorText(textError)}; ` : ""}` + "offered as a download.");
     calcuDownload(a.name || "paper.png", a.bytes || new Uint8Array(0), "image/png");
-    return refused("The browser did not take the picture; it is offered as a download.");
+    return refused(`The browser did not take the picture (${e && e.name || "Error"}); it is offered as a download.`);
   }
 }
 function calcuWebHostServices() {
@@ -293,10 +325,7 @@ function calcuWebHostServices() {
         {
           const files = await calcuPickFiles(a.accept, a.multiple);
           if (!files.length) return refused("cancelled");
-          return given(await Promise.all(files.map(async f => ({
-            name: f.name,
-            bytes: new Uint8Array(await f.arrayBuffer())
-          }))));
+          return given(await calcuNamedFiles(files));
         }
       case "keep-file":
         calcuDownload(a.name || "download", a.bytes || new Uint8Array(0), a.mediaType);
@@ -329,6 +358,78 @@ function calcuWebHostServices() {
     answer
   };
 }
+/* === appLog.js === */
+// The page's app log: how the app ran (library/applog). A page cannot write a
+// file, so each line goes to the browser's console at its level and the last
+// CALCU_APP_LOG_KEEP lines are kept for Help ▸ Show App Log (a download).
+// The worker's lines arrive filtered at the session's level (the setting
+// `[app-log] level`, or `?app-log-level=` for this run); the page's own
+// lines are warn and error, plus info and debug when the URL asks for them.
+//
+//   calcuAppLog(level, text)   level: "error" | "warn" | "info" | "debug"
+//   calcuAppLogText()          the kept lines, one per line, for the download
+//   calcuAppLogLevelOfPage()   the `?app-log-level=` of the page's URL, or ""
+//   calcuErrorText(e)          "<name>: <message>" of a thrown value
+//
+// In the worker (library-worker.js) a line is filtered by the worker's URL,
+// which carries the page's `?app-log-level=`, and posted to the page as
+// {kind: "app-log", level, text}: it lands in the page's kept lines too.
+
+const CALCU_APP_LOG_KEEP = 2000;
+const CALCU_APP_LOG_LEVELS = ["error", "warn", "info", "debug"];
+const calcuAppLogLines = [];
+function calcuAppLogLevelOfPage() {
+  if (typeof location === "undefined") return "";
+  const m = /[?&]app-log-level=([a-z]+)/.exec(location.search);
+  return m && CALCU_APP_LOG_LEVELS.includes(m[1]) ? m[1] : "";
+}
+function calcuAppLogStamp(d) {
+  const p = (n, w) => String(n).padStart(w || 2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:` + `${p(d.getSeconds())}.${p(d.getMilliseconds(), 3)}`;
+}
+
+// A line's text as applog::formatLine writes it, since the page logs before
+// the worker exists: no carriage returns, the lines after the first indented
+// by two spaces, no trailing spaces or line breaks.
+function calcuAppLogBody(text) {
+  return String(text).replace(/\r/g, "").replace(/\n/g, "\n  ").replace(/[ \n]+$/, "");
+}
+function calcuErrorText(e) {
+  if (e && typeof e === "object" && (e.name || e.message)) {
+    const errno = typeof e.errno === "number" ? ` (errno ${e.errno})` : ""; // Emscripten's FS errors
+    return `${e.name || "Error"}: ${e.message || ""}${errno}`;
+  }
+  return String(e);
+}
+const CALCU_APP_LOG_IN_WORKER = typeof WorkerGlobalScope !== "undefined" && typeof self !== "undefined" && self instanceof WorkerGlobalScope;
+
+// `fromWorker`: the line was filtered in the worker already.
+function calcuAppLog(level, text, fromWorker) {
+  const at = CALCU_APP_LOG_LEVELS.indexOf(level);
+  const lvl = at < 0 ? "warn" : level;
+  if (!fromWorker) {
+    const page = CALCU_APP_LOG_LEVELS.indexOf(calcuAppLogLevelOfPage() || "warn");
+    if (CALCU_APP_LOG_LEVELS.indexOf(lvl) > page) return;
+  }
+  if (CALCU_APP_LOG_IN_WORKER) {
+    postMessage({
+      kind: "app-log",
+      level: lvl,
+      text: String(text)
+    });
+    return;
+  }
+  const body = calcuAppLogBody(text);
+  calcuAppLogLines.push(`${calcuAppLogStamp(new Date())} ${lvl.toUpperCase().padEnd(5)} ${body}`.replace(/ +$/, ""));
+  if (calcuAppLogLines.length > CALCU_APP_LOG_KEEP) calcuAppLogLines.splice(0, calcuAppLogLines.length - CALCU_APP_LOG_KEEP);
+  if (typeof console !== "undefined") {
+    const out = console[lvl] || console.log;
+    out.call(console, `[Calc-U] ${body}`);
+  }
+}
+function calcuAppLogText() {
+  return calcuAppLogLines.length ? `${calcuAppLogLines.join("\n")}\n` : "";
+}
 /* === shell.js === */
 // The page side of a Web frontend: starts the worker, keeps the last state of each state topic
 // and what each stream topic appended, sends suspend and continue on
@@ -347,7 +448,8 @@ function calcuWebHostServices() {
 //                                              CALCU_STREAM_KEEP items: the paper)
 //     unlockAudio(), destroy(),
 //   }
-//   state: {start: "starting" | "running" | "failed", failure,
+//   state: {start: "starting" | "running" | "failed", failure (the sentence:
+//           could not start, or stopped once running),
 //           topics: {name → last state}, streams: {name → appended since the last reset}}
 //
 // Everything that crosses postMessage is a session message in its JS form
@@ -385,16 +487,23 @@ function createShell({
     state = next;
     listeners.forEach(l => l());
   };
-  const failWith = why => {
+  // The reason of a call that cannot be carried out: a failed start, or a stop once running.
+  let unanswered = "The product could not start.";
+  // `detail` goes to the app log only. A failure after the start is a stop.
+  const failWith = (why, detail) => {
     if (state.start === "failed") return;
+    const stop = state.start === "running";
+    const failure = (stop ? CALCU_SENTENCES.stopped : CALCU_SENTENCES.startFailed)(product, why);
+    calcuAppLog("error", `${failure}${detail ? `\n${detail}` : ""}`);
+    if (stop) unanswered = "The product stopped.";
     set({
       ...state,
       start: "failed",
-      failure: CALCU_SENTENCES.startFailed(product, why)
+      failure
     });
     waiters.forEach(w => w({
       done: false,
-      reason: "The product could not start.",
+      reason: unanswered,
       value: null
     }));
     waiters.clear();
@@ -406,7 +515,7 @@ function createShell({
     if (state.start === "failed" || destroyed) {
       resolve({
         done: false,
-        reason: "The product could not start.",
+        reason: unanswered,
         value: null
       });
       return;
@@ -439,7 +548,7 @@ function createShell({
       return;
     }
     if (m.topic === "web.start") {
-      if (m.value && m.value.state === "failed") failWith(m.value.failure);else if (state.start === "starting") set({
+      if (m.value && m.value.state === "failed") failWith(m.value.failure, m.value.detail);else if (state.start === "starting") set({
         ...state,
         start: "running",
         topics: {
@@ -473,11 +582,15 @@ function createShell({
     }));
   };
   const onAsk = m => {
-    Promise.resolve().then(() => offered.answer(m.name, m.value)).catch(e => ({
-      done: false,
-      reason: String(e && e.message || e),
-      value: null
-    })).then(a => {
+    Promise.resolve().then(() => offered.answer(m.name, m.value)).catch(e => {
+      const reason = String(e && e.message || e);
+      calcuAppLog("warn", `The host service ${m.name} failed: ${e && e.name || "Error"}: ${reason}`);
+      return {
+        done: false,
+        reason,
+        value: null
+      };
+    }).then(a => {
       const value = a.value === undefined ? null : a.value;
       post({
         kind: "answer",
@@ -489,7 +602,10 @@ function createShell({
     });
   };
   try {
-    worker = new Worker(workerUrl || `${CALC_BASE}calc-engine-worker.js`);
+    // The page's `?app-log-level=` holds for the worker's app log too.
+    const level = calcuAppLogLevelOfPage();
+    const url = workerUrl || `${CALC_BASE}calc-engine-worker.js`;
+    worker = new Worker(level ? `${url}${url.includes("?") ? "&" : "?"}app-log-level=${level}` : url);
   } catch (e) {
     failWith(String(e && e.message || e));
   }
@@ -518,6 +634,9 @@ function createShell({
         case "ask":
           onAsk(m);
           break;
+        case "app-log":
+          calcuAppLog(m.level, m.text, true);
+          break;
         case "sound-start":
         case "sound":
         case "sound-stop":
@@ -530,7 +649,8 @@ function createShell({
     // A script that cannot be fetched or throws, a message that cannot be read.
     worker.onerror = e => {
       if (e && e.preventDefault) e.preventDefault();
-      failWith(e && e.message || "the worker could not be started");
+      const where = e && e.filename ? ` (${e.filename}:${e.lineno || 0}:${e.colno || 0})` : "";
+      failWith(`${e && e.message || "the worker could not be started"}${where}`);
     };
     worker.onmessageerror = () => failWith("a message from the worker could not be read");
     post({
@@ -606,10 +726,11 @@ function calcuPaceOverlay(p, busy) {
 //
 //   embedProps(props, {name, layouts, layout}) → {width, keyboard (default
 //                        true), layout, preset, height, model, workerUrl,
-//                        rest}: the shared props in their order, then the
+//                        paperWindow (default false), rest}: the shared
+//                        props in their order, then the
 //                        product's own in rest; layout is
 //                        one of the product's layouts, else its default (a
-//                        value not among them is ignored with a console
+//                        value not among them is ignored with an app log
 //                        warning naming the component `name`)
 //   bundlePathOf(preset) the preset prop as its bundle path: "sum.ti59" and
 //                        "examples:sum.ti59" both give "examples:sum.ti59"
@@ -639,6 +760,7 @@ function embedProps(props, product) {
     height,
     model,
     workerUrl,
+    paperWindow = false,
     ...rest
   } = props || {};
   const {
@@ -649,7 +771,7 @@ function embedProps(props, product) {
   let taken = byDefault;
   if (layout !== undefined && layouts.includes(layout)) taken = layout;else if (layout !== undefined && !CALCU_LAYOUT_WARNED.has(`${name} ${layout}`)) {
     CALCU_LAYOUT_WARNED.add(`${name} ${layout}`); // once, not at every render
-    console.warn(`${name}: layout ${JSON.stringify(layout)} is not one of its layouts ` + `(${layouts.map(l => JSON.stringify(l)).join(", ")}); it is ignored.`);
+    calcuAppLog("warn", `${name}: layout ${JSON.stringify(layout)} is not one of its layouts ` + `(${layouts.map(l => JSON.stringify(l)).join(", ")}); it is ignored.`);
   }
   return {
     width,
@@ -659,6 +781,7 @@ function embedProps(props, product) {
     height,
     model,
     workerUrl,
+    paperWindow: !!paperWindow,
     rest
   };
 }
@@ -930,7 +1053,8 @@ function calcuPaintMarks(ctx, description, marks, scale, top, bottom) {
 //
 //   <CalcuPaperPanel shell={shell} owner={peripheralId | null} ownerPlace={place | null}
 //                    hint={text} controls={[{id, form: "key" | "switch", on, label?, shortLabel?}]?}
-//                    send={fn?} places={[bar control]} onChoose={fn} />
+//                    send={fn?} places={[bar control]} onChoose={fn}
+//                    ownWindow={{own, toggle}?} />
 //
 // owner, ownerPlace: the printer plugged in and its place, from the control
 // state's panel; hint: what shows where the paper would start while there is
@@ -938,8 +1062,11 @@ function calcuPaintMarks(ctx, description, marks, scale, top, bottom) {
 // control state's of the owner on its place; places: the shell's place controls on the paper
 // (the panel model's), first in the header, onChoose(item) carrying out
 // their choice (the shell's choose); send(command, args) defaults to
-// shell.send. The header holds the places left, the owner's name centred
-// and the view control right; below the paper one row that never wraps: the
+// shell.send; ownWindow: the paper's own window where the page offers it
+// (useCalcuPaperWindow), its button at the header's right edge ("Open in
+// Own Window", in it "Back to Main Window"). The header holds the places
+// left, the owner's name centred and the view control right, left of that
+// button; below the paper one row that never wraps: the
 // owner's controls left, labelled as the control state labels them (the
 // short labels where the row is compact: calcuShellPaperRowCompact on the
 // panel's width and the chrome's --calcu-paper-row-compact-width), a switch
@@ -947,7 +1074,7 @@ function calcuPaintMarks(ctx, description, marks, scale, top, bottom) {
 // arm the clipboard inside the click (armClipboard, hostServices.js) and
 // send `paper.copy` / `paper.cut {copy: true}`.
 // Elements carry data-calcu names for the tests: paper-panel, paper-owner,
-// paper-view, paper-copy, paper-cut, paper-toast, paper-text,
+// paper-view, paper-window, paper-copy, paper-cut, paper-toast, paper-text,
 // paper-control-<id>, paper-scroll, paper-canvas.
 
 const CALCU_PAPER_FOLLOW = 64; // points from the end within which the view follows
@@ -965,10 +1092,33 @@ function useCalcuPaper(shell) {
   return React.useSyncExternalStore(store ? store.subscribe : () => () => {}, store ? store.getState : () => none, () => none);
 }
 
-// Copy (two sheets) and Cut (scissors), drawn in the button's text colour.
+// Copy (two sheets) and Cut (scissors), drawn in the button's text colour;
+// the own window: a window with an arrow out of it ("out") or back in ("in").
 function CalcuPaperIcon({
   kind
 }) {
+  if (kind === "out" || kind === "in") {
+    const tip = kind === "in" ? [7.5, 8.5] : [14, 2],
+      tail = kind === "in" ? [14, 2] : [7.5, 8.5];
+    const d = kind === "in" ? 4 : -4;
+    return /*#__PURE__*/React.createElement("svg", {
+      className: "calcu-paper-icon",
+      viewBox: "0 0 16 16",
+      width: "16",
+      height: "16",
+      "aria-hidden": "true",
+      focusable: "false",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "1.4",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M7.5 2.5H2.5V13.5H13.5V8.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: `M${tail[0]} ${tail[1]}L${tip[0]} ${tip[1]}M${tip[0]} ${tip[1] - d}L${tip[0]} ${tip[1]}L${tip[0] + d} ${tip[1]}`
+    }));
+  }
   return /*#__PURE__*/React.createElement("svg", {
     className: "calcu-paper-icon",
     viewBox: "0 0 16 16",
@@ -1047,6 +1197,11 @@ function CalcuPaperControl({
   }));
 }
 const CALCU_PAPER_NO_CONTROLS = [];
+
+// The window the element is drawn in: the page's, or the paper's own.
+function calcuViewOf(el) {
+  return el && el.ownerDocument && el.ownerDocument.defaultView || window;
+}
 function CalcuPaperPanel({
   shell,
   owner,
@@ -1055,7 +1210,8 @@ function CalcuPaperPanel({
   controls: given,
   send,
   places,
-  onChoose
+  onChoose,
+  ownWindow
 }) {
   const state = useCalcuPaper(shell);
   const all = useTopic(shell, "control-state", cs => cs && cs.controls || CALCU_PAPER_NO_CONTROLS);
@@ -1078,15 +1234,16 @@ function CalcuPaperPanel({
   React.useEffect(() => {
     const el = panelRef.current;
     if (!el) return undefined;
+    const view = calcuViewOf(el);
     const update = () => {
-      const width = parseFloat(getComputedStyle(el).getPropertyValue("--calcu-paper-row-compact-width")) || 0;
+      const width = parseFloat(view.getComputedStyle(el).getPropertyValue("--calcu-paper-row-compact-width")) || 0;
       setCompact(calcuShellPaperRowCompact({
         paperRowCompactWidth: width
       }, el.clientWidth));
     };
     update();
-    if (typeof ResizeObserver === "undefined") return undefined;
-    const o = new ResizeObserver(update);
+    if (typeof view.ResizeObserver === "undefined") return undefined;
+    const o = new view.ResizeObserver(update);
     o.observe(el);
     return () => o.disconnect();
   }, []);
@@ -1106,8 +1263,9 @@ function CalcuPaperPanel({
       height: el.clientHeight
     });
     update();
-    if (typeof ResizeObserver === "undefined") return undefined;
-    const o = new ResizeObserver(update);
+    const view = calcuViewOf(el);
+    if (typeof view.ResizeObserver === "undefined") return undefined;
+    const o = new view.ResizeObserver(update);
     o.observe(el);
     return () => o.disconnect();
   }, [showText]);
@@ -1140,7 +1298,7 @@ function CalcuPaperPanel({
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || showText) return;
-    const dpr = typeof window !== "undefined" && window.devicePixelRatio || 1;
+    const dpr = calcuViewOf(canvas).devicePixelRatio || 1;
     const w = Math.max(1, size.width),
       h = Math.max(1, size.height);
     if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
@@ -1167,9 +1325,12 @@ function CalcuPaperPanel({
     return () => clearTimeout(t);
   }, [copy && copy.seq]);
   const copyOrCut = (command, args) => {
+    // In the gesture (hostServices.js armClipboard), on the clipboard of
+    // the window the click was in.
     armClipboard({
-      text: textLayer
-    }); // in the gesture (hostServices.js armClipboard)
+      text: textLayer,
+      view: calcuViewOf(panelRef.current)
+    });
     Promise.resolve(sendTo(command, args)).then(r => {
       if (!r || !r.done) calcuDisarmClipboard();
     });
@@ -1204,7 +1365,16 @@ function CalcuPaperPanel({
     "data-view": view,
     "aria-pressed": view === "text",
     onClick: () => setView(view === "text" ? "marks" : "text")
-  }, view === "text" ? "Text" : "Marks"))), showText ? /*#__PURE__*/React.createElement("pre", {
+  }, view === "text" ? "Text" : "Marks"), ownWindow && /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "calcu-paper-action",
+    "data-calcu": "paper-window",
+    title: ownWindow.own ? "Back to Main Window" : "Open in Own Window",
+    "aria-label": ownWindow.own ? "Back to Main Window" : "Open in Own Window",
+    onClick: ownWindow.toggle
+  }, /*#__PURE__*/React.createElement(CalcuPaperIcon, {
+    kind: ownWindow.own ? "in" : "out"
+  })))), showText ? /*#__PURE__*/React.createElement("pre", {
     className: "calcu-paper-text",
     "data-calcu": "paper-text"
   }, paper.lines.map(l => l.text).join("\n")) : /*#__PURE__*/React.createElement("div", {
@@ -1615,9 +1785,10 @@ function CalcuSavedMediaDialog({
 /* === shellModel.js === */
 // The shell's rules that run on the page's own clock and measurements, in
 // plain JS: the same rules as library/shell/ (barFit, paperRowCompact, view, LoadingRule,
-// NoticeQueue, the hit rule, PointerTracker, about), rule by rule. The
-// menus, the bar, the panels and the settings dialog are the C++ models',
-// which the worker serves (topic `web.shell`, shell::ModelHost). No React,
+// NoticeQueue, the hit rule, PointerTracker), rule by rule, and About's rows
+// of where the page runs. The menus, the bar, the panels, the settings
+// dialog and About are the C++ models', which the worker serves (topic
+// `web.shell`, shell::ModelHost). No React,
 // no DOM: loadable by `node --test` (library/web/tests/shell_model.test.js,
 // whose cases carry the C++ cases' names). A classic script of the component
 // set's closure; every top-level name starts with `calcuShell` or `CALCU_SHELL`.
@@ -1629,7 +1800,8 @@ function CalcuSavedMediaDialog({
 //   calcuShellNotices() → {push, refusal, current, close, answer, waiting}; current() is
 //     {seq, text, question, command}, seq numbering the notices queued
 //   calcuShellKeyAt(map, scale, x, y); calcuShellPointer(map, scale) → {down, move, up, releaseAll}
-//   calcuShellAbout(product)
+//   calcuShellHostRows(nav, hints, loc) → [[label, value]]: Page, Browser, OS, Hardware
+//   calcuShellDisplayFacts(win) → {reported, scale, window}: About's Display facts
 //   calcuShellList, calcuShellText, calcuShellAvailability: reading the topics' Values
 
 const CALCU_SHELL_ACTIONS = {
@@ -1640,6 +1812,7 @@ const CALCU_SHELL_ACTIONS = {
   copyScreen: "copy-screen",
   pasteText: "paste-text",
   help: "help",
+  showAppLog: "show-app-log",
   about: "about",
   nameAndSavePrefix: "media-name-and-save-"
 };
@@ -1689,11 +1862,15 @@ function calcuShellPaperRowCompact(sizes, rowWidth) {
 // allows, its proportions kept; the room left over lies "beside" it (the
 // window relatively wider) or "below" it, and picks the view. The panels go
 // there only when that room is at least their minimum on that side (0: no
-// panels there); else the product's fallback. On mobile with the room below,
-// panelsAloneOnMobileBelow gives the panels alone.
+// panels there); else the product's fallback. A window in the faceplate's
+// orientation always shows it; a mobile one turned the other way shows the
+// panels alone where the faceplate would be narrower than
+// faceplateUsableWidth (a phone).
 // inputs: {width, height, faceplateAspect, fixedWidth, fixedHeight,
-// panelsMinWidth, panelsMinHeight, debuggerMinWidth, debuggerMinHeight, mobile,
-// panelsAloneOnMobileBelow}; debuggerFits: the debugger beside the panels.
+// panelsMinWidth, panelsMinHeight, debuggerMinWidth, debuggerMinHeight,
+// panelsAreDebugger, mobile, faceplateUsableWidth}; debuggerFits: the
+// debugger beside the panels (panelsAreDebugger: the panels are the
+// debugger alone, it fits where they do and the window is high enough).
 function calcuShellView(inputs) {
   const i = inputs;
   const boxWidth = Math.max(0, i.width - (i.fixedWidth || 0));
@@ -1705,11 +1882,13 @@ function calcuShellView(inputs) {
   const room = side === "beside" ? boxWidth - faceplateWidth : boxHeight - faceplateHeight;
   const least = (side === "beside" ? i.panelsMinWidth : i.panelsMinHeight) || 0;
   const panelsFit = least > 0 && room >= least;
-  // Only where the room below takes the panels: a sliver of it (a phone in
-  // landscape whose safe area narrows the window) keeps the calculator.
-  const panelsAlone = !!i.panelsAloneOnMobileBelow && !!i.mobile && side === "below" && panelsFit;
+  // The natural orientation always shows the faceplate; turned, only a
+  // faceplate too narrow to use gives way to the panels.
+  const turned = aspect >= 1 !== i.width >= i.height;
+  const panelsAlone = !!i.mobile && turned && side === "below" && panelsFit && faceplateWidth < (i.faceplateUsableWidth || 0);
   const across = side === "beside" ? room : i.width;
-  const debuggerFits = panelsFit && !panelsAlone && (i.debuggerMinWidth || 0) > 0 && across >= (i.panelsMinWidth || 0) + i.debuggerMinWidth && i.height >= (i.debuggerMinHeight || 0);
+  const besideThem = !!i.panelsAreDebugger || (i.debuggerMinWidth || 0) > 0 && across >= (i.panelsMinWidth || 0) + i.debuggerMinWidth;
+  const debuggerFits = panelsFit && !panelsAlone && besideThem && i.height >= (i.debuggerMinHeight || 0);
   return {
     side,
     panelsFit,
@@ -1902,16 +2081,61 @@ function calcuShellPointer(map, scale) {
     }
   };
 }
-function calcuShellAbout(product) {
-  let title = product.aboutLabel || `About ${product.name}`;
-  if (title.endsWith("…")) title = title.slice(0, -1);
+
+// About's Display facts (shell::DisplayFacts) of the window `win`: the
+// screen as the browser reports it (CSS pixels), its scale
+// (devicePixelRatio, which the page's zoom changes too) and the window's
+// inner size. A browser names no screen and tells no panel mode.
+function calcuShellDisplayFacts(win) {
+  const size = (w, h) => ({
+    width: Math.round(w || 0),
+    height: Math.round(h || 0)
+  });
   return {
-    title,
-    name: product.name,
-    version: `Version ${product.version}${product.build ? ` (${product.build})` : ""}`,
-    lines: product.aboutLines || [],
-    links: product.aboutLinks || []
+    reported: size(win.screen && win.screen.width, win.screen && win.screen.height),
+    scale: win.devicePixelRatio || 0,
+    window: size(win.innerWidth, win.innerHeight)
   };
+}
+
+// Where the page runs: Page (`loc`, the page's location: host and path,
+// where it was loaded from), then what the browser tells: Browser, OS,
+// Hardware. `nav`: the navigator; `hints`: the answer of userAgentData's
+// getHighEntropyValues (Chromium), or null. Without hints the user agent
+// string gives the browser and the OS's name only: Safari and Firefox
+// freeze the rest, so a version there would be made up. A browser shows no
+// CPU model; the architecture only with hints.
+function calcuShellHostRows(nav, hints, loc) {
+  const page = loc && loc.host ? `${loc.host}${loc.pathname || ""}` : "";
+  const ua = nav && nav.userAgent || "";
+  let browser = "";
+  const brands = hints && (hints.fullVersionList || hints.brands);
+  if (brands && brands.length) {
+    const real = brands.filter(b => !/Not.?A.?Brand/i.test(b.brand));
+    const pick = real.find(b => b.brand !== "Chromium") || real[0];
+    if (pick) browser = `${pick.brand.replace(/^Google /, "")} ${pick.version}`;
+  }
+  if (!browser) {
+    for (const [name, re] of [["Edge", /Edg[A-Za-z]*\/([\d.]+)/], ["Opera", /OPR\/([\d.]+)/], ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/], ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/], ["Safari", /Version\/([\d.]+).*Safari\//]]) {
+      const m = re.exec(ua);
+      if (m) {
+        browser = `${name} ${m[1]}`;
+        break;
+      }
+    }
+  }
+  let os = "";
+  const platform = hints && hints.platform || "";
+  if (platform) {
+    const v = hints.platformVersion || "";
+    if (platform === "Windows") os = v ? `Windows ${parseInt(v, 10) >= 13 ? "11" : "10"}` : "Windows";else os = v ? `${platform} ${v}` : platform;
+  } else if (/iPhone|iPad|iPod/.test(ua)) os = "iOS";else if (/Android/.test(ua)) os = "Android";else if (/Mac OS X|Macintosh/.test(ua)) os = "macOS";else if (/Windows/.test(ua)) os = "Windows";else if (/CrOS/.test(ua)) os = "ChromeOS";else if (/Linux/.test(ua)) os = "Linux";
+  let hardware = "";
+  if (hints && hints.architecture) {
+    const a = hints.architecture === "x86" ? hints.bitness === "64" ? "x86_64" : "x86" : hints.bitness === "64" ? `${hints.architecture}64` : hints.architecture;
+    hardware = hints.model ? `${hints.model}, ${a}` : a;
+  } else if (hints && hints.model) hardware = hints.model;
+  return [["Page", page], ["Browser", browser], ["OS", os], ["Hardware", hardware]];
 }
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
@@ -1922,7 +2146,8 @@ if (typeof module !== "undefined" && module.exports) {
     calcuShellNotices,
     calcuShellKeyAt,
     calcuShellPointer,
-    calcuShellAbout,
+    calcuShellHostRows,
+    calcuShellDisplayFacts,
     calcuShellAvailability,
     CALCU_SHELL_LOADING_MS
   };
@@ -1938,18 +2163,23 @@ if (typeof module !== "undefined" && module.exports) {
 //   (traits: `settings` false: no Settings…; `about` false: no About; the
 //   page is mobile when CALCU_SHELL_MOBILE. shellArgs: the product's own
 //   args of its shell, as its Web part reads them.)
-//   s.menus, s.bar, s.panels, s.dialog (the settings rows), s.loading, s.notice,
+//   s.menus, s.bar, s.panels, s.dialog (the settings rows), s.about (the About
+//   dialog: shell::about with the page's rows and its Display facts, measured
+//   when About opens, and its Copy `text`), s.loading, s.notice,
 //   s.started, s.romsMissing, s.open ("settings" | "about" | "saved-media" |
 //   "name-and-save" | null), s.naming (the place Name & Save is open for),
 //   s.nameAndSavePrompts ({place: prompt}, the models' nameAndSave)
 //   s.choose(item), s.setSetting(section, key, value), s.closeNotice(yes), s.close()
+//   s.chooseStartupPreset(model): the settings row's "Choose…", the preset
+//   picked with its files (`choose-startup-preset`: checked, then kept)
 //   s.notify(text): a notice of the page's own, queued with the session's
 //   s.nameAndSave(place): the Name & Save dialog of a media place (ShellDialogs),
 //   for the place's submenu, the slot pickers' buttons and the product's own
 //   media controls
 //
 // `product` is the page's form of the product's data (`*.shell-product`):
-// its name, help address and About, `product.loadPreset` (optional) in
+// its name, help address, the page's `version`, `build` and `buildTime`
+// (the worker makes About of them), `product.loadPreset` (optional) in
 // place of the shell's Load Preset… (a product that opens the picked files
 // through the session's `open`), `copyScreen`, `nameAndSave` ({slotButtons}:
 // ShellProduct::nameAndSave) and its items' acts by id. The Name & Save
@@ -1983,6 +2213,7 @@ const CALCU_SHELL_NO_MODELS = {
   bar: [],
   panels: [],
   dialog: [],
+  about: null,
   nameAndSave: {}
 };
 function calcuShellNow() {
@@ -1990,7 +2221,22 @@ function calcuShellNow() {
 }
 function useCalcuShell(shell, product, traits, shellArgs) {
   const t = Object.assign({}, CALCU_SHELL_WEB_TRAITS, traits || {});
-  const shellKey = JSON.stringify([t, shellArgs || {}]);
+  const host = useShellHostRows();
+  // About's Display section: the screen and the window as they are when
+  // About opens (measured again at each open, not at each resize).
+  const [display, setDisplay] = React.useState(null);
+  const args = Object.assign({
+    mobile: !!t.mobile,
+    settings: t.settings !== false,
+    about: t.about !== false,
+    version: product.version || "",
+    build: product.build || "",
+    buildTime: product.buildTime || "",
+    host
+  }, display ? {
+    display
+  } : {}, shellArgs || {});
+  const shellKey = JSON.stringify(args);
   const controlState = useTopic(shell, "control-state");
   const busy = useTopic(shell, "busy");
   const runState = useTopic(shell, "run-state");
@@ -2007,13 +2253,10 @@ function useCalcuShell(shell, product, traits, shellArgs) {
   const loading = React.useRef(null);
   if (!loading.current) loading.current = calcuShellLoading();
 
-  // The worker computes the models for this page's traits.
+  // The worker computes the models for this page's traits, build and rows
+  // of where it runs (sent again when the browser's hints come).
   React.useEffect(() => {
-    if (shell && shell.setShell) shell.setShell(Object.assign({
-      mobile: !!t.mobile,
-      settings: t.settings !== false,
-      about: t.about !== false
-    }, shellArgs || {}));
+    if (shell && shell.setShell) shell.setShell(args);
   }, [shell, shellKey]);
 
   // Each notice, in order; none lost.
@@ -2049,7 +2292,8 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     menus,
     bar,
     panels,
-    dialog
+    dialog,
+    about
   } = models;
   const nameAndSavePrompts = models.nameAndSave || {};
   const sendChecked = (name, args) => {
@@ -2078,6 +2322,17 @@ function useCalcuShell(shell, product, traits, shellArgs) {
       });
     });
   };
+  // The preset with every file it names, or alone when they were chosen
+  // before (the session keeps them in its file cache).
+  const chooseStartupPreset = model => {
+    calcuPickFiles(product.presetUploads || "", true).then(async files => {
+      if (!files.length) return;
+      sendChecked("choose-startup-preset", {
+        model,
+        files: await calcuNamedFiles(files)
+      });
+    });
+  };
   const nameAndSave = place => {
     setNaming(place);
     setOpen("name-and-save");
@@ -2090,16 +2345,22 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     }
     const a = CALCU_SHELL_ACTIONS;
     if (item.id === a.loadPreset) (product.loadPreset || loadPreset)(); // a product may open the files itself
-    else if (item.id === a.settings) setOpen("settings");else if (item.id === a.about) setOpen("about");else if (item.id === a.savedMedia) setOpen("saved-media");else if (item.id.startsWith(a.nameAndSavePrefix)) nameAndSave(item.args.place);else if (item.id === a.help) calcuWebHostServices().answer("open-url", {
+    else if (item.id === a.settings) setOpen("settings");else if (item.id === a.about) {
+      setDisplay(calcuShellDisplayFacts(window));
+      setOpen("about");
+    } else if (item.id === a.savedMedia) setOpen("saved-media");else if (item.id.startsWith(a.nameAndSavePrefix)) nameAndSave(item.args.place);else if (item.id === a.help) calcuWebHostServices().answer("open-url", {
       url: product.helpUrl
     }); // its result is ignored
-    else if (item.id === a.copyScreen) {
+    else if (item.id === a.showAppLog) {
+      // a page writes no file: the kept lines as a download
+      calcuDownload(`${product.name || "Calc-U"}.log`, new TextEncoder().encode(calcuAppLogText()), "text/plain");
+    } else if (item.id === a.copyScreen) {
       if (product.copyScreen) product.copyScreen();
     } else if (item.id === a.pasteText) {
       const read = typeof navigator !== "undefined" && navigator.clipboard ? navigator.clipboard.readText() : Promise.resolve("");
       read.then(text => sendChecked("paste", {
         text
-      }), () => {});
+      }), e => calcuAppLog("warn", `Paste: the clipboard could not be read: ${calcuErrorText(e)}`));
     } else {
       const act = (product.acts || {})[item.id]; // a product item acts
       if (act) act();
@@ -2115,6 +2376,7 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     bar,
     panels,
     dialog,
+    about,
     open,
     naming,
     nameAndSavePrompts,
@@ -2125,6 +2387,7 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     choose,
     sendChecked,
     nameAndSave,
+    chooseStartupPreset,
     setSetting: (section, key, value) => sendChecked("set-setting", {
       section,
       key,
@@ -2141,6 +2404,25 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     },
     close: () => setOpen(null)
   };
+}
+
+// About's rows of where the page runs: at once from the user agent string,
+// then from Chromium's client hints when they come (the rows are the last
+// part of the dialog, so nothing above them moves).
+function useShellHostRows() {
+  const [rows, setRows] = React.useState(() => typeof window === "undefined" ? [] : calcuShellHostRows(window.navigator, null, window.location));
+  React.useEffect(() => {
+    const hints = typeof window === "undefined" ? null : window.navigator.userAgentData;
+    if (!hints || typeof hints.getHighEntropyValues !== "function") return undefined;
+    let live = true;
+    hints.getHighEntropyValues(["platformVersion", "architecture", "bitness", "model", "fullVersionList"]).then(h => {
+      if (live) setRows(calcuShellHostRows(window.navigator, h, window.location));
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+  return rows;
 }
 /* === ShellModal.jsx === */
 // ShellModal -- the one modal frame of the React set, the shell's dialogs'
@@ -2592,9 +2874,13 @@ function useShellBarFit(ref, faceplate, room) {
 // a section per group of the dialog model, a change sent as `set-setting` at
 // once, Close as the only button. It follows the `settings` topic and is
 // held back by nothing. Folder rows show the folder in use with "Reset" (a
-// Web frontend has no folder picker). Names: settings-dialog,
+// Web frontend has no folder picker). A startup preset row ends with the
+// model's "Choose…" (`row.choose`), which opens the file picker; the row
+// shows the stored value until the settings topic changes. Names: settings-dialog,
 // setting-<section>-<key>, settings-close.
 
+// No setting has it as its value: a file path or bundle path never starts with NUL.
+const CALCU_CHOOSE_VALUE = "\u0000choose";
 function ShellSettingRow({
   s,
   row
@@ -2604,14 +2890,21 @@ function ShellSettingRow({
   const set = v => s.setSetting(r.section, r.key, v);
   let control = null;
   if (r.widget === "startup-model" || r.widget === "choice" || r.widget === "startup-preset") {
+    const chooses = r.widget === "startup-preset" && !!row.choose;
+    const changed = v => {
+      if (chooses && v === CALCU_CHOOSE_VALUE) s.chooseStartupPreset(r.key);else set(v);
+    };
     control = /*#__PURE__*/React.createElement("select", {
       "data-calcu": name,
       value: row.value,
-      onChange: e => set(e.target.value)
+      onChange: e => changed(e.target.value)
     }, row.choices.map(([v, l]) => /*#__PURE__*/React.createElement("option", {
       key: v,
       value: v
-    }, l)));
+    }, l)), chooses && /*#__PURE__*/React.createElement("option", {
+      key: CALCU_CHOOSE_VALUE,
+      value: CALCU_CHOOSE_VALUE
+    }, row.choose));
   } else if (r.widget === "folder") {
     control = /*#__PURE__*/React.createElement("span", {
       "data-calcu": name,
@@ -2683,24 +2976,41 @@ function ShellSettings({
   })))));
 }
 /* === ShellAbout.jsx === */
-// ShellAbout -- the About dialog of the React set: the product's name, its version and build, the texts and
-// links the product gives, one button to close it. Name: about-dialog.
+// ShellAbout -- the About dialog of the React set, as the worker serves it (useCalcuShell's
+// `about`, shell::about): the product's name, its version and build, the texts and links the
+// product gives, its sections (about-section: the Support Information with build time, the page's
+// address and what the browser tells of where it runs; the Display of the screen and window),
+// Copy (about-copy: the model's text, shell::aboutText) and OK.
+// Name: about-dialog.
 
 function ShellAbout({
   shell
 }) {
   const s = shell;
-  const a = calcuShellAbout(s.product);
+  const a = s.about;
+  if (!a) return null; // the About item comes with the models
+  const copy = () => {
+    const refused = e => calcuAppLog("warn", `About: Copy failed: ${calcuErrorText(e)}`);
+    try {
+      navigator.clipboard.writeText(a.text).catch(refused);
+    } catch (e) {
+      refused(e);
+    }
+  };
   return /*#__PURE__*/React.createElement(ShellModal, {
     name: "about-dialog",
     title: a.title,
     onClose: s.close,
-    buttons: /*#__PURE__*/React.createElement("button", {
+    buttons: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      "data-calcu": "about-copy",
+      onClick: copy
+    }, "Copy"), /*#__PURE__*/React.createElement("button", {
       type: "button",
       className: "calcu-shell-default",
       "data-calcu": "about-close",
       onClick: s.close
-    }, "OK")
+    }, "OK"))
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-about-name",
     "data-calcu": "about-name"
@@ -2715,7 +3025,13 @@ function ShellAbout({
     href: url,
     target: "_blank",
     rel: "noopener noreferrer"
-  }, label))));
+  }, label))), a.sections.map(section => /*#__PURE__*/React.createElement("div", {
+    key: section.heading,
+    className: "calcu-shell-about-section",
+    "data-calcu": "about-section"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, section.heading)), section.rows.map(([label, value]) => /*#__PURE__*/React.createElement("div", {
+    key: label
+  }, label, ": ", value)))));
 }
 /* === ShellNotice.jsx === */
 // ShellNotice -- a notice or a question of the React set: the sentence as it is, no title, OK; a
@@ -3084,6 +3400,191 @@ function ShellStorageBanner({
     role: "status"
   }, storage.sentence || "");
 }
+/* === PaperWindow.jsx === */
+// useCalcuPaperWindow -- the paper panel in a window of its own on a
+// desktop page (Qt6: qt6/PaperWindow): a browser window without the
+// browser's bars (window.open with `popup`), its document made here with the
+// page's stylesheets, the panel drawn into it through a React portal, so it
+// shares the page's shell and paper store; no second worker.
+//
+//   const pw = useCalcuPaperWindow(shell, {paperWindow, product, notify});
+//   pw.own                   the paper is in its own window
+//   pw.toggle()              into its own window (inside the click: a
+//                            browser opens a window only within a gesture),
+//                            or back
+//   pw.ownWindow             {own, toggle} for the paper's header button
+//                            where the window is offered, else undefined
+//   pw.portal(element, style) the element drawn into the window, on a root
+//                            with the client's chrome custom properties
+//                            (null while the paper is in the page)
+//
+// paperWindow: the embed prop of the page that offers the window (the full
+// app); it is offered with it on a desktop page, never on mobile.
+// product: the product's name, for the window's title "<product> — Printer"
+// (Qt6: the same title); notify(text): a page notice.
+// Closing the window puts the paper back; the page's own end closes the
+// window and keeps [window] paper-own-window, so that the next start opens
+// it again. A browser refuses a window outside a gesture, so that start
+// may be refused: the paper stays in the page and a notice says so.
+// The window's place and inner size are [window] paper-x, paper-y,
+// paper-width, paper-height, written through the session's
+// `remember-window` (the settings file in the worker, as every setting).
+
+const CALCU_PAPER_WINDOW_POLL_MS = 1000; // a browser tells no move: its place is read this often
+const CALCU_PAPER_WINDOW_BLOCKED = "The browser did not open the printer's window; the button on the paper opens it.";
+function calcuPaperWindowNumber(win, key, fallback) {
+  const v = parseInt(win && win[key], 10);
+  return Number.isFinite(v) ? v : fallback;
+}
+function useCalcuPaperWindow(shell, {
+  paperWindow,
+  product,
+  notify
+}) {
+  const offered = !!paperWindow && !CALCU_SHELL_MOBILE;
+  const title = `${product} — Printer`;
+  const win = useTopic(shell, "settings", st => st && st.window || null);
+  const [popup, setPopup] = React.useState(null); // {view, root}
+  const popupRef = React.useRef(null);
+  popupRef.current = popup;
+  const ending = React.useRef(false); // the page itself goes
+  const restored = React.useRef(false);
+  const winRef = React.useRef(win);
+  winRef.current = win;
+  const remember = React.useCallback(values => {
+    if (shell) Promise.resolve(shell.send("remember-window", {
+      values
+    })).catch(() => {});
+  }, [shell]);
+  const placeOf = view => ({
+    "paper-x": Math.round(view.screenX),
+    "paper-y": Math.round(view.screenY),
+    "paper-width": Math.round(view.innerWidth),
+    "paper-height": Math.round(view.innerHeight)
+  });
+  const back = React.useCallback(closeIt => {
+    const p = popupRef.current;
+    if (!p) return;
+    popupRef.current = null;
+    setPopup(null);
+    remember(p.view.closed ? {
+      "paper-own-window": false
+    } : {
+      ...placeOf(p.view),
+      "paper-own-window": false
+    });
+    p.stop();
+    if (closeIt && !p.view.closed) p.view.close();
+  }, [remember]);
+
+  // The window, made now; null where the browser refuses it.
+  const open = React.useCallback(() => {
+    if (popupRef.current) {
+      popupRef.current.view.focus();
+      return true;
+    }
+    const w = winRef.current;
+    const width = calcuPaperWindowNumber(w, "paper-width", 400),
+      height = calcuPaperWindowNumber(w, "paper-height", 640);
+    let features = `popup=yes,width=${width},height=${height}`;
+    if (w && w["paper-x"] !== "" && w["paper-y"] !== "" && w["paper-x"] !== undefined) features += `,left=${calcuPaperWindowNumber(w, "paper-x", 0)},top=${calcuPaperWindowNumber(w, "paper-y", 0)}`;
+    let view = null;
+    try {
+      view = window.open("", "calcu-paper-window", features);
+    } catch (_) {
+      view = null;
+    }
+    if (!view) return false;
+    const d = view.document;
+    d.title = title;
+    d.documentElement.style.height = "100%";
+    d.body.style.margin = "0";
+    d.body.style.height = "100%";
+    // The page's stylesheets, at their absolute addresses (the window's
+    // blank document has no base of its own to resolve them against).
+    for (const el of document.querySelectorAll('link[rel="stylesheet"], style')) {
+      const copy = d.importNode(el, true);
+      if (el.tagName === "LINK") copy.href = el.href;
+      d.head.appendChild(copy);
+    }
+    const root = d.createElement("div");
+    d.body.appendChild(root);
+    // Its place as it changes (a browser tells a resize, never a move).
+    let last = JSON.stringify(placeOf(view));
+    const check = () => {
+      if (view.closed) return;
+      const now = JSON.stringify(placeOf(view));
+      if (now !== last) {
+        last = now;
+        remember(placeOf(view));
+      }
+    };
+    const poll = setInterval(check, CALCU_PAPER_WINDOW_POLL_MS);
+    const closed = () => {
+      if (!ending.current) back(false);
+    };
+    view.addEventListener("resize", check);
+    view.addEventListener("pagehide", closed);
+    const stop = () => {
+      clearInterval(poll);
+      try {
+        view.removeEventListener("pagehide", closed);
+        view.removeEventListener("resize", check);
+      } catch (_) {/* gone */}
+    };
+    const p = {
+      view,
+      root,
+      stop
+    };
+    popupRef.current = p;
+    setPopup(p);
+    remember({
+      "paper-own-window": true
+    });
+    view.focus();
+    return true;
+  }, [title, remember, back]);
+  const toggle = React.useCallback(() => {
+    if (popupRef.current) back(true);else if (!open() && notify) notify(CALCU_PAPER_WINDOW_BLOCKED);
+  }, [open, back, notify]);
+
+  // The page's end takes the window with it; the setting stays.
+  React.useEffect(() => {
+    const end = () => {
+      ending.current = true;
+      const p = popupRef.current;
+      if (p && !p.view.closed) p.view.close();
+    };
+    window.addEventListener("pagehide", end);
+    return () => window.removeEventListener("pagehide", end);
+  }, []);
+
+  // At the start, the window again where the last run left it.
+  React.useEffect(() => {
+    if (!offered || !win || restored.current) return;
+    restored.current = true;
+    if (win["paper-own-window"] === "true" && !open() && notify) notify(CALCU_PAPER_WINDOW_BLOCKED);
+  }, [offered, win, open, notify]);
+  const portal = (element, style) => {
+    if (!popup) return null;
+    return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+      className: "calcu-client calcu-paper-window",
+      "data-calcu": "paper-window-root",
+      style: style
+    }, element), popup.root);
+  };
+  const own = !!popup;
+  return {
+    own,
+    toggle,
+    portal,
+    ownWindow: offered ? {
+      own,
+      toggle
+    } : undefined
+  };
+}
 /* === hostKeys.js === */
 // Host keys to the typing engine (the family's rule; the Qt6 twin is
 // library/qt6/HostKeys): a browser key event as the
@@ -3181,13 +3682,13 @@ if (typeof module !== "undefined" && module.exports) {
 /* === useShellProduct.jsx === */
 // A product page's glue to its session, the same for both products' pages.
 //
-//   useShellProduct(shell, {request, args, fallback, version, build,
+//   useShellProduct(shell, {request, args, fallback, version, build, buildTime,
 //                   copyScreen, openFiles, acts}) → {product, ready, chrome}
 //     the product's data: `request` (`<prefix>.shell-product`) with
 //     `args`, once per distinct `args` while the session runs, its answer
 //     {product, chrome} kept; `fallback` (the shell's frame with nothing of
-//     the product's) until it came. The product is the answer's with the
-//     page's `version` and `build`, Copy Screen (`copyScreen`, or null:
+//     the product's) until it came. Either carries the page's `version`,
+//     `build` and `buildTime`; the answer's also Copy Screen (`copyScreen`, or null:
 //     none), Load Preset… (the files picked by the product's
 //     `presetUploads`: the preset with the files it names, through
 //     `openFiles(files, "dialog")`) and the items' acts (`acts`, by id); its
@@ -3235,12 +3736,19 @@ function useShellProduct(shell, options) {
   const data = answers[key];
   const hasCopyScreen = !!options.copyScreen;
   const product = React.useMemo(() => {
-    if (!data) return options.fallback;
+    const stamp = {
+      version: options.version,
+      build: options.build,
+      buildTime: options.buildTime || ""
+    };
+    if (!data) return {
+      ...options.fallback,
+      ...stamp
+    };
     const p = data.product;
     return {
       ...p,
-      version: options.version,
-      build: options.build,
+      ...stamp,
       copyScreen: hasCopyScreen ? () => latest.current.copyScreen() : null,
       loadPreset: async () => {
         const files = await calcuPickFiles(p.presetUploads || "", true);
@@ -3315,12 +3823,8 @@ function useFaceplateMaps(shell, request, model) {
 async function calcuOpenFiles(send, files, way) {
   const list = Array.from(files || []);
   if (!list.length) return null;
-  const named = await Promise.all(list.map(f => f.arrayBuffer().then(b => ({
-    name: f.name,
-    bytes: new Uint8Array(b)
-  }))));
   return send("open", {
-    files: named,
+    files: await calcuNamedFiles(list),
     way,
     upload: true
   });
@@ -3425,12 +3929,12 @@ function ShellNameAndSaveButton({
 //
 //   createC59Traces() → {services, list, subscribe, download}
 //       the page's host services for useShell (the library's, with the
-//       traces the session hands over with keep-file kept: the LOG tab
+//       traces the session hands over with keep-file kept: the RUN LOG tab
 //       lists them; the worker keeps no copy). Every
 //       keep-file is a download; only those of kind "trace" are listed (a
 //       preset's screenshot and an exported medium are not)
 //   C59_PAGE        the context: {shell, s (useCalcuShell), traces, log}
-//   useLogView(shell) → {lines, clear}: the LOG tab's view of the session's
+//   useLogView(shell) → {lines, clear}: the RUN LOG tab's view of the session's
 //       `log`, its last 2000 lines; clear empties this view only
 
 const PRODUCT = "Calc-U-59";
@@ -4117,11 +4621,13 @@ function CardPicker({
 // the page's clipboard service.
 
 // `paper`: the shell's paper panel ({owner, ownerPlace, hint, places});
-// `onChoose`: the shell's choose, for the place controls on the paper.
+// `onChoose`: the shell's choose, for the place controls on the paper;
+// `ownWindow`: the paper's own window where the page offers it.
 function PaperPane({
   shell,
   paper,
-  onChoose
+  onChoose,
+  ownWindow
 }) {
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-printer",
@@ -4132,16 +4638,17 @@ function PaperPane({
     ownerPlace: paper.ownerPlace || null,
     hint: paper.hint,
     places: paper.places || [],
-    onChoose: onChoose
+    onChoose: onChoose,
+    ownWindow: ownWindow
   }));
 }
 /* === Debugger.jsx === */
 // The debugger panel, wide layout only (Qt6/app/debug/, App/Views/DebugView):
-// tabs CALCULATOR / CPU / LOG. Only the visible tab's snapshots are
+// tabs CALCULATOR / CPU / RUN LOG. Only the visible tab's snapshots are
 // built (setLiveDebugEnabled / setCpuDebugEnabled follow it). It draws the
 // product topics of the debug part (app/TIDebugPart): c59.calculator-debug,
 // c59.program-listing, c59.cpu-debug, c59.heatmap, c59.asm-overlay and c59.debug-view, whose
-// values are already the rows formatted by app/DebugText; the LOG tab is
+// values are already the rows formatted by app/DebugText; the RUN LOG tab is
 // the session's `log` at its `log-level`. FREEZE, STEP and RESUME of each tab are the component set's
 // run-control buttons for the level `program` (CALCULATOR) and `cpu` (CPU),
 // on the library's `run-state`, which FREEZE ON START
@@ -4593,7 +5100,7 @@ function LogTab() {
   // The session's log level: off → info → debug → off.
   const LEVELS = ["off", "info", "debug"];
   const level = Math.max(0, LEVELS.indexOf(log.level));
-  const labels = ["LOG ○", "LOG ●", "LOG ●"];
+  const labels = ["RUN LOG ○", "RUN LOG ●", "RUN LOG ●"];
   const mb = n => (n / 1e6).toFixed(n < 1e5 ? 2 : 1) + " MB";
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-debug-tab"
@@ -4601,12 +5108,12 @@ function LogTab() {
     className: "calcu-debug-header calcu-center"
   }, /*#__PURE__*/React.createElement("span", {
     className: "calcu-debug-title"
-  }, "DEBUG LOG")), /*#__PURE__*/React.createElement("textarea", {
+  }, "RUN LOG")), /*#__PURE__*/React.createElement("textarea", {
     className: "calcu-log",
     ref: ref,
     readOnly: true,
     value: text,
-    "aria-label": "Debug log"
+    "aria-label": "Run log"
   }), /*#__PURE__*/React.createElement("div", {
     className: "calcu-log-bar"
   }, traces.length > 0 && /*#__PURE__*/React.createElement("div", {
@@ -4729,7 +5236,7 @@ function Debugger() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-tabs",
     role: "tablist"
-  }, ["CALCULATOR", "CPU", "LOG"].map((t, i) => /*#__PURE__*/React.createElement("button", {
+  }, ["CALCULATOR", "CPU", "RUN LOG"].map((t, i) => /*#__PURE__*/React.createElement("button", {
     key: t,
     type: "button",
     role: "tab",
@@ -4794,7 +5301,8 @@ const FACE_MIN_AUTO = 120; // layout="auto": whatever a landscape phone's height
 const SPLITTERS = 1 + 5; // the line after the calculator, the divider before the debugger
 const MENU_HEIGHT = 26;
 const CALC_VERSION = "3.0.0";
-const CALC_BUILD = "pre-949c2403"; // tools/build-id.cmake
+const CALC_BUILD = "pre-3788d62b"; // tools/build-id.cmake
+const CALC_BUILD_TIME = "2026-11-24T15:50:58Z";
 
 /// The artwork's width that `height` leaves room for, and the column height for an artwork width.
 const faceWidthFor = height => (height - CHROME_SIZES.barHeight - 2 * FACE_PADDING) * CANVAS_ASPECT;
@@ -4984,28 +5492,33 @@ const embeddedWide = () => ({
 });
 
 /// The view of layout="auto" for the client's room (the library's rule on
-/// app/'s chrome): beside the faceplate with the panels fitting, the wide
-/// layout; else the pages.
-function autoView(width, height, menuHeight) {
+/// app/'s chrome, cu59::viewInputs): beside the faceplate with the panels
+/// fitting, the wide layout; else the pages. With the paper in its own
+/// window (`own`) the panels are the debugger alone: beside the faceplate
+/// where its width and height fit, else the calculator alone. The room is
+/// the client's below the menu bar (Qt6: the window's below its menu bar).
+function autoView(width, height, menuHeight, own) {
   const sizes = CHROME_SIZES;
   const view = calcuShellView({
     width,
-    height,
+    height: height - menuHeight,
     faceplateAspect: CANVAS_ASPECT,
     fixedWidth: 2 * FACE_PADDING,
-    fixedHeight: menuHeight + sizes.barHeight + 2 * FACE_PADDING,
-    panelsMinWidth: sizes.panelsMinWidth,
+    fixedHeight: sizes.barHeight + 2 * FACE_PADDING,
+    panelsMinWidth: own ? sizes.debuggerMinWidth : sizes.panelsMinWidth,
     panelsMinHeight: sizes.panelsMinHeight,
     debuggerMinWidth: sizes.debuggerMinWidth,
     debuggerMinHeight: sizes.debuggerMinHeight,
+    panelsAreDebugger: own,
     mobile: CALCU_SHELL_MOBILE
   });
-  const wide = view.side === "beside" && view.panelsFit;
+  const fits = view.side === "beside" && view.panelsFit;
+  const debuggerFits = fits && view.debuggerFits;
   return {
-    wide,
+    wide: own ? debuggerFits : fits,
     printerMin: sizes.printerMinWidth,
     printerMax: sizes.printerMaxWidth,
-    debugger: wide && view.debuggerFits
+    debugger: debuggerFits
   };
 }
 
@@ -5031,6 +5544,8 @@ function WideLayout({
   const [printerWidth, setPrinterWidth] = React.useState(rules.printerStart ?? printerMax);
   const free = width - columnWidth - 2;
   const pw = Math.max(printerMin, Math.min(printerMax, printerWidth, free - (hasDebugger ? CHROME_SIZES.debuggerMinWidth : 0)));
+  // The paper in its own window: the debugger takes its room.
+  const paperHere = !page.paperWindow.own;
   return /*#__PURE__*/React.createElement("div", {
     className: "calcu-wide",
     style: {
@@ -5042,7 +5557,7 @@ function WideLayout({
     width: columnWidth
   }), /*#__PURE__*/React.createElement("div", {
     className: "calcu-vline"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), paperHere && /*#__PURE__*/React.createElement("div", {
     style: {
       width: pw,
       flex: "none",
@@ -5051,8 +5566,9 @@ function WideLayout({
   }, /*#__PURE__*/React.createElement(PaperPane, {
     shell: page.shell,
     paper: page.paper,
-    onChoose: page.s.choose
-  })), hasDebugger && /*#__PURE__*/React.createElement(Divider, {
+    onChoose: page.s.choose,
+    ownWindow: page.ownWindow
+  })), paperHere && hasDebugger && /*#__PURE__*/React.createElement(Divider, {
     onDrag: dx => setPrinterWidth(Math.max(printerMin, Math.min(printerMax, pw + dx)))
   }), hasDebugger && /*#__PURE__*/React.createElement(Debugger, null));
 }
@@ -5085,17 +5601,18 @@ function PortraitLayout({
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-page",
-    hidden: view !== "calc"
+    hidden: view !== "calc" && !page.paperWindow.own
   }, /*#__PURE__*/React.createElement(CalculatorColumn, {
     page: page,
     faceWidth: faceWidth
-  })), view === "printer" && /*#__PURE__*/React.createElement("div", {
+  })), view === "printer" && !page.paperWindow.own && /*#__PURE__*/React.createElement("div", {
     className: "calcu-page calcu-page-printer"
   }, /*#__PURE__*/React.createElement(PaperPane, {
     shell: page.shell,
     paper: page.paper,
-    onChoose: page.s.choose
-  })), view === "calc" ? chevron("right") : chevron("left")));
+    onChoose: page.s.choose,
+    ownWindow: page.ownWindow
+  })), !page.paperWindow.own && (view === "calc" ? chevron("right") : chevron("left"))));
 }
 
 // Before `c59.shell-product` answered: the shell's frame with nothing of
@@ -5107,10 +5624,10 @@ const C59_NO_PRODUCT = {
 
 // The props (docs/developer/Web-Client.md): the embedding interface's width,
 // keyboard (on by default), layout ("portrait", the default, "wide" or
-// "auto"; embedProps ignores another value with a console warning), preset
+// "auto"; embedProps ignores another value with an app log warning), preset
 // (a bundled preset's path, with or without `examples:`), height, model (by
-// its name) and workerUrl, and the product's own settings. model and preset
-// are read once, at mount.
+// its name), workerUrl and paperWindow, and the product's own settings.
+// model and preset are read once, at mount.
 function CalcU59(props) {
   const {
     width,
@@ -5120,6 +5637,7 @@ function CalcU59(props) {
     height,
     model: modelProp,
     workerUrl,
+    paperWindow: paperWindowProp,
     rest
   } = embedProps(props, {
     name: "CalcU59",
@@ -5129,7 +5647,7 @@ function CalcU59(props) {
   const {
     settings = true
   } = rest;
-  // The traces the session hands over (the LOG tab), kept by the page's host services.
+  // The traces the session hands over (the RUN LOG tab), kept by the page's host services.
   const traces = React.useRef(null);
   if (!traces.current) traces.current = createC59Traces();
   const shell = useShell(PRODUCT, {
@@ -5158,10 +5676,22 @@ function CalcU59(props) {
   // is its notice. The picker offers the preset extensions and all files.
   const openFiles = (files, way) => calcuOpenFiles((name, args) => shell.send(name, args), files, way);
 
+  // The paper's own window, only with layout="auto": the fixed layouts
+  // have no view that gives the paper's room to the debugger. Its notice
+  // is the shell's, made below.
+  const notifyRef = React.useRef(null);
+  const paperWindow = useCalcuPaperWindow(shell, {
+    paperWindow: auto && paperWindowProp,
+    product: "Calc-U-59",
+    notify: text => {
+      if (notifyRef.current) notifyRef.current(text);
+    }
+  });
+
   // layout="auto": the view for this size, once app/'s chrome is here
   // (the answer of the last render; the first answer's layout is portrait).
   const [chromeHere, setChromeHere] = React.useState(false);
-  const rules = auto && chromeHere ? autoView(width || measured || 0, height || 0, menuBar ? MENU_HEIGHT : 0) : null;
+  const rules = auto && chromeHere ? autoView(width || measured || 0, height || 0, menuBar ? MENU_HEIGHT : 0, paperWindow.own) : null;
   const portrait = auto ? !rules || !rules.wide : layout !== "wide";
 
   // The product's shell data per layout (the settings differ).
@@ -5179,6 +5709,7 @@ function CalcU59(props) {
     fallback: C59_NO_PRODUCT,
     version: CALC_VERSION,
     build: CALC_BUILD,
+    buildTime: CALC_BUILD_TIME,
     copyScreen: null,
     openFiles,
     acts: {
@@ -5195,10 +5726,9 @@ function CalcU59(props) {
   const chromeStyle = React.useMemo(() => calcuChromeStyle(chrome, dark), [chrome, dark]);
   const traits = React.useMemo(() => traitsFor(settings), [settings]);
   const s = useCalcuShell(shell, product, traits, {
-    layout: portrait ? "portrait" : "wide",
-    version: CALC_VERSION,
-    build: CALC_BUILD
+    layout: portrait ? "portrait" : "wide"
   });
+  notifyRef.current = s.notify;
   const cs = s.inputs.controlState;
   const model = cs && cs.model || modelProp || "TI-59";
 
@@ -5264,13 +5794,16 @@ function CalcU59(props) {
   // ── Drag and drop any file: the session's `open {way: drop, upload}` ─
   const drop = calcuFileDrop(shell ? openFiles : null);
   const paper = s.panels.find(p => p.kind === "paper") || {};
+  const ownWindow = paperWindow.ownWindow;
   const page = {
     shell,
     s,
     faceplate: maps[model] || null,
     model,
     paper,
-    menuHeight: menuBar ? MENU_HEIGHT : 0
+    menuHeight: menuBar ? MENU_HEIGHT : 0,
+    paperWindow,
+    ownWindow
   };
   const romsMissing = !!s.romsMissing && !s.started;
   const failed = start === "failed";
@@ -5324,7 +5857,12 @@ function CalcU59(props) {
     shell: shell,
     mode: cardDialog,
     onClose: () => setCardDialog(null)
-  })));
+  }), paperWindow.portal(/*#__PURE__*/React.createElement(PaperPane, {
+    shell: shell,
+    paper: paper,
+    onChoose: s.choose,
+    ownWindow: ownWindow
+  }), chromeStyle)));
 }
 
 /// The portrait client's width for a height: no wider than the calculator
