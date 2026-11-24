@@ -335,7 +335,16 @@
 }
 .calcu-client .calcu-paper-places .calcu-shell-place.calcu-shell-plugged::after { background: var(--calcu-plugged); }
 .calcu-client .calcu-paper-owner { font-weight: 600; white-space: nowrap; }
-.calcu-client .calcu-paper-views { display: inline-flex; justify-self: end; }
+.calcu-client .calcu-paper-views { display: inline-flex; gap: 4px; justify-self: end; }
+/* The paper's own window: the panel over the whole window. */
+.calcu-client.calcu-paper-window {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  box-sizing: border-box;
+  background: var(--calcu-window);
+}
+.calcu-client.calcu-paper-window > * { flex: 1; min-width: 0; min-height: 0; }
 .calcu-client .calcu-paper-footer {
   flex: none;   /* nor the control row */
   display: flex;
@@ -586,6 +595,8 @@
 .calcu-client .calcu-shell-modal-body a { color: var(--calcu-link); }
 .calcu-client .calcu-shell-modal-body tt { font-family: ui-monospace, Menlo, Consolas, monospace; }
 .calcu-client .calcu-shell-notice-text { white-space: pre-wrap; }
+/* About's Support Information: set off from the links, selectable. */
+.calcu-client .calcu-shell-about-section { margin-top: 1em; user-select: text; -webkit-user-select: text; }
 .calcu-client .calcu-shell-problem { color: var(--calcu-alert); }
 .calcu-client .calcu-shell-modal-buttons { flex: none; display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
 /* The buttons, fields and pickers in a dialog: the menu's colours, the
@@ -611,6 +622,14 @@
   background: var(--calcu-menu-hover);
   color: var(--calcu-menu-hover-text);
 }
+/* A button held down looks pressed: in the highlighted item's colours, the
+   default button (already in them) darker. */
+.calcu-client .calcu-shell-modal-buttons button:active:not(:disabled),
+.calcu-client .calcu-shell-modal .calcu-media-buttons button:active:not(:disabled) {
+  background: var(--calcu-menu-hover);
+  color: var(--calcu-menu-hover-text);
+}
+.calcu-client .calcu-shell-modal .calcu-shell-default:active:not(:disabled) { filter: brightness(0.85); }
 .calcu-client .calcu-shell-modal .calcu-shell-default.calcu-shell-destructive:not(:disabled) {
   background: var(--calcu-alert);
   color: var(--calcu-menu);
