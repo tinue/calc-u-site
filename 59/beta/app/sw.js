@@ -15,7 +15,7 @@
 // caches of this app; the fetch handler answers from this release's cache
 // only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calcu59-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "1f2625e1c55bedb7";
+const CACHE_NAME = CACHE_PREFIX + "d230e1c2cbe4da40";
 
 const ASSETS = [
   "./",
@@ -92,6 +92,10 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => cache.addAll(ASSETS))
+      .catch((e) => {
+        console.warn(`[Calc-U] The app is not kept for offline use: its files could not be cached: ${e.name}: ${e.message}`);
+        throw e;   // the install fails, the release before stays
+      })
       .then(() => (firstInstall ? self.skipWaiting() : undefined))
   );
 });

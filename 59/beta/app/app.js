@@ -18,7 +18,11 @@ const ENGINE_WORKER_URL = new URL("engine-worker.js", document.currentScript.src
 // the page (Safari on iOS), so there the page keeps to the area the browser
 // leaves it.
 const APP_REGISTRATION = "serviceWorker" in navigator ? navigator.serviceWorker.register(new URL("sw.js", document.currentScript.src)) : null;
-if (APP_REGISTRATION) APP_REGISTRATION.catch(() => {});
+// The product's calc.js keeps the app log to itself: this page writes the
+// console only, in the app log's form.
+if (APP_REGISTRATION) {
+  APP_REGISTRATION.catch(e => console.warn("[Calc-U] The app is not available offline: the service worker was not " + `registered: ${e && e.name || "Error"}: ${e && e.message || e}`));
+}
 const APP_STANDALONE = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 if (!APP_STANDALONE) {
   const viewport = document.querySelector('meta[name="viewport"]');
@@ -144,7 +148,7 @@ function useNewVersion(registration) {
           if (w.state === "installed") offer(w);
         });
       });
-    }, () => {});
+    }, () => {/* told where it was registered */});
     navigator.serviceWorker.addEventListener("controllerchange", onChange);
     return () => navigator.serviceWorker.removeEventListener("controllerchange", onChange);
   }, [registration]);
@@ -216,6 +220,7 @@ function StandaloneApp() {
   }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(CalcU59, {
     "layout": "auto",
+    "paperWindow": true,
     width: size.width,
     height: size.height,
     keyboard: true,

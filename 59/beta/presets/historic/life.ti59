@@ -21,7 +21,7 @@
 # The article gives no start pattern. This preset enters a glider heading for
 # an eater in the opposite corner and presses C. The eater has eaten the glider
 # in generation 14; once that field is printed, the preset presses R/S.
-# The run's emulated time goes to the debug log.
+# The run's emulated time goes to the run log (the RUN LOG tab).
 #
 # The article: a full field takes 5 min 57 s to compute and 2 min 20 s to print;
 # an empty field 27 s and 8 s.
@@ -633,4 +633,4 @@ keys:
   - wait: 4860s  # generation 14, the eater alone, has been printed
   - skip-wait:
   - key: R/S  # stop
-  - elapsed-time: report  # the run, into the debug log
+  - elapsed-time: report  # the run, into the run log
