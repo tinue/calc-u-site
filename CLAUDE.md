@@ -43,7 +43,7 @@ emulator release, named `<site folder>/<emulator version>`:
   nothing. Release branches may be pushed to `origin` at any time.
 - **This repository holds the end-user documentation only.** The emulators'
   code and developer documentation stay in their own repositories
-  (`../Calc-U-59`, `../../sharp/Calc-U-1600`).
+  (`../Calc-U-59`, `../Calc-U-1600`).
 - **Code that ships with an emulator is imported, never edited here.**
   `59/calc/` is Calc-U-59's web client, installed by
   `59/.seo/fetch-web-client.js` from a release asset; `check.js` fails on any
