@@ -1,0 +1,53 @@
+# firmware.ti59 Keystrokes to enable firmware listing
+#
+# In early 1980 a personal letter from Maurice Swinnen, the editor of TI PPC Notes, explained that the TI-59 firmware could be
+# observed by performing the following unusual keyboard sequence while disregarding the flashing displays:
+# Step              Display
+# Turnon            0
+# 2nd-0p-09         Flashing 0.
+# 2nd-Pgm-24        Flashing 0.
+# R/S               Flashing 0
+# R/S               Flashing 1
+# R/S               Flashing 00
+# 9-2nd-Op-17       Flashing 239.89
+# GTO-0             Flashing 239.89
+# R/S               Flashing 0. 00
+# 2nd-DMS           Flashing 0
+# LRN               000 82
+#
+# Initially this did not work on the emulator. Problem was in LIB.PC.IN (opcode 0A2E): Reading the ROM PC was destructive.
+
+format-version: 2
+model: TI-59
+slot-1: { name: ML }
+printer: PC-100C
+
+# These are the above keystrokes
+keys:
+  - regular-speed:
+  # 21  2nd
+  - key: Op
+  - key: 9
+  # 21  2nd
+  - key: Pgm
+  - key: 2
+  - key: 4
+  - key: R/S
+  - wait: 5s
+  - key: R/S
+  - wait: 5s
+  - key: R/S
+  - wait: 5s
+  - key: 9
+  # 21  2nd
+  - key: Op
+  - key: 1
+  - key: 7
+  - key: GTO
+  - key: 0
+  - key: R/S
+  - wait: 1s
+  # 21  2nd
+  - key: D.MS
+  - wait: 2s
+  - key: LRN

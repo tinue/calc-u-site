@@ -1,0 +1,18 @@
+# TI-59 Preset File Tutorial — Step 1: setup
+#
+# This is the smallest useful preset file: it only says which calculator to
+# build and what is plugged into it. Load it in Calc-U-59 right now and you
+# get a TI-59 with the Master Library module and the PC-100C printer;
+# nothing else has been set up yet.
+
+# Every preset of this format starts with its version.
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+# A preset builds its machine from scratch: leave out slot-1 and there is no
+# module, leave out printer and there is no printer.
+model: TI-59
+preset-name: Tutorial step 1
+description: Preset tutorial, step 1 - the machine
+slot-1: { name: ML }
+printer: PC-100C

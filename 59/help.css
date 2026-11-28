@@ -1,0 +1,126 @@
+/* Calc-U 59 — the help pages (/59/help/), built from the help asset by
+   .help/render.js with .seo/help-page.js. Hand-written; the tokens are
+   colors_and_type.css, the shell (header, footer, .wrap, .btn, .k, .panel)
+   styles.css. The Markdown arrives as plain elements, so they are styled
+   here inside .help-article. */
+
+/* ---------- Layout: the chapter rail beside the article ---------------- */
+.help-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; }
+
+.help-nav { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; padding-right: 4px; }
+.help-nav .eyebrow a { color: inherit; text-decoration: none; }
+.help-nav ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.help-nav .help-chapter {
+  display: flex; gap: 10px; align-items: center;
+  padding: 6px 8px; border-radius: 7px;
+  color: var(--fg-2); text-decoration: none; font-size: 14px; line-height: 1.3;
+}
+.help-nav .help-chapter:hover { background: rgba(240,192,64,.06); color: var(--fg); }
+.help-nav .help-chapter .k { min-width: 28px; flex: 0 0 auto; }
+.help-nav li.open { background: var(--bg-elevated); border: 1px solid var(--stroke); border-radius: var(--radius-card); padding: 2px 0 6px; }
+.help-nav li.open > .help-chapter { color: var(--fg); font-weight: 600; }
+.help-nav [aria-current="page"] { color: var(--fg); }
+.help-parts { list-style: none; margin: 2px 0 0; padding: 0 0 0 46px; }
+.help-parts a {
+  display: block; padding: 4px 8px 4px 10px; font-size: 13px; line-height: 1.35;
+  color: var(--fg-2); text-decoration: none; box-shadow: inset 2px 0 0 transparent;
+}
+.help-parts a:hover { color: var(--fg); }
+.help-parts a[aria-current="page"] { color: var(--fg); font-weight: 600; box-shadow: inset 2px 0 0 var(--accent); }
+
+/* ---------- The article ------------------------------------------------- */
+.help-crumb { margin: 0 0 18px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-3); }
+.help-crumb a { color: var(--fg-2); text-decoration: none; }
+.help-crumb a:hover { color: var(--fg); text-decoration: underline; }
+
+.help-article { min-width: 0; color: var(--fg-2); line-height: 1.65; }
+.help-article h1 {
+  font-family: var(--font-key); font-weight: 700;
+  font-size: clamp(30px, 7vw, 42px); line-height: 1.04;
+  letter-spacing: .04em; text-transform: uppercase;
+  margin: 0 0 20px; color: var(--fg);
+}
+.help-article h2 {
+  font-family: var(--font-key); font-weight: 700;
+  font-size: clamp(21px, 5vw, 26px); letter-spacing: .06em; text-transform: uppercase;
+  margin: 40px 0 12px; color: var(--fg); scroll-margin-top: 16px;
+}
+.help-article h3, .help-article h4 {
+  font-family: var(--font-key); font-weight: 600;
+  font-size: 18px; letter-spacing: .06em; text-transform: uppercase;
+  margin: 28px 0 8px; color: var(--fg); scroll-margin-top: 16px;
+}
+.help-article h4 { font-size: 16px; }
+.help-article p, .help-article ul, .help-article ol, .help-article blockquote { max-width: 72ch; }
+.help-article ol { padding-left: 24px; margin: 0 0 14px; }
+.help-article strong { color: var(--fg); }
+.help-article a { color: var(--link); }
+.help-article a:visited { color: var(--link-visited); }
+.help-article hr { border: 0; border-top: 1px solid var(--stroke); margin: 32px 0; }
+.help-article blockquote { margin: 0 0 14px; padding: 10px 16px; border-left: 2px solid var(--accent-deep); background: var(--bg-elevated); border-radius: 0 6px 6px 0; }
+.help-article blockquote p:last-child { margin-bottom: 0; }
+
+.help-article img {
+  display: block; max-width: 100%; height: auto;
+  margin: 8px 0 20px; border-radius: var(--radius-card); border: 1px solid var(--stroke);
+}
+/* The app icon at the top of chapter 1: the picture is 1024 px. */
+.help-article img[src$="/app-icon.png"] { width: 96px; border-radius: 22px; border: 0; }
+
+.help-article code {
+  font-family: var(--font-mono); font-size: .9em;
+  background: var(--bg-inset); color: var(--fg);
+  padding: 1px 5px; border-radius: 4px; border: 1px solid var(--stroke);
+}
+.help-code {
+  margin: 0 0 16px; padding: 14px 16px; overflow-x: auto;
+  background: var(--bg-inset); border: 1px solid var(--stroke); border-radius: var(--radius-card);
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.55; color: var(--fg);
+}
+.help-code code { background: none; border: 0; padding: 0; font-size: inherit; }
+
+/* Tables scroll inside their own box on a phone, never the page. */
+.help-table-box { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--stroke); border-radius: var(--radius-card); }
+.help-table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 1.5; }
+.help-table th, .help-table td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--stroke); }
+.help-table thead th {
+  background: var(--bg-elevated); color: var(--fg);
+  font-family: var(--font-key); font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+}
+.help-table tbody tr:last-child td { border-bottom: 0; }
+.help-table td code { white-space: nowrap; }
+
+/* Mermaid draws into the <pre>; until it has (or without JavaScript) the
+   source stays readable. */
+pre.mermaid {
+  margin: 8px 0 20px; padding: 16px; overflow-x: auto;
+  background: var(--bg-elevated); border: 1px solid var(--stroke); border-radius: var(--radius-card);
+  font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); text-align: center;
+}
+pre.mermaid[data-processed] { color: inherit; }
+pre.mermaid svg { max-width: 100%; height: auto; }
+
+.help-steps { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--stroke); }
+.help-built { margin-top: 24px; font-size: 12px; color: var(--fg-3); }
+.help-built a { color: var(--fg-2); }
+
+/* The contents page. */
+.help-index { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; }
+.help-index > li { background: var(--bg-elevated); border: 1px solid var(--stroke); border-radius: var(--radius-card); padding: 14px 18px; }
+.help-index h2 { margin: 0 0 6px; }
+.help-index h2 a { color: var(--fg); text-decoration: none; display: flex; gap: 10px; align-items: center; }
+.help-index ul { margin: 0; padding-left: 20px; font-size: 14px; }
+
+/* ---------- Narrow screens (the breakpoints of styles.css) -------------- */
+@media (max-width: 900px) {
+  /* The article first; the chapters follow it, after the prev/next links. */
+  .help-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .help-nav { order: 2; position: static; max-height: none; overflow: visible; border-top: 1px solid var(--stroke); padding-top: 20px; }
+  .help-nav ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 8px; }
+  .help-nav li.open { grid-column: 1 / -1; }
+  .help-index { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .help-nav ol { grid-template-columns: minmax(0, 1fr); }
+  .help-steps .btn { width: 100%; justify-content: center; }
+}

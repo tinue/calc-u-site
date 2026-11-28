@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presets — Calc-U 59 help</title>
+<meta name="description" content="A preset is a text file that sets up a machine: the model, what is plugged in, then programs and scripted input. Load one to get a machine into a known state…">
+<link rel="canonical" href="https://calc-u.org/59/help/06-presets/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/06-presets/">
+<meta property="og:title" content="Presets — Calc-U 59 help">
+<meta property="og:description" content="A preset is a text file that sets up a machine: the model, what is plugged in, then programs and scripted input. Load one to get a machine into a known state…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/06-presets/" aria-current="page"><span class="k yellow">6</span><span>Presets</span></a><ul class="help-parts"><li><a href="/59/help/06-presets/" aria-current="page">Presets</a></li><li><a href="/59/help/06-presets/presets/">Presets of Calc-U-59</a></li><li><a href="/59/help/06-presets/preset-tutorial/">Writing a preset, step by step</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> 6 Presets</p>
+<p class="eyebrow">Chapter 6 · Presets</p>
+<h1 id="presets">Presets</h1>
+<p>A <strong>preset</strong> is a text file that sets up a machine: the model, what is
+plugged in, then programs and scripted input. Load one to get a machine
+into a known state in one go: a game ready to play, a program typed in
+and started, a test that checks what the display shows. The examples the
+product bundles are presets, and so are the startup presets.</p>
+<p>The product's own sections, keys and examples are in its part of this
+chapter: <a href="/59/help/06-presets/presets/">Presets of this product</a>. Every key and step is
+listed in <a href="/59/help/10-reference/#the-preset-format">the reference</a>.</p>
+<h2 id="loading-a-preset">Loading a preset</h2>
+<ul>
+<li><strong>File ▸ Load Preset…</strong> opens a preset file (Ctrl+O, ⌘O on macOS, in
+the desktop frontends).</li>
+<li><strong>File ▸ Examples ▸</strong> lists the examples the product bundles, one
+submenu per group. In some frontends Examples is a menu of its own.</li>
+<li>Dropping a preset file on the window, or opening it with the product
+from the computer's file manager, loads it too
+(<a href="/59/help/04-media/">Media</a> describes how a file is opened as what it is).</li>
+<li><strong>More ▸ Load Preset…</strong> and <strong>More ▸ Examples ▸</strong> do the same on
+every bar, the only way on mobile
+(<a href="/59/help/02-getting-started/#desktop-and-mobile">Getting started</a>).</li>
+</ul>
+<p>A load always builds a <strong>new machine</strong>: the machine that ran before is
+gone, with its memory. The new machine is built from a cold boot with
+the model and exactly what the preset names; a place the preset does not
+name stays empty. Then the preset's sections are carried out from top to
+bottom.</p>
+<p>While a preset runs:</p>
+<ul>
+<li>the machine runs at full speed, unless the preset asks for regular
+speed; after half a second &quot;Loading…&quot; is shown;</li>
+<li>your key presses on the machine are dropped, and controls that would
+start something else are disabled;</li>
+<li>Reset, Cold boot and a model switch end the preset at once, without
+an error. This is the way out of a preset that waits for ever.</li>
+</ul>
+<p>When the preset is done, the machine runs on at regular speed and is
+yours.</p>
+<h2 id="when-a-preset-is-refused">When a preset is refused</h2>
+<p>The whole file is read and checked before anything is built. If
+anything is wrong (an unknown key, a value a key does not take, a key a
+model does not have, a peripheral that does not fit its place, a file it
+names that cannot be read), nothing is built and the running machine
+stays as it is. A notice gives the first error with its line number.</p>
+<p>A file without <code>format-version</code>, or with another version than 2, is
+refused; a file from a newer release is refused as such. A preset
+written by an earlier release is converted by hand, as the last section
+of the product's media files page describes
+(<a href="/59/help/10-reference/reference/">Reference of this product</a>).</p>
+<p>If a step fails while the preset runs, or does not finish within the
+preset's <code>timeout:</code>, the preset stops there: the steps after it are not
+carried out, the machine stays as it is, and a notice gives the line and
+the reason.</p>
+<p>To follow a preset step by step, set the run log's level to Info (the
+chapter on the debugger says where): the log then shows the machine the
+preset built, each step as it is done and the preset's end. At Off the
+log keeps only what a step writes on purpose, such as
+<code>elapsed-time: report</code>, and why a preset stopped.</p>
+<h2 id="a-first-preset">A first preset</h2>
+<pre class="help-code"><code class="language-yaml">format-version: 2
+model: &lt;model&gt;
+preset-name: My setup
+description: One line for menus and tooltips
+keys:
+  - key: &lt;key&gt; &lt;key&gt;
+  - wait: 2s
+  - expect: &lt;text&gt;
+</code></pre>
+<ul>
+<li><code>format-version: 2</code> and <code>model:</code> are required. The model may carry a
+variant after a colon (<code>&lt;model&gt;:&lt;variant&gt;</code>); without it the model's
+default variant is built.</li>
+<li><code>preset-name:</code> is the name shown in menus (at most 18 characters);
+without it, the file name without its extension is shown.</li>
+<li><code>description:</code> is one line for lists and tooltips.</li>
+<li>Each place of the model that holds a peripheral or a module has a key
+of its own, named after the place (<code>printer:</code>, <code>slot-1:</code>, …). Which
+places a model has is in the product's part.</li>
+<li><code>keys:</code> is a section: a list of <strong>steps</strong>, carried out one after the
+other.</li>
+</ul>
+<p>The file extension does not choose the model; <code>model:</code> does.</p>
+<h2 id="steps">Steps</h2>
+<p>A step is one line <code>- verb: value</code> in a <code>keys:</code> section; a step without
+a value is written <code>- verb:</code>. The most used ones:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Step</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key: &lt;key&gt; …</code></td>
+<td>presses and releases each key in turn; key IDs are separated by spaces</td>
+</tr>
+<tr>
+<td><code>wait: 2s</code></td>
+<td>lets that much time pass (<code>2s</code>, <code>1.5s</code>, <code>500ms</code>; the unit is required)</td>
+</tr>
+<tr>
+<td><code>regular-speed:</code> / <code>full-speed:</code></td>
+<td>the steps after it run at regular or at full speed</td>
+</tr>
+<tr>
+<td><code>expect: &lt;text&gt;</code></td>
+<td>fails the preset unless the display shows the text</td>
+</tr>
+<tr>
+<td><code>not-expect: &lt;text&gt;</code></td>
+<td>fails the preset if the display shows the text</td>
+</tr>
+<tr>
+<td><code>screenshot: &lt;file name&gt;</code></td>
+<td>saves a picture of the display</td>
+</tr>
+<tr>
+<td><code>trace: &lt;file name&gt;</code> / <code>trace: off</code></td>
+<td>starts or ends a trace (<a href="/59/help/07-debugger/#traces">Debugger</a>)</td>
+</tr>
+<tr>
+<td><code>elapsed-time: start</code> / <code>report</code></td>
+<td>measures emulated time and writes it to the log as <code>m:ss.mmm</code></td>
+</tr>
+<tr>
+<td><code>cut-paper:</code></td>
+<td>copies the paper of the printer that is plugged in to the clipboard, then cuts it, as Cut on the paper panel; in the browser it only cuts</td>
+</tr>
+<tr>
+<td><code>copy-paper:</code></td>
+<td>copies the paper of the printer that is plugged in to the clipboard, as Copy on the paper panel; in the browser it does nothing</td>
+</tr>
+</tbody>
+</table></div>
+<p>Steps for media (inserting a medium, Name &amp; Save) and the product's own
+steps are listed in the <a href="/59/help/10-reference/#steps">reference</a> and the
+product's part.</p>
+<h2 id="waiting">Waiting</h2>
+<p>A preset waits on its own: <strong>each item starts only when the one before
+has finished</strong>. A key press has finished when the machine is idle
+again: a key that starts a program finishes when the program stops or
+waits for you (an INPUT, a key).
+You rarely need <code>wait:</code>.</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>You want</th>
+<th>Write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a program to run to its end before the next step</td>
+<td>nothing: the next step waits</td>
+</tr>
+<tr>
+<td>to watch part of the preset happen</td>
+<td><code>regular-speed:</code> before it, <code>full-speed:</code> after it</td>
+</tr>
+<tr>
+<td>a pause so a display can be seen, or a running program to go on for a while</td>
+<td><code>wait: 2s</code></td>
+</tr>
+<tr>
+<td>to press a key while a program still runs (to stop it, say)</td>
+<td><code>skip-wait:</code> after the step that started it</td>
+</tr>
+<tr>
+<td>the last program to run to its end before the preset ends</td>
+<td><code>let-it-finish:</code> as the last step</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>The <strong>last step</strong> is carried out and not waited for: the preset ends at
+once, and what the step started runs on at regular speed, under your
+control. A game started by the last key is yours to play.</li>
+<li><code>skip-wait:</code> may not be the first or the last item; <code>let-it-finish:</code>
+may only be the last.</li>
+<li>The header key <code>timeout:</code> (seconds of emulated time, default 3600) is
+the longest the preset waits for an item to finish. A program that
+never stops either runs as the last item or is followed by
+<code>skip-wait:</code>.</li>
+<li>At full speed, <code>wait:</code> passes as fast as the computer allows; the time
+is the machine's emulated time either way.</li>
+</ul>
+<h2 id="checking-the-display">Checking the display</h2>
+<p><code>expect:</code> and <code>not-expect:</code> turn a preset into a test. They check after
+the item before has finished: after the key that runs a program, when
+the program has ended. If the check fails, the preset stops and the
+notice holds the text and what the display showed. How the display is
+compared (a line of text, a number) is the product's: see its part.</p>
+<h2 id="startup-presets">Startup presets</h2>
+<p>A <strong>startup preset</strong> is the preset a model is built from when the
+product starts with that model, or when you switch to that model. Set
+one per model in <strong>Settings ▸ Startup presets</strong>: &quot;None&quot;, the startup
+presets the product bundles for that model, or any preset file of your
+own with &quot;Choose…&quot;. It is kept in the settings file under <code>[preset]</code>
+(<a href="/59/help/08-settings/">Settings</a>).</p>
+<p>&quot;Choose…&quot; opens the file dialog of the platform: on the desktop and on
+the iPhone and iPad, a preset file; in the browser, the preset together
+with the files it names, as in Load Preset…. The preset is checked
+before it is set, as a start would read it: one that names a file that
+is not there, or is for another model, is not set, and a notice says
+why.</p>
+<p>In the browser, a startup preset chosen this way is kept in the
+browser's storage, and so is every file opened in the browser (with
+Load Preset…, Import Media…, a drop). A preset whose files were opened
+before can therefore be chosen alone. A preset loaded with Load Preset…
+is not kept itself; only the files that came with it are.</p>
+<ul>
+<li>Without a startup preset, a model is built as the product's built-in
+default machine.</li>
+<li>If the startup preset cannot be loaded (the file is gone, it
+cannot be read, it is for another model), the built-in default machine is
+built and a notice says why.</li>
+<li>If it is read without an error but fails while it runs, the machine
+stays as far as the preset built it, and a notice says why.</li>
+<li>Switching the variant of the running model loads no startup preset.</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<p>The product's examples are bundled with it and listed under <strong>File ▸
+Examples ▸</strong>, in groups. They are presets like any other: open one to
+see how it is written, copy it, and change it. The product's part lists
+them.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/05-peripherals-and-paper/printer/">← 5 · The PC-100C printer</a><a class="btn primary" rel="next" href="/59/help/06-presets/presets/">6 · Presets of Calc-U-59 →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

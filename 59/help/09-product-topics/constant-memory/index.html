@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Constant memory — Calc-U 59 help</title>
+<meta name="description" content="The TI-58C keeps its memory when it is switched off: the program, the data registers, the partition and the display format survive, as on the real calculator…">
+<link rel="canonical" href="https://calc-u.org/59/help/09-product-topics/constant-memory/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/09-product-topics/constant-memory/">
+<meta property="og:title" content="Constant memory — Calc-U 59 help">
+<meta property="og:description" content="The TI-58C keeps its memory when it is switched off: the program, the data registers, the partition and the display format survive, as on the real calculator…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k yellow">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/59/help/09-product-topics/">Product topics of Calc-U-59</a></li><li><a href="/59/help/09-product-topics/models/">What differs by model</a></li><li><a href="/59/help/09-product-topics/modules/">Solid State ROM modules</a></li><li><a href="/59/help/09-product-topics/cue-cards/">Cue cards</a></li><li><a href="/59/help/09-product-topics/constant-memory/" aria-current="page">Constant memory</a></li><li><a href="/59/help/09-product-topics/fast-mode/">Fast mode</a></li><li><a href="/59/help/09-product-topics/faq/">FAQ</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> Constant memory</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="constant-memory">Constant memory</h1>
+<p>The TI-58C keeps its memory when it is switched off: the program, the
+data registers, the partition and the display format survive, as on the
+real calculator, whose static memory stayed powered. Calc-U-59 keeps
+this <strong>constant memory</strong> in a file, <code>ti58c.memory.yaml</code>, at the top of
+the save folder, together with the cue card that was fitted. The TI-59
+and TI-58 have no constant memory.</p>
+<h2 id="when-the-memory-comes-back">When the memory comes back</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>You</th>
+<th>The TI-58C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>start Calc-U-59 on the TI-58C, or switch to it, <strong>without a startup preset</strong> for it</td>
+<td>comes up with the memory of the file, as a real TI-58C switched on again, its cue card fitted again</td>
+</tr>
+<tr>
+<td>start it, or switch to it, <strong>with a startup preset</strong>, or load a preset</td>
+<td>starts from a cold boot, with what the preset gives; the file is not read</td>
+</tr>
+<tr>
+<td>Reset, choose a module, attach or detach the PC-100C</td>
+<td>keeps its memory in the calculator; the file is not read</td>
+</tr>
+<tr>
+<td>Cold boot</td>
+<td>its memory is zeroed, as after the batteries were out for a long time</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="when-the-file-is-written">When the file is written</h2>
+<p>The file follows a TI-58C that was built from it: at the latest half a
+second after its memory or its cue card changes, and at once before the
+calculator is replaced, when the app goes to the background or the
+browser page is hidden, and when Calc-U-59 quits. A Cold boot of such a
+TI-58C writes the zeroed memory to the file too.</p>
+<p>A TI-58C built from a preset or a startup preset <strong>never writes the
+file</strong>. So loading an example keeps your own constant memory for the
+next time you switch to the TI-58C without a preset.</p>
+<p>While a TI-59 or TI-58 runs, the file is neither read nor written; it
+holds what the last TI-58C left.</p>
+<h2 id="where-it-lies">Where it lies</h2>
+<p><code>ti58c.memory.yaml</code> lies in the save folder: in the app's iCloud
+storage on the iPhone and the iPad, <code>Calc-U-59</code> in your home
+folder on macOS, Windows and Linux, the browser's storage for the page in the
+browser. It is not a medium: no picker lists it, and opening or dropping
+it is refused with a notice. A damaged file, or a write that fails, is
+reported with a notice. The format is in <a href="/59/help/10-reference/media-files/">Media files</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/09-product-topics/cue-cards/">← 9 · Cue cards</a><a class="btn primary" rel="next" href="/59/help/09-product-topics/fast-mode/">9 · Fast mode →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

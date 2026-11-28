@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What differs by model — Calc-U 59 help</title>
+<meta name="description" content="Reset, Cold boot and the power cycle after a change of hardware are the family's (Models and machine control). What each of them keeps depends on the model:">
+<link rel="canonical" href="https://calc-u.org/59/help/09-product-topics/models/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/09-product-topics/models/">
+<meta property="og:title" content="What differs by model — Calc-U 59 help">
+<meta property="og:description" content="Reset, Cold boot and the power cycle after a change of hardware are the family's (Models and machine control). What each of them keeps depends on the model:">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k yellow">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/59/help/09-product-topics/">Product topics of Calc-U-59</a></li><li><a href="/59/help/09-product-topics/models/" aria-current="page">What differs by model</a></li><li><a href="/59/help/09-product-topics/modules/">Solid State ROM modules</a></li><li><a href="/59/help/09-product-topics/cue-cards/">Cue cards</a></li><li><a href="/59/help/09-product-topics/constant-memory/">Constant memory</a></li><li><a href="/59/help/09-product-topics/fast-mode/">Fast mode</a></li><li><a href="/59/help/09-product-topics/faq/">FAQ</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> What differs by model</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="what-differs-by-model">What differs by model</h1>
+<p>Reset, Cold boot and the power cycle after a change of hardware are the
+family's (<a href="/59/help/03-models-and-machine-control/">Models and machine
+control</a>). What
+each of them keeps depends on the model:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th></th>
+<th>TI-59, TI-58</th>
+<th>TI-58C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reset</strong> (Machine ▸ Reset)</td>
+<td>the program, the data registers and the partition kept; everything else as after switching on</td>
+<td>the same as a power cycle</td>
+</tr>
+<tr>
+<td><strong>Power cycle</strong> (a module chosen, the PC-100C attached or detached)</td>
+<td>the memory lost: as the ROM's start-up leaves a calculator whose memory was lost</td>
+<td>the constant memory kept (all of its memory, H00 to H03 included); everything else as after switching on</td>
+</tr>
+<tr>
+<td><strong>Cold boot</strong> (Machine ▸ Cold boot)</td>
+<td>all memory zero, then the ROM's start-up</td>
+<td>the same, the constant memory included</td>
+</tr>
+</tbody>
+</table></div>
+<p>&quot;Everything else as after switching on&quot; means, among other things: a
+running program has stopped, and a library program that was selected no
+longer is.</p>
+<p>Through all three, on every model:</p>
+<ul>
+<li>the PC-100C and the module stay plugged in;</li>
+<li>the cue card that is fitted stays, and a fitted magnetic card can be fed
+again (<a href="/59/help/04-media/magnetic-cards/">Magnetic cards</a>); a card in the reader at
+that moment is taken out as by Eject Card;</li>
+<li>the printer's TRACE switch keeps its position;</li>
+<li>an ASM overlay stops running; a Cold boot also removes it
+(<a href="/59/help/07-debugger/debugger/">Debugger</a>).</li>
+</ul>
+<p>A model switch, and every preset, builds a new calculator from a cold
+boot. A TI-58C built at a start or a model switch without a startup
+preset gets its constant memory back from its file
+(<a href="/59/help/09-product-topics/constant-memory/">Constant memory</a>).</p>
+<h2 id="the-models-side-by-side">The models side by side</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th></th>
+<th>TI-59</th>
+<th>TI-58</th>
+<th>TI-58C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory</td>
+<td>960 steps or 100 registers</td>
+<td>480 steps or 60 registers</td>
+<td>480 steps or 60 registers, kept when switched off; H00 to H03</td>
+</tr>
+<tr>
+<td>Partition after switching on</td>
+<td>479.59</td>
+<td>239.29</td>
+<td>239.29</td>
+</tr>
+<tr>
+<td>Card reader</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Modules, the PC-100C</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Clock</td>
+<td>regular</td>
+<td>regular</td>
+<td>about 15 % slower, as the real one</td>
+</tr>
+</tbody>
+</table></div>
+<p>A card fed to a TI-58 or TI-58C, by a drop or a preset, is refused: they
+have no card reader. Registers 60 to 99 exist on the TI-59 only.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/09-product-topics/">← 9 · Product topics of Calc-U-59</a><a class="btn primary" rel="next" href="/59/help/09-product-topics/modules/">9 · Solid State ROM modules →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

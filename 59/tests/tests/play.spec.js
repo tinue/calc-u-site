@@ -1,12 +1,10 @@
-const fs = require('fs');
-const path = require('path');
 const { test, expect } = require('@playwright/test');
 
-// The calculator itself is tested in the Calc-U-59 repository (Web/tests/).
+// The calculator itself is tested in the source repository tinue/Calc-U.
 // These tests only prove that the site embeds the imported client correctly:
 // /play/ mounts it, it finds its worker, engine and presets under
-// /59/calc/, and the standalone app opens. Stable hooks: Calc-U-59's
-// reference/WebClient.md, "Stable hooks a host's tests may rely on".
+// /59/calc/, and the standalone app opens. Stable hooks: docs/formats/web-embed.md
+// there.
 
 test.describe.configure({ timeout: 20000 });
 
@@ -93,14 +91,6 @@ test('client-side navigation to /play/ mounts the calculator', async ({ page }) 
 test('the standalone app opens', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/59/calc/app/');
-  await ready(page);
-  expect(errors, `Console/page errors:\n${errors.join('\n')}`).toHaveLength(0);
-});
-
-test('the beta app opens', async ({ page }) => {
-  test.skip(!fs.existsSync(path.join(__dirname, '..', '..', 'beta')), 'no beta/ at the moment');
-  const errors = collectErrors(page);
-  await page.goto('/59/beta/app/');
   await ready(page);
   expect(errors, `Console/page errors:\n${errors.join('\n')}`).toHaveLength(0);
 });

@@ -35,6 +35,11 @@ const OUT_JS = path.join(DOCS, "build");
 
 const { ROUTES, ORIGIN, url } = require(path.join(DOCS, "routes.js"));
 const { PAGES, FALLBACK } = require(path.join(SEO, "pages.js"));
+const { REDIRECTS } = require(path.join(DOCS, "redirects.js"));
+const { buildHelp } = require(path.join(DOCS, "..", ".help", "render.js"));
+const { writeRedirects } = require(path.join(DOCS, "..", ".help", "redirects.js"));
+const { readPins, helpAsset } = require(path.join(DOCS, "..", ".help", "pins.js"));
+const make59Help = require(path.join(SEO, "help-page.js"));
 
 const read = (p) => fs.readFileSync(p, "utf8");
 const log = (...a) => console.log("  ", ...a);
@@ -211,7 +216,7 @@ function softwareApplicationLd() {
     url: ORIGIN + url("/"),
     downloadUrl: APP_STORE,
     installUrl: APP_STORE,
-    softwareHelp: ORIGIN + url("/getting-started/"),
+    softwareHelp: ORIGIN + url("/help/"),
     codeRepository: REPO,
     image: OG_IMAGE,
     description:
@@ -228,22 +233,6 @@ function softwareApplicationLd() {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     isAccessibleForFree: true,
   };
-}
-
-function faqLd() {
-  // The same list FaqPage renders; a JSX answer becomes its text.
-  const text = (a) =>
-    typeof a === "string"
-      ? a
-      : ReactDOMServer.renderToStaticMarkup(a).replace(/<[^>]+>/g, "")
-          .replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
-  const entries = sandbox.FAQS.map((f) => ({
-    "@type": "Question",
-    name: f.question,
-    acceptedAnswer: { "@type": "Answer", text: text(f.answer) },
-  }));
-  log(`FAQ structured data: ${entries.length} questions`);
-  return { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: entries };
 }
 
 function breadcrumbLd(route, meta) {
@@ -288,7 +277,6 @@ function renderPage(route) {
 
   const ld = [];
   if (isHome) ld.push(softwareApplicationLd());
-  if (route.page === "faq" && !route.canonical) ld.push(faqLd());
   if (!isHome) ld.push(breadcrumbLd(route, meta));
 
   const body = renderRoute(route);
@@ -344,25 +332,69 @@ for (const route of ROUTES) {
   log(`${route.path}  →  ${path.relative(DOCS, file)}${route.canonical ? "  (canonical: " + route.canonical + ")" : ""}`);
 }
 
-// sitemap: self-canonical pages only. Listing a page whose canonical
-// points elsewhere is a contradiction search engines are entitled to
-// distrust.
+/* ------------------------------------------------------------------ *
+ * 6. The help, from the pinned help asset (.help/render.js)
+ *
+ * Static pages without React. The header and footer are the site's own
+ * components, rendered once here.
+ * ------------------------------------------------------------------ */
+log("building the help from the pinned asset…");
+const pins = readPins("59");
+const header = ReactDOMServer.renderToStaticMarkup(React.createElement(sandbox.SiteHeader, { page: "help" }));
+const footer = ReactDOMServer.renderToStaticMarkup(React.createElement(sandbox.SiteFooter));
+const help = buildHelp({
+  folder: "59",
+  siteDir: DOCS,
+  asset: helpAsset("59", pins),
+  pin: pins.help,
+  codeClass: "help-code",
+  tableClass: "help-table",
+  boxClass: "help-table-box",
+  // The diagrams in the site's colours (colors_and_type.css).
+  diagrams: {
+    darkMode: true,
+    background: "#000000",
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif",
+    primaryColor: "#1a1410",
+    primaryTextColor: "#f4ecd9",
+    primaryBorderColor: "#f0c040",
+    secondaryColor: "#2a1f15",
+    tertiaryColor: "#120e0b",
+    lineColor: "#c8b99a",
+    textColor: "#f4ecd9",
+    clusterBkg: "#0d0a08",
+    clusterBorder: "#3a2e22",
+    edgeLabelBackground: "#000000",
+  },
+  ...make59Help({ header, footer }),
+  log: (m) => log(m),
+});
+log(`help: ${help.pages.length} pages from ${pins.help.url.split("/").pop()} ${pins.help.version}`);
+
+// The old hand-written help pages' addresses (redirects.js).
+writeRedirects({
+  folder: "59",
+  siteDir: DOCS,
+  table: Object.fromEntries(Object.entries(REDIRECTS).map(([from, to]) => [url(from), url(to)])),
+  title: "Moved — Calc-U 59",
+});
+log(`redirects: ${Object.keys(REDIRECTS).length} old addresses`);
+
+// sitemap: the site pages and the help. No dates: they would change with
+// every build and say nothing; the build stays the same bytes for the
+// same sources, which CI checks.
 const indexable = ROUTES.filter((r) => !r.canonical);
-const today = new Date().toISOString().slice(0, 10);
+const sitemapUrls = indexable.map((r) => [url(r.path), r.path === "/" ? "1.0" : "0.8"])
+  .concat([[url("/help/"), "0.8"]], help.pages.map((p) => [p.url, "0.6"]));
 const sitemap =
   `<?xml version="1.0" encoding="UTF-8"?>\n` +
   `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  indexable
-    .map(
-      (r) =>
-        `  <url>\n    <loc>${ORIGIN}${url(r.path)}</loc>\n` +
-        `    <lastmod>${today}</lastmod>\n` +
-        `    <priority>${r.path === "/" ? "1.0" : "0.8"}</priority>\n  </url>\n`
-    )
+  sitemapUrls
+    .map(([loc, priority]) => `  <url>\n    <loc>${ORIGIN}${loc}</loc>\n    <priority>${priority}</priority>\n  </url>\n`)
     .join("") +
   `</urlset>\n`;
 fs.writeFileSync(path.join(DOCS, "sitemap.xml"), sitemap);
-log(`sitemap.xml  →  ${indexable.length} URLs`);
+log(`sitemap.xml  →  ${sitemapUrls.length} URLs`);
 
 // robots.txt and 404.html are not generated here: search engines and
 // GitHub Pages only look for them at the domain root, so calc-u.org's
@@ -372,4 +404,4 @@ log(`sitemap.xml  →  ${indexable.length} URLs`);
 // anything else that starts with a dot or underscore. Be explicit.
 fs.writeFileSync(path.join(DOCS, ".nojekyll"), "");
 
-console.log(`\nBuilt ${ROUTES.length} pages, ${indexable.length} indexable.\n`);
+console.log(`\nBuilt ${ROUTES.length} site pages, ${help.pages.length + 1} help pages and ${Object.keys(REDIRECTS).length} redirects.\n`);

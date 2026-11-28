@@ -1,3 +1,4 @@
+Calc-U-59 ASM 2.0
 PROGRAM:
 ; Load the program and start
 ; Press R/S once to start the stopwatch.

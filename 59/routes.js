@@ -22,61 +22,37 @@
   // is a real URL a visitor can reach but a near-duplicate of another page,
   // so search engines consolidate onto the primary.
   var ROUTES = [
-    { path: "/",                                     page: "home" },
-    { path: "/what-is-a-ti-59/",                     page: "about" },
-    { path: "/play/",                                page: "play" },
-    { path: "/getting-started/",                     page: "start", topic: "overview" },
-    { path: "/install/iphone-ipad/",                 page: "install-mobile" },
-    { path: "/install/mac/",                         page: "install-mac" },
-    { path: "/install/windows-linux/",               page: "install-pc" },
-    { path: "/install/android/",                     page: "install-android" },
-    { path: "/presets/",                             page: "presets" },
-    { path: "/presets/tutorial/",                    page: "preset-tutorial" },
-    { path: "/debugger/",                            page: "debugger" },
-    { path: "/reference/",                           page: "ref" },
-    { path: "/modules/",                             page: "modules" },
-    { path: "/software/",                            page: "software" },
-    { path: "/faq/",                                 page: "faq" },
-
-    // "State files" was the old name for what the app UI (and now the
-    // site) calls a "preset". Both real URLs below still resolve — old
-    // links and bookmarks keep working — but their canonical points at
-    // the current name so search engines consolidate onto it.
-    { path: "/state-files/",                         page: "presets", canonical: "/presets/" },
-
-    // Old Getting Started deep links. Those topics became the standalone
-    // pages, so each URL now shows that page and points its canonical at
-    // it; "printer" is still a topic of /getting-started/ itself.
-    { path: "/getting-started/install-iphone-ipad/", page: "install-mobile", canonical: "/install/iphone-ipad/" },
-    { path: "/getting-started/install-mac/",         page: "install-mac",    canonical: "/install/mac/" },
-    { path: "/getting-started/presets/",             page: "presets",        canonical: "/presets/" },
-    { path: "/getting-started/debugger/",            page: "debugger",       canonical: "/debugger/" },
-    { path: "/getting-started/state-files/",         page: "presets",        canonical: "/presets/" },
-    { path: "/getting-started/printer/",             page: "start", topic: "printer" }
+    { path: "/",          page: "home" },
+    { path: "/play/",     page: "play" },
+    { path: "/software/", page: "software" }
   ];
 
-  // Old #hash URLs → new paths. Anything already shared or linked keeps
-  // working; site.jsx rewrites them with location.replace on first paint.
+  // The help is not a route: it is built from the pinned help asset into
+  // /59/help/ (.help/render.js), as static pages without React, and a link
+  // to it is an ordinary page load. The addresses of the old hand-written
+  // help pages are redirects (REDIRECTS in redirects.js).
+
+  // Old #hash URLs → where their content is now. site.jsx rewrites them
+  // with location.replace on first paint of the home page.
   var LEGACY_HASHES = {
     "":                       "/",
     "home":                   "/",
     "play":                   "/play/",
-    "start":                  "/getting-started/",
-    "start/install-mobile":   "/getting-started/install-iphone-ipad/",
-    "start/install-mac":      "/getting-started/install-mac/",
-    "start/state-files":      "/getting-started/state-files/",
-    "start/debugger":         "/getting-started/debugger/",
-    "start/printer":          "/getting-started/printer/",
-    "start/faq":              "/faq/",
-    // The README is no longer a page here, only a link out to GitHub.
-    "start/readme":           "/getting-started/",
-    "install-mobile":         "/install/iphone-ipad/",
-    "install-mac":            "/install/mac/",
-    "state-files":            "/state-files/",
-    "debugger":               "/debugger/",
-    "ref":                    "/reference/",
-    "modules":                "/modules/",
-    "faq":                    "/faq/"
+    "start":                  "/help/02-getting-started/getting-started/",
+    "start/install-mobile":   "/help/02-getting-started/installing/#iphone-and-ipad",
+    "start/install-mac":      "/help/02-getting-started/installing/#mac-windows-and-linux",
+    "start/state-files":      "/help/06-presets/presets/",
+    "start/debugger":         "/help/07-debugger/",
+    "start/printer":          "/help/05-peripherals-and-paper/printer/",
+    "start/faq":              "/help/09-product-topics/faq/",
+    "start/readme":           "/help/",
+    "install-mobile":         "/help/02-getting-started/installing/#iphone-and-ipad",
+    "install-mac":            "/help/02-getting-started/installing/#mac-windows-and-linux",
+    "state-files":            "/help/06-presets/presets/",
+    "debugger":               "/help/07-debugger/",
+    "ref":                    "/help/02-getting-started/getting-started/",
+    "modules":                "/help/09-product-topics/modules/",
+    "faq":                    "/help/09-product-topics/faq/"
   };
 
   var BASE = "/59";

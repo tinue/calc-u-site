@@ -1,0 +1,26 @@
+{
+  "product": "Calc-U-59",
+  "release": "calc-u-59-v3.0.0",
+  "help": {
+    "url": "https://github.com/tinue/Calc-U/releases/download/calc-u-59-v3.0.0/Calc-U-59-help.zip",
+    "sha256": "000b3217f3b9832a675cf544939d5f2dcfe6560610051ae165c8b58c15442775",
+    "version": "3.0.0"
+  },
+  "web": {
+    "url": "https://github.com/tinue/Calc-U/releases/download/calc-u-59-v3.0.0/Calc-U-59-web.zip",
+    "sha256": "5b278d3bff2685aef1237c5f46a0e544a064175de2a94a24cf6c14118680ea99",
+    "version": "3.0.0",
+    "commit": "c9c2977272d9610ac88fb0ecdc79f4f51cc8eb90"
+  },
+  "examples": {
+    "tag": "calc-u-59-v3.0.0",
+    "from": "products/calc-u-59/examples",
+    "to": "software-files",
+    "exclude": [
+      "debug/",
+      "screentest/",
+      "startup/",
+      "bundle.yaml"
+    ]
+  }
+}

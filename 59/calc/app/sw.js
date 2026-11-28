@@ -1,89 +1,102 @@
-// Service worker for the standalone Calc-U 59 app (scope: this directory).
-// Precaches the app shell plus everything the calculator needs to run all
-// three models offline — the WASM engine, every model's ROM and constants,
-// the artwork, every Solid State module, the presets, the fonts and scripts —
-// so the installed app opens and runs fully offline after the first launch.
+// The service worker of a product's installed app, scope: dist/app/. Precaches the app page and everything the
+// product needs offline -- its code and WASM, the files of files.json (the
+// ROMs, the bundled presets and media) and its images -- so the installed
+// app starts and runs every model without a network.
 //
-// Every path is relative to this script, so the app works wherever the
-// client is hosted. Web/build.js checks that each one exists in dist/ and
-// stamps CACHE_NAME with a hash of their contents; the activate handler
-// drops this app's older caches. The scope is part of the name: the origin
-// may be shared with the host site, or with another copy of the client.
+// library/web/build/dist.js stampServiceWorker() fills in the product's id,
+// the list (every path relative to this script, each checked to exist) and
+// a hash of the files. The scope is part of the cache's name: the origin
+// may be shared with the host site or another product.
+//
+// A new release: the first install takes over at once;
+// a later one waits until no window of the app is open, so a running app
+// never mixes the files of two releases, or until a page asks it to take
+// over (`skip-waiting`, the page's Reload), and then every page reloads. Its activate removes the older
+// caches of this app; the fetch handler answers from this release's cache
+// only. The persistent file system is IndexedDB and is never touched here.
 const CACHE_PREFIX = `calcu59-app ${self.registration.scope} `;
-const CACHE_NAME = CACHE_PREFIX + "c85c3add71f4d18d";
+const CACHE_NAME = CACHE_PREFIX + "7c015b6aa2c4e877";
 
-const CORE_ASSETS = [
+const ASSETS = [
   "./",
   "index.html",
-  "app.css",
   "app.js",
+  "app.css",
   "engine-worker.js",
   "manifest.json",
   "icon.png",
-
-  "../vendor/react.production.min.js",
   "../vendor/react-dom.production.min.js",
-
-  "../calc.js",
-  "../calc.css",
-  "../calc-engine-worker.js",
-
-  "../fonts/archivo-400.woff2",
-  "../fonts/archivo-700.woff2",
-
-  "../img/ti59_base.png",
-  "../img/ti58_base.png",
+  "../vendor/react.production.min.js",
+  "../wasm/calcu59-core.js",
+  "../wasm/calcu59-core.wasm",
   "../img/CueCard.png",
   "../img/MagnetCard.png",
   "../img/SolidStateCard.png",
-
-  "../presets/manifest.json",
-
-  "../wasm/ti59-core.js",
-  "../wasm/ti59-core.wasm",
-  // Every file in wasm/roms/ and every preset; Web/build.js fills them in.
-  "../wasm/roms/CD2400-CONST-K.txt",
-  "../wasm/roms/CD2400.txt",
-  "../wasm/roms/CD2401-CONST-K.txt",
-  "../wasm/roms/CD2401.txt",
-  "../wasm/roms/TMC0541.txt",
-  "../wasm/roms/TMC0542.txt",
-  "../wasm/roms/TMC0543.txt",
-  "../wasm/roms/TMC0544.txt",
-  "../wasm/roms/TMC0545.txt",
-  "../wasm/roms/TMC0546.txt",
-  "../wasm/roms/TMC0547.txt",
-  "../wasm/roms/TMC0548.txt",
-  "../wasm/roms/TMC0549.txt",
-  "../wasm/roms/TMC0550.txt",
-  "../wasm/roms/TMC0551.txt",
-  "../wasm/roms/TMC0553.txt",
-  "../wasm/roms/TMC0554.txt",
-  "../wasm/roms/TMC0555.txt",
-  "../wasm/roms/TMC0571B.txt",
-  "../wasm/roms/TMC0573.txt",
-  "../wasm/roms/TMC0582-CONST-K.txt",
-  "../wasm/roms/TMC0582.txt",
-  "../wasm/roms/TMC0583-CONST-K.txt",
-  "../wasm/roms/TMC0583.txt",
-  "../wasm/roms/cuecards.txt",
-  "../presets/diag.ti59",
-  "../presets/diag.ti58",
-  "../presets/ram_test.ti59",
-  "../presets/sum.ti59",
+  "../img/ti58_base.png",
+  "../img/ti59_base.png",
+  "../fonts/Archivo-OFL.txt",
+  "../fonts/archivo-400.woff2",
+  "../fonts/archivo-700.woff2",
+  "../calc.js",
+  "../calc.css",
+  "../calc-engine-worker.js",
+  "../library-worker.js",
+  "../audio-worklet.js",
+  "../files.json",
+  "../bundle/AG.rom.yaml",
+  "../bundle/AV.rom.yaml",
+  "../bundle/BD.rom.yaml",
+  "../bundle/CD2400-CONST-K.txt",
+  "../bundle/CD2400.txt",
+  "../bundle/CD2401-CONST-K.txt",
+  "../bundle/CD2401.txt",
+  "../bundle/EE.rom.yaml",
+  "../bundle/LE.rom.yaml",
+  "../bundle/ML.rom.yaml",
+  "../bundle/MU.rom.yaml",
+  "../bundle/NG.rom.yaml",
+  "../bundle/RE.rom.yaml",
+  "../bundle/RP.rom.yaml",
+  "../bundle/SA.rom.yaml",
+  "../bundle/SE.rom.yaml",
+  "../bundle/ST.rom.yaml",
+  "../bundle/SY.rom.yaml",
+  "../bundle/TMC0571B.txt",
+  "../bundle/TMC0573.txt",
+  "../bundle/TMC0582-CONST-K.txt",
+  "../bundle/TMC0582.txt",
+  "../bundle/TMC0583-CONST-K.txt",
+  "../bundle/TMC0583.txt",
+  "../presets/bundle.yaml",
   "../presets/characters.ti59",
-  "../presets/printer-interrupt.ti59",
-  "../presets/picard.ti59",
+  "../presets/diag.ti58",
+  "../presets/diag.ti59",
+  "../presets/fastmode-sst.ti59",
   "../presets/globe-print.ti59",
-  "../presets/switzerland.ti59",
-  "../presets/fastmode-sst.ti59"
+  "../presets/historic/life.ti59",
+  "../presets/picard.ti59",
+  "../presets/printer-interrupt.ti59",
+  "../presets/ram_test.ti59",
+  "../presets/startup/default-ti58.ti58",
+  "../presets/startup/default-ti58c.ti58c",
+  "../presets/startup/default-ti59.ti59",
+  "../presets/sum.ti59",
+  "../presets/switzerland.ti59"
 ];
 
+let firstInstall = false;
+let askedToTakeOver = false;
+
 self.addEventListener("install", (event) => {
+  firstInstall = !self.registration.active;
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(CORE_ASSETS))
-      .then(() => self.skipWaiting())
+      .then((cache) => cache.addAll(ASSETS))
+      .catch((e) => {
+        console.warn(`[Calc-U] The app is not kept for offline use: its files could not be cached: ${e.name}: ${e.message}`);
+        throw e;   // the install fails, the release before stays
+      })
+      .then(() => (firstInstall ? self.skipWaiting() : undefined))
   );
 });
 
@@ -91,18 +104,25 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
       .then((keys) => Promise.all(
-        keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
+        keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map((key) => caches.delete(key))
       ))
-      .then(() => self.clients.claim())
+      .then(() => (firstInstall || askedToTakeOver ? self.clients.claim() : undefined))
   );
 });
 
-// Cache-first: the calculator's own files are versioned by CACHE_NAME
-// above, not by URL, so serving stale-then-network-updating isn't worth the
-// complexity here. Falls back to network for anything not precached.
+self.addEventListener("message", (event) => {
+  if (!event.data || event.data.type !== "skip-waiting") return;
+  askedToTakeOver = true;
+  self.skipWaiting();
+});
+
+// Cache-first from this release's cache: the files are versioned by
+// CACHE_NAME, not by URL.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+  event.respondWith(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.match(event.request, { ignoreSearch: true }))
+      .then((cached) => cached || fetch(event.request))
+  );
 });

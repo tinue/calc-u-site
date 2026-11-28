@@ -1,13 +1,13 @@
 # fastmode-sst.ti59
 #
 # The shortest known way into the TI-59 "fast mode", found by tracing the ROM
-# with the headless harness (tools/headless/, 2026-10-17). Compare
+# with the headless harness (tools/headless/ then, 2026-10-17; today `calcu --product c59`). Compare
 # examples/historic/fastmode.ti59 (the St flg trick of TI PPC Notes V9N3P5) and
 # examples/calendar/calendar-08-acosta.ti59 (the "hi2" entry); rom/TI59-ROM-Guide.md
 # § "Fast mode" explains all known entry methods side by side.
 #
 # The program computes 69! into R00, the same job as examples/historic/fastmode.ti59.
-# Loading the file runs the entry sequence automatically (KEYSTROKES below).
+# Loading the file runs the entry sequence automatically (the keys: below).
 # By hand:
 #
 #   1 + 2 EE 12 +/- =    X := 1.000000000002 exactly
@@ -59,51 +59,58 @@
 # found none that works, because stored operands always arrive as two
 # decimal digits.
 
-MODEL: TI-59
+format-version: 2
+model: TI-59
+preset-name: Fast Mode by SST
+description: The shortest way into Fast Mode
+slot-1: { name: ML }
+printer: PC-100C
 
-PROGRAM:
-000  43 RCL     # reached through the RST at step 031, in normal mode again:
-001  00  00     # show the result …
-002  91 R/S     # … and stop. (On entry steps 001-007 run from the drained cache.)
-007  86 STF     # the entry trigger; its operand is supplied from the keyboard
-008  25 CLR     # fast-mode program starts here
-009  00  0
-010  32 X<>T    # t := 0
-011  06  6
-012  09  9
-013  42 STO
-014  00  00     # R00 := 69 (product)
-015  42 STO
-016  01  01     # R01 := 69 (counter)
-017  01  1      # loop: counter - 1
-018  94 +/-
-019  44 SUM
-020  01  01
-021  43 RCL
-022  01  01
-023  67 EQ      # counter = 0 → done (step 031)
-024  00  00
-025  31  31
-026  49 PRD
-027  00  00     # R00 *= counter
-028  61 GTO
-029  00  00
-030  17  17     # → step 017
-031  81 RST     # leave fast mode (Prg Src Flag 0) and go to step 000
+program:
+  keycodes: |
+    000 43 RCL  # reached through the RST at step 031, in normal mode again:
+    001 00 00  # show the result …
+    002 91 R/S  # … and stop. (On entry steps 001-007 run from the drained cache.)
+    007 86 STF  # the entry trigger; its operand is supplied from the keyboard
+    008 25 CLR  # fast-mode program starts here
+    009 00 0
+    010 32 X<>T  # t := 0
+    011 06 6
+    012 09 9
+    013 42 STO
+    014 00 00  # R00 := 69 (product)
+    015 42 STO
+    016 01 01  # R01 := 69 (counter)
+    017 01 1  # loop: counter - 1
+    018 94 +/-
+    019 44 SUM
+    020 01 01
+    021 43 RCL
+    022 01 01
+    023 67 EQ  # counter = 0 → done (step 031)
+    024 00 00
+    025 31 31
+    026 49 PRD
+    027 00 00  # R00 *= counter
+    028 61 GTO
+    029 00 00
+    030 17 17  # → step 017
+    031 81 RST  # leave fast mode (Prg Src Flag 0) and go to step 000
 
-KEYSTROKES:
-82          # 1
-85          # +
-83          # 2
-52          # EE
-82          # 1
-83          # 2
-94          # +/-
-95          # =      X = 1.000000000002
-61          # GTO
-92          # 0
-92          # 0
-62          # 7      → step 007
-41          # SST    St flg executes, operand pending
-92          # 0      first operand digit
-42          # STO    column-2 key: fast mode starts
+keys:
+  - regular-speed:
+  - key: 1
+  - key: +
+  - key: 2
+  - key: EE
+  - key: 1
+  - key: 2
+  - key: +/-
+  - key: =  # X = 1.000000000002
+  - key: GTO
+  - key: 0
+  - key: 0
+  - key: 7  # → step 007
+  - key: SST  # St flg executes, operand pending
+  - key: 0  # first operand digit
+  - key: STO  # column-2 key: fast mode starts

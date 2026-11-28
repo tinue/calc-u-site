@@ -11,12 +11,10 @@ function SiteHeader({ page }) {
   // (site.jsx intercepts the click).
   const items = [
     { id: "home",     label: "Overview",        href: "/59/" },
-    { id: "start",    label: "Getting Started", href: "/59/getting-started/" },
+    { id: "help",     label: "Help",            href: "/59/help/" },
+    { id: "install",  label: "Install",         href: "/59/help/02-getting-started/installing/" },
     { id: "play",     label: "Play",            href: "/59/play/" },
-    { id: "ref",      label: "App Reference",   href: "/59/reference/" },
-    { id: "modules",  label: "Modules",         href: "/59/modules/" },
     { id: "software", label: "Software",        href: "/59/software/" },
-    { id: "faq",      label: "FAQ",             href: "/59/faq/" },
   ];
   // Under 1060px the links collapse behind a disclosure button (styles.css).
   // They are hidden with CSS rather than unmounted, so the markup a crawler
@@ -60,7 +58,7 @@ function SiteHeader({ page }) {
                 {i.label}
               </a>
             ))}
-            <a href="https://github.com/tinue/calc-u">GitHub</a>
+            <a href="https://github.com/tinue/Calc-U">GitHub</a>
           </nav>
           <a className="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a>
         </div>
@@ -82,7 +80,7 @@ function SiteFooter() {
           textTransform: "uppercase",
           color: "var(--fg-2)",
         }}>Calc-U 59</strong>
-        <a href="/59/what-is-a-ti-59/">What is a TI-59?</a>
+        <a href="/59/help/">Help</a>
         <a href="/59/play/">Online emulator</a>
         <a href="/59/software/">TI-59 Software Collection</a>
         {/* /app/ is the calculator alone, installable to a phone's home
@@ -91,9 +89,9 @@ function SiteFooter() {
             robots.txt's crawl on purpose (see the Disallow comment there):
             it would otherwise compete with /play/ for the same searches. */}
         <a href="/59/calc/app/">Install the web app</a>
-        <a href="https://github.com/tinue/calc-u">GitHub</a>
-        <a href="https://github.com/tinue/calc-u/blob/main/products/calc-u-59/CHANGELOG.md">Release notes</a>
-        <a href="https://github.com/tinue/calc-u/blob/main/products/calc-u-59/PRIVACY.md">Privacy</a>
+        <a href="https://github.com/tinue/Calc-U">GitHub</a>
+        <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a>
+        <a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a>
         <span className="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span>
         <p className="disclaimer">
           Calc-U 59 is an independent project and is not affiliated with, authorized,
