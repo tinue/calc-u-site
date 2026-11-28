@@ -1,0 +1,38 @@
+# TI-59 Preset File Tutorial — Step 4: program
+#
+# Adds a program section: the calculator's program memory, written as
+# keycodes. This program sums the numbers from whatever you enter down to
+# 1: press a number, then A.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Tutorial step 4
+description: Preset tutorial, step 4 - the program
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank
+
+# The program memory, as keycodes. The format is flexible: here we write ten
+# steps per line (the compact notation) with a comment for the step numbers.
+# The loader reads the two-digit keycodes and ignores the comments.
+program:
+  keycodes: |
+    43 00 44 01 97 00 00 00 43 01   # 000-009
+    91 76 11 42 00 25 42 01 61 00   # 010-019
+    00                              # 020

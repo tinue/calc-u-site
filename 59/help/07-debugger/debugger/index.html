@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugger of Calc-U-59 — Calc-U 59 help</title>
+<meta name="description" content="Running and paused, pause, step and resume, traces and the debugger steps of a preset are the family's: Debugger. This part shows Calc-U-59's debug panel and…">
+<link rel="canonical" href="https://calc-u.org/59/help/07-debugger/debugger/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/07-debugger/debugger/">
+<meta property="og:title" content="Debugger of Calc-U-59 — Calc-U 59 help">
+<meta property="og:description" content="Running and paused, pause, step and resume, traces and the debugger steps of a preset are the family's: Debugger. This part shows Calc-U-59's debug panel and…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/07-debugger/"><span class="k yellow">7</span><span>Debugger</span></a><ul class="help-parts"><li><a href="/59/help/07-debugger/">Debugger</a></li><li><a href="/59/help/07-debugger/debugger/" aria-current="page">Debugger of Calc-U-59</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/07-debugger/">7 Debugger</a> <span aria-hidden="true">›</span> Debugger of Calc-U-59</p>
+<p class="eyebrow">Chapter 7 · Debugger</p>
+<h1 id="debugger-of-calc-u-59">Debugger of Calc-U-59</h1>
+<p>Running and paused, pause, step and resume, traces and the debugger
+steps of a preset are the family's: <a href="/59/help/07-debugger/">Debugger</a>.
+This part shows Calc-U-59's <strong>debug panel</strong> and its two levels:
+<code>program</code>, one step of a keystroke program, and <code>cpu</code>, one instruction
+of the calculator's processor.</p>
+<p>The debug panel stands beside the calculator and the paper on macOS,
+Windows and Linux, on the iPad in landscape and in the browser's wide
+layout; in portrait on the iPhone and the iPad it is a page of its own
+(Settings ▸ Layout ▸ Debug Page in Portrait). It has three tabs: <strong>CALCULATOR</strong>, <strong>CPU</strong> and
+<strong>RUN LOG</strong>.</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Tab</th>
+<th>Shows</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CALCULATOR</td>
+<td>the program around the next step, the registers, the flags, at the level <code>program</code></td>
+<td>stepping through your own program</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>the processor's last instructions, at the level <code>cpu</code></td>
+<td>following the ROM's own logic one instruction at a time</td>
+</tr>
+<tr>
+<td>RUN LOG</td>
+<td>the log, the dumps, the TRACE button</td>
+<td>recording a trace to study afterwards</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-run-control-buttons">The run-control buttons</h2>
+<p>The CALCULATOR and the CPU tab each have a row of buttons in their
+header:</p>
+<ul>
+<li><strong>FREEZE</strong> pauses the calculator: in the CALCULATOR tab at the next
+program step, in the CPU tab at the next instruction.</li>
+<li><strong>STEP</strong> carries out one step and pauses again: in the CALCULATOR tab
+one program step, as SST does, a jump (GTO, SBR, RTN, a condition)
+completed in the step that makes it; in the CPU tab one instruction.
+Hold it to repeat.</li>
+<li><strong>RESUME</strong> lets the calculator run on.</li>
+<li><strong>FREEZE ON START</strong> (<strong>F.START</strong> when the panel is narrow) arms a pause
+at the next start and then reads <strong>ARMED</strong>; press ARMED to cancel. In
+the CALCULATOR tab it pauses before the first step of a program run
+(R/S, a label key, anything that starts a program). In the CPU tab it
+pauses when the calculator leaves its keyboard scan loop: when you
+press a key, or at a Cold boot or a Reset.</li>
+</ul>
+<p>FREEZE and FREEZE ON START can be used while the calculator runs. Once it
+is paused, RESUME and STEP work in the tab that paused it.
+<strong>Machine ▸ Resume</strong> resumes it whatever paused it.</p>
+<h2 id="calculator-tab">CALCULATOR tab</h2>
+<p>The CALCULATOR tab shows the calculator between two program steps:</p>
+<ul>
+<li>the program steps around the current one, which is marked as the next
+to run (<strong>← next</strong>) or as running; a jump moves the listing to its
+target, since this is no trace;</li>
+<li>the partition, where the running program comes from (your program,
+the ROM's own, the module), and the return addresses;</li>
+<li><strong>X:</strong> and <strong>T:</strong>, the working value and the t register with all 13
+digits, and the registers of pending operations; when X holds no
+number (while stepping a fast-mode program, say), the raw register is
+shown in amber;</li>
+<li>the flags, the display format and the angle mode; <strong>DEBUG</strong> shows the
+flag registers FA and FB and <strong>HIR0:</strong>, the whole status register;</li>
+<li>the calculator's own 16 registers, and the data registers that are not
+zero, on the TI-58C also H00 to H03.</li>
+</ul>
+<p>While the calculator is paused the tab also has the whole listing of the
+program that runs. Fast mode is shown while a program runs in it
+(<a href="/59/help/09-product-topics/fast-mode/">Fast mode</a>).</p>
+<p><img src="/59/help/images/iphone-debug.png" alt="The CALCULATOR tab on an iPhone" width="1320" height="2868" loading="lazy" decoding="async"></p>
+<h2 id="cpu-tab">CPU tab</h2>
+<p>The CPU tab lists the instructions the processor carried out, each with
+its address, its text and the registers. Each entry <strong>already ran</strong>: the
+newest 32 while the calculator runs, up to 1024 and the next instruction
+while it is paused, so you can scroll back. Jumps, subroutine calls and
+the ROM's page changes show in the addresses.</p>
+<ul>
+<li><strong>ROM HEATMAP</strong> shows how often each ROM address ran; <strong>CLR</strong> starts it
+over. It also starts over at a Reset, a model switch, and when the
+panel comes into view or you switch to the CPU tab.</li>
+<li><strong>ASM OVERLAY</strong>: <strong>Select File</strong> puts a small machine-code program, an
+ASM overlay, over the ROM's addresses 1800 to 1FFF; <strong>Run</strong> enters it
+at 1800; <strong>Clear</strong> takes it away again and resets the calculator when
+it was running. While an overlay runs, the CALCULATOR tab cannot be
+chosen; FREEZE, STEP and RESUME of the CPU tab work on its instructions.
+A Cold boot, a model switch or a preset removes the overlay. The format
+and the examples: <a href="/59/help/10-reference/asm-overlay/">ASM overlay</a>.</li>
+<li>A TEST instruction shows the flag it set, while the following JUMP
+shows the condition restored after it (usually 1), because the state
+is taken after each instruction. That is expected.</li>
+</ul>
+<p><img src="/59/help/images/ipad-2752x2064-asm.png" alt="The CPU tab on an iPad" width="2752" height="2064" loading="lazy" decoding="async"></p>
+<h2 id="run-log-tab">RUN LOG tab</h2>
+<ul>
+<li><strong>SCOM</strong>, <strong>Memory</strong>, <strong>Prog</strong> and <strong>Vars</strong> write the calculator's own
+registers, its memory, the program or the data registers into the log;
+the bin button empties the tab's view.</li>
+<li><strong>RUN LOG</strong> steps the log's level through Off, Info and Debug (a grey,
+orange or red dot). At Info the log also shows how a preset is carried
+out, each step as it is done; at Debug the calculator logs each write
+to its registers and memory as well, which is mostly for the developer.</li>
+<li><strong>TRACE</strong> starts and ends a trace of the processor's instructions.</li>
+</ul>
+<h2 id="traces">Traces</h2>
+<p>A trace started with the TRACE button is named after the model:
+<code>CALCU59_TRACE.bin</code>, <code>CALCU58_TRACE.bin</code> or <code>CALCU58C_TRACE.bin</code>. It goes
+into the trace folder (<a href="/59/help/07-debugger/#traces">the family's rules</a>):</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>System</th>
+<th>Trace folder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPhone, iPad</td>
+<td>the app's own storage (Application Support), or its iCloud folder when Settings ▸ Tracing ▸ Save Location says iCloud</td>
+</tr>
+<tr>
+<td>macOS, Windows, Linux</td>
+<td>the save folder, unless Settings ▸ Tracing ▸ Trace folder names another</td>
+</tr>
+<tr>
+<td>the browser</td>
+<td>a trace that ended is offered to download, in the wide layout</td>
+</tr>
+</tbody>
+</table></div>
+<p>Only one trace runs at a time, the button's or a preset's; it holds the
+processor's instructions and the gaps between them. When the file reaches
+the size limit (Settings ▸ Tracing ▸ Maximum file size), the trace ends
+and a notice says so.</p>
+<p>To read a trace, download or clone the repository
+<a href="https://github.com/tinue/Calc-U">tinue/Calc-U</a> on a computer with
+Python, and in <code>products/calc-u-59/</code> run:</p>
+<pre class="help-code"><code class="language-sh">python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin &gt; CALCU59_TRACE.txt
+</code></pre>
+<p>The script needs the files next to it (the disassembler and its table of
+mnemonics), so it cannot be downloaded alone. The binary file can be
+large (190 MB for a long session), the text much smaller, because the
+script folds repeated loops such as the keyboard scan loop.</p>
+<h2 id="good-to-know">Good to know</h2>
+<ul>
+<li><strong>Stepping through the reset routine:</strong> in the CPU tab press FREEZE ON
+START, then <strong>Machine ▸ Cold boot</strong> (or Reset). The calculator pauses at
+the first instruction of the ROM's start-up; STEP walks through it.</li>
+<li><strong>A key after FREEZE ON START (CPU) seems lost:</strong> the ROM sees a key
+only for a very short time, which has passed when you resume. Use a
+trace instead: it records without stopping the calculator.</li>
+<li><strong>Only one FREEZE ON START</strong> is armed at a time; arming it in one tab
+disarms the other.</li>
+<li><strong>In a preset</strong>, <code>pause: program</code> or <code>pause: cpu</code>, <code>pause-on-start: program</code> / <code>cpu</code> / <code>off</code>,
+<code>step: { level: cpu, count: 5 }</code> and <code>resume:</code> do what the buttons do,
+and <code>debug-panel: cpu</code> shows that tab
+(<a href="/59/help/06-presets/presets/">Presets of this product</a>).</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/07-debugger/">← 7 · Debugger</a><a class="btn primary" rel="next" href="/59/help/08-settings/">8 · Settings →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

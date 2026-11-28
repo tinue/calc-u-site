@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presets of Calc-U-59 — Calc-U 59 help</title>
+<meta name="description" content="What a preset is, how it loads, its steps and how it waits are the family's: Presets. This part shows what Calc-U-59 adds: its header keys, its sections for…">
+<link rel="canonical" href="https://calc-u.org/59/help/06-presets/presets/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/06-presets/presets/">
+<meta property="og:title" content="Presets of Calc-U-59 — Calc-U 59 help">
+<meta property="og:description" content="What a preset is, how it loads, its steps and how it waits are the family's: Presets. This part shows what Calc-U-59 adds: its header keys, its sections for…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/06-presets/"><span class="k yellow">6</span><span>Presets</span></a><ul class="help-parts"><li><a href="/59/help/06-presets/">Presets</a></li><li><a href="/59/help/06-presets/presets/" aria-current="page">Presets of Calc-U-59</a></li><li><a href="/59/help/06-presets/preset-tutorial/">Writing a preset, step by step</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/06-presets/">6 Presets</a> <span aria-hidden="true">›</span> Presets of Calc-U-59</p>
+<p class="eyebrow">Chapter 6 · Presets</p>
+<h1 id="presets-of-calc-u-59">Presets of Calc-U-59</h1>
+<p>What a preset is, how it loads, its steps and how it waits are the
+family's: <a href="/59/help/06-presets/">Presets</a>. This part shows
+what Calc-U-59 adds: its header keys, its sections for program memory,
+data registers, the partition and the cue card, the magnetic cards, and
+its examples. Every key and step is listed in the
+<a href="/59/help/10-reference/preset-sections/">preset sections of this product</a>. New to presets?
+The <a href="/59/help/06-presets/preset-tutorial/">preset tutorial</a> builds one up step by step,
+with a file to download at each step.</p>
+<p>A preset is a plain UTF-8 text file ending in <code>.ti59</code>, <code>.ti58</code> or <code>.ti58c</code>;
+the ending does not choose the model, <code>model:</code> does. Load one with
+<strong>File ▸ Load Preset…</strong> (<strong>More ▸ Load Preset…</strong> on every bar, the only
+way on the iPhone, the iPad and on mobile in the browser), drop it on the
+window, or choose an example under <strong>Examples ▸</strong>.</p>
+<h2 id="an-example">An example</h2>
+<pre class="help-code"><code class="language-yaml">format-version: 2
+model: TI-59
+preset-name: Example
+description: A program, a register, a cue card and the printer
+slot-1: { name: ML }        # the Master Library module
+printer: PC-100C
+
+partition: 799.19           # 800 steps, 20 data registers: 2 Op 17
+
+program:
+  keycodes: |
+    000 76 LBL
+    001 11 A
+    002 89 π
+    003 95 =
+    004 91 R/S
+
+data:
+  00: 3.141592653589793     # π; RCL 00 shows 3.141592654
+
+cue-card:
+  title: Example
+  A: Start
+
+keys:
+  - regular-speed:
+  - key: 3 A
+  - wait: 2s
+  - key: RCL 0 0
+</code></pre>
+<p><img src="/59/help/images/cuecard-single-label.png" alt="The cue card of the example" width="1038" height="230" loading="lazy" decoding="async"></p>
+<ul>
+<li><code>model:</code> is <code>TI-59</code>, <code>TI-58</code> or <code>TI-58C</code>.</li>
+<li><code>slot-1:</code> is the Solid State ROM module, by its ID: <code>{ name: ML }</code> for
+the Master Library (<a href="/59/help/09-product-topics/modules/">Solid State ROM modules</a>). Without
+it the slot is empty.</li>
+<li><code>printer: PC-100C</code> attaches the printer. Without it there is none.</li>
+<li>A load always builds a new calculator from a cold boot; nothing of the
+calculator that ran before is kept.</li>
+</ul>
+<h2 id="the-sections">The sections</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Section</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>partition:</code></td>
+<td>The split between program steps and data registers, written as the display shows it: <code>799.19</code> is the last step 799 and 20 registers. Until it, the partition is the one after switching on: 479.59 on the TI-59, 239.29 on the TI-58 and TI-58C</td>
+</tr>
+<tr>
+<td><code>program:</code></td>
+<td>The program memory, as keycodes, the codes the calculator shows in learn mode, not the keys' positions: <code>keycodes: |</code> inline, or <code>file:</code> a <a href="/59/help/10-reference/keystroke-programs/">keystroke program file</a>. A line is either compact (two-digit keycodes, as many as wanted) or a listing as the PC-100C prints it (step, keycode, mnemonic). Only the steps listed are written</td>
+</tr>
+<tr>
+<td><code>data:</code></td>
+<td>Data registers, <code>NN: value</code>, at the calculator's full precision of 13 digits. On the TI-58C, <code>H00</code> to <code>H03</code> are its four extra cells</td>
+</tr>
+<tr>
+<td><code>cue-card:</code></td>
+<td>The cue card fitted above the keys (<a href="/59/help/09-product-topics/cue-cards/">Cue cards</a>)</td>
+</tr>
+<tr>
+<td><code>keys:</code></td>
+<td>The steps: keys, waiting, checks, and the steps below</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sections are carried out in file order, and each may come several times.
+A <code>program:</code>, <code>data:</code> or <code>cue-card:</code> section after a <code>keys:</code> section
+changes the calculator in the middle of the script, as if you had typed
+the changes in, so that one preset can play a whole session:</p>
+<pre class="help-code"><code class="language-yaml">keys:
+  - key: A                  # it runs and stops
+program:
+  keycodes: |
+    017 01                  # then step 017 changes …
+data:
+  05: 2.5                   # … and register 05
+keys:
+  - key: A                  # run again
+</code></pre>
+<h2 id="keys">Keys</h2>
+<p>A <code>key:</code> step presses keys by their <strong>key IDs</strong>: the label on the key when
+it is one plain word (<code>RCL</code>, <code>SBR</code>, <code>A</code>, <code>7</code>), otherwise the name the
+PC-100C prints for it (<code>STF</code>, <code>IFF</code>). A second function is written by its
+own name, which presses 2nd and then the key: <code>Pgm</code>, <code>2nd Pgm</code> and
+<code>2nd LRN</code> all press 2nd, LRN. Key IDs are separated by spaces and read in
+any case; <code>1 2</code> is two keys, <code>12</code> is an error. The table of every key ID
+is in <a href="/59/help/10-reference/preset-sections/">Preset sections</a>.</p>
+<p>Keycodes (in <code>program:</code>) and key IDs (in <code>key:</code>) are different things:
+digit 5 is keycode <code>05</code>, and the key <strong>5</strong>.</p>
+<h2 id="checking-the-display">Checking the display</h2>
+<p><code>expect: &lt;number&gt;</code> and <code>not-expect: &lt;number&gt;</code> compare the number with the
+calculator's working register X at its full precision of 13 digits,
+whatever the display format shows: after <strong>π</strong>, <code>expect: 3.14159265359</code>
+passes and <code>expect: 3.141592654</code> fails. Blinking is not tested.</p>
+<h2 id="magnetic-cards-in-a-preset">Magnetic cards in a preset</h2>
+<p>On the TI-59 a preset can feed cards as their owners did, one after
+another in a written-down order:</p>
+<ul>
+<li><code>- card: { name: Results }</code> pushes side 0 of a saved card through the
+reader, as you would by hand; <code>{ name: Results, side: 1 }</code> side 1;
+<code>{ file: … }</code> names a card file.</li>
+<li><code>- arm: { name: Results }</code> fits a card for you to feed with a corner.</li>
+<li>The header key <code>magnetic-cards:</code> defines <strong>in-file cards</strong>, which live
+only while the preset is loaded and are addressed with <code>mem:</code>. A side
+replaces its whole bank, as a real card does; what a program writes to
+an in-file card is kept until the next load or model switch.</li>
+<li><code>- saveas: { card: Bank4, as: live, name: Bank 4 }</code> saves an in-file
+card as a card of your own.</li>
+</ul>
+<pre class="help-code"><code class="language-yaml">magnetic-cards:
+  - card-name: Bank4
+    sides:
+      0:
+        bank: 4
+        data:
+          00: 12
+          01: 3.5
+keys:
+  - card: { mem: Bank4 }     # read bank 4, as at the start of a session
+  - key: A                   # run
+</code></pre>
+<p>A step that makes the calculator wait for a card (<code>- key: 1 2nd Write</code>)
+finishes when it waits, so the next step, <code>card:</code>, feeds it. A card a
+preset feeds is fitted after it has passed. A <code>{ name: }</code> or <code>{ file: }</code>
+card that does not exist refuses the preset. More on cards:
+<a href="/59/help/04-media/magnetic-cards/">Magnetic cards</a>.</p>
+<h2 id="calc-u-59s-steps">Calc-U-59's steps</h2>
+<p>Besides the family's steps:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Step</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>card:</code>, <code>arm:</code>, <code>saveas: { card: … }</code></td>
+<td>magnetic cards, above (TI-59)</td>
+</tr>
+<tr>
+<td><code>printer-trace: on</code> / <code>off</code></td>
+<td>sets the PC-100C's TRACE switch; off unless a preset says so</td>
+</tr>
+<tr>
+<td><code>pause: program</code> / <code>cpu</code>, <code>pause-on-start: program</code> / <code>cpu</code> / <code>off</code>, <code>step:</code>, <code>resume:</code></td>
+<td>the debugger (<a href="/59/help/07-debugger/debugger/">Debugger</a>)</td>
+</tr>
+<tr>
+<td><code>debug-panel: calculator</code> / <code>cpu</code> / <code>log</code></td>
+<td>shows that tab of the debug panel</td>
+</tr>
+</tbody>
+</table></div>
+<p>Calc-U-59 has no <code>type:</code> step: the calculator has no text to type.</p>
+<h2 id="startup-presets-and-examples">Startup presets and examples</h2>
+<p><strong>Settings ▸ Startup presets</strong> has a row for the TI-59, the TI-58 and the
+TI-58C (<a href="/59/help/08-settings/settings/">Settings of this product</a>). A TI-58C built from a
+startup preset starts from a cold boot and leaves the constant memory file
+alone (<a href="/59/help/09-product-topics/constant-memory/">Constant memory</a>).</p>
+<p>The examples under <strong>Examples ▸</strong> are in three groups: Diagnostics (the
+diagnostic programs of the TI-59 and TI-58, a RAM test), Programs (the sum
+of 1 to N, the display's characters, fast mode under single steps, the
+Game of Life with a glider an eater eats) and
+Printer pictures (four pictures the PC-100C prints). Each model's row of
+Startup presets also offers the startup preset Calc-U-59 bundles for it. Open an
+example to see how it is written. More programs, many of them historic, are in the
+<a href="/59/software/">TI-59 Software Collection</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/06-presets/">← 6 · Presets</a><a class="btn primary" rel="next" href="/59/help/06-presets/preset-tutorial/">6 · Writing a preset, step by step →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

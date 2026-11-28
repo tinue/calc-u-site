@@ -1,3 +1,4 @@
+Calc-U-59 ASM 2.0
 PROGRAM:
 ; This program *doesn't work* on the emulator. The emulator takes shortcuts when synchronizing
 ; WAIT and KEY, and the bad timing that this program uses does not trigger.

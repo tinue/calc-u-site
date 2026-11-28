@@ -1,0 +1,68 @@
+# trace-quirks.ti59 Q quirk that enables some sort of trace mode on the printer.
+# From Magatzine "TI PPC NOTES", V6N4-5P17, 1981
+#
+# Note that the article has a typo: What is shown on the display is "7993", not "9993".
+#
+# These are the original notes in the article:
+#
+# QUIRK- John Miranda (the youngest member, I suppose, at 14) found this quirk in the
+# TI-58. I tested it and found it to work in the TI-59 as well. With the printer attached,
+# it puts the calculator in TRACE mode. RST kills this state.
+#
+# From turn-on press:
+# CP LRN LBL A FIX O R/S LRN 999 + . 00000999 = A STF IND 7 INV LRN
+#
+# The display nows says 9993 00. You can SST through it to 99999 when it reverts to
+# step 000 and you see your program LBL A FIX 0 R/S again.
+#
+# If you BST, you loose the display, but stay with the TRACE mode. But it is impossible
+# to go back into LRN at this point, unless you press GTO 000 then LRN.
+# The "listing" of your program you now get, if you press SST repeatedly, is SR-52-like,
+# no mnemonics, just the program step and the key code.
+#
+# Further investigating invited from the membership.
+
+format-version: 2
+model: TI-58
+slot-1: { name: ML }
+printer: PC-100C
+
+program:
+  keycodes: |
+    000 76 LBL
+    001 11 A
+    002 58 FIX
+    003 00 00
+    004 91 R/S
+
+# The cue card
+cue-card:
+  title: Trace Quirk
+  row-1: From Magatzine "TI PPC NOTES", V6N4-5P17, 1981
+  row-1-align: center
+
+# Brings the display to the described state:
+keys:
+  - regular-speed:
+  - key: 9
+  - key: 9
+  - key: 9
+  - key: +
+  - key: .  # ,
+  - key: 0
+  - key: 0
+  - key: 0
+  - key: 0
+  - key: 0
+  - key: 9
+  - key: 9
+  - key: 9
+  - key: =
+  - key: A
+  # 21 2nd
+  - key: STF  # St flg
+  # 21 2nd
+  - key: Ind
+  - key: 7
+  - key: INV
+  - key: LRN

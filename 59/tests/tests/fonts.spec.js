@@ -51,8 +51,8 @@ test('no Google Fonts requests on any page', async ({ page }) => {
     }
   });
 
-  // Check every page that has a distinct real route (routes.js).
-  const paths = ['/59/', '/59/getting-started/', '/59/reference/', '/59/faq/', '/59/modules/', '/59/debugger/', '/59/play/'];
+  // The site pages (routes.js) and help pages of each kind.
+  const paths = ['/59/', '/59/play/', '/59/software/', '/59/help/', '/59/help/02-getting-started/', '/59/help/09-product-topics/faq/'];
   for (const path of paths) {
     await page.goto(path);
     await page.waitForSelector('main');

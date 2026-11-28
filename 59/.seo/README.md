@@ -4,9 +4,9 @@
 only rule. The rest of this file explains how the site is put together.
 
 ```bash
-cd docs
-node .seo/build.js     # compile + prerender. No dependencies.
-node .seo/check.js     # verify. Optional: npm i --no-save jsdom for the boot check.
+(cd ../.help && npm ci)   # once: the help renderer's dependencies
+node .seo/build.js        # compile, prerender, build the help
+node .seo/check.js        # verify. Optional: npm i --no-save jsdom for the boot check.
 ```
 
 ## Living under /59
@@ -14,8 +14,8 @@ node .seo/check.js     # verify. Optional: npm i --no-save jsdom for the boot ch
 The site is served at `https://calc-u.org/59/`, from the `59/` folder of the
 calc-u-site repository. `BASE` in `routes.js` is `"/59"`:
 
-- Route paths in `routes.js` and `.seo/pages.js` are site paths (`"/faq/"`).
-  `url()` turns one into an address (`"/59/faq/"`); `matchRoute()` takes an
+- Route paths in `routes.js` and `.seo/pages.js` are site paths (`"/play/"`).
+  `url()` turns one into an address (`"/59/play/"`); `matchRoute()` takes an
   address.
 - Links and image paths written directly in the `.jsx` text carry the `/59`
   prefix literally.
@@ -26,69 +26,65 @@ calc-u-site repository. `BASE` in `routes.js` is `"/59"`:
 - `robots.txt` and `404.html` only work at the domain root, so the build no
   longer writes them; the repository root owns both.
 
-## The playable calculator (`calc/`)
+## The pins: help, Web frontend, examples
 
-`/play/` and the installable app `/calc/app/` are Calc-U-59's web client,
-built in the source repository tinue/calc-u (`products/calc-u-59/frontends/web/`;
-the embedding contract is `docs/formats/web-embed.md`, the client
-`products/calc-u-59/docs/developer/Web-Client.md`). Its CI builds it, and
-each release (tag `calc-u-59-v<version>`) carries it as `Calc-U-59-web.zip`.
-`calc/` is that zip, unpacked unchanged — **never edit it here**; a
-calculator change is made in the source repository and arrives with its
-next build.
+The folder publishes one release of Calc-U-59 (tag `calc-u-59-v<version>`
+of tinue/Calc-U). `pins.json` pins its three parts, and `../.help/pins.js`
+installs them (format and options: `../.help/README.md`):
+
+| Part | Installed into | Used by |
+|---|---|---|
+| Help asset `Calc-U-59-help.zip` (url, sha256, version) | `help-asset/` | the help pages, `help/` |
+| Web frontend `Calc-U-59-web.zip` (url, sha256, version, commit) | `calc/`, unpacked unchanged | `/play/`, the installable app `/calc/app/` |
+| Examples (the tag) | `software-files/`, from `products/calc-u-59/examples/` without `debug/`, `screentest/`, `startup/` | `/software/` |
 
 ```bash
-node .seo/fetch-web-client.js               # (re)install the pinned build
-node .seo/fetch-web-client.js --pin <url>   # move to another release asset
-node .seo/fetch-web-client.js --local ../../Calc-U/products/calc-u-59/frontends/web/dist   # test a local build
+node ../.help/pins.js 59                            # reinstall what is pinned
+node ../.help/pins.js 59 --pin calc-u-59-v3.1.0     # take another release
+node ../.help/pins.js 59 --local-web <dist dir>     # try a local Web frontend; never commit it
 ```
 
-`web-client.json` pins the zip's URL and sha256 and the version and commit
-of its `MANIFEST.json`. The script checks both on every install and replaces
-`calc/` as a whole. `check.js` fails when `calc/` differs from its
-`MANIFEST.json` (a hand edit) or is not the pinned build (a `--local` test
-build left in place). An update is one commit: pin, rebuild, check, test,
-then commit `calc/`, `web-client.json` and the rebuilt pages together.
+All three are imported and never edited here: `check.js` fails when the
+asset differs from its pin, when `calc/` differs from its `MANIFEST.json` or
+the pinned build, or when the three pins are not of one release; CI
+downloads them again and fails on any difference.
 
-How the site uses it: every page loads `calc/calc.css` and `calc/calc.js`
-(37 KB; loaded everywhere so client-side navigation to `/play/` works), and
+How the site uses the Web frontend: every React page loads `calc/calc.css`
+and `calc/calc.js` (so client-side navigation to `/play/` works), and
 `build.js` evaluates `calc.js` with the site's own components, so `/play/`
-prerenders with the real `PlayCalculator`. `PlayPage` in `Pages.jsx` only
-sizes it (`usePlayLayout`) and passes `layout`, `width` and
-`keyboard`: wide where the container is at least 862 px, portrait below. `calc.css`
-loads before the site's CSS: both declare the same font families, and the
-site's declarations win.
+prerenders with the real `CalcU59` (embedding interface:
+`docs/formats/web-embed.md` of the source repository). `PlayPage` in
+`Pages.jsx` only sizes it (`usePlayLayout`) and passes `layout`, `width`
+and `keyboard`: wide where the container is at least 862 px, portrait
+below. The help pages load none of it.
 
-## The beta (`beta/`)
+## The help pages (`help/`)
 
-`/beta/app/` previews the next release's standalone app, built from a
-pre-release asset. `beta/` is that zip, unpacked unchanged next to `calc/`
-(not inside it: an install replaces `calc/` as a whole, and `check.js` fails
-on extra files). No page loads its scripts; `/play/` links to it, and
-`robots.txt` blocks it.
+`build.js` hands the pinned help asset to the shared renderer
+(`../.help/render.js`): one page per help file, at
+`/59/help/<NN>-<chapter>/` for a chapter's first file and
+`/59/help/<NN>-<chapter>/<file>/` for each further one, a contents page
+`/59/help/`, the pictures and downloads, and Mermaid (served from
+`help/vendor/`, drawn only where a diagram is). The page around each file
+is `.seo/help-page.js`: the site's own header and footer (`SiteHeader`,
+`SiteFooter`, rendered once), the chapter rail, breadcrumb, previous and
+next; its styles are `help.css`. Help pages are static: no React, and
+`help/help.js` is their only script (the phone menu button, the diagrams).
 
-```bash
-node .seo/fetch-web-client.js --beta <url of the -pre Calc-U-59-web.zip>
-# or a local build of the source repository (build.sh --release; CALCU_WEB_DIST=<dir>):
-node .seo/fetch-web-client.js --beta <dir>
-node .seo/build.js && node .seo/check.js && tests/run-tests.sh
-```
+The build fails on a file named in the asset's `toc.json` but missing, and
+on a link or anchor inside the help that leads nowhere. Two kinds of link
+the help tool should have rewritten (`chapter:<n>`, a source path
+`../../../library/help/…`) are resolved with a warning; they are reported
+upstream.
 
-`beta-client.json` records what was installed, but unlike `web-client.json`
-nothing downloads it again, here or in CI: a `-pre` asset is rebuilt and its
-tag is deleted on promotion, which would fail every later push. This is the
-one place a `-pre` asset may be used. `check.js` proves that `beta/` matches
-its `MANIFEST.json` and the recorded build.
+## Redirects
 
-The client works from any folder, and its service worker and caches are per
-folder, but `localStorage` belongs to the origin: the beta and the released
-client share settings and the TI-58C's constant memory.
-
-**When the version is released**, remove it in the commit that pins the
-release: delete `beta/` and `beta-client.json`, and the paragraph in
-`PlayPage`. `check.js` fails while the link is still there. Keep
-`Disallow: /59/beta/` in `robots.txt`: it does no harm, and the next preview
-needs it.
+The hand-written help of 2.3.0 and before had other addresses
+(`/faq/`, `/install/mac/`, `/getting-started/printer/`, …). Each is a small
+redirect page now (meta refresh, a script that keeps the `#hash`, a
+canonical and `noindex`), written from `redirects.js`; old `#hash` links
+on the home page go through `LEGACY_HASHES` in `routes.js`.
+`tests/tests/redirects.spec.js` walks both tables.
 
 ## Serving it locally
 
@@ -140,37 +136,27 @@ Each piece has one home, and `check.js` asserts the result:
 | Canonical | Derived from the route: self-canonical unless the entry sets `canonical`. |
 | `<h1>`, body copy | The component in `Pages.jsx`. One `<h1>` per page. |
 | Open Graph / Twitter | `renderPage()` in `build.js`, from the same title and description. |
-| Structured data | `build.js`: `SoftwareApplication` on the home page, `FAQPage` on `/faq/` (parsed out of `Pages.jsx` so markup and JSON-LD cannot disagree), `BreadcrumbList` everywhere else. |
-| `sitemap.xml` | Generated from `ROUTES` — self-canonical pages only. |
-| `robots.txt` | At the repository root, not generated. It blocks `/59/calc/app/`, the client's demo page `/59/calc/index.html`, `/59/preview/` and `/59/beta/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
+| Help pages | Title, description, canonical and `<h1>` come from the help file (`.help/render.js`, `.seo/help-page.js`). |
+| Structured data | `build.js`: `SoftwareApplication` on the home page, `BreadcrumbList` on the other React pages. |
+| `sitemap.xml` | Generated: the self-canonical routes and every help page; no redirect, no dates. |
+| `robots.txt` | At the repository root, not generated. It blocks `/59/calc/app/`, the client's demo page `/59/calc/index.html`, `/59/help-asset/`, `/59/preview/` and `/59/beta/`, and deliberately **not** `/59/build/`, `/59/vendor/` or the rest of `/59/calc/`, which hold the scripts a crawler needs to render the page. |
 | `404.html` | At the repository root, not generated: GitHub Pages only serves the root one. |
 
 Two rules are easy to break by accident:
 
 - **One page, one job.** Two URLs that render the same markup compete with each
   other. If a route restates another page, give it a `canonical` in `routes.js`
-  pointing at the primary; it stays reachable but leaves the sitemap. This is
-  why `/getting-started/` renders an `overview` topic of its own rather than
-  defaulting to one of its sidebar topics — that would make it a byte-identical
-  twin of `/getting-started/install-iphone-ipad/`.
+  pointing at the primary; it stays reachable but leaves the sitemap. An
+  address that moved for good is a redirect instead (`redirects.js`).
 - **A canonical must name a page that says the same thing.** Pointing one at a
   page with different content gets the canonical ignored. If a topic has no
-  real equivalent elsewhere, either let it stand on its own — as
-  `/getting-started/printer/` does — or make it an outbound link instead of a
-  route, as the GitHub README is.
-
-One deliberate imprecision: **`lastmod` is the build date**, so every URL
-claims to have changed whenever any one of them did. Per-file dates from
-`git log` would be more honest, but they would make the build depend on git
-history and would silently emit wrong dates in CI, where `actions/checkout`
-clones with `fetch-depth: 1` and every file looks like it changed in the most
-recent commit. Left as it is on purpose; changing it means fixing the checkout
-depth too.
+  real equivalent elsewhere, let it stand on its own or make it an outbound
+  link instead of a route.
 
 ## Self-hosted, and no analytics
 
 Every byte the browser fetches comes from `calc-u.org`: the fonts in `fonts/`,
-React in `vendor/`, the calculator and its WASM core in `calc/`. Nothing is loaded from a CDN, and
+React in `vendor/`, Mermaid in `help/vendor/`, the calculator and its WASM core in `calc/`. Nothing is loaded from a CDN, and
 the site carries no analytics, tag manager or telemetry of any kind — not
 Google's, not a self-hosted Matomo, none.
 
@@ -189,28 +175,29 @@ stay legal, because `rel=canonical` and `og:url` have to be absolute.
 
 | Path | Role |
 |---|---|
-| `.seo/build.js` | The build. Compile, prerender, sitemap. |
-| `.seo/check.js` | 400-odd assertions over the output. Run it before pushing. |
-| `.seo/pages.js` | Per-page `<title>` and meta description. |
+| `.seo/build.js` | The build. Compile, prerender, help, redirects, sitemap. |
+| `.seo/check.js` | About 1900 assertions over the output. Run it before pushing. |
+| `.seo/pages.js` | Per-page `<title>` and meta description of the React pages. |
+| `.seo/help-page.js` | The page around a help file. |
 | `.seo/vendor/` | `react-dom-server`, the one file not already vendored for the browser. |
-| `.seo/fetch-web-client.js`, `.seo/webclient.js` | Install and verify the web client in `calc/`. |
-| `web-client.json` | Which web client build `calc/` must be. |
-| `calc/` | The web client. Imported; never edit. |
-| `beta/`, `beta-client.json` | The next release's preview, while there is one. Imported; never edit. |
-| `tests/` | Playwright: navigation, fonts, the embedded calculator. `tests/run-tests.sh` after a build. |
-| `routes.js` | The URL map. Shared by the browser router and the build. |
+| `pins.json` | The release this folder publishes (above). |
+| `calc/`, `help-asset/`, `software-files/` | Imported by `../.help/pins.js`; never edit. |
+| `help/` | Generated help pages. Never edit. |
+| `help.css` | The help pages' styles. |
+| `redirects.js` | Old help addresses and where they go. |
+| `tests/` | Playwright: navigation, redirects, fonts, the embedded calculator. `tests/run-tests.sh` after a build. |
+| `routes.js` | The React pages' URL map and the old `#hash` links. Shared by the browser router and the build. |
 | `site.jsx` | Client router. |
 | `build/` | Generated. Never edit; never hand-fix. |
 | `articles/` | Articles: `*.md` is the source; `*.html` and `*.pdf` are rendered from it (below). |
 | `.seo/articles.js`, `.seo/article-template.html` | Render the articles. |
 
-Generated and safe to delete before a rebuild: `build/`, `index.html`,
-`sitemap.xml`, and the `index.html` inside every route directory (`faq/`,
-`play/`, `modules/`, …).
+Generated: `build/`, `help/`, `index.html`, `sitemap.xml`, the `index.html`
+inside every route directory (`play/`, `software/`) and every redirect
+directory (`faq/`, `install/`, …).
 
 Hand-written and never touched by the build: every `.jsx`, `styles.css`,
-`colors_and_type.css`, `assets/`, `fonts/`, `software-files/`,
-`tutorial-files/`. Imported: `calc/`, `beta/`.
+`help.css`, `colors_and_type.css`, `assets/`, `fonts/`, `redirects.js`.
 
 ## Articles (`articles/`)
 
@@ -230,7 +217,9 @@ node .seo/articles.js && node .seo/build.js && node .seo/check.js
 longer matches the Markdown. The article pages are not routes, so they are
 not in the sitemap.
 
-## Adding a page
+## Adding a site page
+
+The help gets its pages from the asset; this is for a page of the site's own.
 
 1. Write the component in `Pages.jsx` and export it via the `Object.assign(window, …)`
    block at the bottom.
@@ -247,13 +236,13 @@ published HTML still shows the old text. `check.js` will not catch that — it
 validates the last build, not whether the build is current.
 
 CI covers it: `.github/workflows/site.yml` at the repository root runs on
-every push to `main`. It re-downloads the pinned web client and fails if it
-differs, rebuilds and fails if the output differs from what was committed
-(`sitemap.xml` excepted — its `lastmod` is the build date), then runs
-`check.js` and the tests. It commits nothing: Pages publishes `main` as
-pushed, so the workflow is an alarm, not a fixer. Locally, before every
-commit: `node .seo/build.js && node .seo/check.js`, and
-`tests/run-tests.sh` before pushing.
+every push to `main`. It installs the three pins again and fails if they
+differ, rebuilds and fails if the output differs from what was committed
+(the build gives the same bytes for the same sources), then runs `check.js`
+and the tests. It commits nothing: Pages publishes `main` as pushed, so the
+workflow is an alarm, not a fixer. Locally, before every commit:
+`node .seo/build.js && node .seo/check.js`, and `tests/run-tests.sh` before
+pushing.
 
 ## After deploying
 
@@ -261,8 +250,8 @@ commit: `node .seo/build.js && node .seo/check.js`, and
   and submit `https://calc-u.org/59/sitemap.xml`. Do the same in
   [Bing Webmaster Tools](https://www.bing.com/webmasters), which also feeds
   DuckDuckGo.
-- Use the URL Inspection tool on `/play/` and `/what-is-a-ti-59/` and request
-  indexing. Those two are the pages most likely to match a cold search.
+- Use the URL Inspection tool on `/play/` and `/help/01-introduction/` and
+  request indexing. Those two are the pages most likely to match a cold search.
 - The App Store listing and the GitHub repository both rank already. Link from
   each of them to `https://calc-u.org/59/` — the repository's About field and
   its README are the cheapest, strongest links available.

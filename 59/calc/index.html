@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Calc-U 59 — web client</title>
-<!-- The web client's demo and test page: PlayCalculator with the physical
+<!-- The web client's demo and test page: CalcU59 with the physical
      keyboard, sized to the window, in the layout the query names
      (?layout=wide|portrait, default wide; also ?width=, ?height=, ?model=,
-     ?module=, ?preset=). Every path is relative, like the rest of dist/
-     (reference/WebClient.md). -->
+     ?preset=; ?model= by its name, TI-58C). Every path is relative, like the rest of dist/
+     (docs/developer/Web-Client.md). -->
 <link rel="stylesheet" href="calc.css">
 <style>
   html, body { margin: 0; height: 100%; background: #000; color: #ccc; font: 13px -apple-system, "Segoe UI", sans-serif; }
@@ -38,13 +38,15 @@
   function size() {
     const w = root.clientWidth, h = root.clientHeight;
     // Portrait: not wider than the calculator at this height needs.
-    const width = layout === "portrait" ? Math.min(w, PlayCalculator.portraitWidth(h)) : w;
+    const width = layout === "portrait" ? Math.min(w, CalcU59.portraitWidth(h)) : w;
     return { width: num("width") || Math.floor(width), height: num("height") || Math.floor(h) };
   }
   function render() {
-    reactRoot.render(React.createElement(PlayCalculator, {
+    reactRoot.render(React.createElement(CalcU59, {
       layout, keyboard: true, ...size(),
-      model: q.get("model") || undefined, module: q.get("module") || undefined, preset: q.get("preset") || undefined,
+      model: q.get("model") || undefined, preset: q.get("preset") || undefined,
+      // The demo and test page: a fresh start is bare (no startup presets).
+      workerUrl: new URL("calc-engine-worker.js?bare=1", location.href).href,
     }));
   }
   new ResizeObserver(render).observe(root);

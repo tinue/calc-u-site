@@ -1,0 +1,55 @@
+# TI-59 Preset File Tutorial — complete
+#
+# This file shows how a preset is put together. The preset tutorial in the
+# help (https://calc-u.org/59/, chapter Presets) builds it up step by step.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Preset tutorial
+description: Preset tutorial, complete - sums 1..5, then recalls R29
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank
+
+# The program memory, as keycodes. The format is flexible: here we write ten
+# steps per line (the compact notation) with a comment for the step numbers.
+# The loader reads the two-digit keycodes and ignores the comments.
+program:
+  keycodes: |
+    43 00 44 01 97 00 00 00 43 01   # 000-009
+    91 76 11 42 00 25 42 01 61 00   # 010-019
+    00                              # 020
+
+# Register content. The full TI-59 precision is supported. On the real
+# hardware the number below cannot be keyed in directly; one would need SUM
+# and a division to set it up.
+data:
+  29: 3.000000000004
+
+# Keys pressed after everything above has been set up. As a sample we
+# calculate the sum of 1..5 with the program above. Keys are written by their
+# key IDs, the labels on the keys, not by keycodes: the digit 5 is the key
+# ID 5, while in the program above the same digit is the keycode 05.
+keys:
+  - regular-speed:      # a preset runs at full speed unless it says otherwise
+  - key: 5 A            # 5, then A: the program runs and shows 15
+  - wait: 2s            # wait 2 seconds, to see the result
+  - key: RCL 2 9        # recall register 29
+  - wait: 2s            # the display shows only "3.": too few digits for the fraction
+  - key: "- 3 ="        # after subtracting 3 we see the fraction

@@ -1,0 +1,12 @@
+{
+  "name": "calc-u-site-help",
+  "private": true,
+  "description": "Renders a pinned Calc-U help asset into static pages for calc-u.org (see README.md).",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=20" },
+  "scripts": { "test": "node --test tests/" },
+  "dependencies": {
+    "markdown-it": "15.0.3",
+    "mermaid": "12.3.0"
+  }
+}

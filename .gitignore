@@ -1,0 +1,3 @@
+# The help renderer's dependencies (installed with npm ci in .help/).
+.help/node_modules/
+.DS_Store

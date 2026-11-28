@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calc-U-59 — Calc-U 59 help</title>
+<meta name="description" content="Calc-U-59 is an emulator of the TI-59, the TI-58 and the TI-58C, the programmable calculators Texas Instruments built from 1977. It runs on macOS, Windows…">
+<link rel="canonical" href="https://calc-u.org/59/help/01-introduction/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/01-introduction/">
+<meta property="og:title" content="Calc-U-59 — Calc-U 59 help">
+<meta property="og:description" content="Calc-U-59 is an emulator of the TI-59, the TI-58 and the TI-58C, the programmable calculators Texas Instruments built from 1977. It runs on macOS, Windows…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class="open"><a class="help-chapter" href="/59/help/01-introduction/" aria-current="page"><span class="k yellow">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> 1 Introduction</p>
+<p class="eyebrow">Chapter 1 · Introduction</p>
+<h1 id="calc-u-59">Calc-U-59</h1>
+<p><img src="/59/help/images/app-icon.png" alt="The Calc-U-59 icon" width="1024" height="1024" loading="lazy" decoding="async"></p>
+<p>Calc-U-59 is an emulator of the <strong>TI-59</strong>, the <strong>TI-58</strong> and the
+<strong>TI-58C</strong>, the programmable calculators Texas Instruments built from
+1977. It runs on macOS, Windows, Linux, the iPhone and the iPad, and in
+the browser. It runs the calculators' original ROM through an emulated
+processor, at the original speed, so every result, the flashing overflow
+display and the documented quirks behave as on the real calculator. The
+display even looks as the eye saw the real one, dimming while the
+calculator works.</p>
+<p><img src="/59/help/images/app-screenshot.png" alt="Calc-U-59 on an iPhone: the display, the cue card and the keys" width="1320" height="2868" loading="lazy" decoding="async"></p>
+<p>What Calc-U-59 emulates:</p>
+<ul>
+<li>the <strong>TI-59, TI-58 and TI-58C</strong>, each with its memory partition and its
+state after switching on (<a href="/59/help/03-models-and-machine-control/">Models and machine
+control</a>,
+<a href="/59/help/09-product-topics/models/">What differs by model</a>);</li>
+<li>all fourteen <strong>Solid State ROM modules</strong>, from the Master Library to
+the RPN Simulator (<a href="/59/help/09-product-topics/modules/">Solid State ROM modules</a>);</li>
+<li><strong>magnetic cards</strong> for the TI-59, read and written as files
+(<a href="/59/help/04-media/magnetic-cards/">Magnetic cards</a>);</li>
+<li>the <strong>PC-100C</strong> print cradle, with its paper as dots and as text that
+can be copied (<a href="/59/help/05-peripherals-and-paper/printer/">The PC-100C printer</a>);</li>
+<li>the <strong>TI-58C's constant memory</strong>, kept between starts
+(<a href="/59/help/09-product-topics/constant-memory/">Constant memory</a>);</li>
+<li>a <strong>debugger</strong> at the level of program steps and of the processor's
+instructions, with traces for analysis afterwards
+(<a href="/59/help/07-debugger/debugger/">Debugger</a>);</li>
+<li><strong>presets</strong>: plain text files that set up a calculator with a program,
+its registers, a cue card and a module in one go
+(<a href="/59/help/06-presets/presets/">Presets</a>).</li>
+</ul>
+<p>You can try it in the browser at
+<a href="/59/play/">calc-u.org/59/play/</a> before you install
+anything; how to install it on each system is in
+<a href="/59/help/02-getting-started/installing/">Installing Calc-U-59</a>.</p>
+<h2 id="the-three-models">The three models</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Model</th>
+<th>Introduced</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TI-59 (TI Programmable 59)</td>
+<td>May 1977</td>
+<td>The top of the range: up to 960 program steps or 100 data registers, traded against each other in steps of 80 and 10, and a magnetic card reader in the side. Its memory is lost when it is switched off, unless the program is on a card</td>
+</tr>
+<tr>
+<td>TI-58 (TI Programmable 58)</td>
+<td>May 1977</td>
+<td>The same calculator with half the memory, up to 480 steps or 60 registers, and no card reader. Solid State ROM modules work as on the TI-59</td>
+</tr>
+<tr>
+<td>TI-58C (TI Programmable 58C)</td>
+<td>1979</td>
+<td>A TI-58 with constant memory: programs and registers survive switching off</td>
+</tr>
+</tbody>
+</table></div>
+<p>You choose the model in the model picker at the left of the control bar
+or under <strong>Machine ▸ Model ▸</strong>.</p>
+<h2 id="the-calculators">The calculators</h2>
+<p>The TI-59 was Texas Instruments' flagship programmable calculator, sold
+for around $300 from 24 May 1977. It followed the SR-52, and for the
+rest of the decade it was the calculator engineers, surveyors,
+navigators and financial analysts carried. You program it by recording
+keystrokes: in learn mode every key you press becomes a program step,
+and the ten user-defined keys, <strong>A</strong> to <strong>E</strong> and their second functions
+<strong>A′</strong> to <strong>E′</strong>, are the entry points. The instruction set has
+conditionals, loops, subroutines and indirect register addressing.</p>
+<p>These calculators use <strong>AOS</strong>, the Algebraic Operating System: you enter
+an expression roughly as it is written on paper, with up to nine levels
+of parentheses, and the calculator applies the precedence of the
+operators when you press <strong>=</strong>. The pending operations have edge cases
+that come out right only when the original ROM runs, which is what
+Calc-U-59 does. One of the modules, the <strong>RPN Simulator</strong>, makes the
+calculator behave like one with reverse Polish notation.</p>
+<h3 id="magnetic-cards-and-banks">Magnetic cards and banks</h3>
+<p>The TI-59's card reader takes small magnetic strips; a side holds one
+<strong>bank</strong>, a fixed quarter of the 960-step memory: 240 steps or 30 data
+registers. Program steps fill the memory from the bottom, data
+registers from the top, so R00 is the last register of bank 4.
+<strong>n 2nd Op 17</strong> moves the boundary between them in steps of ten
+registers (80 program steps), and a bank holds whatever falls into its
+quarter: steps, registers or both.</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>n Op 17</th>
+<th>Partition</th>
+<th>Bank 1</th>
+<th>Bank 2</th>
+<th>Bank 3</th>
+<th>Bank 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>959.</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>480–719</td>
+<td>720–959</td>
+</tr>
+<tr>
+<td>1</td>
+<td>879.09</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>480–719</td>
+<td>720–879, R09–R00</td>
+</tr>
+<tr>
+<td>2</td>
+<td>799.19</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>480–719</td>
+<td>720–799, R19–R00</td>
+</tr>
+<tr>
+<td>3</td>
+<td>719.29</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>480–719</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>4</td>
+<td>639.39</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>480–639, R39–R30</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>5</td>
+<td>559.49</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>480–559, R49–R30</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>6</td>
+<td>479.59</td>
+<td>000–239</td>
+<td>240–479</td>
+<td>R59–R30</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>7</td>
+<td>399.69</td>
+<td>000–239</td>
+<td>240–399, R69–R60</td>
+<td>R59–R30</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>8</td>
+<td>319.79</td>
+<td>000–239</td>
+<td>240–319, R79–R60</td>
+<td>R59–R30</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>9</td>
+<td>239.89</td>
+<td>000–239</td>
+<td>R89–R60</td>
+<td>R59–R30</td>
+<td>R29–R00</td>
+</tr>
+<tr>
+<td>10</td>
+<td>159.99</td>
+<td>000–159, R99–R90</td>
+<td>R89–R60</td>
+<td>R59–R30</td>
+<td>R29–R00</td>
+</tr>
+</tbody>
+</table></div>
+<p>The display shows the partition as last step.last register; 479.59 (6
+Op 17) is the TI-59's partition after switching on. A card side is
+also what the cue card is: once read, the real card slid into a slot
+above the keys, where the labels on its top edge named the keys <strong>A</strong> to
+<strong>E</strong> of the program you had loaded. Calc-U-59 shows that card above the
+keys too (<a href="/59/help/09-product-topics/cue-cards/">Cue cards</a>).</p>
+<h3 id="modules-and-the-printer">Modules and the printer</h3>
+<p>The TI-58 and TI-59 were the first handheld calculators with removable
+ROM program modules. A module held up to 5,000 program steps and ran
+straight from its ROM, leaving the user's memory free. The Master
+Library came in the box; Applied Statistics, Surveying, Aviation, Marine
+Navigation and the others were sold separately. Calc-U-59 has all
+fourteen.</p>
+<p>The calculator docked into a thermal printer, the PC-100A, B or C. Beyond
+printing results, it listed a program with mnemonics instead of key
+codes, printed the data registers, and traced a program as it ran.
+Calc-U-59 emulates the PC-100C, its paper included.</p>
+<p>For the original manuals, program libraries and the wider community,
+start at <a href="https://www.ti59.com/">ti59.com</a> and
+<a href="http://www.datamath.org/SCI/WEDGE/TI-59.htm">datamath.org</a>. This help
+documents the emulator.</p>
+<h2 id="free-software">Free software</h2>
+<p>Calc-U-59 is free software under the GNU GPL version 3; its source is in
+the repository <a href="https://github.com/tinue/Calc-U">tinue/Calc-U</a> on
+GitHub.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><span></span><a class="btn primary" rel="next" href="/59/help/02-getting-started/">2 · Getting started →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

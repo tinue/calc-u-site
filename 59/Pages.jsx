@@ -1,45 +1,46 @@
-// Calc-U 59 — Help site pages
-// User scope: this guide explains the EMULATOR APP, not the underlying
-// TI-59 calculator hardware.
+// Calc-U 59 — the site's own pages: home, play, software.
+//
+// The help is not written here. It is built from the pinned help asset of
+// the release (pins.json, .help/render.js) into /59/help/; these pages link
+// to its chapters through HELP, and check.js fails on a link that leads
+// nowhere.
 
-// The sidebar of /getting-started/. Overview and Printer are topics of that
-// page; every other item is a page of its own.
-const STARTED_SECTIONS = [
-  { title: "Start here", items: [
-    { id: "overview", label: "Overview", href: "/59/getting-started/" },
-  ]},
-  { title: "Setup", items: [
-    { id: "install-mobile", label: "Installing on iPhone and iPad", href: "/59/install/iphone-ipad/" },
-    { id: "install-mac", label: "Installing on Mac", href: "/59/install/mac/" },
-    { id: "install-pc", label: "Installing on Windows and Linux", href: "/59/install/windows-linux/" },
-    { id: "install-android", label: "Installing on Android", href: "/59/install/android/" },
-  ]},
-  { title: "Using the emulator", items: [
-    { id: "presets", label: "Loading a preset", href: "/59/presets/" },
-    { id: "debugger", label: "Using the debugger", href: "/59/debugger/" },
-    { id: "printer", label: "Printer and card reader", href: "/59/getting-started/printer/" },
-  ]},
-  { title: "Help", items: [
-    { id: "faq", label: "FAQ", href: "/59/faq/" },
-    // The README lives on GitHub: an ordinary outbound link.
-    { id: "readme", label: "Main README", href: "https://github.com/tinue/Calc-U-59/blob/main/README.md", external: true },
-  ]},
-];
+const RELEASE = "https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0";
+const APP_STORE = "https://apps.apple.com/us/app/calc-u-59/id6761413142";
 
-// The topic cards of the home page and of /getting-started/.
+// Help pages the site pages link to (addresses made by .help/render.js).
+const HELP = {
+  contents:      "/59/help/",
+  introduction:  "/59/help/01-introduction/",
+  started:       "/59/help/02-getting-started/getting-started/",
+  installing:    "/59/help/02-getting-started/installing/",
+  installMobile: "/59/help/02-getting-started/installing/#iphone-and-ipad",
+  installDesk:   "/59/help/02-getting-started/installing/#mac-windows-and-linux",
+  installAndroid:"/59/help/02-getting-started/installing/#android",
+  cards:         "/59/help/04-media/magnetic-cards/",
+  printer:       "/59/help/05-peripherals-and-paper/printer/",
+  presets:       "/59/help/06-presets/presets/",
+  tutorial:      "/59/help/06-presets/preset-tutorial/",
+  debugger:      "/59/help/07-debugger/",
+  modules:       "/59/help/09-product-topics/modules/",
+  faq:           "/59/help/09-product-topics/faq/",
+  asmOverlay:    "/59/help/10-reference/asm-overlay/",
+};
+
+// The topic cards of the home page: where a newcomer goes first.
 const START_CARDS = [
-  { eyebrow: "Setup", title: "Installing on iPhone and iPad", href: "/59/install/iphone-ipad/",
-    text: "Install from the App Store, pick the calculator model, and open .ti59 files from the file picker." },
-  { eyebrow: "Setup", title: "Installing on Mac", href: "/59/install/mac/",
-    text: "Download the release from GitHub and drag it to Applications." },
-  { eyebrow: "Setup", title: "Installing on Windows and Linux", href: "/59/install/windows-linux/",
-    text: "Run the Windows installer or the Linux AppImage from GitHub Releases." },
-  { eyebrow: "Files", title: "Loading a preset", href: "/59/presets/",
-    text: "What .ti59, .ti58 and .ti58c files contain, and how each section — partition, program, registers, keystrokes — is applied." },
-  { eyebrow: "Debug", title: "Using the debugger", href: "/59/debugger/",
-    text: "The CALCULATOR, CPU and LOG tabs, freeze and step, FREEZE ON START, and binary trace files for offline analysis." },
-  { eyebrow: "Hardware", title: "Printer and card reader", href: "/59/getting-started/printer/",
-    text: "The PC-100C panel in dot and text view, printing and advancing paper, copying the strip, and saving and loading magnetic cards." },
+  { eyebrow: "Chapter 2", title: "Installing", href: HELP.installing,
+    text: "The App Store on iPhone and iPad, the free downloads for Mac, Windows and Linux, and the web app on Android." },
+  { eyebrow: "Chapter 2", title: "Getting started", href: HELP.started,
+    text: "The window on each system, the control bar, the model picker and the keyboard." },
+  { eyebrow: "Chapter 4", title: "Magnetic cards", href: HELP.cards,
+    text: "Fitting and feeding a card, saving a program and loading it back, and where the cards live." },
+  { eyebrow: "Chapter 5", title: "The PC-100C printer", href: HELP.printer,
+    text: "Attaching the printer, its controls, the paper strip and the print speed." },
+  { eyebrow: "Chapter 6", title: "Presets", href: HELP.presets,
+    text: "Plain-text .ti59, .ti58 and .ti58c files that carry a program, registers, a cue card and a module, with a tutorial." },
+  { eyebrow: "Chapter 7", title: "The debugger", href: HELP.debugger,
+    text: "Freeze and step, the CPU view, the ROM trace and trace files for offline analysis." },
 ];
 
 function StartCards() {
@@ -60,25 +61,23 @@ function BackButton() {
 }
 
 /* =============================================================
-   HOME — overview page.
+   HOME — a short page into the help, the play page and the downloads.
    ============================================================= */
 function HomePage() {
   return (
     <main>
-      {/* Hero */}
       <section style={{ borderBottom: "1px solid var(--stroke)" }}>
         <div className="wrap hero">
           <div className="hero-copy">
-            <p className="eyebrow">TI-59 emulator for Mac, Windows, Linux, iPhone and iPad</p>
+            <p className="eyebrow">TI-59 emulator for Mac, Windows, Linux, iPhone, iPad and the browser</p>
             <h1 className="page-title">Calc-U <em>59</em></h1>
-            <p className="lede">Calc-U 59 is a <strong style={{ color: "var(--fg)" }}>TI-59, TI-58 and TI-58C emulator</strong> for macOS, Windows, Linux, iPhone and iPad. It runs the original Texas Instruments ROM, reads and writes virtual magnetic cards, emulates the PC-100C printer and all fourteen Solid State Software modules, and includes a CPU-level debugger. You can <a href="/59/play/">try it in your browser</a> before you install anything.</p>
+            <p className="lede">Calc-U 59 is a <strong style={{ color: "var(--fg)" }}>TI-59, TI-58 and TI-58C emulator</strong>. It runs the original Texas Instruments ROM, reads and writes magnetic cards, emulates the PC-100C printer and all fourteen Solid State Software modules, and has a CPU-level debugger. It runs on macOS, Windows, Linux, the iPhone and the iPad, and in your browser.</p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <a className="btn primary" href="/59/getting-started/">Getting started <span style={{opacity:.5}}>→</span></a>
-              <a className="btn secondary" href="/59/reference/">App reference</a>
+              <a className="btn primary" href="/59/play/">Play in browser <span style={{opacity:.5}}>→</span></a>
+              <a className="btn secondary" href={HELP.contents}>Read the help</a>
+              <a className="btn secondary" href={HELP.installing}>Download</a>
             </div>
           </div>
-          {/* Placed by .hero into the right-hand column on a wide screen and
-              directly under the pitch once the hero stacks. */}
           <div className="hero-shot">
             <img
               src="/59/assets/app-screenshot.png"
@@ -89,1755 +88,66 @@ function HomePage() {
             <div className="panel" style={{ padding: 16 }}>
               <h3 className="sub" style={{ margin: "0 0 6px" }}>iPhone and iPad</h3>
               <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6 }}>
-                Install from the App Store, then open the app and pick a model. Presets load from the file picker inside the app.
+                Free on the <a href={APP_STORE}>App Store</a>. Cards and the TI-58C's memory are kept in iCloud, so the iPhone and the iPad share them.
               </p>
             </div>
             <div className="panel" style={{ padding: 16 }}>
               <h3 className="sub" style={{ margin: "0 0 6px" }}>Mac, Windows and Linux</h3>
               <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6 }}>
-                Download the free release from GitHub: a disk image for the Mac, an installer for Windows, an AppImage for Linux.
+                Free on <a href={RELEASE}>GitHub</a>: a disk image for the Mac, an installer for Windows, an AppImage for Linux.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Topic cards */}
       <div className="wrap">
         <h2 className="section">Where to start</h2>
         <div className="grid-3">
           <StartCards />
         </div>
 
-        {/* What the emulator actually reproduces. Written for someone who
-            arrived from a search engine and has not yet decided whether
-            this is the TI-59 emulator they were looking for. */}
+        {/* Written for someone who arrived from a search engine and has not
+            yet decided whether this is the TI-59 emulator they were looking
+            for. */}
         <h2 className="section">What Calc-U 59 emulates</h2>
         <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
             Calc-U 59 emulates the <strong>TI Programmable 59</strong> that Texas Instruments
             introduced in 1977, along with its two smaller siblings, the <strong>TI-58</strong> and
-            the constant-memory <strong>TI-58C</strong>. It does not reimplement the maths: the app runs
+            the constant-memory <strong>TI-58C</strong>. It does not reimplement the maths: it runs
             the calculators' original ROM through an emulated processor, at the original speed, so
             every result, the flashing overflow display and the documented quirks behave the way the
-            hardware did. The LED display even looks the way the eye saw the real one, dimming while
-            the calculator works.
+            hardware did.
           </p>
           <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
-            <li>Switchable <strong>TI-59 / TI-58 / TI-58C</strong> models, with the correct memory partition and startup state for each.</li>
-            <li>All fourteen <strong>Solid State Software</strong> library modules, from the Master Library to the RPN Simulator — <a href="/59/modules/">see the full list</a>.</li>
-            <li><strong>Magnetic cards</strong> read and written as files, synced between your Apple devices over iCloud.</li>
-            <li>The <strong>PC-100C thermal printer</strong>, in both a dot-matrix view and a copyable text view.</li>
-            <li>A <a href="/59/debugger/">CPU-level debugger</a> with a live program listing, a ROM instruction trace, and binary trace capture for offline analysis.</li>
-            <li>Plain-text <a href="/59/presets/">.ti59 preset files</a> that carry a program, the registers, a cue card and a module selection in one readable file.</li>
+            <li>Switchable <strong>TI-59 / TI-58 / TI-58C</strong> models, each with its memory partition and startup state.</li>
+            <li>All fourteen <strong>Solid State Software</strong> library modules, from the Master Library to the RPN Simulator (<a href={HELP.modules}>the list</a>).</li>
+            <li><strong>Magnetic cards</strong> read and written as files (<a href={HELP.cards}>cards</a>).</li>
+            <li>The <strong>PC-100C thermal printer</strong>, as dots or as copyable text (<a href={HELP.printer}>the printer</a>).</li>
+            <li>A <a href={HELP.debugger}>CPU-level debugger</a> with a live program listing, a ROM instruction trace and trace files.</li>
+            <li>Plain-text <a href={HELP.presets}>preset files</a> that carry a program, the registers, a cue card and a module in one readable file.</li>
           </ul>
           <p style={{ marginBottom: 0 }}>
-            New to these machines, or trying to work out which model you owned?{" "}
-            <a href="/59/what-is-a-ti-59/">Start with the background on the TI-59 and TI-58 →</a>
+            New to these machines? <a href={HELP.introduction}>The introduction</a> describes the three models and what the emulator reproduces.
           </p>
         </div>
 
-        {/* App-icon strip */}
         <div className="panel" style={{
-          marginTop: 48, display: "flex", alignItems: "center", gap: 24,
+          marginTop: 48, display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap",
         }}>
           <img src="/59/assets/app-icon.png" alt=""
                style={{ width: 80, height: 80, borderRadius: 18, flex: "0 0 auto" }}/>
-          <div>
-            <h3 className="sub" style={{ margin: "0 0 4px" }}>Available now</h3>
+          <div style={{ flex: "1 1 420px", minWidth: 0 }}>
+            <h3 className="sub" style={{ margin: "0 0 4px" }}>Version 3.0.0</h3>
             <p style={{ margin: 0, fontSize: 14 }}>
-              The Mac, Windows and Linux builds ship free from <a href="https://github.com/tinue/Calc-U-59/releases/latest">GitHub Releases</a>.
-              The iPhone and iPad build is on the <a href="https://apps.apple.com/us/app/calc-u-59/id6761413142">App Store</a>.
-              On Android, the web app <a href="/59/install/android/">installs from the browser</a>.
-              Calc-U 59 is free software under the GNU GPL version 3; the source code is on <a href="https://github.com/tinue/Calc-U-59">GitHub</a>.
+              The Mac, Windows and Linux builds are free downloads of the <a href={RELEASE}>3.0.0 release on GitHub</a>.
+              The iPhone and iPad build is on the <a href={APP_STORE}>App Store</a>.
+              On Android, the web app <a href={HELP.installAndroid}>installs from the browser</a>.
+              Calc-U 59 is free software under the GNU GPL version 3; the source code is on <a href="https://github.com/tinue/Calc-U">GitHub</a>.
             </p>
           </div>
         </div>
-      </div>
-    </main>
-  );
-}
-
-/* =============================================================
-   WHAT IS A TI-59 — background page.
-
-   Scope exception, and a deliberate one. The rest of this site documents
-   the app and stays away from the 1977 hardware. This page exists because
-   the people looking for the app search for the machine — "TI-59
-   emulator", "TI-58C simulator", "TI-59 magnetic card" — and had nothing
-   here to land on. It orients a newcomer and hands them to the app; it is
-   not a substitute for the TI Personal Programming manual.
-   ============================================================= */
-// The TI-59's four card banks for each partition, n Op 17 with n = 0–10.
-// Memory is 120 register cells (8 steps each); bank b is cells 30(b−1)…30b−1.
-// The program takes cells from 0 up, Rnn is cell 119 − nn.
-function CardBankTable() {
-  const pad = (v, w) => String(v).padStart(w, "0");
-  const rows = [];
-  for (let n = 0; n <= 10; n++) {
-    const prog = 120 - 10 * n;
-    const display = `${prog * 8 - 1}.${n ? pad(10 * n - 1, 2) : ""}`;
-    const banks = [0, 1, 2, 3].map(b => {
-      const lo = 30 * b, hi = lo + 29, parts = [];
-      const progEnd = Math.min(hi, prog - 1);
-      if (progEnd >= lo) parts.push(["prog", progEnd - lo + 1, `${pad(8 * lo, 3)}–${pad(8 * progEnd + 7, 3)}`]);
-      const dataStart = Math.max(lo, prog);
-      if (dataStart <= hi) parts.push(["data", hi - dataStart + 1, `R${pad(119 - dataStart, 2)}–R${pad(119 - hi, 2)}`]);
-      return parts;
-    });
-    rows.push({ n, display, banks });
-  }
-  return (
-    <div className="bank-scroll">
-      <table className="bank-table">
-        <thead>
-          <tr><th>n Op 17</th><th>Partition</th><th>Bank 1</th><th>Bank 2</th><th>Bank 3</th><th>Bank 4</th></tr>
-        </thead>
-        <tbody>
-          {rows.map(r => (
-            <tr key={r.n} className={r.n === 6 ? "bank-default" : undefined}>
-              <th>{r.n}</th>
-              <td className="mono">{r.display}</td>
-              {r.banks.map((parts, i) => (
-                <td key={i} className="bank-cell">
-                  <div className="bank-split">
-                    {parts.map(([kind, cells, label]) => (
-                      <span key={kind} className={`bank-${kind}`} style={{ flexGrow: cells, flexBasis: 0 }}>{label}</span>
-                    ))}
-                  </div>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function AboutTi59Page() {
-  const models = [
-    {
-      code: "TI-59",
-      name: "TI Programmable 59",
-      year: "May 1977",
-      body: "The top of the range. Up to 960 program steps or 100 data registers, traded against each other in steps of 80 and 10, plus a magnetic card reader in the side for saving programs. Memory was volatile: switch it off and the program was gone unless it was on a card.",
-    },
-    {
-      code: "TI-58",
-      name: "TI Programmable 58",
-      year: "May 1977",
-      body: "The same calculator with half the memory — up to 480 steps or 60 registers — and no card reader. Library modules still worked, so it lost storage rather than capability.",
-    },
-    {
-      code: "TI-58C",
-      name: "TI Programmable 58C",
-      year: "1979",
-      body: "A TI-58 with constant memory. The C is the whole point: programs and registers survived being switched off, which removed most of the reason to want a card reader in the first place.",
-    },
-  ];
-
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Background</p>
-      <h1 className="page-title">What is a TI-59?</h1>
-      <p className="lede">
-        A short orientation to the Texas Instruments TI-59, TI-58 and TI-58C — the machines
-        Calc-U 59 emulates — for anyone who arrived here looking for one and wants to know
-        what they are dealing with.
-      </p>
-
-      <div className="prose" style={{ marginTop: 24 }}>
-        <p>
-          The <strong>TI Programmable 59</strong> was Texas Instruments' flagship programmable
-          calculator, introduced on 24 May 1977 at a list price of around $300. It succeeded
-          the SR-52, and for the rest of the decade it was the machine engineers, surveyors,
-          navigators and financial analysts actually carried. Its rival was the Hewlett-Packard
-          HP-67; the TI had roughly twice the memory, the HP had RPN and better build quality,
-          and people argued about it for years.
-        </p>
-        <p>
-          You programmed it by recording keystrokes. In learn mode every key you pressed became
-          a program step, and the ten user-defined keys — <K tone="dark">A</K> through{" "}
-          <K tone="dark">E</K> and their primed second functions — were the entry points. That
-          sounds primitive, and it is, but the instruction set includes conditionals, loops,
-          subroutines and indirect register addressing, which makes the TI-59 Turing-complete.
-          People wrote games for it.
-        </p>
-      </div>
-
-      <h2 className="section">The three models</h2>
-      <div style={{ display: "grid", gap: 12 }}>
-        {models.map(m => (
-          <div key={m.code} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 6 }}>
-              <h3 className="sub" style={{ margin: 0 }}>{m.code}</h3>
-              <span style={{ color: "var(--fg-3)", fontSize: 13 }}>{m.name} · {m.year}</span>
-            </div>
-            <p style={{ margin: 0, color: "var(--fg-2)" }}>{m.body}</p>
-          </div>
-        ))}
-      </div>
-      <p style={{ marginTop: 12, color: "var(--fg-2)", lineHeight: 1.7 }}>
-        Calc-U 59 emulates all three. The app's model picker switches between
-        them, and each starts with the memory partition and power-on state that model really had.
-      </p>
-
-      <h2 className="section">Algebraic Operating System</h2>
-      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          These calculators use <strong>AOS</strong> — Algebraic Operating System — rather than the
-          RPN found on contemporary Hewlett-Packard machines. You enter an expression roughly as it
-          is written on paper, with up to nine levels of parentheses, and the calculator applies
-          operator precedence when you press <K tone="yellow">=</K>. Emulating AOS convincingly is
-          the part that catches out reimplementations: the pending-operation stack has observable
-          edge cases that only fall out correctly if you run the original ROM, which is what
-          Calc-U 59 does.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          One of the library modules, <strong>RP</strong>, is an RPN Simulator — Texas Instruments
-          shipped a way to make its algebraic calculator behave like an HP.
-        </p>
-      </div>
-
-      <h2 className="section">Magnetic cards</h2>
-      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          The TI-59's card reader took small magnetic strips, one quarter of the machine's memory
-          per side. The card did double duty: once read, it slid into a slot above the keyboard so
-          the labels written along its top edge sat directly beneath the{" "}
-          <K tone="dark">A</K>–<K tone="dark">E</K> keys and told you what each one did in the
-          program you had just loaded. That is what the cue card on screen in Calc-U 59 is
-          reproducing.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          In the emulator, cards are files with both sides in one file, and{" "}
-          <a href="/59/getting-started/printer/#magnetic-cards">a press on a corner of the card</a>{" "}
-          feeds that side. On Apple devices they live in iCloud storage, so a program written on a
-          Mac is on the iPhone by the time you pick it up. The card reader mechanism was also the
-          most failure-prone part of the original hardware, which is a reasonable argument for
-          emulating one instead of restoring one.
-        </p>
-      </div>
-
-      <h3 id="card-banks" className="sub">What each bank holds</h3>
-      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          A card side holds one bank: a fixed quarter of the 960-step memory, 240 steps or 30 data
-          registers' worth. Program steps fill the memory from the bottom, data registers from the
-          top, so R00 is the last register in bank 4. <strong>n</strong>{" "}
-          <K tone="dark">2nd</K> <K tone="dark">Op</K> 17 moves the boundary between them in steps
-          of ten registers (80 program steps), and a bank holds whatever falls into its quarter:
-          steps, registers, or both. At the default partition, 479.59, banks 1 and 2 hold the
-          program and banks 3 and 4 the registers.
-        </p>
-        <CardBankTable/>
-        <p style={{ marginBottom: 0, fontSize: 14, color: "var(--fg-3)" }}>
-          Steps in <span className="bank-prog bank-key">cream</span>, data registers in{" "}
-          <span className="bank-data bank-key">yellow</span>, each sized by its share of the bank.
-          The display shows the partition as last step.last register. The layout comes from
-          the calculator's ROM; the details are in the emulator's{" "}
-          <a href="https://github.com/tinue/calc-u/blob/main/products/calc-u-59/docs/developer/Core-Architecture.md">Core-Architecture.md</a>.
-        </p>
-      </div>
-
-      <h2 className="section">Solid State Software modules</h2>
-      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          The TI-58 and TI-59 were the first handheld calculators with removable ROM program
-          modules. A module held up to 5,000 program steps and ran straight from ROM, leaving user
-          memory free. The Master Library came in the box; Applied Statistics, Surveying, Aviation,
-          Marine Navigation, Securities Analysis and the rest were sold separately, and the
-          complete set is now hard to find and expensive.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          Calc-U 59 includes all fourteen. <a href="/59/modules/">See the module list →</a>
-        </p>
-      </div>
-
-      <h2 className="section">The PC-100C printer</h2>
-      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ margin: 0 }}>
-          The calculator docked into a thermal printer — the PC-100A, B or C — and locked in place
-          with a key. Beyond printing results, it was how you got a readable listing of a program
-          with mnemonics instead of raw numeric key codes, dumped the data registers, or traced
-          execution. It is emulated in Calc-U 59, including the paper strip, which you can copy as
-          plain text rather than squinting at dot-matrix output.{" "}
-          <a href="/59/getting-started/printer/">Printer and card reader →</a>
-        </p>
-      </div>
-
-      <h2 className="section">Try one</h2>
-      <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          The quickest way to see whether this is the machine you remember is to use one. The{" "}
-          <a href="/59/play/">browser emulator</a> runs the app's own emulator compiled to
-          WebAssembly — the TI-59, TI-58 and TI-58C with all fourteen library modules, magnetic
-          cards and the PC-100C printer — and needs no installation. The full app, which keeps
-          your cards and syncs them through iCloud on Apple devices, is free on the <a href="/59/install/mac/">Mac</a>,{" "}
-          <a href="/59/install/windows-linux/">Windows and Linux</a>, and{" "}
-          <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad, and the browser
-          emulator <a href="/59/install/android/">installs on Android</a>.
-        </p>
-        <p style={{ marginBottom: 0, color: "var(--fg-3)", fontSize: 13 }}>
-          For the original operating manuals, program libraries and the wider TI-59 community,
-          start at <a href="https://www.ti59.com/">ti59.com</a> and{" "}
-          {/*
-            http:// is deliberate and must stay: datamath.org serves no TLS at
-            all — https:// fails the handshake outright ("tlsv1 alert internal
-            error"), it does not merely warn. Promoting this to https breaks
-            the link. Re-test before changing it; if they ever add a
-            certificate, this is safe to flip.
-          */}
-          <a href="http://www.datamath.org/SCI/WEDGE/TI-59.htm">datamath.org</a>. This site only
-          documents the emulator.
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-/* =============================================================
-   GETTING STARTED — practical install, file, and debug guidance.
-   ============================================================= */
-// "overview" is the default because /getting-started/ is a hub: it is the
-// most-linked page on the site and sits in the header nav. Defaulting to a
-// topic would make it a byte-identical twin of that topic's own URL.
-const TOPICS = {
-  overview: {
-    title: "Getting started with Calc-U 59",
-    note: "Install the app, load a preset, drive the printer and card reader, and find your way around the debugger.",
-    body: (
-      <div style={{ display: "grid", gap: 16, marginTop: 20 }}>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            Calc-U 59 runs the original Texas Instruments ROM, so the calculator in front of you behaves the way a real TI-59, TI-58 or TI-58C does, down to its speed and its Solid State Software modules.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            Most people need three things: get the app installed, load a preset, and know where the printer and the debugger live. Each is a short page.
-          </p>
-        </div>
-
-        <div style={{ display: "grid", gap: 12 }}>
-          <StartCards />
-        </div>
-      </div>
-    ),
-  },
-  printer: {
-    title: "Printer and card reader",
-    note: "The PC-100C panel, paper strip, copy/cut, and saving and loading two-sided magnetic cards.",
-    body: (
-      <div style={{ display: "grid", gap: 16, marginTop: 20 }}>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            The printer view mimics the PC-100C. The <strong>PC-100C</strong> button at the top of the printer view, with its red or grey dot, connects or disconnects the printer; switching it resets the calculator, as plugging in the real printer does. Switch between dot view and text view depending on whether you want realism or easy copying.
-          </p>
-          <p>
-            <strong>PRINT</strong> and <strong>ADV</strong> are the printer's own keys: PRINT prints the display, ADV advances the paper while held. <strong>T</strong> is the printer's TRACE switch, which makes the calculator print every step it executes. Copy puts the strip on the clipboard as an image and as text; cut copies it and then clears the paper.
-          </p>
-          <p>
-            The printer runs at the real PC-100's speed, measured on a TI-59 and a TI-58C: a printed line takes about 0.29 s on the TI-59 (a 2nd List line 0.31 s), a blank line from ADV about 0.19 s. The printer runs on the calculator's clock, so on the TI-58C, whose clock is slower, everything prints about 15% slower, as on the real one. Programs that use the <a href="/59/articles/printer-interrupt.html">printer interrupt</a> to cut a line short print the same dots as the real printer, faint dots included.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            Holding the display runs the calculator at full speed, and that includes printing — a long 2nd List or a calendar printout finishes in moments.
-          </p>
-        </div>
-        <h2 id="magnetic-cards" className="section" style={{ margin: "8px 0 0" }}>Magnetic cards</h2>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            The TI-59 has a card reader; the TI-58 and TI-58C don't. A magnetic card has two sides, as the real one has, and one card file holds both of them with one label.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            Using a card takes two steps. Choosing a card only <strong>fits</strong> it into the calculator above the keys, where it labels them; nothing is read or written yet. Pressing one of its top corners then <strong>feeds</strong> that side through the reader: top-left for side 1, top-right for side 2. The corner lights up while the side passes.
-          </p>
-        </div>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <h3 className="sub" style={{ margin: "0 0 6px" }}>Saving a program</h3>
-          <ol style={{ margin: 0, paddingLeft: 20 }}>
-            <li>Press the <strong>Crd</strong> button with the plus sign and name the card. The fresh card fits above the keys, labeled with its name. If the name is taken, the app asks first: the card's first write replaces both sides and the label of the old one.</li>
-            <li>Press <strong>2nd Write</strong> for the bank you want to save: <strong>1 2nd Write</strong> for bank 1.</li>
-            <li>Press a corner of the card. Once the side has passed, it is saved in the file and the corner shows the bank it now holds.</li>
-          </ol>
-          <p style={{ margin: "12px 0 0" }}>
-            A program too long for one side continues on the other: <strong>2 2nd Write</strong>, then the other corner.
-          </p>
-        </div>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <h3 className="sub" style={{ margin: "0 0 6px" }}>Loading it back</h3>
-          <ol style={{ margin: 0, paddingLeft: 20 }}>
-            <li>Press the other <strong>Crd</strong> button and pick the card. On the Mac, Windows, Linux and in the browser you can also drop the file on the calculator; the TI-58 and TI-58C ignore a dropped card.</li>
-            <li>Press the corner of the side you want. The card stays fitted afterwards, so the other side is one press away.</li>
-          </ol>
-        </div>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <h3 className="sub" style={{ margin: "0 0 6px" }}>Good to know</h3>
-          <ul style={{ margin: 0, paddingLeft: 20 }}>
-            <li><strong>A side is not a bank.</strong> Either side can hold any <a href="/59/what-is-a-ti-59/#card-banks">bank</a>, even both the same one. The number in a corner is the bank stored on that side, and follows a write; no number means the side is still empty. An older one-sided card shows the badges it was saved with.</li>
-            <li><strong>Eject Card</strong> takes the place of the Crd buttons while a side is passing. It stops the pass; the card stays fitted.</li>
-            <li><strong>A library program's cue card</strong> covers a fitted card, and the corners don't respond while it does. The card comes back with <strong>2nd Pgm 00</strong>.</li>
-            <li><strong>A fitted card goes</strong> when you fit another one, reset, switch the model, switch the printer or the module, or load a preset. The file stays as it is.</li>
-            <li><strong>Older cards</strong> have one side and keep working: either corner feeds it, and it stays a one-sided card when written.</li>
-            <li><strong>Only the side you write changes.</strong> The app reads the file again first, so the other side survives even if it was changed on another device meanwhile. A file it can't read is left alone, and the app reports it.</li>
-          </ul>
-        </div>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <h3 className="sub" style={{ margin: "0 0 6px" }}>Where card files live</h3>
-          <p style={{ margin: 0 }}>
-            Card files (.U59) live in the app's card storage — iCloud on Mac, iPhone and iPad (or the app's local folder when iCloud is off), <code>~/Calc-U-59</code> on Windows and Linux. The picker lists only card files. In the <a href="/59/play/">browser emulator</a>, cards last until you close the page: upload a .U59 file to fit it, and download a card to keep it. They are plain text, and a preset can <a href="/59/presets/#sessions">feed them</a> or <a href="/59/presets/#labeling-keys">label them</a>; the format is in <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md#card-files" className="link-accent">reference/StateFileFormat.md</a>.
-          </p>
-        </div>
-      </div>
-    ),
-  },
-};
-
-function GettingStartedPage({ topic = "overview" }) {
-  const t = TOPICS[topic];
-  return (
-    <main className="wrap docs-layout">
-      <DocsSidebar current={topic} sections={STARTED_SECTIONS} />
-      <article className="prose docs-article">
-        <p className="eyebrow">Getting started</p>
-        <h1 className="page-title compact">{t.title}</h1>
-        <p className="lede">{t.note}</p>
-        {t.body}
-      </article>
-    </main>
-  );
-}
-
-/* =============================================================
-   DETAIL PAGES — dedicated targets for home topic cards.
-   ============================================================= */
-function InstallMobilePage() {
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Setup</p>
-      <h1 className="page-title">Installing on iPhone and iPad</h1>
-      <p className="lede">Use the App Store build, then configure the model and load presets from inside the app.</p>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
-        <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>Open the <a href="https://apps.apple.com/us/app/calc-u-59/id6761413142" className="link-accent">App Store</a> and install Calc-U 59.</li>
-          <li>Launch the app and pick the calculator model in the bottom bar. Settings › Startup Calculator chooses the model the app starts with.</li>
-          <li>Use the preset file picker for .ti59, .ti58, or .ti58c files.</li>
-        </ol>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ marginTop: 0 }}>
-          The app needs iOS or iPadOS 18 or later. There is no extra setup after install.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          On iPhone, the app stays in portrait: the calculator fills the screen and the printer and the debugger are pages you turn with the chevrons in the top corners (the debugger only with Settings › Debug Page in Portrait). On iPad in landscape, the layout mirrors the Mac view. On iPhone Duo opened flat, the calculator, the printer and the debugger sit side by side as on iPad, with a narrower printer tape, its print scaled down to fit, and no setting needed; closed, held tall or half open like a laptop, it shows the pages as on iPhone.
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-function InstallMacPage() {
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Setup</p>
-      <h1 className="page-title">Installing on Mac</h1>
-      <p className="lede">Download the release from GitHub, then drag the app to Applications.</p>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
-        <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>Download the latest release DMG from <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub</a>.</li>
-          <li>Double-click the DMG file to open it and show the installer window.</li>
-          <li>Drag Calc-U-59.app to the Applications folder.</li>
-          <li>Eject the disk image and launch the app from Applications.</li>
-        </ol>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ margin: 0 }}>
-          The app is signed and notarized by Apple, so macOS opens it like any other application. It needs macOS 15.6 or later. Cards and the TI-58C's memory sync through iCloud with the iPhone and iPad app.
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-function InstallPcPage() {
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Setup</p>
-      <h1 className="page-title">Installing on Windows and Linux</h1>
-      <p className="lede">Download the Windows installer or the Linux AppImage from GitHub. The app has the same calculators, printer, cards, presets and debugger as the Mac app.</p>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
-        <h3 className="sub" style={{ marginTop: 0 }}>Windows</h3>
-        <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>From the latest <a href="https://github.com/tinue/Calc-U-59/releases/latest" className="link-accent">GitHub release</a>, download <code>Calc-U-59-windows-x86_64.exe</code> (most PCs) or <code>Calc-U-59-windows-arm64.exe</code> (Windows on ARM).</li>
-          <li>Run it. The installer isn't signed, so Windows SmartScreen may warn about an unrecognised app: choose <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
-          <li>Start Calc-U-59 from the Start menu.</li>
-        </ol>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0 }}>Linux</h3>
-        <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>From the same release, download the AppImage for your machine: <code>x86_64</code> for most PCs, <code>aarch64</code> for ARM.</li>
-          <li>Make it executable (<code>chmod +x Calc-U-59-*.AppImage</code>, or the file's Properties dialog) and run it. Nothing else needs installing.</li>
-        </ol>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
-        <p style={{ marginTop: 0 }}>
-          Cards and the TI-58C's constant memory (<code>ti58c.mem</code>) are kept in <code>Calc-U-59</code> in your home folder; debugger traces go there too. Settings › Files changes the card folder, the trace folder and the folder <strong>Open Preset</strong> starts in.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          There is no iCloud on these platforms, so cards don't sync with the Apple apps — copy the .U59 files across if you want them there.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0 }}>Opening presets</h3>
-        <p style={{ marginTop: 0, marginBottom: 0 }}>
-          Besides <strong>Preset</strong>, you can drag a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file onto the window to load it. On Windows the installer associates these files with Calc-U-59, so double-clicking one opens it; on Linux, pass the file on the command line (<code>./Calc-U-59-*.AppImage program.ti59</code>).
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-function InstallAndroidPage() {
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Setup</p>
-      <h1 className="page-title">Installing on Android</h1>
-      <p className="lede">There is no Android app in a store: the web app installs from your browser instead, gets its own icon on the home screen and starts full screen, without the browser around it.</p>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
-        <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>Open <a href="/59/calc/app/" className="link-accent">calc-u.org/59/calc/app/</a> in Chrome.</li>
-          <li>Tap <strong>Install</strong> in the banner that offers to install Calc-U 59. If there is no banner, open Chrome's <strong>⋮</strong> menu and choose <strong>Add to Home screen</strong> (in newer versions, <strong>Install app</strong>), then confirm.</li>
-          <li>Start Calc-U 59 from its icon on the home screen or in the app drawer.</li>
-        </ol>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ marginTop: 0 }}>
-          Other browsers, such as Samsung Internet, Firefox and Edge, have a similar <strong>Add to Home screen</strong> or <strong>Install</strong> command in their menu.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          The installed app is the <a href="/59/play/">browser emulator</a>, laid out like the iPhone and iPad app, and it follows the device's rotation. Held upright, the calculator fills the screen, and the chevron in the corner turns to the PC-100C printer's page and back. In landscape, a phone shows the calculator and the printer side by side; a tablet, an unfolded foldable or a large window adds the debugger beside them. It has the TI-59, TI-58 and TI-58C, all fourteen modules, presets and Settings.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0 }}>Offline and updates</h3>
-        <p style={{ marginTop: 0, marginBottom: 0 }}>
-          Once installed, the app runs all three calculators without a connection, with every Solid State module and every preset in its list. When a new version is out, the app updates itself.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0 }}>Where your files go</h3>
-        <p style={{ marginTop: 0 }}>
-          The TI-58C keeps its constant memory on the phone between launches. Cards last until you close the app: download a card from the card list to keep it, and upload a <strong>.U59</strong> file to fit it again.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          <strong>Preset</strong> offers the main examples from its list, and opens any other <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file from the phone's storage, such as the historic and calendar programs from the Software Collection; files are read on the phone and never uploaded anywhere.
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-function PresetsPage() {
-  const stateFileExample = `# 800 steps, 20 data registers (R00–R19) — "2 OP 17"
-PARTITION: 799.19
-# Magnetic card with one Label
-CUECARD:
-Template: MagnetCard
-Title: Example
-Banks: 1,2
-A: Start
-# Load the Master Library
-SOLID-STATE-MODULE: ML
-# Force Printer On
-PRINTER: on
-# Program Listing
-PROGRAM:
-000  76  LBL
-001  11  A
-002  89  π
-003  95  =
-004  91  R/S
-# Data Registers
-REGISTERS:
-00 = 3.141592653589793   # π  (verify RCL 00 → 3.141592654)
-# Type some keys after load / reset
-KEYSTROKES:
-84   3
-11   A
-Wait: 2s
-43   RCL
-92   0
-92   0`;
-
-  const cueCardLabelExample = `CUECARD:
-Template: MagnetCard
-Title: Roots & Powers
-Banks: 1, 2
-A: \\sqrt x
-B: x^{2}
-C: 1/x
-D: x \\to y
-E: \\blank
-A': \\sum x_{i}
-B': \\xbar
-C': n
-D': \\blank
-E': \\blank`;
-
-  const reloadExample = `PROGRAM:
-…                    # the program, loaded as usual
-KEYSTROKES:
-11                   # A: it runs and stops
-PROGRAM:
-017 01               # then step 017 changes …
-REGISTERS:
-05 = 2.5             # … and register 05
-KEYSTROKES:
-11                   # A: run again`;
-
-  const cardExample = `CARD: mem:Bank4      # a card defined right here
-Bank: 4
-REGISTERS:
-00 = 12
-01 = 3.5
-END-CARD
-
-KEYSTROKES:
-InsertCard: mem:Bank4   # push it in, as at the start of a session
-ArmCard: Results        # ready for the program's own Write
-11                      # A: run`;
-
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Files</p>
-      <h1 className="page-title">Loading a preset</h1>
-      <p className="lede">Presets are plain UTF-8 text files with named sections. You can include only the sections you need.</p>
-
-      <div className="panel" style={{ padding: 16, marginTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-        <p style={{ margin: 0, lineHeight: 1.6 }}>New to writing a preset from scratch? The tutorial builds one up section by section, with a downloadable file at every step.</p>
-        <a className="btn secondary" href="/59/presets/tutorial/">Preset tutorial <span style={{opacity:.5}}>→</span></a>
-      </div>
-
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{stateFileExample}</pre>
-      </div>
-
-      <div className="panel" style={{ padding: 16, marginTop: 12 }}>
-        <img
-          src="/59/assets/cuecard-single-label.png"
-          alt="MagnetCard cue card titled Example, with the Start label in the A key position and blank A′–E′ and B–E cells"
-          style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-        />
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ marginTop: 0 }}><strong>PARTITION:</strong> sets the step split between program memory and data registers.</p>
-        <p><strong>PROGRAM:</strong> accepts sparse step listings, numeric keycodes, and the <strong>...</strong> gap marker.</p>
-        <p><strong>REGISTERS:</strong> stores calculator variables as decimal numbers.</p>
-        <p><strong>KEYSTROKES:</strong> injects matrix codes after the file loads. Between keys, lines such as <strong>Wait:</strong>, <strong>FullSpeed:</strong> and <strong>RegularSpeed:</strong> control timing, and a few more (<strong>Trace:</strong>, <strong>ZeroElapseTime:</strong>, <strong>ReportElapseTime:</strong>) help with timing and debugging programs. To run a long program at full speed, put <strong>FullSpeed:</strong> before the key that starts it; <strong>Wait:</strong> pauses so you can see what the calculator shows. An unknown directive, or a <strong>Wait:</strong> without a unit, is reported as an error rather than read as keys.</p>
-        <p><strong>CUECARD:</strong> defines the on-screen cue card that appears with the loaded file or module.</p>
-        <p><strong>SOLID-STATE-MODULE:</strong> and <strong>PRINTER:</strong> let a file select the matching module and printer state automatically, and <strong>MODEL:</strong> switches to the calculator the file is for.</p>
-        <p>A <strong>KEYSTROKES:</strong> script can also work the controls around the calculator: <strong>PrinterTrace: on</strong> / <strong>off</strong> sets the printer's TRACE switch, <strong>CutPaper:</strong> cuts the paper, and <strong>DebugPanel:</strong>, <strong>Freeze:</strong>, <strong>FreezeOnStart:</strong>, <strong>Step:</strong> and <strong>Resume:</strong> do what the debugger's tabs and buttons do. While the debugger is frozen, the script's keys wait until it runs again. Older presets using <strong>SKIP-RESET:</strong> or key 99 now get an error; a reload in the same file and <strong>PrinterTrace:</strong> replace them.</p>
-        <p style={{ marginBottom: 0 }}>
-          This page covers enough to load and tweak existing files. The complete
-          grammar — matrix code table, 2nd-function presses, the CUECARD field
-          list, and the math-notation shorthand used in cue cards — is developer
-          documentation kept in the GitHub repository:{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">
-            reference/StateFileFormat.md →
-          </a>
-        </p>
-      </div>
-
-      <h2 id="sessions" className="section" style={{ marginTop: 24 }}>A whole session in one preset</h2>
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          Some programs don't fit one load. Their users changed a few steps
-          between runs, or fed the calculator one magnetic card after another.
-          A preset can do both, so one file plays the whole session.
-        </p>
-        <p>
-          <strong>Keyed-in changes.</strong> A <strong>PROGRAM:</strong>,{" "}
-          <strong>REGISTERS:</strong> or <strong>CUECARD:</strong> section after{" "}
-          <strong>KEYSTROKES:</strong> is applied once the program has stopped,
-          as if you had typed the changes in. Only the steps and registers it
-          lists change; everything else stays. This works on every model.
-        </p>
-      </div>
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{reloadExample}</pre>
-      </div>
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <p style={{ marginTop: 0 }}>
-          <strong>A stack of cards (TI-59).</strong> For larger changes, TI-59
-          owners prepared their cards in advance and fed them in a written-down
-          order. Some programs stop and show which card comes next. Others ask
-          for a card themselves (<strong>Write</strong> or{" "}
-          <strong>INV Write</strong> in the program) and simply wait for it. A
-          preset feeds both kinds:
-        </p>
-        <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
-          <li><strong>InsertCard:</strong> pushes a card into the stopped calculator, as you would by hand.</li>
-          <li><strong>ArmCard:</strong> lays a card ready; it goes in as soon as the program asks for one.</li>
-          <li>A card file's side goes after the name: <code>InsertCard: Results:2</code>. Without one, it is side 1.</li>
-          <li>A card is a file in your card folder, by its name, or a temporary card named <strong>mem:</strong>something that lives only while the preset is loaded. A <strong>CARD:</strong> block defines such a card's registers and steps in the preset itself. A card replaces its whole bank, as a real one does.</li>
-        </ul>
-        <p style={{ marginBottom: 0 }}>Picking the right card is up to the preset, just as it was up to the user.</p>
-      </div>
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{cardExample}</pre>
-      </div>
-
-      <h2 id="labeling-keys" className="section" style={{ marginTop: 24 }}>Labeling the A–E and A′–E′ keys</h2>
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          The five plain keys (<strong>A–E</strong>) and their 2nd-function row
-          (<strong>A′–E′</strong>) are exactly what real TI-59/58/58C cards
-          label. A <strong>CUECARD:</strong> section can do the same thing
-          on-screen — either as its own row of short per-key labels, or as one
-          line of running text across the whole row.
-        </p>
-        <p>
-          <strong>Template</strong> picks the card artwork and layout, and
-          matches the real card it stands in for — <strong>MagnetCard</strong>{" "}
-          and <strong>CueCard</strong> look almost identical on screen, since
-          both were the same front-side label design. The difference is on
-          the back: a real magnetic card has a magnetic coating that stores
-          the program; a cue card doesn't. Use <strong>MagnetCard</strong> if
-          the preset is meant to end up written onto a magnetic card (it also
-          shows the <strong>Banks</strong> page badges; once written to a card
-          file, the corners show the bank each side really holds). Cue cards shipped
-          for TI-58, TI-58C <em>and</em> TI-59 owners, but TI-59 owners
-          tended to skip them and just label whichever magnetic card already
-          held the program instead; TI-58 and TI-58C, having no card reader
-          at all, relied on cue cards since there was no magnetic card to
-          label in the first place — use{" "}
-          <strong>CueCard</strong> for that case, or for any file that just
-          wants an on-screen label without a magnetic-card connotation. Which
-          of the two you pick for a given preset is mostly personal
-          preference, except when the file is a step toward an actual
-          magnetic card — then use <strong>MagnetCard</strong> to match.{" "}
-          <strong>SolidStateCard</strong>{" "}
-          reproduces the pre-printed cards that shipped with a Solid State
-          Software module; real ones can't be edited by the module's user, and
-          in the emulator they're normally only touched by the project's
-          developer to document a built-in module — reach for it yourself
-          only if you're prototyping your own module (it shows an{" "}
-          <strong>ID</strong> like <code>ML-01</code> instead of Banks).
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          Set fields <strong>A</strong> through <strong>E</strong> for the
-          plain-key row, and <strong>A′</strong> through <strong>E′</strong>{" "}
-          for the 2nd-function row, as in the example below.{" "}
-          <strong>Row1</strong> and <strong>Row2</strong> put one line of running
-          text across a row instead. The example also shows{" "}
-          <code>\blank</code>, which lets a label span the next key position,
-          and shortcuts such as <code>\sqrt</code> for the symbols real cards use.
-          All the fields, their alignment and ink options and the symbol table are in{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">reference/StateFileFormat.md</a>.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{cueCardLabelExample}</pre>
-      </div>
-
-      <div className="panel" style={{ padding: 16, marginTop: 12 }}>
-        <img
-          src="/59/assets/cuecard-key-grid.png"
-          alt="MagnetCard cue card titled Roots and Powers, with per-key labels on both the A′–E′ and A–E rows, including a merged x → y span"
-          style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-        />
-      </div>
-
-      <h2 className="section" style={{ marginTop: 24 }}>Loading a labeled card</h2>
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}><strong>From a preset</strong> — tap <strong>Preset</strong> and pick a <code>.ti59</code>/<code>.ti58</code>/<code>.ti58c</code> file with a CUECARD section; it's applied immediately and stays until you load something else or reset.</p>
-        <p><strong>Onto a virtual magnetic card</strong> — a card written by a preset gets that preset's CUECARD, with its full layout, in the card file along with the program or data. A fresh card from the <strong>Crd</strong> button starts with its file name as the title; edit the card file to add more. Fitting a card restores the label; pressing a corner reads the contents.</p>
-        <p style={{ marginBottom: 0 }}><strong>By editing the card file directly</strong> — virtual card files are plain text too (see the FAQ entry on where they live), with the same <code>CUECARD:</code> syntax as a preset. Add or edit that section in a text editor and the label shows the next time the card is fitted.</p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-/* =============================================================
-   PRESET TUTORIAL — builds one .ti59 preset file up from nothing,
-   one section at a time, with a real downloadable file at every step.
-   The finished file is docs/tutorial-files/tutorial.ti59, also linked
-   from /presets/ and the FAQ.
-   ============================================================= */
-function TutorialStep({ num, title, children, code, file, filename }) {
-  return (
-    <>
-      <h2 className="section" style={{ marginTop: 32 }}>Step {num}: {title}</h2>
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        {children}
-      </div>
-      <div className="panel" style={{ padding: 20, marginTop: 12 }}>
-        <pre style={{
-          margin: 0,
-          padding: 16,
-          borderRadius: 8,
-          background: "var(--bg-inset)",
-          color: "var(--fg)",
-          overflowX: "auto",
-          lineHeight: 1.5,
-          fontSize: 13,
-        }}>{code}</pre>
-      </div>
-      <div style={{ marginTop: 12, textAlign: "right" }}>
-        <a className="btn secondary" href={`/59/tutorial-files/${file}`} download>
-          Download {filename || file}
-        </a>
-      </div>
-    </>
-  );
-}
-
-function PresetTutorialPage() {
-  const step1 = `# TI-59 Preset File Tutorial — Step 1: setup
-#
-# This is the smallest possible preset file: it only picks the calculator
-# model and a couple of options. Load it in Calc-U 59 right now and you get
-# a TI-59 with the Master Library module and the printer switched on —
-# nothing else has been set up yet.
-
-# Setup the system: Choose the model, solid state module and printer on/off
-MODEL: TI-59
-SOLID-STATE-MODULE: ML
-PRINTER: on`;
-
-  const step2 = `# TI-59 Preset File Tutorial — Step 2: partition
-#
-# Same as Step 1, with one addition: PARTITION changes the split between
-# program memory and data registers.
-
-# Setup the system: Choose the model, solid state module and printer on/off
-MODEL: TI-59
-SOLID-STATE-MODULE: ML
-PRINTER: on
-
-# Change the partition layout of the calculator
-PARTITION: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)`;
-
-  const step3 = `# TI-59 Preset File Tutorial — Step 3: cue card
-#
-# Adds a CUECARD section: the on-screen card shown once the preset loads,
-# labeling the A-E keys the way a real magnetic card would.
-
-# Setup the system: Choose the model, solid state module and printer on/off
-MODEL: TI-59
-SOLID-STATE-MODULE: ML
-PRINTER: on
-
-# Change the partition layout of the calculator
-PARTITION: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
-
-# Setup the cue card that is shown after loading the preset.
-# For the template, either use "MagnetCard" for the TI-59 cards, or "CueCard"
-#  for the blank cards without a magnetic coating.
-CUECARD:
-Template: MagnetCard
-Title: TI-59 Preset File Tutorial Magnetic Card
-Banks: 1,2
-Row1: Calculates the sum of 1..N the slow way
-Row1Align: left
-A: Sum 1..N
-C: Enter number, then A
-D: \\blank
-E: \\blank`;
-
-  const step4 = `# TI-59 Preset File Tutorial — Step 4: program
-#
-# Adds a PROGRAM section: the calculator's program memory, entered as key
-# codes. This particular program sums the numbers from 1 down to whatever
-# you enter — press a number, then A.
-
-# Setup the system: Choose the model, solid state module and printer on/off
-MODEL: TI-59
-SOLID-STATE-MODULE: ML
-PRINTER: on
-
-# Change the partition layout of the calculator
-PARTITION: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
-
-# Setup the cue card that is shown after loading the preset.
-# For the template, either use "MagnetCard" for the TI-59 cards, or "CueCard"
-#  for the blank cards without a magnetic coating.
-CUECARD:
-Template: MagnetCard
-Title: TI-59 Preset File Tutorial Magnetic Card
-Banks: 1,2
-Row1: Calculates the sum of 1..N the slow way
-Row1Align: left
-A: Sum 1..N
-C: Enter number, then A
-D: \\blank
-E: \\blank
-
-# Setup the program memory. The format is very flexible, here we use 10 steps per line
-# and add a comment for the line numbers. The loader simply takes the key codes and ignores the rest.
-PROGRAM:
-43 00 44 01 97  00 00 00 43 01  # 000-009
-91 76 11 42 00  25 42 01 61 00  # 010-019
-00                              # 020`;
-
-  const step5 = `# TI-59 Preset File Tutorial — Step 5: registers
-#
-# Adds a REGISTERS section: preloaded data register content, entered as
-# plain decimal numbers, at the full TI-59 precision.
-
-# Setup the system: Choose the model, solid state module and printer on/off
-MODEL: TI-59
-SOLID-STATE-MODULE: ML
-PRINTER: on
-
-# Change the partition layout of the calculator
-PARTITION: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
-
-# Setup the cue card that is shown after loading the preset.
-# For the template, either use "MagnetCard" for the TI-59 cards, or "CueCard"
-#  for the blank cards without a magnetic coating.
-CUECARD:
-Template: MagnetCard
-Title: TI-59 Preset File Tutorial Magnetic Card
-Banks: 1,2
-Row1: Calculates the sum of 1..N the slow way
-Row1Align: left
-A: Sum 1..N
-C: Enter number, then A
-D: \\blank
-E: \\blank
-
-# Setup the program memory. The format is very flexible, here we use 10 steps per line
-# and add a comment for the line numbers. The loader simply takes the key codes and ignores the rest.
-PROGRAM:
-43 00 44 01 97  00 00 00 43 01  # 000-009
-91 76 11 42 00  25 42 01 61 00  # 010-019
-00                              # 020
-
-# Setup register content. The full TI-59 precision is supported. On the real hardware, the number below
-# can't be entered directly, one would need SUM and division to set this up.
-REGISTERS:
-29 = 3.000000000004`;
-
-  const step6 = `# TI-59 Preset File Tutorial — complete
-#
-# This file is used to explain how preset files are constructed. See
-# https://calc-u.org/59/presets/tutorial/ for the step-by-step walkthrough.
-
-# Setup the system: Choose the model, solid state module and printer on/off
-MODEL: TI-59
-SOLID-STATE-MODULE: ML
-PRINTER: on
-
-# Change the partition layout of the calculator
-PARTITION: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
-
-# Setup the cue card that is shown after loading the preset.
-# For the template, either use "MagnetCard" for the TI-59 cards, or "CueCard"
-#  for the blank cards without a magnetic coating.
-CUECARD:
-Template: MagnetCard
-Title: TI-59 Preset File Tutorial Magnetic Card
-Banks: 1,2
-Row1: Calculates the sum of 1..N the slow way
-Row1Align: left
-A: Sum 1..N
-C: Enter number, then A
-D: \\blank
-E: \\blank
-
-# Setup the program memory. The format is very flexible, here we use 10 steps per line
-# and add a comment for the line numbers. The loader simply takes the key codes and ignores the rest.
-PROGRAM:
-43 00 44 01 97  00 00 00 43 01  # 000-009
-91 76 11 42 00  25 42 01 61 00  # 010-019
-00                              # 020
-
-# Setup register content. The full TI-59 precision is supported. On the real hardware, the number below
-# can't be entered directly, one would need SUM and division to set this up.
-REGISTERS:
-29 = 3.000000000004
-
-KEYSTROKES:
-# Automate keystrokes, sent after everything above has been set up. As a sample here, we calculate
-# the sum from 1..5 using the program above. Keystrokes use the matrix coordinates, not the program
-# memory keycodes. Hence, the key "5" is 73, and not 05.
-73              # 5
-11              # A
-Wait: 2s        # Wait for 2 Seconds in order to see the result
-43              # RCL
-83              # 2
-64              # 9
-Wait: 2s        # The display only shows "3.", because there are not enough digits for the fraction.
-75              # -
-84              # 3
-95              # =
-# After subtracting 3 we see the fraction.`;
-
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Files</p>
-      <h1 className="page-title">Writing a preset file, step by step</h1>
-      <p className="lede">
-        A preset file is nothing more than plain text. This tutorial builds
-        one up from nothing, one section at a time, so you can see exactly
-        what each line changes. Every step below is also a real,
-        downloadable <code>.ti59</code> file you can load in Calc-U 59 as
-        you go — try each one before moving to the next.
-      </p>
-
-      <div id="editing-workflow" className="panel" style={{
-        padding: 20, marginTop: 24, lineHeight: 1.7,
-        border: "1px solid var(--accent-deep)",
-        background: "rgba(240,192,64,.04)",
-      }}>
-        <p style={{ marginTop: 0 }}>
-          <span className="eyebrow" style={{ color: "var(--accent)" }}>Before you start</span>
-        </p>
-        <p>
-          A preset is just a text file, so it's usually easiest to write and
-          edit it on a computer with a proper text editor, then get the
-          finished file onto whichever device runs Calc-U 59. In the Apple
-          ecosystem, the simplest way is to keep your presets in the{" "}
-          <strong>Calc-U-59</strong> folder under iCloud Drive on your Mac —
-          the same folder the app uses for virtual magnetic cards — and let
-          iCloud sync it to your iPhone or iPad automatically; open it there
-          from the Files app or the preset picker. On Windows and Linux,
-          keep them in any folder and point Settings › Files › Preset Folder
-          at it; to get them onto a phone, any folder that syncs to it works.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          None of that is required, though: you can write and edit a preset
-          directly on an iPhone or iPad in any text editor that saves plain
-          text, with no computer involved at all. That also means you can
-          read this tutorial on the device itself and download each step's
-          file straight to it — the same goes for every other preset on the{" "}
-          <a href="/59/software/">TI-59 Software Collection</a> page.
-        </p>
-      </div>
-
-      <div id="txt-extension" className="panel" style={{
-        padding: 20, marginTop: 12, lineHeight: 1.7,
-        border: "1px solid var(--accent-deep)",
-        background: "rgba(240,192,64,.04)",
-      }}>
-        <p style={{ marginTop: 0 }}>
-          <span className="eyebrow" style={{ color: "var(--accent)" }}>Watch out for .txt</span>
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          When you save a preset with a plain text editor, it's easy to end
-          up with <code>my-preset.ti59.txt</code> instead of{" "}
-          <code>my-preset.ti59</code> — Windows and macOS both hide known
-          file extensions by default, so the file still looks like{" "}
-          <code>my-preset.ti59</code> in Finder, Explorer, or the iPhone
-          file picker. Calc-U 59's preset picker only accepts{" "}
-          <code>.ti59</code>, <code>.ti58</code> and <code>.ti58c</code>, so
-          a file with a hidden <code>.txt</code> tail shows up{" "}
-          <strong>grayed out and can't be selected</strong>. If that
-          happens, turn on "Show file extensions" (Windows Explorer) or
-          "Show all filename extensions" (macOS Finder — Finder ▸ Settings ▸
-          Advanced) and rename the file, or rename it from a terminal with{" "}
-          <code>mv my-preset.ti59.txt my-preset.ti59</code>.
-        </p>
-      </div>
-
-      <TutorialStep num={1} title="Setup" code={step1} file="tutorial-1-setup.ti59">
-        <p style={{ marginTop: 0 }}>
-          Start with the three lines every preset can begin with:{" "}
-          <strong>MODEL</strong> picks which calculator you get (TI-59,
-          TI-58 or TI-58C), <strong>SOLID-STATE-MODULE</strong> loads one of
-          the fourteen library modules by its two-letter code — here{" "}
-          <strong>ML</strong> for the Master Library — and{" "}
-          <strong>PRINTER</strong> switches the emulated PC-100C on or off.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          Load this file and you already have a working calculator: nothing
-          else in a preset is required. Everything from here on is
-          optional, added only because this particular preset needs it.
-        </p>
-      </TutorialStep>
-
-      <TutorialStep num={2} title="Partition" code={step2} file="tutorial-2-partition.ti59">
-        <p style={{ marginTop: 0 }}>
-          <strong>PARTITION</strong> sets the split between program memory
-          and data registers — the same trade-off the real TI-59 keyboard
-          sequence <strong>2nd Op 17</strong> controls. The value is written
-          as <code>steps.registers</code>: <code>719.29</code> means step
-          719 is the last program step, so 720 steps go to the program and
-          the remaining 240 steps become 30 data registers (numbered 00–29)
-          on a TI-59. Leave this line out and the emulator uses
-          the model's default partition instead.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          This step doesn't change what you see when you load the file —
-          there's no program or cue card yet. The tutorial's program is
-          short enough for the default partition too; the line is here to
-          show the syntax.
-        </p>
-      </TutorialStep>
-
-      <TutorialStep num={3} title="Cue card" code={step3} file="tutorial-3-cuecard.ti59">
-        <p style={{ marginTop: 0 }}>
-          <strong>CUECARD</strong> is what turns a blank calculator into a
-          labeled one. <strong>Template: MagnetCard</strong> and{" "}
-          <strong>CueCard</strong> draw almost identical card art — real
-          magnetic cards and cue cards used the same front-side label design.
-          The difference is the back: a magnetic card stores the program, a
-          cue card doesn't, so <strong>MagnetCard</strong> is the right
-          choice here since this file is building toward one.{" "}
-          <strong>Title</strong> and <strong>Banks</strong> are the card's
-          header text and bank badges.
-        </p>
-        <p>
-          <strong>Row1</strong> replaces the entire A′–E′ label row with one
-          line of running text instead of five separate key labels — handy
-          for a one-line instruction like this tutorial's "Calculates the
-          sum of 1..N the slow way". <strong>A</strong> through{" "}
-          <strong>E</strong> label the plain key row individually;{" "}
-          <code>\blank</code> on <strong>D</strong> and <strong>E</strong>{" "}
-          merges those key positions into C's label so "Enter number, then
-          A" reads across all three keys.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          Load this file now and the card appears immediately — nothing on
-          it does anything yet, because there's still no program behind the{" "}
-          <strong>A</strong> key. The{" "}
-          <a href="/59/presets/#labeling-keys">section on labeling keys</a>{" "}
-          explains the templates in more depth and links to the full field list.
-        </p>
-      </TutorialStep>
-
-      <TutorialStep num={4} title="Program" code={step4} file="tutorial-4-program.ti59">
-        <p style={{ marginTop: 0 }}>
-          <strong>PROGRAM</strong> loads program memory as key codes — the
-          same codes the calculator itself displays while you record a
-          program by hand, not the physical key positions. Whitespace and
-          line breaks are cosmetic; the loader reads a flat stream of
-          two-digit codes and ignores anything after <strong>#</strong>, so
-          the step-number comments above are for the reader, not the
-          parser. This particular listing sums a number down to 1: it
-          stores the entered value, loops subtracting and adding into a
-          running total, and stops with <strong>R/S</strong> when done.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          Load this file and press a digit, then <strong>A</strong> — the
-          cue card told you to — and the program actually runs now.
-        </p>
-      </TutorialStep>
-
-      <TutorialStep num={5} title="Registers" code={step5} file="tutorial-5-registers.ti59">
-        <p style={{ marginTop: 0 }}>
-          <strong>REGISTERS</strong> preloads data register contents as
-          plain decimal numbers, at the calculator's full internal
-          precision — 13 significant digits. The value here,{" "}
-          <code>3.000000000004</code> in register 29, is deliberately one
-          that's awkward to key in by hand on real hardware (you'd need{" "}
-          <strong>SUM</strong> and a division to land on it exactly); a
-          preset just states the final value directly.
-        </p>
-        <p>
-          This step doesn't change what the program does — register 29
-          isn't part of the sum routine above — it's here so the next step
-          has something worth recalling with <strong>RCL</strong>.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          To check that a value actually loaded, open the <a href="/59/debugger/">debugger</a>{" "}
-          and look at the register list — on Mac, Windows, Linux, on iPad
-          in landscape and on iPhone Duo opened flat it's visible right alongside the calculator; on iPhone (and iPad in
-          portrait) tap the chevron to reach it. The debugger has to be turned on first on
-          iPhone/portrait iPad: enable <strong>Debug Page in Portrait</strong>{" "}
-          under <strong>Settings</strong>, or it won't be there to turn to.
-        </p>
-      </TutorialStep>
-
-      <TutorialStep num={6} title="Keystrokes" code={step6} filename="tutorial.ti59" file="tutorial.ti59">
-        <p style={{ marginTop: 0 }}>
-          <strong>KEYSTROKES</strong> is the odd one out: everything above
-          describes the calculator's state, but this section acts, sending
-          real key presses after everything else has loaded —{" "}
-          <strong>Wait: 2s</strong> pauses between groups so you can watch
-          the display change. Keystrokes use <em>matrix coordinates</em>,
-          not the program-memory key codes from Step 4 — the digit{" "}
-          <strong>5</strong> is program key code <code>05</code> but matrix
-          code <code>73</code>. The two tables are documented separately in
-          the format reference precisely because mixing them up is the most
-          common preset-writing mistake.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          This is the finished tutorial file. Loading it types{" "}
-          <strong>5</strong>, <strong>A</strong> to run the sum program from
-          Step 4, waits, then recalls register 29 from Step 5 and subtracts
-          3 from it — demonstrating, in order, every section this tutorial
-          added.
-        </p>
-      </TutorialStep>
-
-      <div className="panel" style={{ padding: 20, marginTop: 32, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          That covers enough to write your own preset from scratch. The{" "}
-          <a href="/59/presets/">preset reference page</a> documents every
-          section in one place, and the complete grammar — the full matrix
-          code table, 2nd-function key codes, and the CUECARD field list —
-          is developer documentation in the GitHub repository:{" "}
-          <a href="https://github.com/tinue/Calc-U-59/blob/main/reference/StateFileFormat.md" className="link-accent">
-            reference/StateFileFormat.md →
-          </a>
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          For more preset files to read and load, including much longer
-          real-world programs, see the{" "}
-          <a href="/59/software/">TI-59 Software Collection</a>.
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-function DebuggerPage() {
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Debug</p>
-      <h1 className="page-title">Using the debugger</h1>
-      <p className="lede">The debug pane combines a program-level view, a CPU-level instruction trace, and a trace capture tool for analyzing the emulator's behavior in detail.</p>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 24 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>Overview</h3>
-        <p style={{ margin: 0 }}>
-          The debug pane has three tabs: <strong>CALCULATOR</strong>, <strong>CPU</strong>, and <strong>LOG</strong>.
-        </p>
-        <ul style={{ margin: "8px 0 0", paddingLeft: 20 }}>
-          <li><strong>CALCULATOR</strong> — Program listing (copied from RAM), the working value X, registers, flags and the status register at the current moment. Shows the step that will execute <em>next</em>. Useful for stepping through your own programs.</li>
-          <li><strong>CPU</strong> — Execution trace: the actual sequence of ROM instructions that ran. Shows the instruction that just <em>finished</em> and the register state <em>after</em> it executed. You can scroll back through the history.</li>
-          <li><strong>LOG</strong> — Dumps of the calculator's memory on request, the debug log, and the TRACE toggle. Most useful for capturing session files for deep analysis.</li>
-        </ul>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>CALCULATOR tab</h3>
-        <p style={{ marginTop: 0 }}>
-          The CALCULATOR tab shows a window into program memory (copied from RAM) centred on the current step. The highlighted instruction is the one that will execute <strong>next</strong>. After a jump (GTO, SBR, etc.) the listing jumps to the new location — it does not show where you came from, because it is not a trace.
-        </p>
-        <p>
-          Registers and flags reflect the calculator state <strong>right now</strong>, before the highlighted step runs. When frozen, the cursor reads <strong>← next</strong>, as the calculator's own LRN display does after SST. While a program runs, the tab shows the state at the last program step, never the middle of an operation.
-        </p>
-        <ul style={{ margin: "0 0 12px", paddingLeft: 20 }}>
-          <li><strong>X:</strong> — the calculator's working value with all 13 digits. When that register holds no number (for example while single-stepping a fast-mode program), the raw register is shown in amber.</li>
-          <li><strong>DEBUG</strong> — the FA and FB flag registers and <strong>HIR0:</strong>, the whole status register.</li>
-          <li>Fast mode is shown whenever the program runs in it.</li>
-        </ul>
-        <p style={{ marginBottom: 0 }}>
-          <strong>STEP in CALCULATOR mode</strong> — advances exactly as SST does: one program step per press, with a jump (GTO, SBR, RTN, a conditional) completed in the step that causes it. Hold STEP to repeat. This is the right tool for tracing through a keystroke-driven program one step at a time.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>CPU tab</h3>
-        <p style={{ marginTop: 0 }}>
-          The CPU tab shows the actual ROM instructions that executed, in order. Each entry represents an instruction that <strong>already ran</strong>; registers and flags are in the state <em>after</em> that instruction completed.
-        </p>
-        <p>
-          Because it is a true execution trace, you can see jumps, subroutine calls, and PREG transitions — the address changes visibly in the listing. You can also scroll back through past entries to review earlier execution.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          <strong>STEP in CPU mode</strong> — pressing Step executes exactly one ROM instruction, then freezes. This is the right tool when you want to follow the ROM's internal logic one opcode at a time.
-        </p>
-        <p style={{ marginTop: 8 }}>
-          <strong>ROM HEATMAP</strong> — shows how often each ROM address ran; <strong>CLR</strong> starts it over. It also starts over on Reset, Clean reset, a model switch and loading a preset, and when you switch to the CPU tab, unless the CPU is frozen.
-        </p>
-        <p style={{ marginTop: 8 }}>
-          <strong>ASM OVERLAY</strong> — below the CPU tab, <strong>Select File</strong> loads a small assembly program (see the <a href="/59/software/">assembly examples</a>), <strong>Run</strong> starts it and <strong>Clear</strong> removes it. While an overlay is active, the CALCULATOR tab is unavailable.
-        </p>
-        <p style={{ marginTop: 8, marginBottom: 0 }}>
-          <strong>Note on TEST/JUMP flags:</strong> because state is captured <em>after</em> each instruction, a TEST shows the flag it set, but the following JUMP shows the auto-restored condition (usually 1). This is expected behaviour — it is not a bug.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>Freeze controls</h3>
-        <p style={{ marginTop: 0 }}>
-          The CALCULATOR and CPU tabs each have their own row of buttons in the tab's header: <strong>RESUME</strong>, <strong>FREEZE</strong>, <strong>FREEZE ON START</strong> (<strong>F.START</strong> when the panel is narrow), <strong>ARMED</strong>, and <strong>STEP</strong>.
-        </p>
-        <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
-          <li><strong>FREEZE</strong> — stops the CPU (in the CALCULATOR tab, at the next step).</li>
-          <li><strong>FREEZE ON START (CALCULATOR tab)</strong> — arms the debugger so it freezes right before the first program step runs, the same point STEP stops at. This is triggered by pressing R/S, launching a program via a label, or any similar action. Useful for catching the very start of a program run.</li>
-          <li><strong>FREEZE ON START (CPU tab)</strong> — arms the debugger so it freezes the moment the calculator leaves the keyboard scan loop. This happens when you press any key (which causes the ROM to exit the idle loop and start processing the keystroke) or on a Clean reset (on the TI-58C, any reset). Useful for catching the very first ROM instruction of a key-press handler.</li>
-          <li><strong>ARMED</strong> — shown in yellow when FREEZE ON START is active; click it to cancel.</li>
-          <li><strong>RESUME</strong> — resumes execution from the frozen state.</li>
-          <li><strong>STEP</strong> — advances one step (semantics differ per tab, see above).</li>
-        </ul>
-        <p style={{ marginTop: 8, marginBottom: 0, color: "var(--fg-2)" }}>
-          Only one FREEZE ON START can be armed at a time. Pressing it in one tab while the other is already ARMED silently transfers the arm. Once frozen, RESUME and STEP are only available in the tab that caused the freeze — the other tab's buttons are disabled to prevent accidental cross-tab interactions.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>iPhone behaviour</h3>
-        <p style={{ marginTop: 0 }}>
-          On iPhone, the debugger is a page of its own in portrait (turn on Settings › Debug Page in Portrait) and covers the calculator. This is different from iPad in landscape, iPhone Duo opened flat, the Mac, Windows and Linux, where both views are visible at the same time.
-        </p>
-        <ul style={{ margin: "8px 0 0", paddingLeft: 20 }}>
-          <li>Switching to the <strong>CPU</strong> tab resets the heat map, because the CPU trace was not running while CALCULATOR was visible. Exception: if the CPU is already frozen when you switch, the heat map is preserved.</li>
-          <li>The selected tab (CALCULATOR, CPU, LOG) is remembered when you navigate away from the debugger and return.</li>
-          <li><strong>FREEZE ON START in CALCULATOR</strong> works best on iPad in landscape, on iPhone Duo opened flat or on a computer, where you can press a key on the calculator while the tab is watching. On iPhone you would need to go back to the calculator, press the key, then return to the debugger.</li>
-          <li><strong>FREEZE ON START in CPU</strong> arms in the background and fires as soon as you press any key (or do a Clean reset; on the TI-58C, any reset), regardless of which tab or screen is visible — the freeze is waiting for a ROM-level scan-loop exit, not a screen interaction.</li>
-        </ul>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>TRACE and LOG: for session capture and analysis</h3>
-        <p style={{ marginTop: 0 }}>
-          The <strong>LOG</strong> panel serves two main purposes:
-        </p>
-        <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
-          <li><strong>Dumps</strong> — the <strong>SCOM</strong>, <strong>Memory</strong>, <strong>Prog</strong> and <strong>Vars</strong> buttons write the scratch registers, the RAM, the program or the data registers to the log as raw values; the trash button clears it.</li>
-          <li><strong>TRACE toggle</strong> — Records a binary session file while the calculator is running. This is the most thorough way to understand sequences like a Clean reset's routine or key-processing flow.</li>
-        </ul>
-
-        <p style={{ marginTop: 12, marginBottom: 12 }}>
-          <strong>To capture and analyze a sequence:</strong>
-        </p>
-        <ol style={{ margin: 0, paddingLeft: 20 }}>
-          <li>Switch to the LOG tab and toggle TRACE on.</li>
-          <li>Perform the action you want to analyze (e.g., press <strong>Clean</strong>, or execute a ROM subroutine).</li>
-          <li>Toggle TRACE off to stop recording.</li>
-          <li>Find the trace file: on the Mac in the Save Location from Settings (local by default), on iPhone and iPad in the app's iCloud folder (use the Files app), on Windows and Linux in the trace folder from Settings › Files; the <a href="/59/play/">browser emulator</a> downloads it when you toggle TRACE off. The app tells you if the file couldn't be created or reached its size limit.</li>
-          <li>On a computer with Python, download or clone the <a href="https://github.com/tinue/Calc-U-59" className="link-accent">Calc-U-59 repository</a>. Its <code>tools/read_trace.py</code> needs the files next to it (the disassembler and its mnemonics table), so it can't be downloaded on its own.</li>
-          <li>From the repository's root folder, run: <code style={{ background: "var(--bg-inset)", padding: "2px 6px", borderRadius: 4 }}>python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin &gt; CALCU59_TRACE.txt</code> (the TI-58 and TI-58C write CALCU58_TRACE.bin and CALCU58C_TRACE.bin).</li>
-          <li>Open the resulting text file to see the full execution trace as human-readable disassembly.</li>
-        </ol>
-
-        <p style={{ marginTop: 12, marginBottom: 0 }}>
-          The binary trace file can be large (190 MB for a long session), but the text output is much smaller (57 kB) because the tool deduplicates repetitive loops — especially the keyboard scan loop that runs continuously. This makes it practical to analyze even long traces.
-        </p>
-      </div>
-
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7, marginTop: 12 }}>
-        <h3 className="sub" style={{ marginTop: 0, marginBottom: 12 }}>When to use each tool</h3>
-        <ul style={{ margin: 0, paddingLeft: 20 }}>
-          <li><strong>CALCULATOR tab</strong> — Stepping through your own program one step at a time, checking registers and flags at each step.</li>
-          <li><strong>CPU tab</strong> — Tracing the ROM's internal instruction flow, reviewing jumps and subroutine calls, scrolling back through execution history.</li>
-          <li><strong>TRACE (in LOG)</strong> — Capturing a complete ROM sequence for offline analysis (a Clean reset's routine, memory writes, keyboard processing, etc.).</li>
-          <li><strong>Debug logging (in LOG)</strong> — the LOG button cycles the level between Off, Info and Debug (grey, orange and red dot). It is mainly used by the developer for debugging specific issues. When enabled, you will see all memory writes and other hardware events. This has limited utility for regular app users.</li>
-        </ul>
-      </div>
-
-      <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
-        <div className="panel" style={{ padding: 16 }}>
-          <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPhone</h3>
-          <img
-            src="/59/assets/iphone-debug.png"
-            alt="iPhone screenshot showing the CALCULATOR debug tab with program listing and registers"
-            style={{ width: "auto", maxWidth: "60%", height: "auto", display: "block", borderRadius: 8, margin: "0 auto" }}
-          />
-        </div>
-        <div className="panel" style={{ padding: 16 }}>
-          <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPad</h3>
-          <img
-            src="/59/assets/ipad-13-2752x2064.png"
-            alt="iPad screenshot showing the CALCULATOR debug tab"
-            style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-          />
-        </div>
-        <div className="panel" style={{ padding: 16 }}>
-          <h3 className="sub" style={{ margin: "0 0 10px" }}>CALCULATOR tab — iPhone Duo, opened flat</h3>
-          <img
-            src="/59/assets/iphone-duo-2852x2006.png"
-            alt="iPhone Duo screenshot: calculator, a narrow printer tape and the CALCULATOR debug tab side by side"
-            style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-          />
-        </div>
-        <div className="panel" style={{ padding: 16 }}>
-          <h3 className="sub" style={{ margin: "0 0 10px" }}>CPU tab — iPad</h3>
-          <img
-            src="/59/assets/ipad-2752x2064-asm.png"
-            alt="iPad screenshot showing the CPU debug tab with execution trace"
-            style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-          />
-        </div>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-/* =============================================================
-   APP REFERENCE — emulator controls and screen regions.
-   ============================================================= */
-function ReferencePage() {
-  return (
-    <main className="wrap docs-split">
-      <div>
-        <p className="eyebrow">App Reference</p>
-        <h1 className="page-title">Every control,<br/>annotated.</h1>
-        <p className="lede">This page explains the emulator controls as they behave in the app: the calculator, the printer, the debug pane, and the settings that affect a session.</p>
-
-        <h2 className="section">The calculator</h2>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            The calculator view is the main working surface. On iPhone and on iPad in portrait, it uses the same key layout as the app screenshot; on iPad in landscape and on iPhone Duo opened flat, the layout mirrors the Mac view.
-          </p>
-          <p>
-            The top display area shows the current number and status indicators, the cue card area directly beneath it shows module/context notes, and the keyboard area contains the full key matrix for normal operation.
-          </p>
-          <p>
-            Bottom bar on iPhone and iPad (left to right): <strong>Reset</strong> (long press: a clean reset that also wipes the memory), the <strong>model picker</strong> (TI-59/TI-58/TI-58C), the two <strong>Crd</strong> buttons (fit a card; fit a fresh card), which <strong>Eject Card</strong> replaces while a side is passing — on the TI-59 only, the one with a card reader — then <strong>Preset</strong> and <strong>Settings</strong>.
-          </p>
-          <p>
-            On the Mac, Windows and Linux, the bar has the same buttons except Settings, which is in the app menu (Mac) or the File menu (Windows, Linux). Holding <strong>⌘</strong> (Mac) or <strong>Ctrl</strong> (Windows, Linux) turns Reset into <strong>Clean</strong>. On the Mac the model picker sits in the window's toolbar.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            On the Mac, Windows and Linux you can also type on the calculator with your computer's keyboard: the digits, the yellow operation keys, <strong>A</strong>–<strong>E</strong>, <strong>EE</strong> and the parentheses, with <strong>Shift</strong> + a letter for <strong>A′</strong>–<strong>E′</strong>. The bindings are the same as in the browser emulator; the full list is under “Use your keyboard” on the <a href="/59/play/">online emulator page</a>.
-          </p>
-        </div>
-
-        <h2 className="section">The printer</h2>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            The printer view has a <strong>PC-100C</strong> button at the top (connects or disconnects the printer, and resets the calculator), a dot/text toggle, the printer's <strong>PRINT</strong> and <strong>ADV</strong> keys, and <strong>T</strong>, its TRACE switch. Copy puts the paper strip on the clipboard as an image and as text; cut copies it and then clears the paper.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            The text view is useful when you want to read or copy output quickly. The dot view is the closer match to the physical printer.
-          </p>
-        </div>
-
-        <h2 className="section">The debug pane</h2>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            The debug pane has three tabs: <strong>CALCULATOR</strong>, <strong>CPU</strong>, and <strong>LOG</strong>.
-          </p>
-          <ul style={{ margin: "8px 0 0", paddingLeft: 20 }}>
-            <li><strong>CALCULATOR</strong> — Program listing (from RAM) centred on the next instruction to execute, with live registers and flags.</li>
-            <li><strong>CPU</strong> — Execution trace of ROM instructions that already ran. State shown is <em>after</em> each instruction. Scrollable history, one-opcode step.</li>
-            <li><strong>LOG</strong> — Dumps of the SCOM registers, memory, program and variables, the debug log level, and the TRACE toggle. Use TRACE to capture a binary session file for detailed analysis with read_trace.py.</li>
-          </ul>
-          <p style={{ marginTop: 8, marginBottom: 0 }}>
-            The CALCULATOR and CPU tabs have different step semantics: CALCULATOR advances one program step, as SST does; CPU advances exactly one ROM opcode. See <a href="/59/debugger/">Using the debugger</a>.
-          </p>
-        </div>
-
-        <h2 className="section">Settings</h2>
-        <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-          <p style={{ marginTop: 0 }}>
-            Settings choose the <strong>Startup Calculator</strong> (a model, or Last Used), the <strong>Solid State Module</strong>, the LED <strong>Segment Style</strong> (Modernized or Classic), and the trace file's <strong>Maximum File Size</strong>, so long debug sessions don't grow without bound. iPhone and iPad add <strong>Keyboard Feedback</strong> and <strong>Debug Page in Portrait</strong>. The installed web app, in either orientation, and the browser emulator's portrait layout on a phone have <strong>Keyboard Feedback</strong> too: Off or Click Sound. Its wide layout, and the installed app in landscape, offer the <strong>Maximum File Size</strong> for traces.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            Where files go: on the Mac, the trace file's <strong>Save Location</strong> (local, iCloud or a folder you choose); on iPhone and iPad, traces go to the app's iCloud folder. On Windows and Linux, <strong>Files</strong> sets the preset, card and trace folders.
-          </p>
-        </div>
-
-        <div style={{ marginTop: 24 }}>
-          <BackButton />
-        </div>
-      </div>
-
-      <div className="docs-aside">
-        <div className="panel" style={{ padding: 14 }}>
-          <div style={{ position: "relative" }}>
-            <img
-              src="/59/assets/app-screenshot.png"
-              alt="Calc-U 59 main app screenshot with annotated interface regions and toolbar buttons"
-              style={{ width: "100%", height: "auto", display: "block", borderRadius: 10 }}
-            />
-
-            <div style={{ position: "absolute", top: "10%", left: "48%", transform: "translateX(-50%)", background: "rgba(0,0,0,.72)", color: "var(--accent)", border: "1px solid var(--accent)", borderRadius: 999, padding: "4px 8px", fontFamily: "var(--font-key)", fontSize: 11, letterSpacing: ".06em", textTransform: "uppercase" }}>Display</div>
-            <div style={{ position: "absolute", top: "21%", left: "50%", transform: "translateX(-50%)", background: "rgba(0,0,0,.72)", color: "var(--accent)", border: "1px solid var(--accent)", borderRadius: 999, padding: "4px 8px", fontFamily: "var(--font-key)", fontSize: 11, letterSpacing: ".06em", textTransform: "uppercase" }}>Cue card</div>
-            <div style={{ position: "absolute", top: "36%", left: "50%", transform: "translateX(-50%)", background: "rgba(0,0,0,.72)", color: "var(--accent)", border: "1px solid var(--accent)", borderRadius: 999, padding: "4px 8px", fontFamily: "var(--font-key)", fontSize: 11, letterSpacing: ".06em", textTransform: "uppercase" }}>Keyboard</div>
-
-              <div style={{ position: "absolute", bottom: "2.1%", left: "6%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>1</div>
-              <div style={{ position: "absolute", bottom: "2.1%", left: "17%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>2</div>
-              <div style={{ position: "absolute", bottom: "2.1%", left: "62%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>3</div>
-              <div style={{ position: "absolute", bottom: "2.1%", left: "70%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>4</div>
-              <div style={{ position: "absolute", bottom: "2.1%", left: "80%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>5</div>
-              <div style={{ position: "absolute", bottom: "2.1%", left: "89%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>6</div>
-              <div style={{ position: "absolute", top: "6%", right: "8%", width: 22, height: 22, borderRadius: 999, background: "var(--accent)", color: "#21170f", fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 12, display: "grid", placeItems: "center" }}>7</div>
-          </div>
-
-          <ol style={{ margin: "12px 0 0", paddingLeft: 20, lineHeight: 1.65, color: "var(--fg-2)", fontSize: 14 }}>
-            <li><strong>Reset</strong> (long press: clean reset, wipes the memory)</li>
-            <li><strong>Model picker</strong> (TI-59 / TI-58 / TI-58C)</li>
-            <li><strong>Crd</strong>: fit a card (TI-59)</li>
-            <li><strong>Crd</strong>: fit a fresh card (TI-59)</li>
-            <li><strong>Preset</strong></li>
-            <li><strong>Settings</strong></li>
-            <li><strong>Chevron to the printer</strong></li>
-          </ol>
-        </div>
-      </div>
-    </main>
-  );
-}
-
-/* =============================================================
-   FAQ — direct answers.
-   ============================================================= */
-// Also the FAQ page's structured data (.seo/build.js).
-const FAQS = [
-  {
-    question: "Where do preset files live?",
-    answer: "They are regular .ti59, .ti58, or .ti58c text files that can be anywhere on the file system. On Mac, Windows and Linux, Preset opens them from disk (on Windows and Linux, Settings › Files sets the folder it starts in); you can also drag one onto the window, or double-click it on Windows; on iPhone and iPad, use the built-in file picker.",
-  },
-  {
-    question: "Are there examples of preset files?",
-    answer: "Yes. The GitHub repository includes an 'examples' folder with a selection of .ti59, .ti58, and .ti58c files, and the 'TI-59 Software Collection' page has downloadable copies. There's also a step-by-step tutorial that builds one from scratch.",
-  },
-  {
-    question: "What are the 'assembly' examples here for?",
-    answer: "This feature is still a bit experimental. You can load these examples in the ASM OVERLAY box under the debugger's CPU tab: Select File, then Run. Clear removes the overlay again.",
-  },
-  {
-    question: "Where do virtual magnetic cards live?",
-    answer: "On Mac, iPhone and iPad they are stored in the app's iCloud storage (or the app's local folder when iCloud is off); use the Crd buttons to pick or create one, as described under Printer and card reader. On Mac, they are also in Finder under 'iCloud Drive/Calc-U-59'. On Windows and Linux they are in the Calc-U-59 folder in your home folder, unless Settings › Files names another.",
-  },
-  {
-    question: "Where is the TI-58C state file?",
-    answer: "The TI-58C state file (ti58c.mem) is stored next to the cards: in the app's iCloud storage on Mac, iPhone and iPad, in the card folder on Windows and Linux. Unlike a preset, which you load on demand, this file is the TI-58C's persistent state — it's written and loaded automatically whenever you switch to the TI-58C model, standing in for the battery-backed static RAM the real hardware used to keep memory alive between sessions.",
-  },
-  {
-    question: "Can I see what the emulator is doing internally?",
-    answer: "Yes. Use the debug pane: CALCULATOR for program state and registers, CPU for the ROM instruction trace, and LOG for text output plus trace controls.",
-  },
-  {
-    question: "How do I get a trace file?",
-    answer: "Open the debug pane, switch to LOG, and turn TRACE on. The app writes a binary session file (CALCU59_TRACE.bin; CALCU58_TRACE.bin or CALCU58C_TRACE.bin for the smaller models) to the trace location: on Mac the one set in Settings (local by default), on iPhone and iPad the app's iCloud folder, on Windows and Linux the trace folder from Settings › Files. The browser emulator, wherever it shows the debugger (its wide layout, or the installed app in landscape on a tablet, an unfolded foldable or a large window), downloads the file when you turn TRACE off. If the file can't be created or reaches its size limit, the app tells you.",
-  },
-  {
-    question: "What can I do with a trace file?",
-    answer: "You first need the trace file on a computer. On Mac, Windows and Linux it already is. An iPad or iPhone writes it to the app's iCloud folder, so it syncs to iCloud Drive; retrieve it from there on your computer. The browser emulator, wherever it shows the debugger, downloads the trace when you switch TRACE off. To convert the binary file to readable disassembly, download or clone the Calc-U-59 repository from GitHub (tools/read_trace.py needs the disassembler and mnemonics table next to it, so it can't be downloaded alone) and, from the repository's root folder, run: python3 tools/read_trace.py --clean --skip-repeating CALCU59_TRACE.bin > CALCU59_TRACE.txt",
-  },
-  {
-    question: "Why does switching to the CPU tab reset the heat map?",
-    answer: "The CPU tab only traces while it is visible. When you switch to it, the heat map resets because any activity since you last left would be missing anyway. Exception: if the CPU is already frozen when you switch, the heat map is left intact — there is nothing new to miss. The heat map also starts over on Reset, Clean reset, a model switch and loading a preset, since the calculator starts afresh.",
-  },
-  {
-    question: "What does FREEZE ON START do in the CPU tab?",
-    answer: "In the CPU tab, FREEZE ON START (F.START when the panel is narrow) arms a scan-loop exit trigger: it freezes the moment the calculator leaves the keyboard idle loop — either because you pressed a key (the ROM exits the loop to handle the keystroke) or because of a Clean reset (on the TI-58C, any reset). This lets you catch the very first ROM opcode of a key-press handler without having to time a manual FREEZE. Only one FREEZE ON START can be armed at a time; arming one tab silently disarms the other.",
-  },
-  {
-    question: "How can I step through the reset routine?",
-    answer: "Switch to the CPU tab and press FREEZE ON START. Then press Clean (hold ⌘ or Ctrl while you click Reset; long-press Reset on a touch screen), which wipes the memory, or plain Reset on the TI-58C. The CPU freezes at the first ROM instruction of the reset routine. Use STEP to walk through it one opcode at a time. A plain Reset on the TI-59 and TI-58 runs the routine out of sight, to keep the memory, so the freeze then waits for the next key.",
-  },
-  {
-    question: "I used FREEZE ON START in the CPU tab, the freeze triggered on a keypress — but after RESUME the key seems lost. Why?",
-    answer: "This is expected. The ROM's key-debouncing logic registers a keypress only for a very short window. When the freeze fires, the CPU freezes at the first instruction after the scan loop exits — but that window has already passed by the time you press RESUME or STEP. The key handler never sees the keypress and the calculator returns to idle. Use a TRACE capture instead: it records the full keystroke sequence without stopping the emulator, so the debounce window is never interrupted.",
-  },
-  {
-    question: "Is there a faster way to read long printer output?",
-    answer: "Yes. Copy or cut the output, and paste it into a text editor.",
-  },
-  {
-    question: "How do I create the cards that label the A-E and A'-E' keys?",
-    answer: (
-      <>
-        Add a <strong>CUECARD:</strong> section to a preset: set{" "}
-        <strong>Template</strong> to <code>MagnetCard</code> or{" "}
-        <code>CueCard</code>, then fill in fields <strong>A</strong>{" "}
-        through <strong>E</strong> and <strong>A′</strong> through{" "}
-        <strong>E′</strong> for the two key rows. Load that file (a card the preset itself writes, with <strong>ArmCard:</strong>,
-        keeps the label) and it appears on screen. See{" "}
-        <a href="/59/presets/#labeling-keys" className="link-accent">
-          Loading a preset → Labeling the A–E and A′–E′ keys
-        </a>{" "}
-        for the format, the math shortcuts, and the loading options.
-      </>
-    ),
-  },
-  {
-    question: "I wrote a preset file myself, but the app shows it grayed out and won't load it. Why?",
-    answer: (
-      <>
-        Almost always a hidden <strong>.txt</strong> extension. Some text
-        editors, and Finder/Explorer with extensions hidden, save{" "}
-        <code>my-preset.ti59</code> as <code>my-preset.ti59.txt</code>{" "}
-        without showing it — the file looks right in the file browser, but
-        the preset picker only accepts <code>.ti59</code>, <code>.ti58</code>{" "}
-        and <code>.ti58c</code>, so it's shown grayed out and can't be
-        selected. Turn on "Show file extensions" (Explorer) or "Show all
-        filename extensions" (Finder), or rename the file from a terminal,
-        and it should load normally. See{" "}
-        <a href="/59/presets/tutorial/#txt-extension" className="link-accent">
-          the preset tutorial
-        </a>{" "}
-        for more on avoiding this.
-      </>
-    ),
-  },
-];
-
-function FaqPage() {
-  return (
-    <main className="wrap-narrow">
-      <p className="eyebrow">Help</p>
-      <h1 className="page-title">FAQ</h1>
-      <p className="lede">Concise answers to the questions that usually come up first.</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 24 }}>
-        {FAQS.map((item, i) => (
-          <div key={i} className="panel" style={{
-            padding: "16px 20px",
-            display: "grid", gap: 8,
-          }}>
-            <span style={{
-              fontFamily: "var(--font-key)", fontWeight: 700, fontSize: 16,
-              textTransform: "uppercase", letterSpacing: ".05em",
-              color: "var(--fg)",
-            }}>{item.question}</span>
-            <p style={{ margin: 0, lineHeight: 1.7, color: "var(--fg-2)" }}>{item.answer}</p>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
-      </div>
-    </main>
-  );
-}
-
-function ModulesPage() {
-  const modules = [
-    { code: "ML", name: "Master Library" },
-    { code: "ST", name: "Applied Statistics" },
-    { code: "RE", name: "Investment" },
-    { code: "SY", name: "Surveying" },
-    { code: "NG", name: "Marine Navigation" },
-    { code: "AV", name: "Aviation" },
-    { code: "LE", name: "Leisure Library" },
-    { code: "SA", name: "Securities Analysis" },
-    { code: "BD", name: "Business Decisions" },
-    { code: "MU", name: "Math/Utilities" },
-    { code: "EE", name: "EE Library" },
-    { code: "SE", name: "Structural Engineering" },
-    { code: "AG", name: "Agriculture" },
-    { code: "RP", name: "RPN Simulator" },
-  ];
-  return (
-    <main className="wrap">
-      <p className="eyebrow">Modules</p>
-      <h1 className="page-title">Library modules</h1>
-      <p className="lede">The module picker changes the Solid State Software library loaded into the emulator. That affects the cue card, the available programs, and the labels shown on screen.</p>
-
-      <div className="panel" style={{ padding: 20, marginTop: 24, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          Keep the selected module aligned with the file you are loading. If a preset includes a <strong>SOLID-STATE-MODULE:</strong> line, the emulator can switch to that module automatically.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          If the cue card or program list looks unexpected, the module selection is the first thing to check.
-        </p>
-      </div>
-
-      <div className="grid-2" style={{ marginTop: 24 }}>
-        {modules.map(m => (
-          <div key={m.code} className="panel"
-               style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
-            <div style={{
-              background: "linear-gradient(180deg,#1a0c08,#2c1812)",
-              color: "var(--accent)",
-              fontFamily: "var(--font-key)", fontWeight: 700,
-              padding: "8px 12px", borderRadius: 4,
-              letterSpacing: ".05em", fontSize: 13,
-              minWidth: 70, textAlign: "center",
-              border: "1px solid var(--stroke-warm)",
-            }}>{m.code}</div>
-            <div>
-              <h3 className="sub" style={{ margin: 0 }}>{m.name}</h3>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <h2 className="section">Per-module details</h2>
-      <div className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
-        <p style={{ marginTop: 0 }}>
-          Each module has its own cue card content and program selection. The app loads the matching ROM/library data together with the module metadata so the on-screen card stays in sync with the selected library.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          This is an emulator feature, not a historical TI-59 walkthrough: the purpose is to make the active module understandable while you use the app.
-        </p>
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <BackButton />
       </div>
     </main>
   );
@@ -1865,15 +175,16 @@ function SoftwarePage() {
       heading: "The calendar printer competition, 1978–1981",
       intro: "“52-Notes,” the TI programmable-calculator newsletter, ran a competition from 1978 to write the fastest TI-59 program that prints a full year calendar on the PC-100 printer, using the Master Library module's date routines. Each entry improved on the last; the 1981 winner is here too, with a new entry from 2026. PC-100/PC-100C printer required.",
       items: [
-        { file: "calendar-01-Weinberger.ti59", title: "Calendar Printer — Jared Weinberger", description: "The opening entry in the competition (52-Notes V3N5).", printer: true },
-        { file: "calendar-02-cargile.ti59", title: "Calendar Printer — Lou Cargile", description: "A second V3N5 entry, Lou Cargile's first attempt at the calendar problem.", printer: true },
-        { file: "calendar-03-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh", description: "A third V3N5 entry, checking for the ML module and warning the user if it's missing.", printer: true },
-        { file: "calendar-04-skillman.ti59", title: "Calendar Printer — Bill Skillman", description: "V3N6: a faster print-buffer packing approach, down to about 7½ minutes per year.", printer: true },
-        { file: "calendar-05-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh (revised)", description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to just under 5 minutes per year (4 min 53 s for 1978).", printer: true },
-        { file: "calendar-06-cargile.ti59", title: "Calendar Printer — Lou Cargile (bugfix)", description: "V3N7: a correction to an earlier entry — a missing CLR' meant the 1st of a month could fail to print if it fell on a Thursday.", printer: true },
-        { file: "calendar-07-calidas.ti59", title: "Calendar Printer — Panos Galidas", description: "V3N9: the fastest of the 1978 entries, averaging 2 minutes 38.6 seconds per year over a five-year test span.", printer: true },
-        { file: "calendar-08-acosta.ti59", title: "Calendar Printer — Patrick Acosta", description: "TI PPC Notes V9N2: the 1981 program that ended the race, using Fast Mode to print the worst-case year 2000 in 1 minute 23 seconds.", printer: true },
-        { file: "calendar-09-dispatch.ti59", title: "Calendar Printer — fast mode with dispatched fix-ups (2026)", description: "A new entry, written with the Calc-U 59 tools: Acosta's output format, about 7% faster.", printer: true },
+        { file: "calendar/CALENDAR_PROGRAMS.md", title: "The calendar programs — guide", description: "What each entry of the competition does differently, how to run them and how long each takes. A Markdown text file." },
+        { file: "calendar/calendar-01-Weinberger.ti59", title: "Calendar Printer — Jared Weinberger", description: "The opening entry in the competition (52-Notes V3N5).", printer: true },
+        { file: "calendar/calendar-02-cargile.ti59", title: "Calendar Printer — Lou Cargile", description: "A second V3N5 entry, Lou Cargile's first attempt at the calendar problem.", printer: true },
+        { file: "calendar/calendar-03-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh", description: "A third V3N5 entry, checking for the ML module and warning the user if it's missing.", printer: true },
+        { file: "calendar/calendar-04-skillman.ti59", title: "Calendar Printer — Bill Skillman", description: "V3N6: a faster print-buffer packing approach, down to about 7½ minutes per year.", printer: true },
+        { file: "calendar/calendar-05-vanderburgh.ti59", title: "Calendar Printer — Richard Vanderburgh (revised)", description: "V3N6: Vanderburgh folds in Panos Galidas' doubled print-code method and further tightens it, to just under 5 minutes per year (4 min 53 s for 1978).", printer: true },
+        { file: "calendar/calendar-06-cargile.ti59", title: "Calendar Printer — Lou Cargile (bugfix)", description: "V3N7: a correction to an earlier entry — a missing CLR' meant the 1st of a month could fail to print if it fell on a Thursday.", printer: true },
+        { file: "calendar/calendar-07-calidas.ti59", title: "Calendar Printer — Panos Galidas", description: "V3N9: the fastest of the 1978 entries, averaging 2 minutes 38.6 seconds per year over a five-year test span.", printer: true },
+        { file: "calendar/calendar-08-acosta.ti59", title: "Calendar Printer — Patrick Acosta", description: "TI PPC Notes V9N2: the 1981 program that ended the race, using Fast Mode to print the worst-case year 2000 in 1 minute 23 seconds.", printer: true },
+        { file: "calendar/calendar-09-dispatch.ti59", title: "Calendar Printer — fast mode with dispatched fix-ups (2026)", description: "A new entry, written with the Calc-U 59 tools: Acosta's output format, about 7% faster.", printer: true },
       ],
     },
     {
@@ -1882,29 +193,29 @@ function SoftwarePage() {
       article: "printer-interrupt",
       items: [
         { file: "characters.ti59", title: "Print character table", description: "Prints the full TI-59 print-code table with row and column headers." },
-        { file: "characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). This program's way into Fast Mode (Pgm 02 SBR 239) clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.", printer: true },
-        { file: "fast-grafik-3d-plot.ti59", title: "Fast-Grafik 3-D Plot", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.", printer: true },
-        { file: "printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
+        { file: "historic/characters-fastmode.ti59", title: "Print characters in Fast Mode", description: "K-J Meusch's version of the character table, using Fast Mode to print far faster than normal execution (TI PPC Notes V5N9-10, 1980). This program's way into Fast Mode (Pgm 02 SBR 239) clears the calculator's memory, as on a real TI-59, so loading the file plays his recipe: card, RST R/S, card.", printer: true },
+        { file: "historic/fast-grafik-3d-plot.ti59", title: "Fast-Grafik 3-D Plot", description: "Peter Poloczek's 3-D surface plotter for the PC-100, built on the printer-interrupt trick (TI PPC Notes V8N2, 1983). Part 1 asks for the plot's limits; part 2 then loads by itself and plots.", printer: true },
+        { file: "historic/printer-quirks.ti59", title: "Printer interrupt character table", description: "Dave Leising's print-code table showing each character both normally and interrupted mid-print (PPX Exchange, March/April 1982).", printer: true },
         { file: "printer-interrupt.ti59", title: "The printer interrupt, smallest form", description: "Prints “A0” twice, once normally and once cut off after two of its seven dot rows — the trick the printer-graphics programs here are built on, in a few steps.", printer: true },
         { file: "picard.ti59", title: "Picard — printer-interrupt picture", description: "A picture printed two dot rows per line with the printer interrupt. Its file header explains how to run it on a real TI-59.", printer: true },
         { file: "globe-print.ti59", title: "Globe — printer-interrupt picture", description: "A larger picture in three parts: the preset feeds the second and third from magnetic cards by itself. Its file header explains how to do it by hand on a real TI-59.", printer: true },
-        { file: "stars-and-stripes.ti59", title: "Stars & Stripes", description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).", printer: true },
+        { file: "historic/stars-and-stripes.ti59", title: "Stars & Stripes", description: "Richard Snow's demonstration of PC-100 graphics capability, drawing a flag using the printer-interrupt technique (TI PPC Notes V6N4-5, 1981).", printer: true },
         { file: "switzerland.ti59", title: "Switzerland — printer-interrupt outline map", description: "The outline of Switzerland drawn from 41 lines, each cut off after its first two dot rows by the printer interrupt so they stack without a gap (2026). Loading the file makes the interrupt code and prints the picture automatically, at full speed.", printer: true },
-        { file: "texas-print.ti59", title: "“TI” logo — high-resolution printer graphics", description: "Frank Dever's high-resolution “TI” logo (PPX Exchange, March/April 1982). The program corrupts a program-step keycode on purpose to redirect the ROM's dispatcher mid-instruction — the file's header traces exactly which ROM address that lands on.", printer: true },
-        { file: "trace-quirk.ti59", title: "Printer trace-mode quirk", description: "A keystroke sequence, found by a TI PPC club member, that puts a TI-58 or TI-59 into an undocumented trace mode once a printer is attached (TI PPC Notes V6N4-5, 1981).", printer: true },
+        { file: "historic/texas-print.ti59", title: "“TI” logo — high-resolution printer graphics", description: "Frank Dever's high-resolution “TI” logo (PPX Exchange, March/April 1982). The program corrupts a program-step keycode on purpose to redirect the ROM's dispatcher mid-instruction — the file's header traces exactly which ROM address that lands on.", printer: true },
+        { file: "historic/trace-quirk.ti59", title: "Printer trace-mode quirk", description: "A keystroke sequence, found by a TI PPC club member, that puts a TI-58 or TI-59 into an undocumented trace mode once a printer is attached (TI PPC Notes V6N4-5, 1981).", printer: true },
       ],
     },
     {
       heading: "From the German magazine CHIP, 1979–1980",
       intro: "CHIP printed TI-59 programs that readers keyed in by hand. These were transcribed from the magazine's listings; each file's header names the article.",
       items: [
-        { file: "pdcm-card-tricks.ti59", title: "PDCM — a card-swapping operating system", description: "Horst Umlauf's system (“Karten-Tricks”, CHIP 8/1979, with his corrections from 10/1979) that manages a program's magnetic cards: it asks for the card it needs, checks it and reads it, so memory is limited only by the stack of cards. Includes a demo program; the guide is below." },
-        { file: "pdcm-make-cards.ti59", title: "PDCM — write its two cards", description: "Creates PDCM's two magnetic cards in your card folder, as if they had been keyed in and saved by hand. Run it once, then follow the emulator guide below." },
-        { file: "PDCM-Emulator.md", title: "PDCM — guide for the emulator", description: "The short way into PDCM: start from the cards the preset above writes. A Markdown text file." },
-        { file: "PDCM.md", title: "PDCM — step-by-step guide", description: "What PDCM is for and how to use it on a TI-59, from keying it in to a worked demo. Written by an AI from the two articles; the key sequences were run on the emulator, not on a real calculator. A Markdown text file." },
-        { file: "erdkundetest.ti59", title: "Erdkundetest — geography quiz", description: "Michael Hartstang's printer quiz (CHIP 1/1980), which prints questions and answers and keeps the score. The texts are in German. This file holds the article's first set of questions.", printer: true },
-        { file: "erdkundetest-2.ti59", title: "Erdkundetest — second set of questions", description: "The same quiz with the second set from the article.", printer: true },
-        { file: "life.ti59", title: "LIFE — the Game of Life", description: "Joachim Dörges' Game of Life on a 10 × 10 field (“Life auf dem TI-59”, CHIP 9/1980). It prints every generation, with optional random mutations; a generation takes minutes, as on the real calculator. Loading the file starts it with a glider, which is not from the article.", printer: true },
+        { file: "historic/pdcm-card-tricks.ti59", title: "PDCM — a card-swapping operating system", description: "Horst Umlauf's system (“Karten-Tricks”, CHIP 8/1979, with his corrections from 10/1979) that manages a program's magnetic cards: it asks for the card it needs, checks it and reads it, so memory is limited only by the stack of cards. Includes a demo program; the guide is below." },
+        { file: "historic/pdcm-make-cards.ti59", title: "PDCM — write its two cards", description: "Creates PDCM's two magnetic cards in your card folder, as if they had been keyed in and saved by hand. Run it once, then follow the emulator guide below." },
+        { file: "historic/PDCM-Emulator.md", title: "PDCM — guide for the emulator", description: "The short way into PDCM: start from the cards the preset above writes. A Markdown text file." },
+        { file: "historic/PDCM.md", title: "PDCM — step-by-step guide", description: "What PDCM is for and how to use it on a TI-59, from keying it in to a worked demo. Written by an AI from the two articles; the key sequences were run on the emulator, not on a real calculator. A Markdown text file." },
+        { file: "historic/erdkundetest.ti59", title: "Erdkundetest — geography quiz", description: "Michael Hartstang's printer quiz (CHIP 1/1980), which prints questions and answers and keeps the score. The texts are in German. This file holds the article's first set of questions.", printer: true },
+        { file: "historic/erdkundetest-2.ti59", title: "Erdkundetest — second set of questions", description: "The same quiz with the second set from the article.", printer: true },
+        { file: "historic/life.ti59", title: "LIFE — the Game of Life", description: "Joachim Dörges' Game of Life on a 10 × 10 field (“Life auf dem TI-59”, CHIP 9/1980). It prints every generation, with optional random mutations; a generation takes minutes, as on the real calculator. Loading the file starts it with a glider, which is not from the article.", printer: true },
       ],
     },
     {
@@ -1914,8 +225,8 @@ function SoftwarePage() {
         { file: "diag.ti59", title: "TI-59 calculator diagnostic", description: "The magnetic-card diagnostic Texas Instruments documented in the owner's manual, both card sides. Prints and displays “−.8888888888” when everything checks out.", printer: true },
         { file: "diag.ti58", title: "TI-58 calculator diagnostic", description: "The same diagnostic, resized to fit the TI-58's smaller memory partition.", printer: true },
         { file: "ram_test.ti59", title: "RAM test", description: "A roughly three-minute test of all data registers that prints “598-TEST-1” and reports the default memory partition; faulty registers are called out by address." },
-        { file: "ram_test_full_fast.ti59", title: "Full RAM test (Fast Mode)", description: "George Thomson's test of all 100 data registers using indirect addressing and the STF fast-mode trick, printing any mismatch on the PC-100A/PC-100C (TI PPC Notes V9N5, 1985).", printer: true },
-        { file: "repartition.ti58c", title: "TI-58C repartitioning reference", description: "Keystroke notes on how the TI-58C's constant-memory feature stores the partition setting, and how to reach the extra 32 steps (480–511) that are otherwise keyboard-only (TI PPC Notes V5N7, 1980)." },
+        { file: "historic/ram_test_full_fast.ti59", title: "Full RAM test (Fast Mode)", description: "George Thomson's test of all 100 data registers using indirect addressing and the STF fast-mode trick, printing any mismatch on the PC-100A/PC-100C (TI PPC Notes V9N5, 1985).", printer: true },
+        { file: "historic/repartition.ti58c", title: "TI-58C repartitioning reference", description: "Keystroke notes on how the TI-58C's constant-memory feature stores the partition setting, and how to reach the extra 32 steps (480–511) that are otherwise keyboard-only (TI PPC Notes V5N7, 1980)." },
       ],
     },
     {
@@ -1923,20 +234,20 @@ function SoftwarePage() {
       intro: "Fast Mode is an undocumented TI-58/TI-58C/TI-59 execution mode, discovered and written up by the TI PPC club over several years — these programs demonstrate it, along with a couple of other undocumented corners of the ROM.",
       article: "fast-mode",
       items: [
-        { file: "fastmode.ti59", title: "Fast Mode factorial demo (TI-59)", description: "Computes 69! in Fast Mode in about 24 seconds; the same program takes about 44 in normal mode, 85% longer (measured on the emulator)." },
-        { file: "fastmode.ti58", title: "Fast Mode factorial demo (TI-58)", description: "The same Fast Mode factorial comparison, for the TI-58/TI-58C." },
+        { file: "historic/fastmode.ti59", title: "Fast Mode factorial demo (TI-59)", description: "Computes 69! in Fast Mode in about 24 seconds; the same program takes about 44 in normal mode, 85% longer (measured on the emulator)." },
+        { file: "historic/fastmode.ti58", title: "Fast Mode factorial demo (TI-58)", description: "The same Fast Mode factorial comparison, for the TI-58/TI-58C." },
         { file: "fastmode-sst.ti59", title: "The shortest way into Fast Mode", description: "A new, shorter Fast Mode entry, found by tracing the ROM in 2026; computes 69! like the factorial demo. Loading the file runs the entry sequence automatically." },
-        { file: "FastMode_Zero4.ti59", title: "Fast Mode zero-padding bug", description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state." },
-        { file: "firmware.ti59", title: "Firmware listing keystroke sequence", description: "An unusual keyboard sequence, originally described by TI PPC Notes editor Maurice Swinnen, that puts the TI-59 into a mode where the ROM firmware itself can be listed." },
-        { file: "keycodes.ti59", title: "Print all keycodes", description: "Jared Weinberger's routine for generating and printing every TI-59 key code, using dynamic program-code modification (TI PPC Notes V5N4-5, 1980)." },
+        { file: "historic/FastMode_Zero4.ti59", title: "Fast Mode zero-padding bug", description: "A mistyped Fast Mode program — one leading zero short of the documented five — that puts a real TI-59 into an unusual, reproducible misbehaving state." },
+        { file: "historic/firmware.ti59", title: "Firmware listing keystroke sequence", description: "An unusual keyboard sequence, originally described by TI PPC Notes editor Maurice Swinnen, that puts the TI-59 into a mode where the ROM firmware itself can be listed." },
+        { file: "historic/keycodes.ti59", title: "Print all keycodes", description: "Jared Weinberger's routine for generating and printing every TI-59 key code, using dynamic program-code modification (TI PPC Notes V5N4-5, 1980)." },
       ],
     },
     {
       heading: "Utilities",
       intro: "Small, self-contained programs that aren't tied to a particular magazine series.",
       items: [
-        { file: "Integer-Base-Conversion.ti59", title: "Integer base conversion", description: "Converts an integer between arbitrary number bases — hex to binary to decimal and back — originally published in Computer Design magazine, 1980." },
-        { file: "Frequency-Transformation.ti59", title: "Frequency transformation", description: "A filter-design program that transforms a normalized low-pass filter's cutoff frequencies, from the Artech House discrete-time filter design tables." },
+        { file: "historic/Integer-Base-Conversion.ti59", title: "Integer base conversion", description: "Converts an integer between arbitrary number bases — hex to binary to decimal and back — originally published in Computer Design magazine, 1980." },
+        { file: "historic/Frequency-Transformation.ti59", title: "Frequency transformation", description: "A filter-design program that transforms a normalized low-pass filter's cutoff frequencies, from the Artech House discrete-time filter design tables." },
         { file: "sum.ti59", title: "Sum of N numbers", description: "A deliberately simple program — sums N down to 1 — useful as a stopwatch for comparing execution speed across devices running the emulator." },
       ],
     },
@@ -1944,6 +255,7 @@ function SoftwarePage() {
       heading: "CPU-level assembly examples",
       intro: "These target the TMC0501 CPU inside the calculator directly, as raw opcodes rather than a keystroke program, loaded through the ASM Overlay in the debugger — in the full app (Mac, Windows, Linux, iPhone, iPad), and in the web client wherever it shows the debugger: its wide layout, or the installed app in landscape on a tablet, an unfolded foldable or a large window.",
       items: [
+        { file: "assembly/README.md", title: "The assembly examples — guide", description: "How an ASM overlay file is written and loaded, and what each example below shows. A Markdown text file." },
         { file: "assembly/simple_count.asm", title: "Simple counter", description: "The smallest useful ASM overlay example: increments a counter on the display in a tight loop, about 1185 times a second." },
         { file: "assembly/stopwatch.asm", title: "Stopwatch", description: "A precisely timed stopwatch built on the WAIT Dn instruction rather than counting cycles — 222 increments per second, 4.5011 ms each." },
         { file: "assembly/DPT.asm", title: "Decimal-point test", description: "Cycles the decimal point across every digit position. The emulator shows the display as the eye sees it, so — as on the real calculator — all the points look lit at once." },
@@ -1965,17 +277,17 @@ function SoftwarePage() {
       <div className="panel" style={{ padding: 20, marginTop: 24, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}>
           Each entry below is a <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong>{" "}
-          <a href="/59/presets/">preset file</a> — the calculator's program, registers and (where the
+          <a href={HELP.presets}>preset file</a> — the calculator's program, registers and (where the
           original used one) magnetic-card cue card, ready to load. Programs marked <strong>Requires printer</strong>{" "}
           need the emulated PC-100C printer — connected from the start in the full app and in the browser emulator.
         </p>
         <p style={{ marginBottom: 0 }}>
-          Get Calc-U 59 for <a href="/59/install/mac/">Mac</a>,{" "}
-          <a href="/59/install/windows-linux/">Windows and Linux</a>,{" "}
-          <a href="/59/install/iphone-ipad/">iPhone and iPad</a> or{" "}
-          <a href="/59/install/android/">Android</a>, then open a downloaded file, or try the{" "}
-          <a href="/59/play/">browser emulator</a> first — its <strong>Preset</strong> button opens a downloaded
-          file too, on the TI-59, TI-58 or TI-58C.
+          Get Calc-U 59 for <a href={HELP.installDesk}>Mac</a>,{" "}
+          <a href={HELP.installDesk}>Windows and Linux</a>,{" "}
+          <a href={HELP.installMobile}>iPhone and iPad</a> or{" "}
+          <a href={HELP.installAndroid}>Android</a>, then open a downloaded file, or try the{" "}
+          <a href="/59/play/">browser emulator</a> first: <strong>File ▸ Load Preset…</strong> opens a downloaded
+          file there too, on the TI-59, TI-58 or TI-58C.
         </p>
       </div>
 
@@ -2010,11 +322,11 @@ function SoftwarePage() {
           </p>
           <div style={{ display: "grid", gap: 12 }}>
             {cat.items.map((it) => (
-              <div key={it.file} id={it.file.replace(/^assembly\//, "").replace(/\./g, "-")} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
+              <div key={it.file} id={it.file.replace(/^.*\//, "").replace(/\./g, "-")} className="panel" style={{ padding: 20, lineHeight: 1.7 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "4px 16px" }}>
                   <h3 className="sub" style={{ margin: 0 }}>{it.title}</h3>
                   <a className="btn secondary" href={`/59/software-files/${it.file}`} download>
-                    Download {it.file.replace(/^assembly\//, "")}
+                    Download {it.file.replace(/^.*\//, "")}
                   </a>
                 </div>
                 <p style={{ margin: "8px 0 0", color: "var(--fg-2)" }}>{it.description}</p>
@@ -2030,12 +342,12 @@ function SoftwarePage() {
       <h2 className="section">Source and format</h2>
       <div className="prose panel" style={{ padding: 20, lineHeight: 1.7 }}>
         <p style={{ marginTop: 0 }}>
-          These files are maintained in the <a href="https://github.com/tinue/Calc-U-59/tree/main/examples">
-          examples/ directory</a> of the Calc-U 59 repository — its name predates this collection outgrowing
+          These files are maintained in the <a href="https://github.com/tinue/Calc-U/tree/calc-u-59-v3.0.0/products/calc-u-59/examples">
+          examples/ directory</a> of Calc-U 59 in the Calc-U repository — its name predates this collection outgrowing
           "examples" — together with a few internal debugging and screenshot-test files not listed here. The{" "}
-          <a href="/59/presets/">preset file format</a> is documented if you want to write your own — the{" "}
-          <a href="/59/presets/tutorial/">tutorial</a> walks through building one from scratch — and the
-          debugger's ASM Overlay is documented for the assembly examples above.
+          <a href={HELP.presets}>preset file format</a> is documented if you want to write your own — the{" "}
+          <a href={HELP.tutorial}>tutorial</a> walks through building one from scratch — and the
+          debugger's <a href={HELP.asmOverlay}>ASM Overlay</a> is documented for the assembly examples above.
         </p>
         <p style={{ marginBottom: 0, color: "var(--fg-3)", fontSize: 13 }}>
           Most of these programs were originally published in <em>52-Notes</em>, <em>TI PPC Notes</em> and{" "}
@@ -2087,8 +399,8 @@ function PlayPage() {
     <main className="wrap">
       <div ref={holderRef} style={{ display: "flex", justifyContent: "center" }}>
         {wide
-          ? <PlayCalculator layout="wide" width={width} keyboard />
-          : <PlayCalculator layout="portrait" width={Math.min(width, PORTRAIT_MAX_WIDTH)} keyboard />}
+          ? <CalcU59 width={width} keyboard layout="wide" />
+          : <CalcU59 width={Math.min(width, PORTRAIT_MAX_WIDTH)} keyboard layout="portrait" />}
       </div>
       <div style={{ textAlign: "center", marginTop: 12 }}>
         <a className="btn secondary" href="/59/calc/app/">Open as a standalone app <span style={{opacity:.5}}>→</span></a>
@@ -2108,46 +420,35 @@ function PlayPage() {
             downloads; on a phone the chevron in the corner turns to the printer's page and back.
           </p>
           <p>
-            Module 01 (Master Library) is loaded by default; <strong>Settings</strong> switches modules
-            (that resets the calculator, as swapping the real module did) and chooses the calculator
-            the page starts with. <strong>Preset</strong> loads one of the bundled presets or your own{" "}
-            <strong>.ti59</strong>, <strong>.ti58</strong> or <strong>.ti58c</strong> file, and you can
-            also drop a file onto the calculator — files are read entirely in your browser and never
-            leave your machine. The TI-58C keeps its constant memory in your browser between visits.
-            For more programs to try, see the{" "}
+            The menu bar above the calculator (on a phone: the <strong>More</strong> button) holds
+            everything else. <strong>File ▸ Examples</strong> opens the bundled programs,{" "}
+            <strong>File ▸ Load Preset…</strong> your own <strong>.ti59</strong>, <strong>.ti58</strong> or{" "}
+            <strong>.ti58c</strong> file, and you can also drop a file onto the calculator — files are read in
+            your browser and never leave your machine. <strong>Machine</strong> switches the model and the
+            peripherals, <strong>File ▸ Settings…</strong> the module. For more programs, see the{" "}
             <a href="/59/software/">TI-59 Software Collection</a>.
+          </p>
+          <p>
+            Your magnetic cards and the TI-58C's constant memory stay in your browser from one visit to
+            the next. <strong>File ▸ Import Media…</strong> brings a card file in, <strong>File ▸ Saved
+            Media…</strong> lists, downloads and deletes your cards (<a href={HELP.cards}>more on cards</a>).
           </p>
           <p>
             Press <strong>2nd</strong> then <strong>Pgm</strong> then a two-digit program number to
             bring up that program's cue card, the same way it works on the module itself.
           </p>
           <p>
-            The TI-59 has a card reader. To save a program, press the <strong>Crd</strong> button for a fresh card, give the
-            card a name, press <strong>2nd Write</strong> (bank 1:{" "}
-            <strong>1 2nd Write</strong>), and press its top-left or top-right corner to write that side. To load it back,
-            press the other <strong>Crd</strong> button and pick the card, or upload a <strong>.U59</strong>{" "}
-            card file, then press the corner of the side to read; <strong>Eject Card</strong> stops a
-            passing card; it stays fitted (<a href="/59/getting-started/printer/#magnetic-cards">more on cards</a>).
-            Cards last until you close the page — download one from the card list to keep it.
-          </p>
-          <p>
-            The full app adds a card folder that stays (synced through iCloud on
-            Apple devices), traces saved to disk and the Modernized LED style; it is free on the{" "}
-            <a href="/59/install/mac/">Mac</a> and on{" "}
-            <a href="/59/install/windows-linux/">Windows and Linux</a>, or{" "}
-            <a href="/59/install/iphone-ipad/">on the App Store</a> for iPhone and iPad. On Android,{" "}
-            <a href="/59/install/android/">install the web app</a> from your browser. If you are
-            not sure what any of this is, <a href="/59/what-is-a-ti-59/">start here</a>.
+            The full app adds folders of your own for cards, presets and traces (synced through iCloud
+            on the iPhone and the iPad); it is free for the <a href={HELP.installDesk}>Mac, Windows and
+            Linux</a> and <a href={HELP.installMobile}>on the App Store</a> for iPhone and iPad. On
+            Android, <a href={HELP.installAndroid}>install the web app</a> from your browser. The{" "}
+            <a href={HELP.contents}>help</a> explains all of it, and <a href={HELP.introduction}>the
+            introduction</a> the three calculators.
           </p>
           <p>
             Prefer this without the browser chrome? <a href="/59/calc/app/">Open the standalone app</a> — the
             same calculator alone at its own address, installable to your phone's home screen for a
             one-tap, full-screen launch. Once installed it runs all three calculators offline, with every module and every preset in its list.
-          </p>
-          <p>
-            Curious what comes next? <a href="/59/beta/app/">Try the 3.0.0 preview</a>, the standalone
-            app of the next version, before its release. It may change without notice. It shares its
-            settings and the TI-58C's constant memory with the calculator on this page.
           </p>
         </div>
 
@@ -2228,19 +529,7 @@ function KeyboardLegend() {
 
 Object.assign(window, {
   HomePage,
-  AboutTi59Page,
-  GettingStartedPage,
-  InstallMobilePage,
-  InstallMacPage,
-  PresetsPage,
-  PresetTutorialPage,
-  DebuggerPage,
-  ReferencePage,
-  ModulesPage,
-  FaqPage,
   PlayPage,
   SoftwarePage,
-  InstallPcPage,
-  InstallAndroidPage,
-  FAQS,
+  HELP,
 });

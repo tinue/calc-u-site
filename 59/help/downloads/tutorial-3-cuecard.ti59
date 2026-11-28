@@ -1,0 +1,28 @@
+# TI-59 Preset File Tutorial — Step 3: cue card
+#
+# Adds a cue-card section: the card shown once the preset loads, labelling
+# the A-E keys the way a real card would.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Tutorial step 3
+description: Preset tutorial, step 3 - the cue card
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank

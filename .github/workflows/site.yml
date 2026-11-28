@@ -1,8 +1,9 @@
 name: Site
 
-# Checks every push to main: the Calc-U-59 site (/59/) is built from its
-# current sources, its static checks pass, and the Playwright tests pass
-# against the repository served as calc-u.org serves it.
+# Checks every push to main: each site folder holds exactly its pinned
+# release (help asset, Web frontend, examples), its pages are what the
+# build makes from them, its static checks pass, and the Playwright tests
+# pass against the repository served as calc-u.org serves it.
 #
 # GitHub Pages publishes main as it is ("Deploy from a branch"); this
 # workflow commits nothing. A failure means the published site is stale or
@@ -15,6 +16,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  # The renderer of the help asset, shared by the folders, on its test asset.
+  help-renderer:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: .help
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+
   site-59:
     runs-on: ubuntu-24.04
     defaults:
@@ -27,20 +42,24 @@ jobs:
         with:
           node-version: '24'
 
-      # calc/ is committed; this proves it is the pinned build, untouched.
-      # (check.js verifies it too, but this also re-downloads the release
-      # asset and fails if it no longer matches the pinned sha256.)
-      - name: Web client matches the pinned release
-        run: |
-          node .seo/fetch-web-client.js
-          git diff --exit-code -- calc
+      - name: Renderer dependencies
+        run: npm ci --no-audit --no-fund
+        working-directory: .help
 
-      # sitemap.xml carries the build date as lastmod, so it differs on any
-      # other day by design (.seo/README.md) and is left out of the diff.
+      # Downloads the pinned assets and the examples of the pinned tag again
+      # and fails when they differ from what is committed (or from the
+      # pinned sha256).
+      - name: The folder holds the pinned release
+        run: |
+          node ../.help/pins.js 59
+          git diff --exit-code -- calc help-asset software-files
+          test -z "$(git status --porcelain -- calc help-asset software-files)"
+
       - name: Build is current
         run: |
           node .seo/build.js
-          git diff --exit-code -- . ':!sitemap.xml'
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain -- .)"
 
       - name: Check
         run: |
