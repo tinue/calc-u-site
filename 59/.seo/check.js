@@ -4,7 +4,8 @@
 //
 //   node .seo/check.js
 //
-// Verifies the things that silently rot: that every route produced a
+// Verifies the things that silently rot: that the folder holds exactly the
+// pinned release (help asset, Web frontend), that every route produced a
 // file, that each file carries the head tags search engines need, that
 // the prerendered markup is real text rather than an empty root, that
 // internal links all resolve to a built page, and that the compiled
@@ -20,8 +21,10 @@ const path = require("path");
 
 const SEO = __dirname;
 const DOCS = path.join(SEO, "..");
-const { ROUTES, ORIGIN, BASE, url, normalizePath } = require(path.join(DOCS, "routes.js"));
-const { CLIENT_DIR, BETA_DIR, BETA_LOCK, verifyTree, readLock } = require(path.join(SEO, "webclient.js"));
+const { ROUTES, ORIGIN, BASE, url, normalizePath, LEGACY_HASHES } = require(path.join(DOCS, "routes.js"));
+const { REDIRECTS } = require(path.join(DOCS, "redirects.js"));
+const PINS = require(path.join(DOCS, "..", ".help", "pins.js"));
+const CLIENT_DIR = path.join(DOCS, "calc");
 
 // The site lives under BASE ("/59"), so every root-relative URL it names
 // must start with BASE + "/". Addresses → site paths and files on disk:
@@ -78,6 +81,63 @@ for (const route of ROUTES) {
      `${route.path}: ReactDOM is not loaded before site.js`);
 }
 
+/* ---- the help pages (built from the pinned asset) ----------------- */
+section("help pages");
+function htmlFiles(dir, prefix) {
+  const out = [];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) out.push(...htmlFiles(path.join(dir, e.name), prefix + e.name + "/"));
+    else if (e.name === "index.html") out.push(prefix);
+  }
+  return out;
+}
+const HELP_DIR = path.join(DOCS, "help");
+const helpPages = fs.existsSync(HELP_DIR) ? htmlFiles(HELP_DIR, "/help/") : [];
+ok(helpPages.length >= 20, `only ${helpPages.length} help pages — run node .seo/build.js`);
+for (const p of helpPages) {
+  const html = fs.readFileSync(fileFor(p), "utf8");
+  built.set(p, html);
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
+  const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
+  const canon = (html.match(/<link rel="canonical" href="([^"]*)"/) || [])[1] || "";
+  ok(title.length > 3 && title.length <= 75, `${p}: title length ${title.length} — "${title}"`);
+  ok(desc.length >= 40 && desc.length <= 175, `${p}: description length ${desc.length}`);
+  ok(canon === ORIGIN + url(p), `${p}: canonical is "${canon}"`);
+  ok((html.match(/<h1[\s>]/g) || []).length === 1, `${p}: needs exactly one <h1>`);
+  ok(/class="site-header"/.test(html) && /class="site-footer"/.test(html), `${p}: header or footer missing`);
+  ok(/Help built from Calc-U-59-help\.zip /.test(html), `${p}: does not name the asset it is built from`);
+  const srcs = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map((m) => m[1]);
+  ok(srcs.length === 1 && srcs[0] === url("/help/help.js"), `${p}: help pages load only help.js, not ${srcs.join(", ")}`);
+}
+ok(fs.existsSync(path.join(HELP_DIR, "vendor", "mermaid.min.js")) && fs.existsSync(path.join(HELP_DIR, "vendor", "MERMAID-LICENSE.txt")),
+   "help/vendor/: Mermaid or its licence missing");
+
+/* ---- the redirects of the old help addresses ----------------------- */
+section("redirects");
+const redirectPages = new Set();
+for (const [from, to] of Object.entries(REDIRECTS)) {
+  const file = fileFor(from);
+  redirectPages.add(normalizePath(from));
+  if (!fs.existsSync(file)) { ok(false, `${from}: no redirect page`); continue; }
+  const html = fs.readFileSync(file, "utf8");
+  ok(html.includes(`<meta http-equiv="refresh" content="0; url=${url(to)}">`), `${from}: does not refresh to ${url(to)}`);
+  ok(html.includes(`<link rel="canonical" href="${ORIGIN}${url(to)}">`), `${from}: canonical is not ${url(to)}`);
+  ok(html.includes('<meta name="robots" content="noindex">'), `${from}: not noindex`);
+  const [target, anchor] = to.split("#");
+  ok(built.has(normalizePath(target)), `${from}: goes to ${to}, which is no built page`);
+  if (anchor && built.has(normalizePath(target))) ok(built.get(normalizePath(target)).includes(` id="${anchor}"`), `${from}: ${target} has no #${anchor}`);
+}
+for (const [hash, to] of Object.entries(LEGACY_HASHES)) {
+  const [target, anchor] = to.split("#");
+  ok(built.has(normalizePath(target)), `#${hash}: goes to ${to}, which is no built page`);
+  if (anchor && built.has(normalizePath(target))) ok(built.get(normalizePath(target)).includes(` id="${anchor}"`), `#${hash}: ${target} has no #${anchor}`);
+}
+
+/* ---- the pins: help asset, Web frontend, examples of one release ---- */
+section("pins");
+for (const problem of PINS.verify("59")) ok(false, problem);
+checks++;
+
 // Exactly one title per indexable page, or they compete with each other.
 section("uniqueness");
 const titles = new Map();
@@ -102,24 +162,38 @@ section("internal links");
 const ARTICLES = fs.readdirSync(path.join(DOCS, "articles")).filter((f) => f.endsWith(".md")).map((f) => f.slice(0, -3));
 const STATIC_TARGETS = {
   "/calc/app/": path.join(DOCS, "calc", "app", "index.html"),
-  // The next release's preview: a link left behind when beta/ goes fails here.
-  "/beta/app/": path.join(BETA_DIR, "app", "index.html"),
   ...Object.fromEntries(ARTICLES.map((a) => [`/articles/${a}.html`, path.join(DOCS, "articles", `${a}.html`)])),
 };
+const REPO_ROOT = path.join(DOCS, "..");
 for (const [p, html] of built) {
-  const hrefs = [...html.matchAll(/href="(\/[^"]*)"/g)].map((m) => m[1]);
+  const hrefs = [...html.matchAll(/href="(\/[^"]*)"/g)].map((m) => m[1].replace(/&amp;/g, "&"));
   for (const address of new Set(hrefs)) {
-    if (!underBase(address)) { ok(false, `${p}: link ${address} is not under ${BASE}/`); continue; }
-    const href = sitePath(address);
+    const [where, anchor] = address.split("#");
+    if (!underBase(where)) {
+      // A link to the other site folder (the help links /1600/ and back) is
+      // followed on disk.
+      const file = path.join(REPO_ROOT, where, where.endsWith("/") ? "index.html" : "");
+      ok(/^\/(1600)\//.test(where) && fs.existsSync(file), `${p}: link ${address} leads nowhere`);
+      continue;
+    }
+    const href = sitePath(where);
     if (/\.(css|png|js|xml|txt|json|woff2?|ti59|ti58|ti58c|asm|pdf|md)$/.test(href)) {
-      ok(fs.existsSync(diskPath(address)), `${p}: asset ${address} missing`);
+      ok(fs.existsSync(diskPath(where)), `${p}: asset ${address} missing`);
     } else if (STATIC_TARGETS[href]) {
       ok(fs.existsSync(STATIC_TARGETS[href]), `${p}: static page ${href} missing`);
+    } else if (redirectPages.has(normalizePath(href))) {
+      ok(false, `${p}: links to ${address}, which only redirects — link to where it goes`);
     } else {
       ok(built.has(normalizePath(href)), `${p}: link ${href} has no built page`);
+      if (anchor && built.has(normalizePath(href))) {
+        ok(built.get(normalizePath(href)).includes(` id="${anchor}"`), `${p}: link ${address}: no #${anchor} there`);
+      }
     }
   }
-  ok(!/href="#(?!\s)/.test(html.slice(html.indexOf('<div id="root">'))), `${p}: still contains a legacy #hash link`);
+  const body = html.includes('<div id="root">') ? html.slice(html.indexOf('<div id="root">')) : html;
+  for (const m of body.matchAll(/href="#([^"]+)"/g)) {
+    ok(html.includes(` id="${m[1]}"`), `${p}: link #${m[1]} has no heading on the page`);
+  }
 }
 
 /* ---- image sources resolve ----------------------------------------- *
@@ -137,7 +211,7 @@ for (const [p, html] of built) {
  */
 section("image sources");
 for (const [p, html] of built) {
-  const root = html.slice(html.indexOf('<div id="root">'));
+  const root = html.includes('<div id="root">') ? html.slice(html.indexOf('<div id="root">')) : html;
   const srcs = [...root.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]);
   for (const src of new Set(srcs)) {
     ok(underBase(src), `${p}: <img src="${src}"> is not root-relative under ${BASE}/`);
@@ -153,6 +227,14 @@ const sitemap = fs.readFileSync(path.join(DOCS, "sitemap.xml"), "utf8");
 for (const route of ROUTES) {
   const listed = sitemap.includes(`<loc>${ORIGIN}${url(route.path)}</loc>`);
   ok(listed === !route.canonical, `sitemap: ${route.path} should ${route.canonical ? "not " : ""}be listed`);
+}
+for (const p of helpPages) ok(sitemap.includes(`<loc>${ORIGIN}${url(p)}</loc>`), `sitemap: help page ${p} missing`);
+for (const p of redirectPages) ok(!sitemap.includes(`<loc>${ORIGIN}${url(p)}</loc>`), `sitemap: ${p} only redirects`);
+ok(!/<lastmod>/.test(sitemap), "sitemap: no dates (the build must give the same bytes)");
+const robots = fs.readFileSync(path.join(DOCS, "..", "robots.txt"), "utf8");
+ok(robots.includes(`Sitemap: ${ORIGIN}${url("/sitemap.xml")}`), "robots.txt does not name the sitemap");
+for (const blocked of ["/59/calc/app/", "/59/calc/index.html", "/59/help-asset/"]) {
+  ok(robots.includes(`Disallow: ${blocked}`), `robots.txt does not block ${blocked}`);
 }
 // robots.txt and 404.html live at the domain root, outside this site.
 ok(fs.existsSync(path.join(DOCS, ".nojekyll")), ".nojekyll missing");
@@ -172,43 +254,6 @@ for (const name of SCRIPTS) {
   const body = fs.readFileSync(path.join(DOCS, name), "utf8");
   for (const m of body.matchAll(/["'`](\/[A-Za-z_][^"'`]*)/g)) {
     ok(underBase(m[1]), `${name}: path ${m[1]} is not under ${BASE}/`);
-  }
-}
-
-/* ---- the web client is the pinned build, unchanged ---------------- *
- *
- * calc/ is imported from the Calc-U-59 repository and never edited here.
- * It must match its own MANIFEST.json file for file, and be the build
- * web-client.json pins — a --local test build fails here until the pinned
- * one is installed again (node .seo/fetch-web-client.js).
- */
-section("web client");
-{
-  const { manifest, problems } = verifyTree(CLIENT_DIR);
-  for (const p of problems) ok(false, `calc/: ${p} — calc/ is imported, reinstall with fetch-web-client.js`);
-  const lock = readLock();
-  ok(manifest && manifest.commit === lock.commit && manifest.version === lock.version,
-     `calc/ is ${manifest ? manifest.version + " (" + manifest.commit + ")" : "missing"}, ` +
-     `web-client.json pins ${lock.version} (${lock.commit})`);
-}
-
-/* ---- the beta, if there is one, is its recorded build, unchanged --- *
- *
- * beta/ is optional and imported like calc/. Its zip is not downloaded again,
- * here or in CI: a -pre asset changes and disappears (.seo/README.md).
- */
-section("beta client");
-if (fs.existsSync(BETA_DIR) || fs.existsSync(BETA_LOCK)) {
-  ok(fs.existsSync(BETA_DIR) && fs.existsSync(BETA_LOCK), "beta/ and beta-client.json must come and go together");
-  if (fs.existsSync(BETA_DIR) && fs.existsSync(BETA_LOCK)) {
-    const { manifest, problems } = verifyTree(BETA_DIR);
-    for (const p of problems) ok(false, `beta/: ${p} — beta/ is imported, reinstall with fetch-web-client.js --beta`);
-    const lock = JSON.parse(fs.readFileSync(BETA_LOCK, "utf8"));
-    ok(manifest && manifest.commit === lock.commit && manifest.version === lock.version,
-       `beta/ is ${manifest ? manifest.version + " (" + manifest.commit + ")" : "missing"}, ` +
-       `beta-client.json records ${lock.version} (${lock.commit})`);
-    ok(/^Disallow: \/59\/beta\/$/m.test(fs.readFileSync(path.join(DOCS, "..", "robots.txt"), "utf8")),
-       "robots.txt must block /59/beta/");
   }
 }
 
@@ -238,7 +283,7 @@ for (const [p, html] of built) {
   }
 }
 
-const AUTHORED_CSS = ["styles.css", "colors_and_type.css", "fonts/self-hosted.css", "articles/article.css"];
+const AUTHORED_CSS = ["styles.css", "help.css", "colors_and_type.css", "fonts/self-hosted.css", "articles/article.css"];
 for (const name of AUTHORED_CSS) {
   const file = path.join(DOCS, name);
   if (!fs.existsSync(file)) { ok(false, `${name}: missing`); continue; }
@@ -276,6 +321,7 @@ const scanned = [
   ...ARTICLES.map((a) => [`articles/${a}.html`, fs.readFileSync(path.join(DOCS, "articles", `${a}.html`), "utf8")]),
   ...AUTHORED_CSS.map((f) => [f, fs.readFileSync(path.join(DOCS, f), "utf8")]),
   ["calc/calc.js", fs.readFileSync(path.join(CLIENT_DIR, "calc.js"), "utf8")],
+  ["help/help.js", fs.readFileSync(path.join(HELP_DIR, "help.js"), "utf8")],
 ];
 for (const [name, body] of scanned) {
   const hit = body.match(TRACKERS);
@@ -314,7 +360,7 @@ if (!JSDOM) {
     if (!scriptCache.has(src)) scriptCache.set(src, fs.readFileSync(diskPath(src), "utf8"));
     return scriptCache.get(src);
   };
-  const pages = ["/", "/play/", "/faq/", "/what-is-a-ti-59/", "/modules/", "/getting-started/debugger/"];
+  const pages = ROUTES.map((r) => r.path);
   for (const p of pages) {
     const html = built.get(normalizePath(p));
     const errors = [];

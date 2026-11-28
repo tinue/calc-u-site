@@ -6,8 +6,8 @@ new design. This document describes what the TI-58C ROM does differently,
 and why.
 
 Addresses are TI-58C ROM addresses unless written "TI-59 XXXX". They refer
-to the [annotated TI-58C ROM listing](https://github.com/tinue/Calc-U-59/blob/main/rom/TI58C-commented.asm)
-in the Calc-U-59 repository. Statements marked *derived* come from reading
+to the [annotated TI-58C ROM listing](https://github.com/tinue/calc-u/blob/main/products/calc-u-59/rom/TI58C-commented.asm)
+in the Calc-U repository. Statements marked *derived* come from reading
 the code; nothing observed shows them directly.
 
 ## Overview
@@ -72,7 +72,7 @@ causes compound:
      oscillator's CLK pad is bonded to pin 14, which otherwise carries D0
      ([datamath: TMC0580](http://www.datamath.org/Chips/TMC0580.htm)). The
      TI-59's printer test at D0 then had nowhere to go. Measured on an
-     opened unit: [CoreArchitecture.md, "TI-58C clock"](https://github.com/tinue/Calc-U-59/blob/main/reference/CoreArchitecture.md).
+     opened unit: [Core-Architecture.md, "TI-58C clock"](https://github.com/tinue/calc-u/blob/main/products/calc-u-59/docs/developer/Core-Architecture.md#ti-58c-clock).
 4. **The card-reader code went away.** That freed most of 1680–17FF, which
    now holds a factory self-test and relocated routines.
 5. **The ROM is a later revision.**
@@ -208,8 +208,8 @@ counts behind them match a real TI-58C exactly: the blink is 11,200
 instructions per period (8,800 with the printer), a Pause shows for 1,489
 idle instructions. In seconds a real unit differs, because its clock is a
 DSCOM's own oscillator: it differs between units (PHI ≈ 195–200 kHz) and
-wanders by about 0.8% between sessions ([CoreArchitecture.md, "TI-58C
-clock"](https://github.com/tinue/Calc-U-59/blob/main/reference/CoreArchitecture.md)).
+wanders by about 0.8% between sessions ([Core-Architecture.md, "TI-58C
+clock"](https://github.com/tinue/calc-u/blob/main/products/calc-u-59/docs/developer/Core-Architecture.md#ti-58c-clock)).
 
 ## Bug fixes
 

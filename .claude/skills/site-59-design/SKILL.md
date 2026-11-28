@@ -13,8 +13,9 @@ The system is built around the **Calc-U 59 emulator app** for Mac, iPhone, and i
 Key files:
 - `59/colors_and_type.css` — all color and typography tokens. Load this first; wrap your content in `<div class="calcu">`.
 - `59/assets/app-screenshot.png` — canonical app screenshot; `59/assets/app-icon.png` — brand mark.
-- `59/Pages.jsx` / `59/components.jsx` — the help website's sources. Copy components from here rather than reinventing. The `index.html` files are generated from them; see `59/.seo/README.md`.
-- The playable calculator (`59/calc/`) is imported from Calc-U-59's web client and never edited here; its components live in that repository's `Web/src/`.
+- `59/Pages.jsx` / `59/components.jsx` — the site pages' sources (home, play, software). Copy components from here rather than reinventing. The `index.html` files are generated from them; see `59/.seo/README.md`.
+- `59/help.css` and `59/.seo/help-page.js` — the help pages: the help's Markdown, rendered from the release's help asset, inside the site's header, footer and chapter rail. The help's words are the release's; the design changes only these two files.
+- The playable calculator (`59/calc/`) is imported from Calc-U-59's web client and never edited here; its components live in the source repository's `products/calc-u-59/frontends/web/src/`.
 - `59/CREDITS.md` — every asset + its license. `59/fonts/` — self-hosting setup.
 - `59/preview/` — small specimen cards demonstrating colors, type, spacing, components, brand.
 

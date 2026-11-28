@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fast mode — Calc-U 59 help</title>
+<meta name="description" content="The TI-59's ROM runs some programs that are not in its memory, the built-in functions Σ+, x̄, P→R, D.MS and Op 11–15 and the programs of a module, on a faster…">
+<link rel="canonical" href="https://calc-u.org/59/help/09-product-topics/fast-mode/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/09-product-topics/fast-mode/">
+<meta property="og:title" content="Fast mode — Calc-U 59 help">
+<meta property="og:description" content="The TI-59's ROM runs some programs that are not in its memory, the built-in functions Σ+, x̄, P→R, D.MS and Op 11–15 and the programs of a module, on a faster…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k yellow">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/59/help/09-product-topics/">Product topics of Calc-U-59</a></li><li><a href="/59/help/09-product-topics/models/">What differs by model</a></li><li><a href="/59/help/09-product-topics/modules/">Solid State ROM modules</a></li><li><a href="/59/help/09-product-topics/cue-cards/">Cue cards</a></li><li><a href="/59/help/09-product-topics/constant-memory/">Constant memory</a></li><li><a href="/59/help/09-product-topics/fast-mode/" aria-current="page">Fast mode</a></li><li><a href="/59/help/09-product-topics/faq/">FAQ</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> Fast mode</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="fast-mode">Fast mode</h1>
+<p>The TI-59's ROM runs some programs that are not in its memory, the
+built-in functions Σ+, x̄, P→R, D.MS and Op 11–15 and the programs of a
+module, on a faster path: between two steps it skips the display update,
+the R/S check, the trace printing and the stop on an error. Such steps
+run in 40–50 % less time. Users' clubs found firmware bugs that put a
+program of your own on that path: <strong>fast mode</strong>. Calc-U-59 runs the
+original ROM, so fast mode works as on the real calculator, with its
+pitfalls. This page sums up what you need to use it; the whole story,
+with its sources, is the article
+<a href="/59/articles/fast-mode.html">TI-59 Fast Mode</a>.</p>
+<h2 id="what-changes-in-fast-mode">What changes in fast mode</h2>
+<ul>
+<li>The display stays as it was until the program ends, and R/S cannot
+stop the program.</li>
+<li>An error does not stop the program, and nothing is traced on the
+printer.</li>
+<li>A program runs in about half the time: Martin Neef's 69! (CHIP
+10/1980) took 29.2 s in normal mode and 14.6 s in fast mode on his
+calculator; Calc-U-59 takes 29.0 s and 14.3 s.</li>
+</ul>
+<h2 id="rules-for-a-fast-mode-program">Rules for a fast-mode program</h2>
+<ul>
+<li><strong>Allowed:</strong> number entry, arithmetic, parentheses and all functions;
+STO, RCL, SUM, Prd, Exc with INV and Ind; HIR, CMs, CP, x⇄t, CE, CLR;
+St flg, If flg, Fix, Eng, Deg, Rad, Grad; Op 00–08, Op 10, Op 16–39;
+Prt, Adv, Pause; transfers to an absolute or Ind address (GTO, x=t,
+x≥t, If flg, Dsz).</li>
+<li><strong>Not allowed</strong> (each leaves fast mode and loses the result): a label as
+a target, A to E′ called from the program, every SBR, and the built-in
+ROM routines Σ+, x̄, P→R, D.MS, Op 11–15.</li>
+<li><strong>Ending the program</strong> is where most fast-mode programs go wrong. End
+with RST or R/S while X is 0, a number still being typed, a value just
+shown by Pause or Prt, or one that went through <code>EE INV EE</code>. Safe:
+<code>CLR RST</code>, <code>0 RST</code>, <code>RCL nn Pause RST</code>, <code>RCL nn EE INV EE R/S</code>. Any
+other result hangs the calculator with a dark display: only switching
+off helps, which erases the program (in Calc-U-59: Machine ▸ Cold boot).</li>
+</ul>
+<h2 id="ways-in">Ways in</h2>
+<p>Most ways in put X = 1.000000000002 on the display first
+(<code>1 + 2 EE 12 +/- =</code>):</p>
+<ul>
+<li><strong>SST</strong>: a St flg step at step 007 and the program from step 008; key
+<code>GTO 007 SST 0 STO</code>. The example <strong>fastmode-sst</strong> under
+<strong>Examples ▸ Programs</strong> does this.</li>
+<li><strong>St flg on the last step of the partition</strong>: the program halts with a
+flashing display; key <code>7 EE</code>.</li>
+<li><strong>LRN inside a module program</strong>, <code>00000 Pgm 02 SBR 239</code> with the Master
+Library: it reaches the same state by another bug, and it <strong>clears the
+whole memory</strong>. The first step must lie on a multiple of 8.</li>
+</ul>
+<p>Entering fast mode overwrites the ten user flags and the Fix setting: set
+the flags you need inside the program.</p>
+<h2 id="in-calc-u-59">In Calc-U-59</h2>
+<ul>
+<li>The debug panel's CALCULATOR tab shows when a program runs in fast mode;
+while you step such a program, X may hold no number and is shown raw, in
+amber (<a href="/59/help/07-debugger/debugger/">Debugger</a>).</li>
+<li>More fast-mode programs, among them the calendar programs, are in the
+<a href="/59/software/">TI-59 Software Collection</a>.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/09-product-topics/constant-memory/">← 9 · Constant memory</a><a class="btn primary" rel="next" href="/59/help/09-product-topics/faq/">9 · FAQ →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

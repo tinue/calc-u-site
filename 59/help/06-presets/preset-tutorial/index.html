@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing a preset, step by step — Calc-U 59 help</title>
+<meta name="description" content="A preset is nothing more than plain text. This tutorial builds one up from nothing, one part at a time, so you can see exactly what each line changes. Every…">
+<link rel="canonical" href="https://calc-u.org/59/help/06-presets/preset-tutorial/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/06-presets/preset-tutorial/">
+<meta property="og:title" content="Writing a preset, step by step — Calc-U 59 help">
+<meta property="og:description" content="A preset is nothing more than plain text. This tutorial builds one up from nothing, one part at a time, so you can see exactly what each line changes. Every…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/06-presets/"><span class="k yellow">6</span><span>Presets</span></a><ul class="help-parts"><li><a href="/59/help/06-presets/">Presets</a></li><li><a href="/59/help/06-presets/presets/">Presets of Calc-U-59</a></li><li><a href="/59/help/06-presets/preset-tutorial/" aria-current="page">Writing a preset, step by step</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/06-presets/">6 Presets</a> <span aria-hidden="true">›</span> Writing a preset, step by step</p>
+<p class="eyebrow">Chapter 6 · Presets</p>
+<h1 id="writing-a-preset-step-by-step">Writing a preset, step by step</h1>
+<p>A preset is nothing more than plain text. This tutorial builds one up
+from nothing, one part at a time, so you can see exactly what each line
+changes. Every step below is also a real file you can download and load
+in Calc-U-59 as you go; try each one before moving on to the next. What
+every key and section means in full is in <a href="/59/help/06-presets/presets/">Presets</a> and in
+the reference, <a href="/59/help/10-reference/preset-sections/">The preset's TI sections</a>.</p>
+<h2 id="before-you-start">Before you start</h2>
+<p>A preset is just a text file, so it is usually easiest to write and edit
+it on a computer with a proper text editor, then get the finished file
+onto whichever device runs Calc-U-59. On the Mac, Windows and Linux,
+keep your presets in the save folder of the desktop app (<code>Calc-U-59</code> in
+your home folder) or in any folder of your own. On the iPhone and the
+iPad, the simplest place is the app's <strong>Calc-U-59</strong> folder of iCloud
+Drive, the save folder it uses for magnetic cards: copy a finished
+preset there (on the Mac, Finder ▸ iCloud Drive ▸ Calc-U-59) and open it
+with <strong>More ▸ Load Preset…</strong>. Any other folder that syncs to the device works too. On a
+computer, <strong>Settings ▸ Folders ▸ Presets folder</strong> makes Load Preset…
+start in your presets' folder.</p>
+<p>None of that is needed, though: you can write and edit a preset directly
+on an iPhone or iPad in any text editor that saves plain text, with no
+computer at all. You can also read this tutorial on the device itself
+and download each step's file straight to it; the same goes for every
+other preset of the <a href="/59/software/">TI-59 Software Collection</a>.</p>
+<h2 id="watch-out-for-txt">Watch out for .txt</h2>
+<p>When you save a preset with a plain text editor, it is easy to end up
+with <code>my-preset.ti59.txt</code> instead of <code>my-preset.ti59</code>. Windows and macOS
+both hide known file extensions by default, so the file still looks like
+<code>my-preset.ti59</code> in Finder, Explorer or the iPhone's file picker.
+Calc-U-59's preset picker accepts only <code>.ti59</code>, <code>.ti58</code> and <code>.ti58c</code>, so
+a file with a hidden <code>.txt</code> tail shows up <strong>greyed out and cannot be
+chosen</strong>. If that happens, turn on &quot;Show file extensions&quot; (Windows
+Explorer) or &quot;Show all filename extensions&quot; (macOS Finder: Finder ▸
+Settings ▸ Advanced) and rename the file, or rename it in a terminal with
+<code>mv my-preset.ti59.txt my-preset.ti59</code>.</p>
+<h2 id="step-1-setup">Step 1: Setup</h2>
+<p>Every preset starts with the same few lines. <code>format-version: 2</code> says
+which version of the format the file is written in; a file without it
+is refused with a hint. <code>model</code>
+picks the calculator you get (<code>TI-59</code>, <code>TI-58</code> or <code>TI-58C</code>), <code>slot-1</code>
+plugs in one of the fourteen Solid State ROM modules by its two-letter
+ID, here <code>ML</code> for the Master Library, and <code>printer: PC-100C</code> attaches the
+printer. <code>preset-name</code> is the name the preset shows in lists, and
+<code>description</code> the line under it.</p>
+<p>A preset always builds its machine from scratch, from a cold boot: what
+the file does not name is not there. Leave out <code>slot-1</code> and the slot is
+empty; leave out <code>printer</code> and there is no printer.</p>
+<pre class="help-code"><code class="language-yaml"># TI-59 Preset File Tutorial — Step 1: setup
+#
+# This is the smallest useful preset file: it only says which calculator to
+# build and what is plugged into it. Load it in Calc-U-59 right now and you
+# get a TI-59 with the Master Library module and the PC-100C printer;
+# nothing else has been set up yet.
+
+# Every preset of this format starts with its version.
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+# A preset builds its machine from scratch: leave out slot-1 and there is no
+# module, leave out printer and there is no printer.
+model: TI-59
+preset-name: Tutorial step 1
+description: Preset tutorial, step 1 - the machine
+slot-1: { name: ML }
+printer: PC-100C
+</code></pre>
+<p><a href="/59/help/downloads/tutorial-1-setup.ti59">Download tutorial-1-setup.ti59</a></p>
+<p>Load this file and you already have a working calculator: nothing else
+in a preset is needed. Everything from here on is added only because
+this preset needs it.</p>
+<h2 id="step-2-partition">Step 2: Partition</h2>
+<p><code>partition</code> sets the split between program memory and data registers,
+the same trade-off the calculator's own key sequence <strong>2nd Op 17</strong>
+controls. The value is written as <code>steps.registers</code>: <code>719.29</code> means step
+719 is the last program step, so 720 steps go to the program and the
+remaining 240 steps become 30 data registers (00 to 29) on a TI-59. Only
+the number before the dot counts; the part after it is a note for the
+reader. Leave the line out and the model's partition after a cold boot
+holds: 479.59 on the TI-59.</p>
+<pre class="help-code"><code class="language-yaml"># TI-59 Preset File Tutorial — Step 2: partition
+#
+# Same as Step 1, with one addition: partition changes the split between
+# program memory and data registers.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Tutorial step 2
+description: Preset tutorial, step 2 - the partition
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+</code></pre>
+<p><a href="/59/help/downloads/tutorial-2-partition.ti59">Download tutorial-2-partition.ti59</a></p>
+<p>This step does not change what you see when you load the file; there is
+no program or cue card yet. The tutorial's program is short enough for
+the default partition too; the line is here to show how it is written.</p>
+<h2 id="step-3-cue-card">Step 3: Cue card</h2>
+<p><code>cue-card</code> is what turns a blank calculator into a labelled one: a card
+in the window above the top row of keys, as the real calculator held a
+card in its slot. <code>title</code> is the card's headline. <code>row-1</code> puts one line of
+running text in place of the five labels of the A′–E′ row, handy for a
+one-line instruction like this tutorial's &quot;Calculates the sum of 1..N
+the slow way&quot;; <code>row-1-align</code> sets it left. <code>A</code> to <code>E</code> label the keys of
+the lower row one by one; <code>\blank</code> on <code>D</code> and <code>E</code> makes those places
+empty cells into which the label of <code>C</code> runs, so &quot;Enter number, then A&quot;
+reads across three keys.</p>
+<p>A preset's cue card is a plain card, written by hand. A magnetic card
+brings its own cue card, which is described with the cards
+(<a href="/59/help/04-media/magnetic-cards/">Magnetic cards</a>).</p>
+<pre class="help-code"><code class="language-yaml"># TI-59 Preset File Tutorial — Step 3: cue card
+#
+# Adds a cue-card section: the card shown once the preset loads, labelling
+# the A-E keys the way a real card would.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Tutorial step 3
+description: Preset tutorial, step 3 - the cue card
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank
+</code></pre>
+<p><a href="/59/help/downloads/tutorial-3-cuecard.ti59">Download tutorial-3-cuecard.ti59</a></p>
+<p>Load this file now and the card appears at once. Nothing on it does
+anything yet, because there is still no program behind the <strong>A</strong> key.
+All the keys of a cue card, the symbols such as <code>\sqrt</code> and how the
+labels line up are in <a href="/59/help/09-product-topics/cue-cards/">Cue cards</a>.</p>
+<h2 id="step-4-program">Step 4: Program</h2>
+<p><code>program</code> fills the program memory with keycodes: the codes the
+calculator itself shows while you record a program by hand, not the
+keys' positions. Under <code>keycodes: |</code> each line is either a run of
+two-digit keycodes (the compact notation used here, ten steps per line,
+going on where the line before stopped) or a listing line as the printer
+lists a program, with the step number first. Anything after <code>#</code> is a
+comment, so the step numbers at the end of the lines are for the reader.
+Only the steps listed are written.</p>
+<p>This program sums a number down to 1: <strong>A</strong> stores the number you
+entered, clears the total, and loops with <strong>Dsz</strong>, adding the counter
+into the total until it reaches zero; then it shows the total and stops
+with <strong>R/S</strong>.</p>
+<pre class="help-code"><code class="language-yaml"># TI-59 Preset File Tutorial — Step 4: program
+#
+# Adds a program section: the calculator's program memory, written as
+# keycodes. This program sums the numbers from whatever you enter down to
+# 1: press a number, then A.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Tutorial step 4
+description: Preset tutorial, step 4 - the program
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank
+
+# The program memory, as keycodes. The format is flexible: here we write ten
+# steps per line (the compact notation) with a comment for the step numbers.
+# The loader reads the two-digit keycodes and ignores the comments.
+program:
+  keycodes: |
+    43 00 44 01 97 00 00 00 43 01   # 000-009
+    91 76 11 42 00 25 42 01 61 00   # 010-019
+    00                              # 020
+</code></pre>
+<p><a href="/59/help/downloads/tutorial-4-program.ti59">Download tutorial-4-program.ti59</a></p>
+<p>Load this file and press <strong>5</strong>, then <strong>A</strong>, as the cue card tells you:
+the program runs now and shows 15.</p>
+<h2 id="step-5-registers">Step 5: Registers</h2>
+<p><code>data</code> preloads data registers, one <code>NN: value</code> per line, as decimal
+numbers at the calculator's full precision of 13 digits. The value
+here, <code>3.000000000004</code> in register 29, is chosen because it is awkward
+to key in by hand on the real calculator (you would need <strong>SUM</strong> and a
+division to land on it exactly); a preset just states the value. Only
+the registers listed are written; the others stay zero.</p>
+<pre class="help-code"><code class="language-yaml"># TI-59 Preset File Tutorial — Step 5: registers
+#
+# Adds a data section: data registers preloaded with decimal numbers, at
+# the full TI-59 precision.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Tutorial step 5
+description: Preset tutorial, step 5 - the data registers
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank
+
+# The program memory, as keycodes. The format is flexible: here we write ten
+# steps per line (the compact notation) with a comment for the step numbers.
+# The loader reads the two-digit keycodes and ignores the comments.
+program:
+  keycodes: |
+    43 00 44 01 97 00 00 00 43 01   # 000-009
+    91 76 11 42 00 25 42 01 61 00   # 010-019
+    00                              # 020
+
+# Register content. The full TI-59 precision is supported. On the real
+# hardware the number below cannot be keyed in directly; one would need SUM
+# and a division to set it up.
+data:
+  29: 3.000000000004
+</code></pre>
+<p><a href="/59/help/downloads/tutorial-5-registers.ti59">Download tutorial-5-registers.ti59</a></p>
+<p>This step does not change what the program does, since register 29 is
+not part of the sum; it is here so that the next step has something
+worth recalling with <strong>RCL</strong>. Press <strong>RCL 2 9</strong> and the display shows
+<code>3.</code>: the display has too few places for the fraction.</p>
+<p>To see that the value loaded, open the debug panel and look at the
+registers of its CALCULATOR tab (<a href="/59/help/07-debugger/debugger/">Debugger</a>). On a Mac,
+on Windows and Linux, on an iPad held sideways and on an iPhone Duo
+opened flat the panel is beside the calculator; on an iPhone, and on an
+iPad held upright, it is a page of its own that you turn to with the
+arrow in the corner, once <strong>Settings ▸ Layout ▸ Debug Page in Portrait</strong> is on.</p>
+<h2 id="step-6-keys">Step 6: Keys</h2>
+<p><code>keys</code> is the odd one out: everything above describes the calculator,
+but this section acts. It is a list of steps, one per line, each
+<code>- verb: value</code>, carried out in order once everything above has been set
+up. <code>- key:</code> presses keys, written by their key IDs: the label on the
+key, such as <code>5</code>, <code>A</code>, <code>RCL</code> or <code>=</code>, separated by spaces. Key IDs are
+not the keycodes of Step 4: the digit 5 is the key ID <code>5</code> here and the
+keycode <code>05</code> in a program. Mixing the two up is the most common mistake
+in a preset, and the reference lists both (<a href="/59/help/10-reference/preset-sections/">The preset's TI
+sections</a>).</p>
+<p>A preset's steps run at full speed unless it says otherwise, so this one
+starts with <code>- regular-speed:</code> to let you watch the display. Each step
+waits until the calculator is idle before the next one starts, so the
+sum has finished before the next step. <code>- wait: 2s</code> pauses for two
+seconds so you can read the result.</p>
+<pre class="help-code"><code class="language-yaml"># TI-59 Preset File Tutorial — complete
+#
+# This file shows how a preset is put together. The preset tutorial in the
+# help (https://calc-u.org/59/, chapter Presets) builds it up step by step.
+
+format-version: 2
+
+# Set up the machine: the model, the Solid State ROM module and the printer.
+model: TI-59
+preset-name: Preset tutorial
+description: Preset tutorial, complete - sums 1..5, then recalls R29
+slot-1: { name: ML }
+printer: PC-100C
+
+# Change the partition of the calculator
+partition: 719.29   # 720 steps, 30 data registers (3 2nd Op 17)
+
+# The cue card that is shown after loading the preset, above the top row of
+# keys. row-1 is one line of text in place of the A'-E' labels; A to E label
+# the keys below it, and \blank lets the label before it run on.
+cue-card:
+  title: TI-59 Preset File Tutorial
+  row-1: Calculates the sum of 1..N the slow way
+  row-1-align: left
+  A: Sum 1..N
+  C: Enter number, then A
+  D: \blank
+  E: \blank
+
+# The program memory, as keycodes. The format is flexible: here we write ten
+# steps per line (the compact notation) with a comment for the step numbers.
+# The loader reads the two-digit keycodes and ignores the comments.
+program:
+  keycodes: |
+    43 00 44 01 97 00 00 00 43 01   # 000-009
+    91 76 11 42 00 25 42 01 61 00   # 010-019
+    00                              # 020
+
+# Register content. The full TI-59 precision is supported. On the real
+# hardware the number below cannot be keyed in directly; one would need SUM
+# and a division to set it up.
+data:
+  29: 3.000000000004
+
+# Keys pressed after everything above has been set up. As a sample we
+# calculate the sum of 1..5 with the program above. Keys are written by their
+# key IDs, the labels on the keys, not by keycodes: the digit 5 is the key
+# ID 5, while in the program above the same digit is the keycode 05.
+keys:
+  - regular-speed:      # a preset runs at full speed unless it says otherwise
+  - key: 5 A            # 5, then A: the program runs and shows 15
+  - wait: 2s            # wait 2 seconds, to see the result
+  - key: RCL 2 9        # recall register 29
+  - wait: 2s            # the display shows only &quot;3.&quot;: too few digits for the fraction
+  - key: &quot;- 3 =&quot;        # after subtracting 3 we see the fraction
+</code></pre>
+<p><a href="/59/help/downloads/tutorial.ti59">Download tutorial.ti59</a></p>
+<p>This is the finished file. Loading it presses <strong>5 A</strong> to run the sum of
+Step 4 (15), waits, recalls register 29 of Step 5, waits again, and
+subtracts 3, which leaves the fraction: the display shows <code>4.-12</code>. It
+uses, in order, every part this tutorial added. The last line is in
+quotes because a value that starts with <code>- </code> would otherwise be read as
+a list.</p>
+<h2 id="where-next">Where next</h2>
+<p>That covers enough to write your own preset from scratch.
+<a href="/59/help/06-presets/presets/">Presets</a> describes every part in one place: the magnetic
+cards a preset can feed, the steps that check the display, the debugger's
+steps. The full grammar, with every key ID, is in the reference (<a href="/59/help/10-reference/preset-sections/">The
+preset's TI sections</a>). For more presets to read
+and load, many of them long programs from the calculator's day, see the
+<a href="/59/software/">TI-59 Software Collection</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/06-presets/presets/">← 6 · Presets of Calc-U-59</a><a class="btn primary" rel="next" href="/59/help/07-debugger/">7 · Debugger →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

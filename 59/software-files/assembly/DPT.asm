@@ -1,3 +1,4 @@
+Calc-U-59 ASM 2.0
 PROGRAM:
 ; The emulator models how the eye integrates the multiplexed display (persistence of vision),
 ; so, as on the real hardware, all decimal dots look as if they were on at the same time.

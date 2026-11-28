@@ -1,4 +1,80 @@
 // Generated from library/web/src/ by library/web/build/dist.js. Do not edit.
+/* === appLog.js === */
+// The page's app log: how the app ran (library/applog). A page cannot write a
+// file, so each line goes to the browser's console at its level and the last
+// CALCU_APP_LOG_KEEP lines are kept for Help ▸ Show App Log (a download).
+// The worker's lines arrive filtered at the session's level (the setting
+// `[app-log] level`, or `?app-log-level=` for this run); the page's own
+// lines are warn and error, plus info and debug when the URL asks for them.
+//
+//   calcuAppLog(level, text)   level: "error" | "warn" | "info" | "debug"
+//   calcuAppLogText()          the kept lines, one per line, for the download
+//   calcuAppLogLevelOfPage()   the `?app-log-level=` of the page's URL, or ""
+//   calcuErrorText(e)          "<name>: <message>" of a thrown value
+//
+// In the worker (library-worker.js) a line is filtered by the worker's URL,
+// which carries the page's `?app-log-level=`, and posted to the page as
+// {kind: "app-log", level, text}: it lands in the page's kept lines too.
+
+const CALCU_APP_LOG_KEEP = 2000;
+const CALCU_APP_LOG_LEVELS = ["error", "warn", "info", "debug"];
+const calcuAppLogLines = [];
+
+function calcuAppLogLevelOfPage() {
+  if (typeof location === "undefined") return "";
+  const m = /[?&]app-log-level=([a-z]+)/.exec(location.search);
+  return m && CALCU_APP_LOG_LEVELS.includes(m[1]) ? m[1] : "";
+}
+
+function calcuAppLogStamp(d) {
+  const p = (n, w) => String(n).padStart(w || 2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:` +
+    `${p(d.getSeconds())}.${p(d.getMilliseconds(), 3)}`;
+}
+
+// A line's text as applog::formatLine writes it, since the page logs before
+// the worker exists: no carriage returns, the lines after the first indented
+// by two spaces, no trailing spaces or line breaks.
+function calcuAppLogBody(text) {
+  return String(text).replace(/\r/g, "").replace(/\n/g, "\n  ").replace(/[ \n]+$/, "");
+}
+
+function calcuErrorText(e) {
+  if (e && typeof e === "object" && (e.name || e.message)) {
+    const errno = typeof e.errno === "number" ? ` (errno ${e.errno})` : "";   // Emscripten's FS errors
+    return `${e.name || "Error"}: ${e.message || ""}${errno}`;
+  }
+  return String(e);
+}
+
+const CALCU_APP_LOG_IN_WORKER = typeof WorkerGlobalScope !== "undefined" && typeof self !== "undefined" &&
+  self instanceof WorkerGlobalScope;
+
+// `fromWorker`: the line was filtered in the worker already.
+function calcuAppLog(level, text, fromWorker) {
+  const at = CALCU_APP_LOG_LEVELS.indexOf(level);
+  const lvl = at < 0 ? "warn" : level;
+  if (!fromWorker) {
+    const page = CALCU_APP_LOG_LEVELS.indexOf(calcuAppLogLevelOfPage() || "warn");
+    if (CALCU_APP_LOG_LEVELS.indexOf(lvl) > page) return;
+  }
+  if (CALCU_APP_LOG_IN_WORKER) {
+    postMessage({ kind: "app-log", level: lvl, text: String(text) });
+    return;
+  }
+  const body = calcuAppLogBody(text);
+  calcuAppLogLines.push(`${calcuAppLogStamp(new Date())} ${lvl.toUpperCase().padEnd(5)} ${body}`.replace(/ +$/, ""));
+  if (calcuAppLogLines.length > CALCU_APP_LOG_KEEP) calcuAppLogLines.splice(0, calcuAppLogLines.length - CALCU_APP_LOG_KEEP);
+  if (typeof console !== "undefined") {
+    const out = console[lvl] || console.log;
+    out.call(console, `[Calc-U] ${body}`);
+  }
+}
+
+function calcuAppLogText() {
+  return calcuAppLogLines.length ? `${calcuAppLogLines.join("\n")}\n` : "";
+}
+
 /* === sentences.js === */
 // The sentences a Web frontend shows about its start and its storage: the same for every
 // product, with the product's name. Concatenated into a product's calc.js
@@ -7,6 +83,8 @@
 const CALCU_SENTENCES = {
   // The page shows it instead of going on with "starting".
   startFailed: (product, why) => `${product} could not start${why ? `: ${why}` : "."}`,
+  // The same, for a failure once it ran.
+  stopped: (product, why) => `${product} stopped${why ? `: ${why}` : "."}`,
   starting: (product) => `Starting ${product}…`,
   // Another copy of the product holds the store.
   secondCopy: (product) => `${product} is open in another tab or window: what you save here is not kept.`,
@@ -41,9 +119,13 @@ function calcuCanOpenIndexedDb(name) {
       if (typeof indexedDB === "undefined" || !indexedDB) { resolve(false); return; }
       const request = indexedDB.open(name);
       request.onsuccess = () => { request.result.close(); resolve(true); };
-      request.onerror = () => resolve(false);
+      request.onerror = () => {
+        calcuAppLog("warn", `storage: IndexedDB ${name} cannot be opened: ${calcuErrorText(request.error)}`);
+        resolve(false);
+      };
       request.onblocked = () => resolve(true);
-    } catch (_) {
+    } catch (e) {
+      calcuAppLog("warn", `storage: IndexedDB ${name} cannot be opened: ${calcuErrorText(e)}`);
       resolve(false);
     }
   });
@@ -57,7 +139,10 @@ function calcuAcquireStorageLock(name) {
     navigator.locks.request(name, { ifAvailable: true }, (lock) => {
       resolve(!!lock);
       return lock ? new Promise(() => {}) : undefined;  // held while the worker lives
-    }).catch(() => resolve(true));
+    }).catch((e) => {
+      calcuAppLog("warn", `storage: the lock ${name} could not be asked for: ${calcuErrorText(e)}; this copy writes.`);
+      resolve(true);
+    });
   });
 }
 
@@ -78,6 +163,7 @@ async function calcuOpenStorage(Module, config, onRefused) {
     const done = (err) => {
       if (err && open) {
         open = false;
+        calcuAppLog("warn", `storage: writing ${config.mount} failed: ${calcuErrorText(err)}; nothing more is kept.`);
         if (onRefused) onRefused(memory("unavailable", CALCU_SENTENCES.unavailable));
       }
       if (mount.calcuPersist === "again") start();
@@ -104,7 +190,10 @@ async function calcuOpenStorage(Module, config, onRefused) {
       resolve(e);
     }
   });
-  if (err) return memory("unreadable", CALCU_SENTENCES.unreadable);
+  if (err) {
+    calcuAppLog("warn", `storage: ${config.mount} could not be read: ${calcuErrorText(err)}; nothing is kept.`);
+    return memory("unreadable", CALCU_SENTENCES.unreadable);
+  }
   if (!writer) return memory("second-copy", CALCU_SENTENCES.secondCopy);
   open = true;
   return { mode: "kept", sentence: "" };
@@ -124,8 +213,8 @@ async function calcuOpenStorage(Module, config, onRefused) {
 //   importScripts(`${self.CALC_ROOT || ""}library-worker.js`);
 //
 // File system: /bundle and /presets (files.json), /uploads (picked files),
-// <mount> (the persistent file system: settings/<Product>/<Product>.ini and
-// the save folder <Product>/).
+// <mount> (the persistent file system: settings/<Product>/<Product>.ini,
+// the save folder <Product>/ and the file cache cache/).
 
 (function () {
   const CONFIG = self.CALCU_PRODUCT;
@@ -140,8 +229,9 @@ async function calcuOpenStorage(Module, config, onRefused) {
   let suspended = false;
   const pending = [];
 
-  const postStart = (state, failure) =>
-    postMessage({ kind: "state", topic: "web.start", value: { state, failure: failure || "" } });
+  // `detail`: what only the app log gets (the stack, what was handled).
+  const postStart = (state, failure, detail) =>
+    postMessage({ kind: "state", topic: "web.start", value: { state, failure: failure || "", detail: detail || "" } });
 
   function errorText(e) {
     if (Module && typeof WebAssembly !== "undefined" && WebAssembly.Exception && e instanceof WebAssembly.Exception &&
@@ -154,18 +244,24 @@ async function calcuOpenStorage(Module, config, onRefused) {
     return String((e && e.message) || e);
   }
 
+  // The app log's part of a failure: where it happened and the stack.
+  function errorDetail(where, e) {
+    const stack = e && typeof e.stack === "string" ? e.stack : "";
+    return stack ? `${where}\n${stack}` : where;
+  }
+
   function stopLoop() {
     if (loop === null) return;
     clearInterval(loop);
     loop = null;
   }
 
-  function fail(why) {
+  function fail(why, detail) {
     if (failed) return;
     failed = true;
     stopLoop();
     host = null;
-    postStart("failed", why);
+    postStart("failed", why, detail);
   }
 
   let lastTick = null;
@@ -178,7 +274,7 @@ async function calcuOpenStorage(Module, config, onRefused) {
       try {
         host.call();
       } catch (e) {
-        fail(errorText(e));
+        fail(errorText(e), errorDetail("in the host's call", e));
       }
       return;
     }
@@ -188,7 +284,7 @@ async function calcuOpenStorage(Module, config, onRefused) {
     try {
       host.call();
     } catch (e) {
-      fail(errorText(e));
+      fail(errorText(e), errorDetail("in the host's call", e));
     }
     const end = performance.now();
     pace.ticks += 1;
@@ -215,7 +311,8 @@ async function calcuOpenStorage(Module, config, onRefused) {
     try {
       host.receive(m);
     } catch (e) {
-      fail(errorText(e));
+      const what = [m.kind, m.name || m.topic, m.call ? `call ${m.call}` : ""].filter(Boolean).join(" ");
+      fail(errorText(e), errorDetail(`handling the message ${what}`, e));
       return;
     }
     if (m.kind === "command" && m.name === "suspend") {
@@ -280,12 +377,17 @@ async function calcuOpenStorage(Module, config, onRefused) {
       postMessage({ kind: "state", topic: "web.storage", value: state });
       postMessage({ kind: "stream", topic: "notices", reset: false, value: [{ sentence: state.sentence }] });
     });
+    calcuAppLog("debug", `storage: ${CONFIG.mount} opened as ${storage.mode}`);
     host = new Module[CONFIG.host]({
       product: CONFIG.name,
-      dirs: { settingsBase: `${CONFIG.mount}/settings`, saveFolder: `${CONFIG.mount}/${CONFIG.name}`, home: "" },
+      // cache: the file cache, every uploaded or picked file but a preset loaded once.
+      dirs: { settingsBase: `${CONFIG.mount}/settings`, saveFolder: `${CONFIG.mount}/${CONFIG.name}`,
+              cache: `${CONFIG.mount}/cache`, home: "" },
       storage,
       // `?bare=1` on the worker's URL: a fresh install starts bare (the demo and test pages).
       bare: /[?&]bare=1\b/.test(self.location.search),
+      // `?app-log-level=` (the page's, shell.js): the app log's level for this run.
+      appLogLevel: calcuAppLogLevelOfPage(),
       post: (message, transfer) => postMessage(message, transfer),
     });
     const why = host.failure();
@@ -304,5 +406,5 @@ async function calcuOpenStorage(Module, config, onRefused) {
   };
 
   if (!CONFIG) fail("The worker was started without a product.");
-  else init().catch((e) => fail(errorText(e)));
+  else init().catch((e) => fail(errorText(e), errorDetail("while starting", e)));
 })();

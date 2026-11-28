@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media files — Calc-U 59 help</title>
+<meta name="description" content="Calc-U-59 keeps three kinds of file besides presets: the magnetic card of the TI-59, the TI-58C's constant memory file, and the Solid State ROM module. All…">
+<link rel="canonical" href="https://calc-u.org/59/help/10-reference/media-files/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/10-reference/media-files/">
+<meta property="og:title" content="Media files — Calc-U 59 help">
+<meta property="og:description" content="Calc-U-59 keeps three kinds of file besides presets: the magnetic card of the TI-59, the TI-58C's constant memory file, and the Solid State ROM module. All…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/10-reference/"><span class="k yellow">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/59/help/10-reference/">Reference</a></li><li><a href="/59/help/10-reference/reference/">Calc-U-59 reference</a></li><li><a href="/59/help/10-reference/preset-sections/">Preset sections of Calc-U-59</a></li><li><a href="/59/help/10-reference/keystroke-programs/">Keystroke program files</a></li><li><a href="/59/help/10-reference/media-files/" aria-current="page">Media files</a></li><li><a href="/59/help/10-reference/asm-overlay/">ASM overlay</a></li><li><a href="/59/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> Media files</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="media-files">Media files</h1>
+<p>Calc-U-59 keeps three kinds of file besides presets: the magnetic card
+of the TI-59, the TI-58C's constant memory file, and the Solid State ROM
+module. All three hold a cue card block, described at the end of this
+page. How cards are used (arming, feeding, Name &amp; Save) is in
+<a href="/59/help/04-media/magnetic-cards/">Magnetic cards</a> and the shared
+<a href="/59/help/04-media/">Media chapter</a>; the constant memory in
+<a href="/59/help/09-product-topics/constant-memory/">Constant memory</a>; the modules in
+<a href="/59/help/09-product-topics/modules/">Modules</a>. This page gives the files themselves.</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>File</th>
+<th>Suffix</th>
+<th><code>format:</code></th>
+<th>Version</th>
+<th>Where it lies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Magnetic card</td>
+<td><code>.magnetcard.yaml</code></td>
+<td><code>ti59-magnetic-card</code></td>
+<td>3</td>
+<td>the save folder, or where you opened it from</td>
+</tr>
+<tr>
+<td>Constant memory file</td>
+<td><code>ti58c.memory.yaml</code></td>
+<td><code>ti58c-constant-memory</code></td>
+<td>1</td>
+<td>the save folder, one per product</td>
+</tr>
+<tr>
+<td>Solid State ROM module</td>
+<td><code>.rom.yaml</code></td>
+<td><code>solid-state-rom-module</code></td>
+<td>1</td>
+<td>with the ROMs; the 14 modules are part of the ROM set</td>
+</tr>
+</tbody>
+</table></div>
+<p>All of them follow the family's YAML rules
+(<a href="/59/help/10-reference/#syntax">Reference</a>). A damaged
+file, or one in another version of its format, is refused as a whole
+and the product says so with a notice.</p>
+<h2 id="magnetic-card">Magnetic card</h2>
+<p>A TI-59 magnetic card has two sides, 0 and 1. A side holds one bank, a
+quarter of the TI-59's memory, numbered 1 to 4; both sides may hold the
+same bank. A card is <strong>fresh</strong> while neither side has been written.</p>
+<pre class="help-code"><code class="language-yaml"># Calc-U-59 magnetic card
+format: ti59-magnetic-card
+format-version: 3
+card-name: &quot;My Program&quot;
+description: &quot;Bank 1 and 2 of the plotter program&quot;
+saved: 2026-11-12T10:00:00Z
+cue-card:
+  title: My Program
+  A: run
+sides:
+  0:
+    partition: 0x1C
+    data-type: program
+    bank: 1
+    protection: false
+    checksum: 0x02
+    encoding: register-hex
+    bytes: |
+      R000: 00 29 43 59 40 58 21 67
+      # … 30 rows in all
+</code></pre>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>yes</td>
+<td><code>ti59-magnetic-card</code></td>
+</tr>
+<tr>
+<td><code>format-version</code></td>
+<td>yes</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>card-name</code></td>
+<td>yes</td>
+<td>The card's name, which the card dialogs list; no <code>&quot;</code> and no line break</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>no</td>
+<td>One line about the card</td>
+</tr>
+<tr>
+<td><code>insert-notice</code></td>
+<td>no</td>
+<td>One line shown when you put the template in (<a href="/59/help/04-media/#templates-and-instances">Media</a>)</td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td>no</td>
+<td><code>true</code>: a template, which is never written</td>
+</tr>
+<tr>
+<td><code>saved</code></td>
+<td>no</td>
+<td>The time of the last write, <code>YYYY-MM-DDTHH:MM:SSZ</code> (UTC); for your information</td>
+</tr>
+<tr>
+<td><code>cue-card</code></td>
+<td>no</td>
+<td>The card's labels (<a href="#the-cue-card-block">below</a>)</td>
+</tr>
+<tr>
+<td><code>sides</code></td>
+<td>yes</td>
+<td><code>0</code>, <code>1</code> or both; a side not written yet is left out, and an empty <code>sides</code> is a fresh card</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each side:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>partition</code></td>
+<td>the header's partition byte, as the ROM writes it</td>
+</tr>
+<tr>
+<td><code>data-type</code></td>
+<td><code>program</code> or <code>data</code></td>
+</tr>
+<tr>
+<td><code>bank</code></td>
+<td>1–4; shown in that side's corner of the card</td>
+</tr>
+<tr>
+<td><code>protection</code></td>
+<td><code>true</code> or <code>false</code>: the side was written protected (<code>−n Write</code>)</td>
+</tr>
+<tr>
+<td><code>checksum</code></td>
+<td>the header's checksum byte</td>
+</tr>
+<tr>
+<td><code>encoding</code></td>
+<td><code>register-hex</code></td>
+</tr>
+<tr>
+<td><code>bytes</code></td>
+<td>exactly 30 rows, the bank's registers; the row labels are informational</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>A card made in Calc-U-59 is saved as <code>&lt;card-name&gt;.magnetcard.yaml</code> in
+the save folder.</li>
+<li>A write rewrites the file whole. It replaces only the side that was
+written, keeps the name, the description, the insert notice, the
+template mark and the cue card, and sets <code>saved</code>. Comments in the file are not kept; the
+file starts with the comment line <code># Calc-U-59 magnetic card</code>.</li>
+<li>A card saved without a cue card shows one titled with its name.</li>
+<li>The corners show the banks of the written sides; they follow from the
+sides and are not set by hand.</li>
+<li>The calculator checks what the real one checks: the partition when a
+card is read at idle, the bank number on <code>n INV Write</code>.</li>
+</ul>
+<h2 id="constant-memory-file">Constant memory file</h2>
+<p>The TI-58C's memory that keeps its contents while the calculator is off,
+with the cue card fitted at the time. Calc-U-59 writes it and reads it
+back when a TI-58C starts without a startup preset; it cannot be opened
+or dropped (it is refused with a notice).</p>
+<pre class="help-code"><code class="language-yaml"># Calc-U-59 TI-58C constant memory
+format: ti58c-constant-memory
+format-version: 1
+saved: 2026-11-12T10:00:00Z
+cue-card:
+  title: Loan
+  A: n
+ram:
+  encoding: register-hex
+  bytes: |
+    R000: 00 00 00 00 00 00 00 25
+    R059: 00 00 00 00 00 00 10 00
+</code></pre>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>yes</td>
+<td><code>ti58c-constant-memory</code></td>
+</tr>
+<tr>
+<td><code>format-version</code></td>
+<td>yes</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>memory-name</code></td>
+<td>no</td>
+<td>A name</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>no</td>
+<td>One line</td>
+</tr>
+<tr>
+<td><code>saved</code></td>
+<td>no</td>
+<td>The time of the last write, <code>YYYY-MM-DDTHH:MM:SSZ</code> (UTC); for your information</td>
+</tr>
+<tr>
+<td><code>cue-card</code></td>
+<td>no</td>
+<td>The stand-alone cue card fitted when the file was written; absent: none</td>
+</tr>
+<tr>
+<td><code>ram</code></td>
+<td>yes</td>
+<td><code>encoding: register-hex</code> and <code>bytes</code>: the 64 raw registers <code>R000</code>–<code>R063</code>; H00 to H03 are <code>R060</code> to <code>R063</code>. A register not listed is zero</td>
+</tr>
+</tbody>
+</table></div>
+<p>When the file is written, and when a preset leaves it alone, is in
+<a href="/59/help/09-product-topics/constant-memory/">Constant memory</a>.</p>
+<h2 id="solid-state-rom-module">Solid State ROM module</h2>
+<p>One file per module holds its names, its ROM and the pre-printed cue
+card of each library program. The 14 modules come with the ROM set; you
+do not need to write one, but a preset can name one by <code>slot-1: { file: … }</code>.</p>
+<pre class="help-code"><code class="language-yaml">format: solid-state-rom-module
+format-version: 1
+module-name: ML
+description: Master Library
+title: MASTER LIBRARY MODULE -1-
+menu-sort: 0
+chip: TMC0541
+rom:
+  size: 5000
+  encoding: addressed-hex
+  bytes: |
+    $0000: 25 00 00 54 02 43 11 41  14 15 15 82 17 01 19 51
+    # …
+cue-cards:
+  - program: 1
+    title: MASTER LIBRARY DIAGNOSTIC
+    id: ML-01
+    row-1: &quot;DIAGNOSTIC: SBR =&quot;
+    row-1-align: center
+</code></pre>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>yes</td>
+<td><code>solid-state-rom-module</code></td>
+</tr>
+<tr>
+<td><code>format-version</code></td>
+<td>yes</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>module-name</code></td>
+<td>yes</td>
+<td>The two-letter ID (<code>ML</code>) that <code>slot-1: { name: … }</code> names</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>yes</td>
+<td>The name the module picker shows (&quot;Master Library&quot;)</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>no</td>
+<td>The title printed on the module</td>
+</tr>
+<tr>
+<td><code>menu-sort</code></td>
+<td>no</td>
+<td>Orders the modules in a list; default 0</td>
+</tr>
+<tr>
+<td><code>chip</code></td>
+<td>no</td>
+<td>The ROM chip</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>no</td>
+<td>Free text, not read</td>
+</tr>
+<tr>
+<td><code>rom</code></td>
+<td>yes</td>
+<td><code>size</code> (at most 5000 bytes), <code>encoding</code> (<code>addressed-hex</code>, <code>hex</code> or <code>base64</code>), <code>bytes</code></td>
+</tr>
+<tr>
+<td><code>cue-cards</code></td>
+<td>no</td>
+<td>One cue card block per library program, each with <code>program:</code> (1–99, as <code>Pgm</code> selects it)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A library program without an item in <code>cue-cards</code> shows the stand-in card
+titled with the module's <code>description</code>. A module file cannot be opened or
+dropped on the window; it is refused with a notice.</p>
+<h2 id="the-cue-card-block">The cue card block</h2>
+<p>A cue card labels the user-defined keys A–E and A′–E′ above the top row
+of keys. The same block stands in a preset's <code>cue-card:</code>, an in-file
+card, a magnetic card file, the constant memory file and a module's
+<code>cue-cards:</code>. The kind follows from where it stands: a stand-alone cue
+card (preset, constant memory file), a magnetic card (TI-59), or a
+module cue card, pre-printed in gold. More on what is shown when is in
+<a href="/59/help/09-product-topics/cue-cards/">Cue cards</a>.</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Kinds</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>all</td>
+<td>The headline</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>module</td>
+<td>The module and program ID right of the title, e.g. <code>ML-02</code></td>
+</tr>
+<tr>
+<td><code>row-1</code></td>
+<td>all</td>
+<td>Text in place of the A′–E′ label row</td>
+</tr>
+<tr>
+<td><code>row-2</code>, <code>row-2-r</code></td>
+<td>all</td>
+<td>Text in place of the A–E label row; <code>row-2-r</code> stands right of <code>row-2</code> on the same line</td>
+</tr>
+<tr>
+<td><code>row-1-align</code></td>
+<td>all</td>
+<td><code>left</code>, <code>center</code> (default) or <code>right</code></td>
+</tr>
+<tr>
+<td><code>row-2-align</code>, <code>row-2-r-align</code></td>
+<td>all</td>
+<td><code>left</code> (default), <code>center</code> or <code>right</code></td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>all</td>
+<td><code>none</code> (default) or <code>button</code>: a box around the row text</td>
+</tr>
+<tr>
+<td><code>pencil-color</code></td>
+<td>stand-alone, magnetic</td>
+<td><code>black</code> (default), <code>pencil</code> or <code>sharpie</code>, for the whole card</td>
+</tr>
+<tr>
+<td><code>A</code> … <code>E</code></td>
+<td>all</td>
+<td>Labels of the A–E row</td>
+</tr>
+<tr>
+<td><code>A'</code> … <code>E'</code></td>
+<td>all</td>
+<td>Labels of the A′–E′ row, written quoted: <code>&quot;A'&quot;: text</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>A key that doesn't apply to the kind is an error, and so is an unknown
+key.</li>
+<li>A label row shows only when its row text is empty.</li>
+<li>A label <code>\blank</code> is an empty cell that the label before it spans into;
+an empty label is an empty cell nothing spans into.</li>
+<li>A text is written in quotes when it contains <code>: </code> or <code> #</code>, or starts
+with <code>[</code>, <code>{</code>, <code>&quot;</code> or <code>'</code>. Quotes have no escapes.</li>
+</ul>
+<p><strong>Symbols.</strong> The title, the id, the rows and every label turn these
+tokens into the symbols real cards use (case matters):</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Group</th>
+<th>Tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Greek</td>
+<td><code>\lambda</code> λ, <code>\Lambda</code> Λ, <code>\sigma</code> σ, <code>\Sigma</code> Σ, <code>\mu</code> μ, <code>\theta</code> θ, <code>\Theta</code> Θ, <code>\alpha</code> α, <code>\beta</code> β, <code>\epsilon</code> ε, <code>\Epsilon</code> Ε, <code>\Delta</code> Δ, <code>\pi</code> π, <code>\Pi</code> Π</td>
+</tr>
+<tr>
+<td>Overlined</td>
+<td><code>\xbar</code> x̄, <code>\ybar</code> ȳ, <code>\zbar</code> z̄, <code>\nbar</code> n̄, <code>\mbar</code> m̄</td>
+</tr>
+<tr>
+<td>Arrows</td>
+<td><code>\leftrightarrows</code> ⇄, <code>\leftrightarrow</code> ↔, <code>\updownarrow</code> ↕, <code>\leftarrow</code> ←, <code>\to</code> →</td>
+</tr>
+<tr>
+<td>Signs</td>
+<td><code>\sqrt</code> √, <code>\cbrt</code> ∛, <code>\fourthroot</code> ∜, <code>\triangle</code> △, <code>\angle</code> ∠, <code>\inf</code> ∞, <code>\sum</code> ∑, <code>\product</code> ∏, <code>\integral</code> ∫, <code>\approx</code> ≈, <code>\neq</code> ≠, <code>\leq</code> ≤, <code>\geq</code> ≥</td>
+</tr>
+<tr>
+<td>Layout</td>
+<td><code>\blank</code>: an empty cell (above)</td>
+</tr>
+<tr>
+<td>Superscript</td>
+<td><code>^{-1}</code> ⁻¹, <code>^{-2}</code> ⁻², <code>^{-3}</code> ⁻³, <code>^{-}</code> ⁻, <code>^{+}</code> ⁺, <code>^{*}</code> ˣ, <code>^{n}</code> ⁿ, <code>^{T}</code> ᵀ, <code>^{x}</code> / <code>^{X}</code> ˣ, <code>^{y}</code> / <code>^{Y}</code> ʸ, <code>^{z}</code> / <code>^{Z}</code> ᶻ, <code>^{0}</code> … <code>^{9}</code> ⁰ … ⁹</td>
+</tr>
+<tr>
+<td>Subscript</td>
+<td><code>_{-1}</code> ₋₁, <code>_{-}</code> ₋, <code>_{+}</code> ₊, <code>_{0}</code> … <code>_{9}</code> ₀ … ₉, <code>_{i}</code> ᵢ, <code>_{j}</code> ⱼ, <code>_{a}</code> ₐ, <code>_{e}</code> ₑ, <code>_{o}</code> ₒ, <code>_{x}</code> / <code>_{X}</code> ₓ, <code>_{y}</code> / <code>_{Y}</code> ᵧ, <code>_{n}</code> ₙ, <code>_{m}</code> ₘ, <code>_{k}</code> ₖ</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="from-230">From 2.3.0</h2>
+<p>Calc-U-59 3.0 reads none of the files 2.3.0 wrote; they stay where they
+are, and you convert them by hand:</p>
+<ul>
+<li>a preset (<code>.ti59</code>, <code>.ti58</code>, <code>.ti58c</code>): line by line as
+<a href="/59/help/10-reference/preset-sections/#from-a-230-file">Preset sections</a> shows;</li>
+<li>an ASM overlay: add the first line <code>Calc-U-59 ASM 2.0</code> and check the
+text after <code>HEX:</code> against the rules of <a href="/59/help/10-reference/asm-overlay/">ASM overlay</a>;</li>
+<li>the card files (<code>.U59</code>) and the constant memory file <code>ti58c.mem</code>:</li>
+</ul>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>2.3.0</th>
+<th>Now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a card file <code>Calc-U-59 Card 2.0</code>, ending with <code>END-CARD</code></td>
+<td>a magnetic card of format 3 (<code>.magnetcard.yaml</code>); <code>card-name</code> is the old file name without its extension; no end line</td>
+</tr>
+<tr>
+<td>the card's <code>CUECARD:</code> block</td>
+<td><code>cue-card:</code> (its keys below)</td>
+</tr>
+<tr>
+<td><code>SIDE: 1</code> / <code>SIDE: 2</code></td>
+<td><code>sides:</code> <code>0:</code> / <code>1:</code></td>
+</tr>
+<tr>
+<td><code>HEADER:</code> keys <code>Partition</code>, <code>DataType</code>, <code>Bank</code>, <code>Protection</code>, <code>Checksum</code></td>
+<td>the side's <code>partition</code>, <code>data-type</code>, <code>bank</code>, <code>protection</code>, <code>checksum</code>, every one needed</td>
+</tr>
+<tr>
+<td><code>Partition: 18</code>, <code>Checksum: 03</code> (hex without a prefix)</td>
+<td><code>partition: 0x18</code>, <code>checksum: 0x03</code>: without <code>0x</code> the number is read as decimal</td>
+</tr>
+<tr>
+<td><code>Protection: yes</code> / <code>no</code></td>
+<td><code>protection: true</code> / <code>false</code></td>
+</tr>
+<tr>
+<td><code>DATA:</code> rows <code>R###: …</code></td>
+<td><code>encoding: register-hex</code> and <code>bytes:</code>, the 30 rows copied unchanged, in the same order</td>
+</tr>
+<tr>
+<td>card files 1.0 and the binary layouts</td>
+<td>not converted</td>
+</tr>
+<tr>
+<td><code>ti58c.mem</code> (cue card, <code>R###:</code> rows)</td>
+<td><code>ti58c.memory.yaml</code>, format 1, the rows copied unchanged</td>
+</tr>
+<tr>
+<td><code>CUECARD:</code> keys <code>Title</code>, <code>ID</code>, <code>Style</code>, <code>Row1</code>, <code>Row2</code>, <code>Row2R</code>, <code>Row1Align</code>, <code>Row2Align</code>, <code>Row2RAlign</code>, <code>PencilColor</code></td>
+<td><code>title</code>, <code>id</code>, <code>style</code>, <code>row-1</code>, <code>row-2</code>, <code>row-2-r</code>, <code>row-1-align</code>, <code>row-2-align</code>, <code>row-2-r-align</code>, <code>pencil-color</code></td>
+</tr>
+<tr>
+<td><code>CUECARD:</code> keys <code>Template</code>, <code>Banks</code></td>
+<td>dropped: the kind follows from where the block stands, the corners from the sides</td>
+</tr>
+<tr>
+<td><code>CUECARD:</code> unknown keys and <code>IDAlign</code> were ignored</td>
+<td>an error</td>
+</tr>
+</tbody>
+</table></div>
+<p>For example, the first side of a card 2.3.0 wrote (rows R002 to R029 left
+out):</p>
+<pre class="help-code"><code class="language-text">SIDE: 1
+HEADER:
+Partition: 18
+DataType: program
+Bank: 1
+Protection: no
+Checksum: 03
+
+DATA:
+R000: 30 19 75 49 90 90 90 39
+R001: 23 49 80 90 90 39 69 22
+</code></pre>
+<p>becomes, in <code>sides:</code> of the new card:</p>
+<pre class="help-code"><code class="language-yaml">  0:
+    partition: 0x18
+    data-type: program
+    bank: 1
+    protection: false
+    checksum: 0x03
+    encoding: register-hex
+    bytes: |
+      R000: 30 19 75 49 90 90 90 39
+      R001: 23 49 80 90 90 39 69 22
+</code></pre>
+<p>The full rules of every format are in the source repository:
+<a href="https://github.com/tinue/Calc-U/blob/main/docs/formats/media.md">media.md</a>,
+<a href="https://github.com/tinue/Calc-U/blob/main/docs/formats/modules.md">modules.md</a>,
+<a href="https://github.com/tinue/Calc-U/blob/main/docs/formats/cue-card.md">cue-card.md</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/10-reference/keystroke-programs/">← 10 · Keystroke program files</a><a class="btn primary" rel="next" href="/59/help/10-reference/asm-overlay/">10 · ASM overlay →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

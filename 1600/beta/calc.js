@@ -56,6 +56,8 @@ function calcImage(name, onLoad) {
 const CALCU_SENTENCES = {
   // The page shows it instead of going on with "starting".
   startFailed: (product, why) => `${product} could not start${why ? `: ${why}` : "."}`,
+  // The same, for a failure once it ran.
+  stopped: (product, why) => `${product} stopped${why ? `: ${why}` : "."}`,
   starting: product => `Starting ${product}…`,
   // Another copy of the product holds the store.
   secondCopy: product => `${product} is open in another tab or window: what you save here is not kept.`,
@@ -77,9 +79,15 @@ function calcuCreateAudio() {
   let node = null;
   let rate = 48000;
   let starting = null;
+  let warned = false; // once: every key would try again
+  const warnOnce = (what, e) => {
+    if (warned) return;
+    warned = true;
+    calcuAppLog("warn", `audio: the sound could not be ${what}: ${calcuErrorText(e)}`);
+  };
   const unlock = () => {
     if (context || starting || typeof AudioContext === "undefined") {
-      if (context && context.state === "suspended") context.resume();
+      if (context && context.state === "suspended") context.resume().catch(e => warnOnce("resumed", e));
       return;
     }
     const ctx = new AudioContext({
@@ -94,7 +102,7 @@ function calcuCreateAudio() {
         rate
       });
       context = ctx;
-    }).catch(() => {/* no audio */}).finally(() => {
+    }).catch(e => warnOnce("started", e)).finally(() => {
       starting = null;
     });
   };
@@ -168,6 +176,14 @@ function calcuPickFiles(accept, multiple) {
   });
 }
 
+// Files (picked or dropped) as the session takes them: [{name, bytes}].
+function calcuNamedFiles(files) {
+  return Promise.all(Array.from(files).map(async f => ({
+    name: f.name,
+    bytes: new Uint8Array(await f.arrayBuffer())
+  })));
+}
+
 // Both products' downloadBytes.
 function calcuDownload(name, bytes, type) {
   const url = URL.createObjectURL(new Blob([bytes], {
@@ -182,24 +198,30 @@ function calcuDownload(name, bytes, type) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// The clipboard written inside the user's gesture (a click on
-// Copy or Cut), with promises the clipboard-image answer resolves, because
-// the picture is made in the worker and its ask reaches the page after the
-// gesture (WebKit allows a write only within one). {text}: whether a text
-// entry comes too. A later arm, or calcuDisarmClipboard (the command was
-// refused), rejects the one before.
+// The clipboard written inside the user's gesture (a click on Copy, Cut
+// or Copy Screen), with promises calcuCopyPicture resolves, because the
+// picture comes from the worker after the gesture (WebKit allows a write
+// only within one). {text}: whether a text entry comes too. A later arm,
+// or calcuDisarmClipboard (the copy was refused), rejects the one before.
 let calcuArmedClipboard = null;
 function calcuDisarmClipboard() {
   const armed = calcuArmedClipboard;
   calcuArmedClipboard = null;
   if (armed) armed.reject(new Error("The copy was not made."));
 }
+
+// {view}: the window of the gesture (the paper's own window), whose
+// clipboard takes the entry; the page's by default.
 function armClipboard({
-  text = false
+  text = false,
+  view = null
 } = {}) {
   calcuDisarmClipboard();
-  const clip = typeof navigator !== "undefined" ? navigator.clipboard : null;
-  if (!clip || !clip.write || typeof ClipboardItem === "undefined") return null;
+  const w = view || (typeof window !== "undefined" ? window : null);
+  const nav = w ? w.navigator : typeof navigator !== "undefined" ? navigator : null;
+  const Item = w && w.ClipboardItem || (typeof ClipboardItem !== "undefined" ? ClipboardItem : undefined);
+  const clip = nav ? nav.clipboard : null;
+  if (!clip || !clip.write || typeof Item === "undefined") return null;
   const deferred = () => {
     const d = {};
     d.promise = new Promise((resolve, reject) => {
@@ -217,7 +239,7 @@ function armClipboard({
   if (txt) items["text/plain"] = txt.promise;
   let written;
   try {
-    written = Promise.resolve(clip.write([new ClipboardItem(items)]));
+    written = Promise.resolve(clip.write([new Item(items)]));
   } catch (e) {
     written = Promise.reject(e);
   }
@@ -238,8 +260,10 @@ function armClipboard({
   return armed;
 }
 
-// clipboard-image with text, name, dotsPerInch.
-async function calcuCopyPicture(a, given, refused) {
+// clipboard-image with text, name, dotsPerInch; also the page's own copy
+// of a picture (Copy Screen), with `whose` for the app log ("The
+// screen's"); given(value) and refused(reason) make the outcome.
+async function calcuCopyPicture(a, given, refused, whose = "The paper's") {
   const pngBlob = new Blob([a.bytes || new Uint8Array(0)], {
     type: "image/png"
   });
@@ -263,16 +287,24 @@ async function calcuCopyPicture(a, given, refused) {
     }
     return given();
   } catch (e) {
+    // The browser's own error is told here only: the refusal's reason stays
+    // short, for the user.
+    const why = `${whose} picture was not copied: ${calcuErrorText(e)}`;
+    let textError = null;
     if (hasText) {
       try {
         await navigator.clipboard.writeText(a.text);
+        calcuAppLog("warn", `${why}; its text was copied alone.`);
         return given({
           textOnly: true
         });
-      } catch (_) {/* the download below */}
+      } catch (t) {
+        textError = t;
+      }
     }
+    calcuAppLog("warn", `${why}; ${textError ? `its text was not copied either: ${calcuErrorText(textError)}; ` : ""}` + "offered as a download.");
     calcuDownload(a.name || "paper.png", a.bytes || new Uint8Array(0), "image/png");
-    return refused("The browser did not take the picture; it is offered as a download.");
+    return refused(`The browser did not take the picture (${e && e.name || "Error"}); it is offered as a download.`);
   }
 }
 function calcuWebHostServices() {
@@ -293,10 +325,7 @@ function calcuWebHostServices() {
         {
           const files = await calcuPickFiles(a.accept, a.multiple);
           if (!files.length) return refused("cancelled");
-          return given(await Promise.all(files.map(async f => ({
-            name: f.name,
-            bytes: new Uint8Array(await f.arrayBuffer())
-          }))));
+          return given(await calcuNamedFiles(files));
         }
       case "keep-file":
         calcuDownload(a.name || "download", a.bytes || new Uint8Array(0), a.mediaType);
@@ -329,6 +358,78 @@ function calcuWebHostServices() {
     answer
   };
 }
+/* === appLog.js === */
+// The page's app log: how the app ran (library/applog). A page cannot write a
+// file, so each line goes to the browser's console at its level and the last
+// CALCU_APP_LOG_KEEP lines are kept for Help ▸ Show App Log (a download).
+// The worker's lines arrive filtered at the session's level (the setting
+// `[app-log] level`, or `?app-log-level=` for this run); the page's own
+// lines are warn and error, plus info and debug when the URL asks for them.
+//
+//   calcuAppLog(level, text)   level: "error" | "warn" | "info" | "debug"
+//   calcuAppLogText()          the kept lines, one per line, for the download
+//   calcuAppLogLevelOfPage()   the `?app-log-level=` of the page's URL, or ""
+//   calcuErrorText(e)          "<name>: <message>" of a thrown value
+//
+// In the worker (library-worker.js) a line is filtered by the worker's URL,
+// which carries the page's `?app-log-level=`, and posted to the page as
+// {kind: "app-log", level, text}: it lands in the page's kept lines too.
+
+const CALCU_APP_LOG_KEEP = 2000;
+const CALCU_APP_LOG_LEVELS = ["error", "warn", "info", "debug"];
+const calcuAppLogLines = [];
+function calcuAppLogLevelOfPage() {
+  if (typeof location === "undefined") return "";
+  const m = /[?&]app-log-level=([a-z]+)/.exec(location.search);
+  return m && CALCU_APP_LOG_LEVELS.includes(m[1]) ? m[1] : "";
+}
+function calcuAppLogStamp(d) {
+  const p = (n, w) => String(n).padStart(w || 2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:` + `${p(d.getSeconds())}.${p(d.getMilliseconds(), 3)}`;
+}
+
+// A line's text as applog::formatLine writes it, since the page logs before
+// the worker exists: no carriage returns, the lines after the first indented
+// by two spaces, no trailing spaces or line breaks.
+function calcuAppLogBody(text) {
+  return String(text).replace(/\r/g, "").replace(/\n/g, "\n  ").replace(/[ \n]+$/, "");
+}
+function calcuErrorText(e) {
+  if (e && typeof e === "object" && (e.name || e.message)) {
+    const errno = typeof e.errno === "number" ? ` (errno ${e.errno})` : ""; // Emscripten's FS errors
+    return `${e.name || "Error"}: ${e.message || ""}${errno}`;
+  }
+  return String(e);
+}
+const CALCU_APP_LOG_IN_WORKER = typeof WorkerGlobalScope !== "undefined" && typeof self !== "undefined" && self instanceof WorkerGlobalScope;
+
+// `fromWorker`: the line was filtered in the worker already.
+function calcuAppLog(level, text, fromWorker) {
+  const at = CALCU_APP_LOG_LEVELS.indexOf(level);
+  const lvl = at < 0 ? "warn" : level;
+  if (!fromWorker) {
+    const page = CALCU_APP_LOG_LEVELS.indexOf(calcuAppLogLevelOfPage() || "warn");
+    if (CALCU_APP_LOG_LEVELS.indexOf(lvl) > page) return;
+  }
+  if (CALCU_APP_LOG_IN_WORKER) {
+    postMessage({
+      kind: "app-log",
+      level: lvl,
+      text: String(text)
+    });
+    return;
+  }
+  const body = calcuAppLogBody(text);
+  calcuAppLogLines.push(`${calcuAppLogStamp(new Date())} ${lvl.toUpperCase().padEnd(5)} ${body}`.replace(/ +$/, ""));
+  if (calcuAppLogLines.length > CALCU_APP_LOG_KEEP) calcuAppLogLines.splice(0, calcuAppLogLines.length - CALCU_APP_LOG_KEEP);
+  if (typeof console !== "undefined") {
+    const out = console[lvl] || console.log;
+    out.call(console, `[Calc-U] ${body}`);
+  }
+}
+function calcuAppLogText() {
+  return calcuAppLogLines.length ? `${calcuAppLogLines.join("\n")}\n` : "";
+}
 /* === shell.js === */
 // The page side of a Web frontend: starts the worker, keeps the last state of each state topic
 // and what each stream topic appended, sends suspend and continue on
@@ -347,7 +448,8 @@ function calcuWebHostServices() {
 //                                              CALCU_STREAM_KEEP items: the paper)
 //     unlockAudio(), destroy(),
 //   }
-//   state: {start: "starting" | "running" | "failed", failure,
+//   state: {start: "starting" | "running" | "failed", failure (the sentence:
+//           could not start, or stopped once running),
 //           topics: {name → last state}, streams: {name → appended since the last reset}}
 //
 // Everything that crosses postMessage is a session message in its JS form
@@ -385,16 +487,23 @@ function createShell({
     state = next;
     listeners.forEach(l => l());
   };
-  const failWith = why => {
+  // The reason of a call that cannot be carried out: a failed start, or a stop once running.
+  let unanswered = "The product could not start.";
+  // `detail` goes to the app log only. A failure after the start is a stop.
+  const failWith = (why, detail) => {
     if (state.start === "failed") return;
+    const stop = state.start === "running";
+    const failure = (stop ? CALCU_SENTENCES.stopped : CALCU_SENTENCES.startFailed)(product, why);
+    calcuAppLog("error", `${failure}${detail ? `\n${detail}` : ""}`);
+    if (stop) unanswered = "The product stopped.";
     set({
       ...state,
       start: "failed",
-      failure: CALCU_SENTENCES.startFailed(product, why)
+      failure
     });
     waiters.forEach(w => w({
       done: false,
-      reason: "The product could not start.",
+      reason: unanswered,
       value: null
     }));
     waiters.clear();
@@ -406,7 +515,7 @@ function createShell({
     if (state.start === "failed" || destroyed) {
       resolve({
         done: false,
-        reason: "The product could not start.",
+        reason: unanswered,
         value: null
       });
       return;
@@ -439,7 +548,7 @@ function createShell({
       return;
     }
     if (m.topic === "web.start") {
-      if (m.value && m.value.state === "failed") failWith(m.value.failure);else if (state.start === "starting") set({
+      if (m.value && m.value.state === "failed") failWith(m.value.failure, m.value.detail);else if (state.start === "starting") set({
         ...state,
         start: "running",
         topics: {
@@ -473,11 +582,15 @@ function createShell({
     }));
   };
   const onAsk = m => {
-    Promise.resolve().then(() => offered.answer(m.name, m.value)).catch(e => ({
-      done: false,
-      reason: String(e && e.message || e),
-      value: null
-    })).then(a => {
+    Promise.resolve().then(() => offered.answer(m.name, m.value)).catch(e => {
+      const reason = String(e && e.message || e);
+      calcuAppLog("warn", `The host service ${m.name} failed: ${e && e.name || "Error"}: ${reason}`);
+      return {
+        done: false,
+        reason,
+        value: null
+      };
+    }).then(a => {
       const value = a.value === undefined ? null : a.value;
       post({
         kind: "answer",
@@ -489,7 +602,10 @@ function createShell({
     });
   };
   try {
-    worker = new Worker(workerUrl || `${CALC_BASE}calc-engine-worker.js`);
+    // The page's `?app-log-level=` holds for the worker's app log too.
+    const level = calcuAppLogLevelOfPage();
+    const url = workerUrl || `${CALC_BASE}calc-engine-worker.js`;
+    worker = new Worker(level ? `${url}${url.includes("?") ? "&" : "?"}app-log-level=${level}` : url);
   } catch (e) {
     failWith(String(e && e.message || e));
   }
@@ -518,6 +634,9 @@ function createShell({
         case "ask":
           onAsk(m);
           break;
+        case "app-log":
+          calcuAppLog(m.level, m.text, true);
+          break;
         case "sound-start":
         case "sound":
         case "sound-stop":
@@ -530,7 +649,8 @@ function createShell({
     // A script that cannot be fetched or throws, a message that cannot be read.
     worker.onerror = e => {
       if (e && e.preventDefault) e.preventDefault();
-      failWith(e && e.message || "the worker could not be started");
+      const where = e && e.filename ? ` (${e.filename}:${e.lineno || 0}:${e.colno || 0})` : "";
+      failWith(`${e && e.message || "the worker could not be started"}${where}`);
     };
     worker.onmessageerror = () => failWith("a message from the worker could not be read");
     post({
@@ -606,10 +726,11 @@ function calcuPaceOverlay(p, busy) {
 //
 //   embedProps(props, {name, layouts, layout}) → {width, keyboard (default
 //                        true), layout, preset, height, model, workerUrl,
-//                        rest}: the shared props in their order, then the
+//                        paperWindow (default false), rest}: the shared
+//                        props in their order, then the
 //                        product's own in rest; layout is
 //                        one of the product's layouts, else its default (a
-//                        value not among them is ignored with a console
+//                        value not among them is ignored with an app log
 //                        warning naming the component `name`)
 //   bundlePathOf(preset) the preset prop as its bundle path: "sum.ti59" and
 //                        "examples:sum.ti59" both give "examples:sum.ti59"
@@ -639,6 +760,7 @@ function embedProps(props, product) {
     height,
     model,
     workerUrl,
+    paperWindow = false,
     ...rest
   } = props || {};
   const {
@@ -649,7 +771,7 @@ function embedProps(props, product) {
   let taken = byDefault;
   if (layout !== undefined && layouts.includes(layout)) taken = layout;else if (layout !== undefined && !CALCU_LAYOUT_WARNED.has(`${name} ${layout}`)) {
     CALCU_LAYOUT_WARNED.add(`${name} ${layout}`); // once, not at every render
-    console.warn(`${name}: layout ${JSON.stringify(layout)} is not one of its layouts ` + `(${layouts.map(l => JSON.stringify(l)).join(", ")}); it is ignored.`);
+    calcuAppLog("warn", `${name}: layout ${JSON.stringify(layout)} is not one of its layouts ` + `(${layouts.map(l => JSON.stringify(l)).join(", ")}); it is ignored.`);
   }
   return {
     width,
@@ -659,6 +781,7 @@ function embedProps(props, product) {
     height,
     model,
     workerUrl,
+    paperWindow: !!paperWindow,
     rest
   };
 }
@@ -928,25 +1051,35 @@ function calcuPaintMarks(ctx, description, marks, scale, top, bottom) {
 // any paper from its marks and names no printer; the shell places it in its
 // area for panels.
 //
-//   <CalcuPaperPanel shell={shell} owner={peripheralId | null}
-//                    controls={[{id, form: "key" | "switch", on}]} send={fn?}
-//                    places={[bar control]} onChoose={fn} />
+//   <CalcuPaperPanel shell={shell} owner={peripheralId | null} ownerPlace={place | null}
+//                    hint={text} controls={[{id, form: "key" | "switch", on, label?, shortLabel?}]?}
+//                    send={fn?} places={[bar control]} onChoose={fn}
+//                    ownWindow={{own, toggle}?} />
 //
-// owner: the printer plugged in, from the control state; controls:
-// that printer's controls; places: the shell's place controls on the paper
+// owner, ownerPlace: the printer plugged in and its place, from the control
+// state's panel; hint: what shows where the paper would start while there is
+// none (the panel model's); controls: that printer's controls, by default the
+// control state's of the owner on its place; places: the shell's place controls on the paper
 // (the panel model's), first in the header, onChoose(item) carrying out
 // their choice (the shell's choose); send(command, args) defaults to
-// shell.send. The header holds the places left, the owner's name centred
-// and the view control right; below the paper, the owner's controls left
-// and Copy and Cut right. Copy and Cut arm the clipboard inside the click (armClipboard,
-// hostServices.js) and send `paper.copy` / `paper.cut {copy: true}`.
+// shell.send; ownWindow: the paper's own window where the page offers it
+// (useCalcuPaperWindow), its button at the header's right edge ("Open in
+// Own Window", in it "Back to Main Window"). The header holds the places
+// left, the owner's name centred and the view control right, left of that
+// button; below the paper one row that never wraps: the
+// owner's controls left, labelled as the control state labels them (the
+// short labels where the row is compact: calcuShellPaperRowCompact on the
+// panel's width and the chrome's --calcu-paper-row-compact-width), a switch
+// with the dot of its position; Copy and Cut right as icons. Copy and Cut
+// arm the clipboard inside the click (armClipboard, hostServices.js) and
+// send `paper.copy` / `paper.cut {copy: true}`.
 // Elements carry data-calcu names for the tests: paper-panel, paper-owner,
-// paper-view, paper-copy, paper-cut, paper-toast, paper-text,
+// paper-view, paper-window, paper-copy, paper-cut, paper-toast, paper-text,
 // paper-control-<id>, paper-scroll, paper-canvas.
 
 const CALCU_PAPER_FOLLOW = 64; // points from the end within which the view follows
 const CALCU_PAPER_BLANK = 8; // blank above and below the paper
-const CALCU_PAPER_TOAST_MS = 1800; // how long "Copied to clipboard" shows
+const CALCU_PAPER_TOAST_MS = 1800; // how long a Copy's outcome shows
 
 function useCalcuPaper(shell) {
   const store = calcuPaperStore(shell);
@@ -958,11 +1091,73 @@ function useCalcuPaper(shell) {
   }).current;
   return React.useSyncExternalStore(store ? store.subscribe : () => () => {}, store ? store.getState : () => none, () => none);
 }
+
+// Copy (two sheets) and Cut (scissors), drawn in the button's text colour;
+// the own window: a window with an arrow out of it ("out") or back in ("in").
+function CalcuPaperIcon({
+  kind
+}) {
+  if (kind === "out" || kind === "in") {
+    const tip = kind === "in" ? [7.5, 8.5] : [14, 2],
+      tail = kind === "in" ? [14, 2] : [7.5, 8.5];
+    const d = kind === "in" ? 4 : -4;
+    return /*#__PURE__*/React.createElement("svg", {
+      className: "calcu-paper-icon",
+      viewBox: "0 0 16 16",
+      width: "16",
+      height: "16",
+      "aria-hidden": "true",
+      focusable: "false",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: "1.4",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M7.5 2.5H2.5V13.5H13.5V8.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: `M${tail[0]} ${tail[1]}L${tip[0]} ${tip[1]}M${tip[0]} ${tip[1] - d}L${tip[0]} ${tip[1]}L${tip[0] + d} ${tip[1]}`
+    }));
+  }
+  return /*#__PURE__*/React.createElement("svg", {
+    className: "calcu-paper-icon",
+    viewBox: "0 0 16 16",
+    width: "16",
+    height: "16",
+    "aria-hidden": "true",
+    focusable: "false",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.4",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, kind === "copy" ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+    x: "5.5",
+    y: "1.5",
+    width: "8",
+    height: "10",
+    rx: "1.5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M5.5 4.5H2.5V14.5H10.5V11.5"
+  })) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+    cx: "4",
+    cy: "12",
+    r: "2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M5.4 10.6L11.5 1.5M10.6 10.6L4.5 1.5"
+  })));
+}
 function CalcuPaperControl({
   control,
+  compact,
   onSet
 }) {
   const [held, setHeld] = React.useState(false);
+  const label = (compact ? control.shortLabel : control.label) || control.label || control.id;
   if (control.form === "key") {
     const down = held || !!control.on;
     const release = () => {
@@ -987,25 +1182,40 @@ function CalcuPaperControl({
       onPointerUp: release,
       onPointerCancel: release,
       onLostPointerCapture: release
-    }, control.id);
+    }, label);
   }
+  // A switch: its label and the dot of its position.
   return /*#__PURE__*/React.createElement("button", {
     type: "button",
-    className: "calcu-paper-control" + (control.on ? " calcu-paper-down" : ""),
+    className: "calcu-paper-control calcu-paper-switch",
     "data-calcu": `paper-control-${control.id}`,
     "aria-pressed": !!control.on,
     onClick: () => onSet(control.id, !control.on)
-  }, control.id);
+  }, label, /*#__PURE__*/React.createElement("span", {
+    className: "calcu-paper-dot" + (control.on ? " calcu-paper-dot-on" : ""),
+    "aria-hidden": "true"
+  }));
+}
+const CALCU_PAPER_NO_CONTROLS = [];
+
+// The window the element is drawn in: the page's, or the paper's own.
+function calcuViewOf(el) {
+  return el && el.ownerDocument && el.ownerDocument.defaultView || window;
 }
 function CalcuPaperPanel({
   shell,
   owner,
-  controls,
+  ownerPlace,
+  hint,
+  controls: given,
   send,
   places,
-  onChoose
+  onChoose,
+  ownWindow
 }) {
   const state = useCalcuPaper(shell);
+  const all = useTopic(shell, "control-state", cs => cs && cs.controls || CALCU_PAPER_NO_CONTROLS);
+  const controls = given || all.filter(c => c.peripheral === owner && c.place === ownerPlace);
   const entry = calcuPaperOf(state.papers, owner);
   const name = entry ? entry.owner : "";
   const description = entry ? entry.description : null;
@@ -1017,6 +1227,26 @@ function CalcuPaperPanel({
   const sendTo = send || ((n, a) => shell ? shell.send(n, a) : Promise.resolve({
     done: false
   }));
+
+  // The row's rule on the panel's width (the page measures it).
+  const panelRef = React.useRef(null);
+  const [compact, setCompact] = React.useState(false);
+  React.useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return undefined;
+    const view = calcuViewOf(el);
+    const update = () => {
+      const width = parseFloat(view.getComputedStyle(el).getPropertyValue("--calcu-paper-row-compact-width")) || 0;
+      setCompact(calcuShellPaperRowCompact({
+        paperRowCompactWidth: width
+      }, el.clientWidth));
+    };
+    update();
+    if (typeof view.ResizeObserver === "undefined") return undefined;
+    const o = new view.ResizeObserver(update);
+    o.observe(el);
+    return () => o.disconnect();
+  }, []);
   const scrollRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const lastHeight = React.useRef(null); // the scroll height the last follow saw
@@ -1033,8 +1263,9 @@ function CalcuPaperPanel({
       height: el.clientHeight
     });
     update();
-    if (typeof ResizeObserver === "undefined") return undefined;
-    const o = new ResizeObserver(update);
+    const view = calcuViewOf(el);
+    if (typeof view.ResizeObserver === "undefined") return undefined;
+    const o = new view.ResizeObserver(update);
     o.observe(el);
     return () => o.disconnect();
   }, [showText]);
@@ -1067,7 +1298,7 @@ function CalcuPaperPanel({
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || showText) return;
-    const dpr = typeof window !== "undefined" && window.devicePixelRatio || 1;
+    const dpr = calcuViewOf(canvas).devicePixelRatio || 1;
     const w = Math.max(1, size.width),
       h = Math.max(1, size.height);
     if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
@@ -1089,14 +1320,17 @@ function CalcuPaperPanel({
   const copy = state.copy;
   React.useEffect(() => {
     if (!copy || !name || copy.owner !== name) return undefined;
-    setToast(copy.outcome === "failed" ? "Copy failed" : "Copied to clipboard");
+    setToast(copy.text);
     const t = setTimeout(() => setToast(null), CALCU_PAPER_TOAST_MS);
     return () => clearTimeout(t);
   }, [copy && copy.seq]);
   const copyOrCut = (command, args) => {
+    // In the gesture (hostServices.js armClipboard), on the clipboard of
+    // the window the click was in.
     armClipboard({
-      text: textLayer
-    }); // in the gesture (hostServices.js armClipboard)
+      text: textLayer,
+      view: calcuViewOf(panelRef.current)
+    });
     Promise.resolve(sendTo(command, args)).then(r => {
       if (!r || !r.done) calcuDisarmClipboard();
     });
@@ -1107,8 +1341,10 @@ function CalcuPaperPanel({
     on
   });
   return /*#__PURE__*/React.createElement("div", {
-    className: "calcu-paper-panel",
-    "data-calcu": "paper-panel"
+    className: "calcu-paper-panel" + (compact ? " calcu-paper-compact" : ""),
+    "data-calcu": "paper-panel",
+    "data-compact": compact ? "true" : "false",
+    ref: panelRef
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-paper-header"
   }, /*#__PURE__*/React.createElement("span", {
@@ -1129,7 +1365,16 @@ function CalcuPaperPanel({
     "data-view": view,
     "aria-pressed": view === "text",
     onClick: () => setView(view === "text" ? "marks" : "text")
-  }, view === "text" ? "Text" : "Marks"))), showText ? /*#__PURE__*/React.createElement("pre", {
+  }, view === "text" ? "Text" : "Marks"), ownWindow && /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "calcu-paper-action",
+    "data-calcu": "paper-window",
+    title: ownWindow.own ? "Back to Main Window" : "Open in Own Window",
+    "aria-label": ownWindow.own ? "Back to Main Window" : "Open in Own Window",
+    onClick: ownWindow.toggle
+  }, /*#__PURE__*/React.createElement(CalcuPaperIcon, {
+    kind: ownWindow.own ? "in" : "out"
+  })))), showText ? /*#__PURE__*/React.createElement("pre", {
     className: "calcu-paper-text",
     "data-calcu": "paper-text"
   }, paper.lines.map(l => l.text).join("\n")) : /*#__PURE__*/React.createElement("div", {
@@ -1140,7 +1385,7 @@ function CalcuPaperPanel({
   }, !owner && /*#__PURE__*/React.createElement("p", {
     className: "calcu-paper-hint",
     "data-calcu": "paper-hint"
-  }, "No printer attached."), /*#__PURE__*/React.createElement("div", {
+  }, hint), /*#__PURE__*/React.createElement("div", {
     className: "calcu-paper-sheet",
     style: {
       height: contentHeight
@@ -1159,25 +1404,36 @@ function CalcuPaperPanel({
   }, entry && (controls || []).map(c => /*#__PURE__*/React.createElement(CalcuPaperControl, {
     key: c.id,
     control: c,
+    compact: compact,
     onSet: setControl
   })), /*#__PURE__*/React.createElement("span", {
     className: "calcu-paper-actions"
   }, /*#__PURE__*/React.createElement("button", {
     type: "button",
+    className: "calcu-paper-action",
     "data-calcu": "paper-copy",
     disabled: !usable,
+    title: "Copy",
+    "aria-label": "Copy",
     onClick: () => copyOrCut("paper.copy", {
       owner: name
     })
-  }, "Copy"), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement(CalcuPaperIcon, {
+    kind: "copy"
+  })), /*#__PURE__*/React.createElement("button", {
     type: "button",
+    className: "calcu-paper-action",
     "data-calcu": "paper-cut",
     disabled: !usable,
+    title: "Cut",
+    "aria-label": "Cut",
     onClick: () => copyOrCut("paper.cut", {
       owner: name,
       copy: true
     })
-  }, "Cut"))), toast && /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(CalcuPaperIcon, {
+    kind: "cut"
+  })))), toast && /*#__PURE__*/React.createElement("div", {
     className: "calcu-paper-toast",
     "data-calcu": "paper-toast",
     role: "status"
@@ -1528,20 +1784,24 @@ function CalcuSavedMediaDialog({
 }
 /* === shellModel.js === */
 // The shell's rules that run on the page's own clock and measurements, in
-// plain JS: the same rules as library/shell/ (barFit, view, LoadingRule,
-// NoticeQueue, the hit rule, PointerTracker, about), rule by rule. The
-// menus, the bar, the panels and the settings dialog are the C++ models',
-// which the worker serves (topic `web.shell`, shell::ModelHost). No React,
+// plain JS: the same rules as library/shell/ (barFit, paperRowCompact, view, LoadingRule,
+// NoticeQueue, the hit rule, PointerTracker), rule by rule, and About's rows
+// of where the page runs. The menus, the bar, the panels, the settings
+// dialog and About are the C++ models', which the worker serves (topic
+// `web.shell`, shell::ModelHost). No React,
 // no DOM: loadable by `node --test` (library/web/tests/shell_model.test.js,
 // whose cases carry the C++ cases' names). A classic script of the component
 // set's closure; every top-level name starts with `calcuShell` or `CALCU_SHELL`.
 //
 //   calcuShellBarFit(faceplate, withoutLabels, withLabels, room?) → {width, labels}
+//   calcuShellPaperRowCompact(sizes, rowWidth) → bool
 //   calcuShellView(inputs) → {side, panelsFit, panelsAlone, faceplateWidth, faceplateHeight, room}
 //   calcuShellLoading() → {busy(runs, full, now), shown(now), due()}
-//   calcuShellNotices() → {push, refusal, current, close, answer, waiting}
+//   calcuShellNotices() → {push, refusal, current, close, answer, waiting}; current() is
+//     {seq, text, question, command}, seq numbering the notices queued
 //   calcuShellKeyAt(map, scale, x, y); calcuShellPointer(map, scale) → {down, move, up, releaseAll}
-//   calcuShellAbout(product)
+//   calcuShellHostRows(nav, hints, loc) → [[label, value]]: Page, Browser, OS, Hardware
+//   calcuShellDisplayFacts(win) → {reported, scale, window}: About's Display facts
 //   calcuShellList, calcuShellText, calcuShellAvailability: reading the topics' Values
 
 const CALCU_SHELL_ACTIONS = {
@@ -1552,7 +1812,9 @@ const CALCU_SHELL_ACTIONS = {
   copyScreen: "copy-screen",
   pasteText: "paste-text",
   help: "help",
-  about: "about"
+  showAppLog: "show-app-log",
+  about: "about",
+  nameAndSavePrefix: "media-name-and-save-"
 };
 const CALCU_SHELL_LOADING_MS = 500;
 // The notice queue's question rule, as shell::kAsksPrefix (Notices.cpp): "asks:"
@@ -1589,15 +1851,26 @@ function calcuShellBarFit(faceplate, withoutLabels, withLabels, room = Infinity)
   };
 }
 
+// The paper panel's control row (C++ shell::paperRowCompact): compact below
+// the chrome's paperRowCompactWidth; 0: never.
+function calcuShellPaperRowCompact(sizes, rowWidth) {
+  const least = sizes && sizes.paperRowCompactWidth || 0;
+  return least > 0 && rowWidth < least;
+}
+
 // The view rule (C++ shell::view): the faceplate as large as the window
 // allows, its proportions kept; the room left over lies "beside" it (the
 // window relatively wider) or "below" it, and picks the view. The panels go
 // there only when that room is at least their minimum on that side (0: no
-// panels there); else the product's fallback. On mobile with the room below,
-// panelsAloneOnMobileBelow gives the panels alone.
+// panels there); else the product's fallback. A window in the faceplate's
+// orientation always shows it; a mobile one turned the other way shows the
+// panels alone where the faceplate would be narrower than
+// faceplateUsableWidth (a phone).
 // inputs: {width, height, faceplateAspect, fixedWidth, fixedHeight,
-// panelsMinWidth, panelsMinHeight, debuggerMinWidth, debuggerMinHeight, mobile,
-// panelsAloneOnMobileBelow}; debuggerFits: the debugger beside the panels.
+// panelsMinWidth, panelsMinHeight, debuggerMinWidth, debuggerMinHeight,
+// panelsAreDebugger, mobile, faceplateUsableWidth}; debuggerFits: the
+// debugger beside the panels (panelsAreDebugger: the panels are the
+// debugger alone, it fits where they do and the window is high enough).
 function calcuShellView(inputs) {
   const i = inputs;
   const boxWidth = Math.max(0, i.width - (i.fixedWidth || 0));
@@ -1609,11 +1882,13 @@ function calcuShellView(inputs) {
   const room = side === "beside" ? boxWidth - faceplateWidth : boxHeight - faceplateHeight;
   const least = (side === "beside" ? i.panelsMinWidth : i.panelsMinHeight) || 0;
   const panelsFit = least > 0 && room >= least;
-  // Only where the room below takes the panels: a sliver of it (a phone in
-  // landscape whose safe area narrows the window) keeps the calculator.
-  const panelsAlone = !!i.panelsAloneOnMobileBelow && !!i.mobile && side === "below" && panelsFit;
+  // The natural orientation always shows the faceplate; turned, only a
+  // faceplate too narrow to use gives way to the panels.
+  const turned = aspect >= 1 !== i.width >= i.height;
+  const panelsAlone = !!i.mobile && turned && side === "below" && panelsFit && faceplateWidth < (i.faceplateUsableWidth || 0);
   const across = side === "beside" ? room : i.width;
-  const debuggerFits = panelsFit && !panelsAlone && (i.debuggerMinWidth || 0) > 0 && across >= (i.panelsMinWidth || 0) + i.debuggerMinWidth && i.height >= (i.debuggerMinHeight || 0);
+  const besideThem = !!i.panelsAreDebugger || (i.debuggerMinWidth || 0) > 0 && across >= (i.panelsMinWidth || 0) + i.debuggerMinWidth;
+  const debuggerFits = panelsFit && !panelsAlone && besideThem && i.height >= (i.debuggerMinHeight || 0);
   return {
     side,
     panelsFit,
@@ -1649,9 +1924,11 @@ function calcuShellLoading() {
 function calcuShellNotices() {
   const queue = [];
   let last = "";
+  let seq = 0;
   const push = sentence => {
     last = sentence;
     queue.push({
+      seq: ++seq,
       text: sentence,
       question: false,
       command: null
@@ -1663,6 +1940,7 @@ function calcuShellNotices() {
       const r = reason || "";
       if (r.startsWith(CALCU_SHELL_ASKS)) {
         queue.push({
+          seq: ++seq,
           text: r.slice(CALCU_SHELL_ASKS.length).replace(/^ +/, ""),
           question: true,
           command: sent || null
@@ -1803,26 +2081,73 @@ function calcuShellPointer(map, scale) {
     }
   };
 }
-function calcuShellAbout(product) {
-  let title = product.aboutLabel || `About ${product.name}`;
-  if (title.endsWith("…")) title = title.slice(0, -1);
+
+// About's Display facts (shell::DisplayFacts) of the window `win`: the
+// screen as the browser reports it (CSS pixels), its scale
+// (devicePixelRatio, which the page's zoom changes too) and the window's
+// inner size. A browser names no screen and tells no panel mode.
+function calcuShellDisplayFacts(win) {
+  const size = (w, h) => ({
+    width: Math.round(w || 0),
+    height: Math.round(h || 0)
+  });
   return {
-    title,
-    name: product.name,
-    version: `Version ${product.version}${product.build ? ` (${product.build})` : ""}`,
-    lines: product.aboutLines || [],
-    links: product.aboutLinks || []
+    reported: size(win.screen && win.screen.width, win.screen && win.screen.height),
+    scale: win.devicePixelRatio || 0,
+    window: size(win.innerWidth, win.innerHeight)
   };
+}
+
+// Where the page runs: Page (`loc`, the page's location: host and path,
+// where it was loaded from), then what the browser tells: Browser, OS,
+// Hardware. `nav`: the navigator; `hints`: the answer of userAgentData's
+// getHighEntropyValues (Chromium), or null. Without hints the user agent
+// string gives the browser and the OS's name only: Safari and Firefox
+// freeze the rest, so a version there would be made up. A browser shows no
+// CPU model; the architecture only with hints.
+function calcuShellHostRows(nav, hints, loc) {
+  const page = loc && loc.host ? `${loc.host}${loc.pathname || ""}` : "";
+  const ua = nav && nav.userAgent || "";
+  let browser = "";
+  const brands = hints && (hints.fullVersionList || hints.brands);
+  if (brands && brands.length) {
+    const real = brands.filter(b => !/Not.?A.?Brand/i.test(b.brand));
+    const pick = real.find(b => b.brand !== "Chromium") || real[0];
+    if (pick) browser = `${pick.brand.replace(/^Google /, "")} ${pick.version}`;
+  }
+  if (!browser) {
+    for (const [name, re] of [["Edge", /Edg[A-Za-z]*\/([\d.]+)/], ["Opera", /OPR\/([\d.]+)/], ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/], ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/], ["Safari", /Version\/([\d.]+).*Safari\//]]) {
+      const m = re.exec(ua);
+      if (m) {
+        browser = `${name} ${m[1]}`;
+        break;
+      }
+    }
+  }
+  let os = "";
+  const platform = hints && hints.platform || "";
+  if (platform) {
+    const v = hints.platformVersion || "";
+    if (platform === "Windows") os = v ? `Windows ${parseInt(v, 10) >= 13 ? "11" : "10"}` : "Windows";else os = v ? `${platform} ${v}` : platform;
+  } else if (/iPhone|iPad|iPod/.test(ua)) os = "iOS";else if (/Android/.test(ua)) os = "Android";else if (/Mac OS X|Macintosh/.test(ua)) os = "macOS";else if (/Windows/.test(ua)) os = "Windows";else if (/CrOS/.test(ua)) os = "ChromeOS";else if (/Linux/.test(ua)) os = "Linux";
+  let hardware = "";
+  if (hints && hints.architecture) {
+    const a = hints.architecture === "x86" ? hints.bitness === "64" ? "x86_64" : "x86" : hints.bitness === "64" ? `${hints.architecture}64` : hints.architecture;
+    hardware = hints.model ? `${hints.model}, ${a}` : a;
+  } else if (hints && hints.model) hardware = hints.model;
+  return [["Page", page], ["Browser", browser], ["OS", os], ["Hardware", hardware]];
 }
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     calcuShellBarFit,
+    calcuShellPaperRowCompact,
     calcuShellView,
     calcuShellLoading,
     calcuShellNotices,
     calcuShellKeyAt,
     calcuShellPointer,
-    calcuShellAbout,
+    calcuShellHostRows,
+    calcuShellDisplayFacts,
     calcuShellAvailability,
     CALCU_SHELL_LOADING_MS
   };
@@ -1838,15 +2163,27 @@ if (typeof module !== "undefined" && module.exports) {
 //   (traits: `settings` false: no Settings…; `about` false: no About; the
 //   page is mobile when CALCU_SHELL_MOBILE. shellArgs: the product's own
 //   args of its shell, as its Web part reads them.)
-//   s.menus, s.bar, s.panels, s.dialog (the settings rows), s.loading, s.notice,
-//   s.started, s.romsMissing, s.open ("settings" | "about" | "saved-media" | null)
+//   s.menus, s.bar, s.panels, s.dialog (the settings rows), s.about (the About
+//   dialog: shell::about with the page's rows and its Display facts, measured
+//   when About opens, and its Copy `text`), s.loading, s.notice,
+//   s.started, s.romsMissing, s.open ("settings" | "about" | "saved-media" |
+//   "name-and-save" | null), s.naming (the place Name & Save is open for),
+//   s.nameAndSavePrompts ({place: prompt}, the models' nameAndSave)
 //   s.choose(item), s.setSetting(section, key, value), s.closeNotice(yes), s.close()
+//   s.chooseStartupPreset(model): the settings row's "Choose…", the preset
+//   picked with its files (`choose-startup-preset`: checked, then kept)
+//   s.notify(text): a notice of the page's own, queued with the session's
+//   s.nameAndSave(place): the Name & Save dialog of a media place (ShellDialogs),
+//   for the place's submenu, the slot pickers' buttons and the product's own
+//   media controls
 //
 // `product` is the page's form of the product's data (`*.shell-product`):
-// its name, help address and About, `product.loadPreset` (optional) in
+// its name, help address, the page's `version`, `build` and `buildTime`
+// (the worker makes About of them), `product.loadPreset` (optional) in
 // place of the shell's Load Preset… (a product that opens the picked files
-// through the session's `open`), `copyScreen`, `nameAndSave(place)` and its
-// items' acts by id.
+// through the session's `open`), `copyScreen`, `nameAndSave` ({slotButtons}:
+// ShellProduct::nameAndSave) and its items' acts by id. The Name & Save
+// prompts by place are the models' (`s.nameAndSavePrompts`).
 
 // Whether the page is mobile, fixed while it is open: true for the
 // installed app and for a browser that asks for the mobile site, else
@@ -1875,14 +2212,31 @@ const CALCU_SHELL_NO_MODELS = {
   menus: [],
   bar: [],
   panels: [],
-  dialog: []
+  dialog: [],
+  about: null,
+  nameAndSave: {}
 };
 function calcuShellNow() {
   return typeof performance !== "undefined" ? performance.now() : Date.now();
 }
 function useCalcuShell(shell, product, traits, shellArgs) {
   const t = Object.assign({}, CALCU_SHELL_WEB_TRAITS, traits || {});
-  const shellKey = JSON.stringify([t, shellArgs || {}]);
+  const host = useShellHostRows();
+  // About's Display section: the screen and the window as they are when
+  // About opens (measured again at each open, not at each resize).
+  const [display, setDisplay] = React.useState(null);
+  const args = Object.assign({
+    mobile: !!t.mobile,
+    settings: t.settings !== false,
+    about: t.about !== false,
+    version: product.version || "",
+    build: product.build || "",
+    buildTime: product.buildTime || "",
+    host
+  }, display ? {
+    display
+  } : {}, shellArgs || {});
+  const shellKey = JSON.stringify(args);
   const controlState = useTopic(shell, "control-state");
   const busy = useTopic(shell, "busy");
   const runState = useTopic(shell, "run-state");
@@ -1891,6 +2245,7 @@ function useCalcuShell(shell, product, traits, shellArgs) {
   const media = useTopic(shell, "media");
   const models = useTopic(shell, "web.shell") || CALCU_SHELL_NO_MODELS;
   const [open, setOpen] = React.useState(null);
+  const [naming, setNaming] = React.useState(null);
   const [, setVersion] = React.useState(0);
   const rerender = React.useCallback(() => setVersion(v => v + 1), []);
   const notices = React.useRef(null);
@@ -1898,13 +2253,10 @@ function useCalcuShell(shell, product, traits, shellArgs) {
   const loading = React.useRef(null);
   if (!loading.current) loading.current = calcuShellLoading();
 
-  // The worker computes the models for this page's traits.
+  // The worker computes the models for this page's traits, build and rows
+  // of where it runs (sent again when the browser's hints come).
   React.useEffect(() => {
-    if (shell && shell.setShell) shell.setShell(Object.assign({
-      mobile: !!t.mobile,
-      settings: t.settings !== false,
-      about: t.about !== false
-    }, shellArgs || {}));
+    if (shell && shell.setShell) shell.setShell(args);
   }, [shell, shellKey]);
 
   // Each notice, in order; none lost.
@@ -1940,8 +2292,10 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     menus,
     bar,
     panels,
-    dialog
+    dialog,
+    about
   } = models;
+  const nameAndSavePrompts = models.nameAndSave || {};
   const sendChecked = (name, args) => {
     if (!shell) return Promise.resolve({
       done: false
@@ -1968,6 +2322,21 @@ function useCalcuShell(shell, product, traits, shellArgs) {
       });
     });
   };
+  // The preset with every file it names, or alone when they were chosen
+  // before (the session keeps them in its file cache).
+  const chooseStartupPreset = model => {
+    calcuPickFiles(product.presetUploads || "", true).then(async files => {
+      if (!files.length) return;
+      sendChecked("choose-startup-preset", {
+        model,
+        files: await calcuNamedFiles(files)
+      });
+    });
+  };
+  const nameAndSave = place => {
+    setNaming(place);
+    setOpen("name-and-save");
+  };
   const choose = item => {
     if (!item || item.enabled === false) return;
     if (item.command) {
@@ -1976,18 +2345,22 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     }
     const a = CALCU_SHELL_ACTIONS;
     if (item.id === a.loadPreset) (product.loadPreset || loadPreset)(); // a product may open the files itself
-    else if (item.id === a.settings) setOpen("settings");else if (item.id === a.about) setOpen("about");else if (item.id === a.savedMedia) setOpen("saved-media");else if (item.id.startsWith("media-name-and-save-")) {
-      if (product.nameAndSave) product.nameAndSave(item.args.place);
-    } else if (item.id === a.help) calcuWebHostServices().answer("open-url", {
+    else if (item.id === a.settings) setOpen("settings");else if (item.id === a.about) {
+      setDisplay(calcuShellDisplayFacts(window));
+      setOpen("about");
+    } else if (item.id === a.savedMedia) setOpen("saved-media");else if (item.id.startsWith(a.nameAndSavePrefix)) nameAndSave(item.args.place);else if (item.id === a.help) calcuWebHostServices().answer("open-url", {
       url: product.helpUrl
     }); // its result is ignored
-    else if (item.id === a.copyScreen) {
+    else if (item.id === a.showAppLog) {
+      // a page writes no file: the kept lines as a download
+      calcuDownload(`${product.name || "Calc-U"}.log`, new TextEncoder().encode(calcuAppLogText()), "text/plain");
+    } else if (item.id === a.copyScreen) {
       if (product.copyScreen) product.copyScreen();
     } else if (item.id === a.pasteText) {
       const read = typeof navigator !== "undefined" && navigator.clipboard ? navigator.clipboard.readText() : Promise.resolve("");
       read.then(text => sendChecked("paste", {
         text
-      }), () => {});
+      }), e => calcuAppLog("warn", `Paste: the clipboard could not be read: ${calcuErrorText(e)}`));
     } else {
       const act = (product.acts || {})[item.id]; // a product item acts
       if (act) act();
@@ -2003,13 +2376,18 @@ function useCalcuShell(shell, product, traits, shellArgs) {
     bar,
     panels,
     dialog,
+    about,
     open,
+    naming,
+    nameAndSavePrompts,
     started: !!controlState,
     romsMissing: romsMissing || null,
     loading: loading.current.shown(calcuShellNow()),
     notice: current,
     choose,
     sendChecked,
+    nameAndSave,
+    chooseStartupPreset,
     setSetting: (section, key, value) => sendChecked("set-setting", {
       section,
       key,
@@ -2020,8 +2398,31 @@ function useCalcuShell(shell, product, traits, shellArgs) {
       if (again) sendChecked(again.name, again.args);
       rerender();
     },
+    notify: text => {
+      notices.current.push(text);
+      rerender();
+    },
     close: () => setOpen(null)
   };
+}
+
+// About's rows of where the page runs: at once from the user agent string,
+// then from Chromium's client hints when they come (the rows are the last
+// part of the dialog, so nothing above them moves).
+function useShellHostRows() {
+  const [rows, setRows] = React.useState(() => typeof window === "undefined" ? [] : calcuShellHostRows(window.navigator, null, window.location));
+  React.useEffect(() => {
+    const hints = typeof window === "undefined" ? null : window.navigator.userAgentData;
+    if (!hints || typeof hints.getHighEntropyValues !== "function") return undefined;
+    let live = true;
+    hints.getHighEntropyValues(["platformVersion", "architecture", "bitness", "model", "fullVersionList"]).then(h => {
+      if (live) setRows(calcuShellHostRows(window.navigator, h, window.location));
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+  return rows;
 }
 /* === ShellModal.jsx === */
 // ShellModal -- the one modal frame of the React set, the shell's dialogs'
@@ -2031,7 +2432,9 @@ function useCalcuShell(shell, product, traits, shellArgs) {
 // Opened, it takes the focus unless a child took it (autoFocus): the
 // default button (`calcu-shell-default`), else the dialog itself, so that
 // Escape always reaches it. And ShellDialogs, which shows
-// the settings dialog, About, the notice and "Loading…" of useCalcuShell.
+// the settings dialog, About, Name & Save (the library's CalcuNameAndSaveDialog
+// with the product's prompt for the place, data-calcu="name-and-save"), the
+// notice and "Loading…" of useCalcuShell.
 //
 //   <ShellModal name="settings-dialog" title="Settings" onClose={fn} buttons={…}>…</ShellModal>
 //   <ShellDialogs shell={s} savedMedia={Component?} />
@@ -2077,6 +2480,24 @@ function ShellModal({
     className: "calcu-shell-modal-buttons"
   }, buttons)));
 }
+
+// The place's prompt from the worker's models (`web.shell`'s nameAndSave).
+function ShellNameAndSave({
+  shell
+}) {
+  const s = shell;
+  const prompt = (s.nameAndSavePrompts || {})[s.naming];
+  return /*#__PURE__*/React.createElement(ShellModal, {
+    title: "Name & Save",
+    name: "name-and-save",
+    onClose: s.close
+  }, /*#__PURE__*/React.createElement(CalcuNameAndSaveDialog, {
+    place: calcuMediaPlace(s.inputs.media, s.naming),
+    prompt: prompt,
+    send: (c, a) => s.shell.send(c, a),
+    onClose: s.close
+  }));
+}
 function ShellDialogs({
   shell,
   savedMedia
@@ -2090,6 +2511,8 @@ function ShellDialogs({
   }), s.open === "saved-media" && Saved && /*#__PURE__*/React.createElement(Saved, {
     shell: s.shell,
     onClose: s.close
+  }), s.open === "name-and-save" && /*#__PURE__*/React.createElement(ShellNameAndSave, {
+    shell: s
   }), s.notice && /*#__PURE__*/React.createElement(ShellNotice, {
     shell: s
   }));
@@ -2105,12 +2528,20 @@ function ShellDialogs({
 
 // `prefix`: the items' names ("item-"; the More menu's "more-item-");
 // `onChoose`: in place of s.choose (the More menu asks first).
+// `inline`: the More popup's way. A submenu opens below its item and
+// pushes the items after it down, so it opens and closes by a click or a
+// tap only: opened by hovering, the items would move under the pointer.
+// The menu bar's submenus fly out beside their item and open on hover.
+// `sizer`: every submenu open, no names, no handlers; the More popup
+// measures its width with it.
 function ShellMenuItems({
   s,
   items,
   onDone,
   prefix = "item-",
-  onChoose
+  onChoose,
+  inline = false,
+  sizer = false
 }) {
   const [sub, setSub] = React.useState(null);
   const ref = React.useRef(null);
@@ -2118,13 +2549,13 @@ function ShellMenuItems({
   // popup scrolls; a low window shows only part of it).
   React.useEffect(() => {
     const ul = ref.current;
-    if (ul && ul.parentElement && ul.parentElement.closest(".calcu-shell-more-popup") && ul.parentElement.tagName === "LI") ul.scrollIntoView({
+    if (!sizer && inline && ul && ul.parentElement && ul.parentElement.tagName === "LI") ul.scrollIntoView({
       block: "nearest"
     });
   }, []);
   return /*#__PURE__*/React.createElement("ul", {
     className: "calcu-shell-menu-items",
-    role: "menu",
+    role: sizer ? undefined : "menu",
     ref: ref
   }, items.map((item, i) => {
     if (item.kind === "separator") return /*#__PURE__*/React.createElement("li", {
@@ -2136,41 +2567,58 @@ function ShellMenuItems({
       key: item.id,
       className: "calcu-shell-heading",
       role: "presentation",
-      "data-calcu": `${prefix}${item.id}`
+      "data-calcu": sizer ? undefined : `${prefix}${item.id}`
     }, item.label);
     const disabled = item.enabled === false;
     const isSub = item.kind === "submenu";
-    return /*#__PURE__*/React.createElement("li", {
-      key: item.id,
-      className: "calcu-shell-item" + (disabled ? " calcu-shell-disabled" : ""),
-      role: "menuitem",
-      "data-calcu": `${prefix}${item.id}`,
-      "aria-disabled": disabled ? "true" : undefined,
-      "aria-checked": item.checkable ? String(!!item.checked) : undefined,
-      title: disabled && item.reason ? item.reason : undefined,
-      onMouseEnter: () => setSub(isSub ? item.id : null),
-      onClick: e => {
-        e.stopPropagation();
-        if (disabled) return;
-        if (isSub) {
-          setSub(item.id);
-          return;
-        } // opens it (a hover may have opened it already)
-        onDone();
-        (onChoose || s.choose)(item);
-      }
+    const open = isSub && (sizer || sub === item.id);
+    const row = /*#__PURE__*/React.createElement("div", {
+      className: "calcu-shell-row"
     }, /*#__PURE__*/React.createElement("span", {
       className: "calcu-shell-check"
     }, item.checkable && item.checked ? "✓" : ""), /*#__PURE__*/React.createElement("span", {
       className: "calcu-shell-label"
     }, item.label), isSub && /*#__PURE__*/React.createElement("span", {
       className: "calcu-shell-arrow"
-    }, "\u25B8"), isSub && sub === item.id && /*#__PURE__*/React.createElement(ShellMenuItems, {
+    }, inline && open ? "▾" : "▸"));
+    if (sizer) return /*#__PURE__*/React.createElement("li", {
+      key: item.id,
+      className: "calcu-shell-item"
+    }, row, open && /*#__PURE__*/React.createElement(ShellMenuItems, {
+      s: s,
+      items: item.children,
+      inline: true,
+      sizer: true
+    }));
+    return /*#__PURE__*/React.createElement("li", {
+      key: item.id,
+      className: "calcu-shell-item" + (disabled ? " calcu-shell-disabled" : "") + (open ? " calcu-shell-sub-open" : ""),
+      role: "menuitem",
+      "data-calcu": `${prefix}${item.id}`,
+      "aria-disabled": disabled ? "true" : undefined,
+      "aria-haspopup": isSub ? "true" : undefined,
+      "aria-expanded": isSub ? open : undefined,
+      "aria-checked": item.checkable ? String(!!item.checked) : undefined,
+      title: disabled && item.reason ? item.reason : undefined,
+      onMouseEnter: inline ? undefined : () => setSub(isSub ? item.id : null),
+      onClick: e => {
+        e.stopPropagation();
+        if (disabled) return;
+        // Inline a click opens or closes it; beside, it opens it (a hover may have already).
+        if (isSub) {
+          setSub(inline && sub === item.id ? null : item.id);
+          return;
+        }
+        onDone();
+        (onChoose || s.choose)(item);
+      }
+    }, row, open && /*#__PURE__*/React.createElement(ShellMenuItems, {
       s: s,
       items: item.children,
       onDone: onDone,
       prefix: prefix,
-      onChoose: onChoose
+      onChoose: onChoose,
+      inline: inline
     }));
   }));
 }
@@ -2426,9 +2874,13 @@ function useShellBarFit(ref, faceplate, room) {
 // a section per group of the dialog model, a change sent as `set-setting` at
 // once, Close as the only button. It follows the `settings` topic and is
 // held back by nothing. Folder rows show the folder in use with "Reset" (a
-// Web frontend has no folder picker). Names: settings-dialog,
+// Web frontend has no folder picker). A startup preset row ends with the
+// model's "Choose…" (`row.choose`), which opens the file picker; the row
+// shows the stored value until the settings topic changes. Names: settings-dialog,
 // setting-<section>-<key>, settings-close.
 
+// No setting has it as its value: a file path or bundle path never starts with NUL.
+const CALCU_CHOOSE_VALUE = "\u0000choose";
 function ShellSettingRow({
   s,
   row
@@ -2438,14 +2890,21 @@ function ShellSettingRow({
   const set = v => s.setSetting(r.section, r.key, v);
   let control = null;
   if (r.widget === "startup-model" || r.widget === "choice" || r.widget === "startup-preset") {
+    const chooses = r.widget === "startup-preset" && !!row.choose;
+    const changed = v => {
+      if (chooses && v === CALCU_CHOOSE_VALUE) s.chooseStartupPreset(r.key);else set(v);
+    };
     control = /*#__PURE__*/React.createElement("select", {
       "data-calcu": name,
       value: row.value,
-      onChange: e => set(e.target.value)
+      onChange: e => changed(e.target.value)
     }, row.choices.map(([v, l]) => /*#__PURE__*/React.createElement("option", {
       key: v,
       value: v
-    }, l)));
+    }, l)), chooses && /*#__PURE__*/React.createElement("option", {
+      key: CALCU_CHOOSE_VALUE,
+      value: CALCU_CHOOSE_VALUE
+    }, row.choose));
   } else if (r.widget === "folder") {
     control = /*#__PURE__*/React.createElement("span", {
       "data-calcu": name,
@@ -2517,24 +2976,41 @@ function ShellSettings({
   })))));
 }
 /* === ShellAbout.jsx === */
-// ShellAbout -- the About dialog of the React set: the product's name, its version and build, the texts and
-// links the product gives, one button to close it. Name: about-dialog.
+// ShellAbout -- the About dialog of the React set, as the worker serves it (useCalcuShell's
+// `about`, shell::about): the product's name, its version and build, the texts and links the
+// product gives, its sections (about-section: the Support Information with build time, the page's
+// address and what the browser tells of where it runs; the Display of the screen and window),
+// Copy (about-copy: the model's text, shell::aboutText) and OK.
+// Name: about-dialog.
 
 function ShellAbout({
   shell
 }) {
   const s = shell;
-  const a = calcuShellAbout(s.product);
+  const a = s.about;
+  if (!a) return null; // the About item comes with the models
+  const copy = () => {
+    const refused = e => calcuAppLog("warn", `About: Copy failed: ${calcuErrorText(e)}`);
+    try {
+      navigator.clipboard.writeText(a.text).catch(refused);
+    } catch (e) {
+      refused(e);
+    }
+  };
   return /*#__PURE__*/React.createElement(ShellModal, {
     name: "about-dialog",
     title: a.title,
     onClose: s.close,
-    buttons: /*#__PURE__*/React.createElement("button", {
+    buttons: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      "data-calcu": "about-copy",
+      onClick: copy
+    }, "Copy"), /*#__PURE__*/React.createElement("button", {
       type: "button",
       className: "calcu-shell-default",
       "data-calcu": "about-close",
       onClick: s.close
-    }, "OK")
+    }, "OK"))
   }, /*#__PURE__*/React.createElement("div", {
     className: "calcu-shell-about-name",
     "data-calcu": "about-name"
@@ -2549,23 +3025,26 @@ function ShellAbout({
     href: url,
     target: "_blank",
     rel: "noopener noreferrer"
-  }, label))));
+  }, label))), a.sections.map(section => /*#__PURE__*/React.createElement("div", {
+    key: section.heading,
+    className: "calcu-shell-about-section",
+    "data-calcu": "about-section"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, section.heading)), section.rows.map(([label, value]) => /*#__PURE__*/React.createElement("div", {
+    key: label
+  }, label, ": ", value)))));
 }
 /* === ShellNotice.jsx === */
 // ShellNotice -- a notice or a question of the React set: the sentence as it is, no title, OK; a
 // question (`asks:`) with Yes and No. Modal: it must be closed before the
 // component can be used again, while the machine and a running operation go
-// on behind it. Names: notice, notice-ok, notice-yes, notice-no.
+// on behind it. Each notice is a modal of its own, so the modal's focus rule
+// gives each its default button. Names: notice, notice-ok, notice-yes, notice-no.
 
 function ShellNotice({
   shell
 }) {
   const s = shell;
   const n = s.notice;
-  const ok = React.useRef(null);
-  React.useEffect(() => {
-    if (ok.current) ok.current.focus();
-  }, [n]);
   if (!n) return null;
   const buttons = n.question ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     type: "button",
@@ -2575,16 +3054,15 @@ function ShellNotice({
     type: "button",
     className: "calcu-shell-default",
     "data-calcu": "notice-yes",
-    ref: ok,
     onClick: () => s.closeNotice(true)
   }, "Yes")) : /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "calcu-shell-default",
     "data-calcu": "notice-ok",
-    ref: ok,
     onClick: () => s.closeNotice(true)
   }, "OK");
   return /*#__PURE__*/React.createElement(ShellModal, {
+    key: n.seq,
     name: "notice",
     onClose: () => s.closeNotice(false),
     buttons: buttons
@@ -2619,7 +3097,7 @@ function ShellLoading() {
 //
 //   <ShellPanelArea shell={s} panels={{paper: Component?}}>{product panels}</ShellPanelArea>
 //
-// A component of `panels` gets {shell: s.shell, owner, ownerPlace, places,
+// A component of `panels` gets {shell: s.shell, owner, ownerPlace, hint, places,
 // onChoose} (places: the place controls on the paper, s.choose for them).
 
 function ShellPanelArea({
@@ -2640,7 +3118,7 @@ function ShellPanelArea({
       shell: s.shell,
       owner: p.owner || null,
       ownerPlace: p.ownerPlace || null,
-      controls: [],
+      hint: p.hint,
       places: p.places,
       onChoose: s.choose
     });
@@ -2764,7 +3242,8 @@ function ShellRomsMissing({
 // ShellMoreMenu -- the More button at the end of every bar: the button
 // (its icon; its label, a bar label: unseen on a compact bar, and measured
 // with the others) opens a popup of the menus' items (ShellMenuItems)
-// anchored to it, kept inside the client's width; an item
+// anchored to it, kept inside the client's width, its submenus opening
+// inline (ShellMenuItems `inline`); an item
 // with `confirm` asks first in a ShellModal with the item's label and
 // Cancel. The items are the bar model's `choices`, computed again at
 // every change of an input. Names: bar-more, more-menu,
@@ -2805,7 +3284,12 @@ function ShellMoreMenu({
     const c = client.getBoundingClientRect();
     const b = ref.current.getBoundingClientRect();
     const p = popup.getBoundingClientRect();
-    const width = Math.min(p.width, c.width - 8);
+    // As wide as its widest entry with every submenu open, measured once:
+    // opening a submenu then neither wraps its entries nor moves the popup's
+    // left edge.
+    const sizer = ref.current.querySelector(".calcu-shell-more-sizer");
+    const natural = sizer ? Math.ceil(sizer.getBoundingClientRect().width) : 0;
+    const width = Math.min(Math.max(p.width, natural), c.width - 8);
     const left = Math.max(c.left + 4, Math.min(b.right, c.right - 4) - width);
     // Below the button, or above it when the window has no room below (the
     // bar sits at the bottom of the calculator); as high as that room, the
@@ -2818,7 +3302,7 @@ function ShellMoreMenu({
     setPlace({
       left,
       top,
-      maxWidth: c.width - 8,
+      width,
       maxHeight
     });
   }, [open]);
@@ -2832,7 +3316,7 @@ function ShellMoreMenu({
   const style = place ? {
     left: place.left,
     top: place.top,
-    maxWidth: place.maxWidth,
+    width: place.width,
     maxHeight: place.maxHeight
   } : {
     visibility: "hidden"
@@ -2863,7 +3347,16 @@ function ShellMoreMenu({
     items: items,
     prefix: "more-item-",
     onChoose: choose,
-    onDone: () => setOpen(false)
+    onDone: () => setOpen(false),
+    inline: true
+  })), open && !place && /*#__PURE__*/React.createElement("div", {
+    className: "calcu-shell-more-popup calcu-shell-more-sizer",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement(ShellMenuItems, {
+    s: s,
+    items: items,
+    inline: true,
+    sizer: true
   })), asking && /*#__PURE__*/React.createElement(ShellModal, {
     name: "more-confirm",
     onClose: () => setAsking(null),
@@ -2906,6 +3399,191 @@ function ShellStorageBanner({
     "data-calcu": "storage-banner",
     role: "status"
   }, storage.sentence || "");
+}
+/* === PaperWindow.jsx === */
+// useCalcuPaperWindow -- the paper panel in a window of its own on a
+// desktop page (Qt6: qt6/PaperWindow): a browser window without the
+// browser's bars (window.open with `popup`), its document made here with the
+// page's stylesheets, the panel drawn into it through a React portal, so it
+// shares the page's shell and paper store; no second worker.
+//
+//   const pw = useCalcuPaperWindow(shell, {paperWindow, product, notify});
+//   pw.own                   the paper is in its own window
+//   pw.toggle()              into its own window (inside the click: a
+//                            browser opens a window only within a gesture),
+//                            or back
+//   pw.ownWindow             {own, toggle} for the paper's header button
+//                            where the window is offered, else undefined
+//   pw.portal(element, style) the element drawn into the window, on a root
+//                            with the client's chrome custom properties
+//                            (null while the paper is in the page)
+//
+// paperWindow: the embed prop of the page that offers the window (the full
+// app); it is offered with it on a desktop page, never on mobile.
+// product: the product's name, for the window's title "<product> — Printer"
+// (Qt6: the same title); notify(text): a page notice.
+// Closing the window puts the paper back; the page's own end closes the
+// window and keeps [window] paper-own-window, so that the next start opens
+// it again. A browser refuses a window outside a gesture, so that start
+// may be refused: the paper stays in the page and a notice says so.
+// The window's place and inner size are [window] paper-x, paper-y,
+// paper-width, paper-height, written through the session's
+// `remember-window` (the settings file in the worker, as every setting).
+
+const CALCU_PAPER_WINDOW_POLL_MS = 1000; // a browser tells no move: its place is read this often
+const CALCU_PAPER_WINDOW_BLOCKED = "The browser did not open the printer's window; the button on the paper opens it.";
+function calcuPaperWindowNumber(win, key, fallback) {
+  const v = parseInt(win && win[key], 10);
+  return Number.isFinite(v) ? v : fallback;
+}
+function useCalcuPaperWindow(shell, {
+  paperWindow,
+  product,
+  notify
+}) {
+  const offered = !!paperWindow && !CALCU_SHELL_MOBILE;
+  const title = `${product} — Printer`;
+  const win = useTopic(shell, "settings", st => st && st.window || null);
+  const [popup, setPopup] = React.useState(null); // {view, root}
+  const popupRef = React.useRef(null);
+  popupRef.current = popup;
+  const ending = React.useRef(false); // the page itself goes
+  const restored = React.useRef(false);
+  const winRef = React.useRef(win);
+  winRef.current = win;
+  const remember = React.useCallback(values => {
+    if (shell) Promise.resolve(shell.send("remember-window", {
+      values
+    })).catch(() => {});
+  }, [shell]);
+  const placeOf = view => ({
+    "paper-x": Math.round(view.screenX),
+    "paper-y": Math.round(view.screenY),
+    "paper-width": Math.round(view.innerWidth),
+    "paper-height": Math.round(view.innerHeight)
+  });
+  const back = React.useCallback(closeIt => {
+    const p = popupRef.current;
+    if (!p) return;
+    popupRef.current = null;
+    setPopup(null);
+    remember(p.view.closed ? {
+      "paper-own-window": false
+    } : {
+      ...placeOf(p.view),
+      "paper-own-window": false
+    });
+    p.stop();
+    if (closeIt && !p.view.closed) p.view.close();
+  }, [remember]);
+
+  // The window, made now; null where the browser refuses it.
+  const open = React.useCallback(() => {
+    if (popupRef.current) {
+      popupRef.current.view.focus();
+      return true;
+    }
+    const w = winRef.current;
+    const width = calcuPaperWindowNumber(w, "paper-width", 400),
+      height = calcuPaperWindowNumber(w, "paper-height", 640);
+    let features = `popup=yes,width=${width},height=${height}`;
+    if (w && w["paper-x"] !== "" && w["paper-y"] !== "" && w["paper-x"] !== undefined) features += `,left=${calcuPaperWindowNumber(w, "paper-x", 0)},top=${calcuPaperWindowNumber(w, "paper-y", 0)}`;
+    let view = null;
+    try {
+      view = window.open("", "calcu-paper-window", features);
+    } catch (_) {
+      view = null;
+    }
+    if (!view) return false;
+    const d = view.document;
+    d.title = title;
+    d.documentElement.style.height = "100%";
+    d.body.style.margin = "0";
+    d.body.style.height = "100%";
+    // The page's stylesheets, at their absolute addresses (the window's
+    // blank document has no base of its own to resolve them against).
+    for (const el of document.querySelectorAll('link[rel="stylesheet"], style')) {
+      const copy = d.importNode(el, true);
+      if (el.tagName === "LINK") copy.href = el.href;
+      d.head.appendChild(copy);
+    }
+    const root = d.createElement("div");
+    d.body.appendChild(root);
+    // Its place as it changes (a browser tells a resize, never a move).
+    let last = JSON.stringify(placeOf(view));
+    const check = () => {
+      if (view.closed) return;
+      const now = JSON.stringify(placeOf(view));
+      if (now !== last) {
+        last = now;
+        remember(placeOf(view));
+      }
+    };
+    const poll = setInterval(check, CALCU_PAPER_WINDOW_POLL_MS);
+    const closed = () => {
+      if (!ending.current) back(false);
+    };
+    view.addEventListener("resize", check);
+    view.addEventListener("pagehide", closed);
+    const stop = () => {
+      clearInterval(poll);
+      try {
+        view.removeEventListener("pagehide", closed);
+        view.removeEventListener("resize", check);
+      } catch (_) {/* gone */}
+    };
+    const p = {
+      view,
+      root,
+      stop
+    };
+    popupRef.current = p;
+    setPopup(p);
+    remember({
+      "paper-own-window": true
+    });
+    view.focus();
+    return true;
+  }, [title, remember, back]);
+  const toggle = React.useCallback(() => {
+    if (popupRef.current) back(true);else if (!open() && notify) notify(CALCU_PAPER_WINDOW_BLOCKED);
+  }, [open, back, notify]);
+
+  // The page's end takes the window with it; the setting stays.
+  React.useEffect(() => {
+    const end = () => {
+      ending.current = true;
+      const p = popupRef.current;
+      if (p && !p.view.closed) p.view.close();
+    };
+    window.addEventListener("pagehide", end);
+    return () => window.removeEventListener("pagehide", end);
+  }, []);
+
+  // At the start, the window again where the last run left it.
+  React.useEffect(() => {
+    if (!offered || !win || restored.current) return;
+    restored.current = true;
+    if (win["paper-own-window"] === "true" && !open() && notify) notify(CALCU_PAPER_WINDOW_BLOCKED);
+  }, [offered, win, open, notify]);
+  const portal = (element, style) => {
+    if (!popup) return null;
+    return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+      className: "calcu-client calcu-paper-window",
+      "data-calcu": "paper-window-root",
+      style: style
+    }, element), popup.root);
+  };
+  const own = !!popup;
+  return {
+    own,
+    toggle,
+    portal,
+    ownWindow: offered ? {
+      own,
+      toggle
+    } : undefined
+  };
 }
 /* === hostKeys.js === */
 // Host keys to the typing engine (the family's rule; the Qt6 twin is
@@ -3004,17 +3682,17 @@ if (typeof module !== "undefined" && module.exports) {
 /* === useShellProduct.jsx === */
 // A product page's glue to its session, the same for both products' pages.
 //
-//   useShellProduct(shell, {request, args, fallback, version, build,
-//                   copyScreen, openFiles, acts, nameAndSave}) → {product, ready, chrome}
+//   useShellProduct(shell, {request, args, fallback, version, build, buildTime,
+//                   copyScreen, openFiles, acts}) → {product, ready, chrome}
 //     the product's data: `request` (`<prefix>.shell-product`) with
 //     `args`, once per distinct `args` while the session runs, its answer
 //     {product, chrome} kept; `fallback` (the shell's frame with nothing of
-//     the product's) until it came. The product is the answer's with the
-//     page's `version` and `build`, Copy Screen (`copyScreen`, or null:
+//     the product's) until it came. Either carries the page's `version`,
+//     `build` and `buildTime`; the answer's also Copy Screen (`copyScreen`, or null:
 //     none), Load Preset… (the files picked by the product's
 //     `presetUploads`: the preset with the files it names, through
-//     `openFiles(files, "dialog")`), the items' acts (`acts`, by id) and
-//     Name & Save of a media place from More (`nameAndSave(place)`). copyScreen, openFiles and acts are read
+//     `openFiles(files, "dialog")`) and the items' acts (`acts`, by id); its
+//     `nameAndSave` the shell carries out. copyScreen, openFiles and acts are read
 //     when used, so they may be new closures at each render. `chrome`: the
 //     answer's chrome (the product's app/ Chrome in shell/Chrome's form),
 //     null until it came.
@@ -3058,16 +3736,20 @@ function useShellProduct(shell, options) {
   const data = answers[key];
   const hasCopyScreen = !!options.copyScreen;
   const product = React.useMemo(() => {
-    if (!data) return options.fallback;
+    const stamp = {
+      version: options.version,
+      build: options.build,
+      buildTime: options.buildTime || ""
+    };
+    if (!data) return {
+      ...options.fallback,
+      ...stamp
+    };
     const p = data.product;
     return {
       ...p,
-      version: options.version,
-      build: options.build,
+      ...stamp,
       copyScreen: hasCopyScreen ? () => latest.current.copyScreen() : null,
-      nameAndSave: place => {
-        if (latest.current.nameAndSave) latest.current.nameAndSave(place);
-      },
       loadPreset: async () => {
         const files = await calcuPickFiles(p.presetUploads || "", true);
         if (files.length) latest.current.openFiles(files, "dialog");
@@ -3113,6 +3795,9 @@ function calcuChromeStyle(chrome, dark) {
   style["--calcu-bar-height"] = px(s.barHeight);
   style["--calcu-bar-gap"] = px(s.barGap);
   if (s.slotPickerEm) style["--calcu-slot-picker-width"] = `${s.slotPickerEm}em`;
+  style["--calcu-paper-row-compact-width"] = String(s.paperRowCompactWidth);
+  style["--calcu-paper-row-gap"] = px(s.paperRowGap);
+  style["--calcu-paper-row-compact-gap"] = px(s.paperRowCompactGap);
   if (s.printerMaxWidth) {
     style["--calcu-printer-min-width"] = px(s.printerMinWidth);
     style["--calcu-printer-max-width"] = px(s.printerMaxWidth);
@@ -3138,12 +3823,8 @@ function useFaceplateMaps(shell, request, model) {
 async function calcuOpenFiles(send, files, way) {
   const list = Array.from(files || []);
   if (!list.length) return null;
-  const named = await Promise.all(list.map(f => f.arrayBuffer().then(b => ({
-    name: f.name,
-    bytes: new Uint8Array(b)
-  }))));
   return send("open", {
-    files: named,
+    files: await calcuNamedFiles(list),
     way,
     upload: true
   });
@@ -3168,12 +3849,19 @@ function calcuFileDrop(open) {
 //     File ▸ Saved Media…: the library's list (CalcuSavedMediaDialog) in the
 //     shell's modal (data-calcu="saved-media")
 //   <ShellControlBar slotPicker={Component} />, where the component draws
-//   <ShellSlotPicker shell={s} entry={entry} label={text?} nameAndSave={fn?} icon={element?} short={bool?} />
+//   <ShellSlotPicker shell={s} entry={entry} label={text?} icon={element?} short={bool?} />
 //     the library's module picker of a slot (the shell's slot picker),
 //     disabled with the place's reason while it cannot be used (`empty`);
-//     `label` names the fieldset; with `nameAndSave(word)` a Name & Save
-//     button (`icon` its glyph; data-calcu="name-and-save-<place>"), usable
-//     while the place's medium can be named and saved
+//     `label` names the fieldset; where the product asks for it
+//     (nameAndSave.slotButtons) a Name & Save button (`icon` its glyph;
+//     data-calcu="name-and-save-<place>"), usable while the place's medium
+//     can be named and saved, which opens the shell's dialog
+//   <ShellNameAndSaveButton shell={s} place={word} label={text?} icon={element} />
+//     the Name & Save button of a media place, for the slot pickers and a
+//     product's own media controls: usable while the place's medium can be
+//     named and saved, it opens the shell's dialog; `label` names the place
+//     in the button's accessible name (default: the place's word);
+//     data-calcu="name-and-save-<place>"
 
 function ShellSavedMedia({
   shell,
@@ -3194,11 +3882,11 @@ function ShellSlotPicker({
   shell,
   entry,
   label,
-  nameAndSave,
   icon,
   short
 }) {
   const word = calcuShellText(entry, "place");
+  const button = !!(shell.product && shell.product.nameAndSave && shell.product.nameAndSave.slotButtons);
   const place = calcuMediaPlace(shell.inputs.media, word);
   const ok = calcuShellAvailability(entry, "empty");
   return /*#__PURE__*/React.createElement("fieldset", {
@@ -3210,15 +3898,28 @@ function ShellSlotPicker({
     place: place,
     send: (c, a) => shell.shell.send(c, a),
     short: short
-  }), nameAndSave && /*#__PURE__*/React.createElement("button", {
+  }), button && /*#__PURE__*/React.createElement(ShellNameAndSaveButton, {
+    shell: shell,
+    place: word,
+    icon: icon
+  }));
+}
+function ShellNameAndSaveButton({
+  shell,
+  place,
+  label,
+  icon
+}) {
+  const medium = calcuMediaPlace(shell.inputs.media, place);
+  return /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "calcu-iconbutton",
-    disabled: !place || !place.nameAndSave,
+    disabled: !medium || !medium.nameAndSave,
     title: "Name & Save",
-    "data-calcu": `name-and-save-${word}`,
-    "aria-label": `Name & Save ${word.replace("-", " ")}`,
-    onClick: () => nameAndSave(word)
-  }, icon));
+    "data-calcu": `name-and-save-${place}`,
+    "aria-label": `Name & Save ${label || place.replace("-", " ")}`,
+    onClick: () => shell.nameAndSave(place)
+  }, icon);
 }
 /* === painters.js === */
 // Canvas painters: the LCD (Qt6/app/LcdWidget.cpp's algorithm). What is lit
@@ -3360,37 +4061,6 @@ function paintLcd(ctx, L, display, width, height) {
 // A PNG Blob of a canvas.
 function canvasPng(canvas) {
   return new Promise(resolve => canvas.toBlob(resolve, "image/png"));
-}
-
-// Puts `items` ({mime: Promise of a Blob or string}) on the clipboard.
-// Called straight from the click (Safari allows a write only inside the
-// gesture), with the data still on its way from the worker -- ClipboardItem
-// takes promises. Resolves false if the browser refuses.
-async function writeClipboard(items) {
-  const asBlob = mime => Promise.resolve(items[mime]).then(v => typeof v === "string" ? new Blob([v], {
-    type: mime
-  }) : v);
-  try {
-    if (navigator.clipboard && window.ClipboardItem) {
-      const entries = {};
-      for (const mime of Object.keys(items)) entries[mime] = asBlob(mime);
-      await navigator.clipboard.write([new ClipboardItem(entries)]);
-      return true;
-    }
-    if (navigator.clipboard && items["text/plain"]) {
-      await navigator.clipboard.writeText(await items["text/plain"]);
-      return true;
-    }
-  } catch (e) {/* refused, or a type this browser doesn't take */}
-  return false;
-}
-
-// Copy Screen: `items` on the clipboard, else (the
-// browser refuses) its "image/png" downloaded as `fileName`.
-async function copyImageOrDownload(fileName, items) {
-  if (await writeClipboard(items)) return;
-  const png = await items["image/png"];
-  if (png) downloadBytes(fileName, png, "image/png");
 }
 
 // A file or blob for the user to keep (the library's download).
@@ -3717,10 +4387,13 @@ function Inspector({
 }
 
 // The library's paper panel in the product's chrome: always
-// there, named after the plotter the control state's panel entry names.
+// there, named after the plotter the control state's panel entry names;
+// `ownWindow`: the paper's own window where the page offers it.
 function PaperDock({
   shell,
-  owner
+  owner,
+  hint,
+  ownWindow
 }) {
   const papers = useCalcuPaper(shell);
   const entry = owner ? papers.papers.find(p => p.printer === owner) : null;
@@ -3732,7 +4405,9 @@ function PaperDock({
     "data-empty": empty ? "true" : "false"
   }, /*#__PURE__*/React.createElement(CalcuPaperPanel, {
     shell: shell,
-    owner: owner || null
+    owner: owner || null,
+    hint: hint,
+    ownWindow: ownWindow
   }));
 }
 
@@ -3851,10 +4526,10 @@ function useDismiss(ref, active, close) {
 /* === Dialogs.jsx === */
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 // The product's own dialogs: those of the program-file flows (the
-// machine-code start address and its result, "Load which one?"), the
-// media's Name & Save, and a notice as the shell's for what a flow refuses,
-// each in the React set's ShellModal. Settings, About, the shell's notices
-// and "Loading…" are the React set's (ShellDialogs). Each is shown through
+// machine-code start address and its result, "Load which one?"), each in
+// the React set's ShellModal. Settings, About, the notices (a flow's refusal
+// too, through the shell's notify) and "Loading…" are the React set's
+// (ShellDialogs). Each is shown through
 // useDialogs()'s ask(), which resolves with the answer (null: cancelled), so
 // the flows in CalcU1600.jsx read like MainWindow's.
 
@@ -3874,28 +4549,6 @@ function OkCancel({
     disabled: disabled,
     onClick: ok
   }, label));
-}
-
-// A notice of the product's own flows (a file that cannot be read, a
-// refused plan): as the shell's notice: the sentence
-// as it is, no title, OK.
-function NoticeDialog({
-  text,
-  done
-}) {
-  return /*#__PURE__*/React.createElement(ShellModal, {
-    name: "notice",
-    onClose: () => done(true),
-    buttons: /*#__PURE__*/React.createElement("button", {
-      type: "button",
-      className: "calcu-shell-default",
-      "data-calcu": "notice-ok",
-      autoFocus: true,
-      onClick: () => done(true)
-    }, "OK")
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "calcu-shell-notice-text"
-  }, text));
 }
 function ChoiceDialog({
   title,
@@ -3937,8 +4590,7 @@ function AddressDialog({
   const [text, setText] = React.useState(plan.proposed || "");
   const [check, setCheck] = React.useState({
     valid: false,
-    hint: "",
-    problem: false
+    hint: ""
   });
   React.useEffect(() => {
     let live = true;
@@ -3953,12 +4605,10 @@ function AddressDialog({
       };
       if (p.needsAddress) setCheck({
         valid: false,
-        hint: "",
-        problem: false
+        hint: ""
       });else setCheck({
         valid: !p.refusal,
-        hint: p.refusal || p.where || "",
-        problem: !!p.refusal
+        hint: p.refusal || p.where || ""
       });
     });
     return () => {
@@ -3998,7 +4648,7 @@ function AddressDialog({
   }, "Length:"), /*#__PURE__*/React.createElement("span", null, plan.length, " bytes")), plan.cpuNote && /*#__PURE__*/React.createElement("p", {
     className: "calcu-shell-notice-text"
   }, plan.cpuNote), check.hint && /*#__PURE__*/React.createElement("p", {
-    className: check.problem ? "calcu-shell-problem" : "calcu-shell-notice-text"
+    className: check.valid ? "calcu-shell-notice-text" : "calcu-shell-problem"
   }, check.hint));
 }
 function LoadedDialog({
@@ -4016,33 +4666,10 @@ function LoadedDialog({
     }, "OK")
   }, /*#__PURE__*/React.createElement("p", null, result.summary, "."), /*#__PURE__*/React.createElement("p", null, "Keep BASIC from overwriting it:", /*#__PURE__*/React.createElement("br", null), result.newCommand && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("b", null, /*#__PURE__*/React.createElement("tt", null, result.newCommand)), /*#__PURE__*/React.createElement("br", null)), /*#__PURE__*/React.createElement("small", null, result.newNote)), /*#__PURE__*/React.createElement("p", null, "Start it:", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("b", null, /*#__PURE__*/React.createElement("tt", null, result.callCommand)), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("small", null, result.callNote)));
 }
-
-// Name & Save: the library's dialog with the prompt ("Instance name:" with the write-protect switch where the
-// module has one still off, "Disk name:", "Cassette name:"); a name an instance
-// has asks before it is replaced.
-function NameAndSaveDialog({
-  shell,
-  place,
-  prompt,
-  done
-}) {
-  return /*#__PURE__*/React.createElement(ShellModal, {
-    title: "Name & Save",
-    name: "name-and-save",
-    onClose: () => done(null)
-  }, /*#__PURE__*/React.createElement(CalcuNameAndSaveDialog, {
-    place: place,
-    prompt: prompt,
-    send: (c, a) => shell.send(c, a),
-    onClose: saved => done(saved ? true : null)
-  }));
-}
 const DIALOGS = {
-  notice: NoticeDialog,
   choice: ChoiceDialog,
   address: AddressDialog,
-  loaded: LoadedDialog,
-  nameAndSave: NameAndSaveDialog
+  loaded: LoadedDialog
 };
 
 // ask(kind, props) shows one dialog and resolves with its answer.
@@ -4156,31 +4783,25 @@ function SaveIcon() {
   }));
 }
 
-// The product's own controls and the media controls it hands the shell's
-// bar get the page's actions through this context.
-const C1600Bar = React.createContext(null);
-
 // The module picker of a slot (the library's ShellSlotPicker), with its
-// Name & Save button.
+// Name & Save button (the product's nameAndSave.slotButtons).
 function SlotControls(props) {
-  const bar = React.useContext(C1600Bar);
   return /*#__PURE__*/React.createElement(ShellSlotPicker, _extends({}, props, {
-    nameAndSave: bar.nameAndSave,
     icon: /*#__PURE__*/React.createElement(SaveIcon, null)
   }));
 }
 
 // The cassette's controls (the shell's media control of the kind
 // `cassette`): the tape picker (Blank records into memory), Name & Save,
-// the counter with the motor (`c1600.lamps`).
+// the counter with the motor (`c1600.lamps`, read here: a running tape
+// re-renders these controls only).
 function TapeControls({
   shell,
   entry
 }) {
-  const bar = React.useContext(C1600Bar);
+  const lamps = useTopic(shell.shell, "c1600.lamps");
   const place = calcuMediaPlace(shell.inputs.media, "cassette");
   const ok = calcuShellAvailability(entry, "insert");
-  const lamps = bar.lamps;
   return /*#__PURE__*/React.createElement("fieldset", {
     className: "calcu-bar-fieldset",
     disabled: !ok.now,
@@ -4189,16 +4810,12 @@ function TapeControls({
     className: "calcu-bar-label"
   }, "Cassette:"), /*#__PURE__*/React.createElement(CalcuMediaPicker, {
     place: place,
-    send: bar.send
-  }), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    className: "calcu-iconbutton",
-    disabled: !place || !place.nameAndSave,
-    title: "Name & Save",
-    "data-calcu": "name-and-save-cassette",
-    "aria-label": "Name & Save cassette",
-    onClick: () => bar.nameAndSave("cassette")
-  }, /*#__PURE__*/React.createElement(SaveIcon, null)), /*#__PURE__*/React.createElement("span", {
+    send: (c, a) => shell.shell.send(c, a)
+  }), /*#__PURE__*/React.createElement(ShellNameAndSaveButton, {
+    shell: shell,
+    place: "cassette",
+    icon: /*#__PURE__*/React.createElement(SaveIcon, null)
+  }), /*#__PURE__*/React.createElement("span", {
     className: `calcu-tape-counter${lamps && lamps.tapeMotor ? " on" : ""}${!lamps || lamps.tapeEmpty ? " empty" : ""}`,
     "data-lamp": "tape",
     title: lamps ? lamps.tapeTip : "No cassette"
@@ -4212,7 +4829,7 @@ function TapeControls({
 function DiskControls({
   s
 }) {
-  const bar = React.useContext(C1600Bar);
+  const lamps = useTopic(s.shell, "c1600.lamps");
   const cs = s.inputs.controlState;
   const entry = cs && cs.product ? cs.product["c1600.disk-controls"] : null;
   if (!entry || !entry.shown) return null;
@@ -4221,19 +4838,19 @@ function DiskControls({
     now: true,
     reason: ""
   };
-  const ok = insert;
-  const place = ok.now ? calcuMediaPlace(s.inputs.media, "floppy") : null;
+  const place = insert.now ? calcuMediaPlace(s.inputs.media, "floppy") : null;
   const side = place && place.holds && place.holds.side ? 1 : 0;
+  const send = (c, a) => s.shell.send(c, a);
   return /*#__PURE__*/React.createElement("fieldset", {
     className: "calcu-bar-fieldset",
     "data-calcu": "bar-disk",
-    disabled: !ok.now,
-    title: ok.now ? undefined : ok.reason
+    disabled: !insert.now,
+    title: insert.now ? undefined : insert.reason
   }, /*#__PURE__*/React.createElement("span", {
     className: "calcu-bar-label"
   }, "Disk:"), place ? /*#__PURE__*/React.createElement(CalcuMediaPicker, {
     place: place,
-    send: bar.send
+    send: send
   }) : /*#__PURE__*/React.createElement("select", {
     className: "calcu-media-picker",
     "data-calcu": "media-picker-floppy",
@@ -4245,19 +4862,16 @@ function DiskControls({
     title: "Eject and turn the disk over",
     "data-calcu": "disk-side",
     "aria-label": "Disk side",
-    onClick: () => bar.send("media.turn", {
+    onClick: () => send("media.turn", {
       place: "floppy"
     })
-  }, String(side)), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    className: "calcu-iconbutton",
-    disabled: !place || !place.nameAndSave,
-    title: "Name & Save",
-    "data-calcu": "name-and-save-floppy",
-    "aria-label": "Name & Save disk",
-    onClick: () => bar.nameAndSave("floppy")
-  }, /*#__PURE__*/React.createElement(SaveIcon, null)), /*#__PURE__*/React.createElement("span", {
-    className: `calcu-lamp${bar.lamps && bar.lamps.floppyMotor ? " on" : ""}`,
+  }, String(side)), /*#__PURE__*/React.createElement(ShellNameAndSaveButton, {
+    shell: s,
+    place: "floppy",
+    label: "disk",
+    icon: /*#__PURE__*/React.createElement(SaveIcon, null)
+  }), /*#__PURE__*/React.createElement("span", {
+    className: `calcu-lamp${lamps && lamps.floppyMotor ? " on" : ""}`,
     "data-lamp": "floppy",
     title: "Drive active -- wait for this to go dark before turning the disk over"
   }, "\u25CF"));
@@ -4286,9 +4900,10 @@ const C1600_NO_PRODUCT = {
 };
 
 // The props: the shared ones of embedProps
-// (width, keyboard, layout, preset, height, model, workerUrl). One layout:
+// (width, keyboard, layout, preset, height, model, workerUrl, paperWindow).
+// One layout:
 // `layout` takes "auto" only (the default); embedProps ignores another value
-// with a console warning. `model` is the model's name (PC-1600); `preset` a
+// with an app log warning. `model` is the model's name (PC-1600); `preset` a
 // path of the bundle, with or without `examples:`.
 function CalcU1600(props) {
   const embedded = embedProps(props, {
@@ -4320,11 +4935,10 @@ function CalcU1600(props) {
   }, [shell]);
   const start = useShellState(shell, st => st.start);
   const failure = useShellState(shell, st => st.failure);
-  const lamps = useTopic(shell, "c1600.lamps");
   const programs = useStream(shell, "c1600.program-opened");
-  const tell = text => dialogs.ask("notice", {
-    text
-  });
+  const tell = text => {
+    if (sRef.current) sRef.current.notify(text);
+  };
   const sendChecked = (name, args) => sRef.current ? sRef.current.sendChecked(name, args) : Promise.resolve({
     done: false
   });
@@ -4417,7 +5031,7 @@ function CalcU1600(props) {
   // of Load BASIC Program… or Load Machine Code… without its file dialog.
   // A WAV with several files asks which one; the file chosen goes to the
   // flow of its own kind. One flow at a time: one that comes meanwhile is
-  // dropped with a log line. The last program taken marks the place in the
+  // dropped with an app log line. The last program taken marks the place in the
   // stream (which keeps only its last items and starts anew on a reset).
   const programTaken = React.useRef(null);
   React.useEffect(() => {
@@ -4427,7 +5041,7 @@ function CalcU1600(props) {
     const p = fresh[0];
     programTaken.current = p;
     if (programFlow.current) {
-      console.log(`[open] a program flow runs; dropped ${p.name}`);
+      calcuAppLog("info", `Open: a program flow runs; ${p.name} is dropped.`);
       return;
     }
     programFlow.current = true;
@@ -4449,11 +5063,25 @@ function CalcU1600(props) {
     });
   }, [shell, programs, dialogs.open]);
   const copyScreen = () => {
-    const image = shell.request("c1600.screen-image", null).then(r => r.value);
-    copyImageOrDownload("screen.png", {
-      "image/png": image.then(grayPng),
-      "text/plain": image.then(i => i.text)
+    // Armed in the click, as the paper's Copy; a refused picture disarms it:
+    // nothing is copied, and the app log names the session's reason.
+    armClipboard({
+      text: true
     });
+    const notMade = why => {
+      calcuDisarmClipboard();
+      calcuAppLog("warn", `Copy Screen: ${why}`);
+    };
+    shell.request("c1600.screen-image", null).then(async r => {
+      if (!r.done || !r.value) return notMade(r.reason || "the screen's picture did not come");
+      const bytes = new Uint8Array(await (await grayPng(r.value)).arrayBuffer());
+      const ignored = () => {}; // the app log has told the outcome
+      return calcuCopyPicture({
+        bytes,
+        text: r.value.text,
+        name: "screen.png"
+      }, ignored, ignored, "The screen's");
+    }).catch(e => notMade(calcuErrorText(e)));
   };
 
   // The product's shell data with the page's acts. Load Preset…: the
@@ -4468,16 +5096,23 @@ function CalcU1600(props) {
     fallback: C1600_NO_PRODUCT,
     version: CalcU1600.version,
     build: CalcU1600.build,
+    buildTime: CalcU1600.buildTime,
     copyScreen,
     openFiles,
     acts: {
       "load-basic-program": () => pickProgram("basic"),
       "load-machine-code": () => pickProgram("code")
-    },
-    nameAndSave: place => bar.nameAndSave(place)
+    }
   });
   const s = useCalcuShell(shell, product, CALCU_SHELL_WEB_TRAITS);
   sRef.current = s;
+  // The paper's own window: never in the row then.
+  const paperWindow = useCalcuPaperWindow(shell, {
+    paperWindow: embedded.paperWindow,
+    product: "Calc-U-1600",
+    notify: tell
+  });
+  const ownWindow = paperWindow.ownWindow;
   // The product's chrome (app/SharpChrome) as the root's custom properties,
   // light or dark with the system.
   const dark = useColourScheme();
@@ -4533,23 +5168,6 @@ function CalcU1600(props) {
   // hardware keyboard).
   const onFocusCapture = e => {
     if (e.target.tagName === "BUTTON" && !e.target.closest(".calcu-shell-modal")) reclaimFocus();
-  };
-
-  // ── Media flows ─────────────────────────────────────────────────────
-  const bar = {
-    send,
-    lamps,
-    // Name & Save of a module, a disk or a tape.
-    nameAndSave: async word => {
-      const place = calcuMediaPlace(s.inputs.media, word);
-      if (!place) return;
-      const prompt = word === "floppy" ? "Disk name:" : word === "cassette" ? "Cassette name:" : "Instance name:";
-      await dialogs.ask("nameAndSave", {
-        shell,
-        place,
-        prompt
-      });
-    }
   };
 
   // ── Keyboard (MainWindow::keyPressEvent / keyReleaseEvent) ──────────
@@ -4634,8 +5252,8 @@ function CalcU1600(props) {
   const menuHeight = mobile ? 0 : MENU_HEIGHT; // mobile has no menu bar
   // The library's view rule on app/'s chrome: the faceplate as large as
   // the window allows; the panels' row below it where the room below takes
-  // it, else the calculator alone (a phone in landscape); on mobile with the
-  // room below (a phone in portrait) the panels alone.
+  // it, else the calculator alone (a phone in landscape); a phone upright
+  // (mobile, the faceplate too narrow to use) the panels alone.
   const sizes = chrome && chrome.sizes || {};
   const view = calcuShellView({
     width: W,
@@ -4647,7 +5265,7 @@ function CalcU1600(props) {
     debuggerMinWidth: sizes.debuggerMinWidth || 0,
     debuggerMinHeight: sizes.debuggerMinHeight || 0,
     mobile,
-    panelsAloneOnMobileBelow: true
+    faceplateUsableWidth: sizes.faceplateUsableWidth || 0
   });
   const faceWidth = Math.max(200, view.faceplateWidth);
   // The bar below the faceplate by the library's rule: its labels
@@ -4655,13 +5273,14 @@ function CalcU1600(props) {
   const barRef = React.useRef(null);
   const barFit = useShellBarFit(barRef, faceWidth, W);
   const panelRoom = view.panelsAlone || view.side === "below" && view.panelsFit;
-  const paperOwner = (s.panels.find(p => p.kind === "paper") || {}).owner || "";
+  const paperPanel = s.panels.find(p => p.kind === "paper") || {};
+  const paperOwner = paperPanel.owner || "";
   const printerEntry = cs && cs.product ? cs.product["c1600.ce158-printer-panel"] : null;
   // The paper panel with or without a plotter, the inspector beside it
   // where the view rule's debugger fits. Narrower, the paper gives way to
   // the inspector while no plotter is plugged in. The panels alone (mobile)
   // are the paper, with its hint without a plotter, and never the inspector.
-  const showPaper = panelRoom && (view.panelsAlone || view.debuggerFits || !!paperOwner);
+  const showPaper = panelRoom && !paperWindow.own && (view.panelsAlone || view.debuggerFits || !!paperOwner);
   const showPrinter = panelRoom && !!(printerEntry && printerEntry.shown);
   const showInspector = panelRoom && !view.panelsAlone && (view.debuggerFits || !(showPaper || showPrinter));
   const anyPanel = showInspector || showPaper || showPrinter;
@@ -4728,9 +5347,7 @@ function CalcU1600(props) {
     map: maps[model] || null,
     width: faceWidth,
     shiftFlash: shiftFlash
-  })), /*#__PURE__*/React.createElement(C1600Bar.Provider, {
-    value: bar
-  }, /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("div", {
     className: "calcu-controlbar",
     ref: barRef,
     style: faceHidden ? {
@@ -4750,7 +5367,7 @@ function CalcU1600(props) {
         s: s
       })]
     }
-  }))), anyPanel && s.started && /*#__PURE__*/React.createElement("div", {
+  })), anyPanel && s.started && /*#__PURE__*/React.createElement("div", {
     className: "calcu-panels"
   }, /*#__PURE__*/React.createElement(ShellPanelArea, {
     shell: s,
@@ -4759,15 +5376,23 @@ function CalcU1600(props) {
     shell: shell
   }), showPaper && /*#__PURE__*/React.createElement(PaperDock, {
     shell: shell,
-    owner: paperOwner
+    owner: paperOwner,
+    hint: paperPanel.hint,
+    ownWindow: ownWindow
   }), showPrinter && /*#__PURE__*/React.createElement(Ce158Printer, {
     shell: shell
   }))), /*#__PURE__*/React.createElement(ShellDialogs, {
     shell: s,
     savedMedia: ShellSavedMedia
-  }), dialogs.element);
+  }), dialogs.element, paperWindow.portal(/*#__PURE__*/React.createElement(PaperDock, {
+    shell: shell,
+    owner: paperOwner,
+    hint: paperPanel.hint,
+    ownWindow: ownWindow
+  }), chromeStyle));
 }
 CalcU1600.version = "0.9.0";
-CalcU1600.build = "pre-84825e8"; // tools/build-id.cmake
+CalcU1600.build = "pre-3788d62b"; // tools/build-id.cmake
+CalcU1600.buildTime = "2026-11-24T15:51:10Z";
 if (typeof window !== "undefined") window.CalcU1600 = CalcU1600;
 })();

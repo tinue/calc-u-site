@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media — Calc-U 59 help</title>
+<meta name="description" content="A medium holds your data and can be named and saved: a memory module that keeps its contents on a battery, a disk, a cassette or a card. Which media your…">
+<link rel="canonical" href="https://calc-u.org/59/help/04-media/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/04-media/">
+<meta property="og:title" content="Media — Calc-U 59 help">
+<meta property="og:description" content="A medium holds your data and can be named and saved: a memory module that keeps its contents on a battery, a disk, a cassette or a card. Which media your…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/04-media/" aria-current="page"><span class="k yellow">4</span><span>Media</span></a><ul class="help-parts"><li><a href="/59/help/04-media/" aria-current="page">Media</a></li><li><a href="/59/help/04-media/magnetic-cards/">Magnetic cards</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/10-reference/"><span class="k dark">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> 4 Media</p>
+<p class="eyebrow">Chapter 4 · Media</p>
+<h1 id="media">Media</h1>
+<p>A <strong>medium</strong> holds your data and can be named and saved: a memory
+module that keeps its contents on a battery, a disk, a cassette or a card. Which media your product has, and where each goes, is in
+<a href="/59/help/04-media/magnetic-cards/">the product's part of this chapter</a>.</p>
+<h2 id="templates-and-instances">Templates and instances</h2>
+<p>Every medium is a template or an instance.</p>
+<ul>
+<li>A <strong>template</strong> is a starting point. The product brings its own, and
+you can make your own (a user template). A template is never written:
+what the machine writes to it stays in the machine until you save it
+under a name, or until you take it out.</li>
+<li>An <strong>instance</strong> is a medium of your own, with a name. It saves itself
+after each change (autosave), at the latest half a second after the
+machine wrote to it, so there is no Save command to remember.</li>
+</ul>
+<pre class="mermaid">flowchart LR
+  t[&quot;Template (never written)&quot;] --&gt;|&quot;Name &amp; Save&quot;| i[&quot;Instance (saves itself)&quot;]
+  i --&gt;|&quot;saveas as a template, in a preset&quot;| u[&quot;User template&quot;]
+</pre>
+<p>Each medium carries its name inside its file. The file's name counts
+only for a file that carries none.</p>
+<p>A template can carry an <strong>insert notice</strong>, something you need to know
+before you use the medium. It is shown when you put the template in
+(from its place's picker, by Start new, or by opening or dropping its
+file). A medium you saved from it keeps the text but no longer shows it,
+and a preset that puts the template in shows nothing.</p>
+<h2 id="the-save-folder">The save folder</h2>
+<p>Your instances and user templates live in the <strong>save folder</strong>. You
+choose it in the settings dialog, under Storage
+(<a href="/59/help/08-settings/">Settings</a>). In the browser, media are kept in the
+browser's storage, from one visit to the next.</p>
+<p>A medium's file is named after the medium, with the ending of its kind.
+When a file of that name already holds another medium, the new one gets
+the next free numbered name (<code>name-1</code>).</p>
+<p>The product reads the save folder again whenever it wrote to it and
+whenever you open a picker or the list of saved media. It does not
+watch the folder for changes made by other programs.</p>
+<h2 id="choosing-a-medium">Choosing a medium</h2>
+<p>The picker of a module slot, or of a place that holds a medium (a disk
+drive, a cassette), lists in this order, each group sorted by name:</p>
+<ol>
+<li>the empty place;</li>
+<li>the templates, the product's before your own;</li>
+<li>your instances;</li>
+<li>in a module slot, the modules that are not media (a ROM module, for
+instance).</li>
+</ol>
+<p>The tooltip of an entry is its description.</p>
+<p>When you choose an entry, anything the old medium still has to save is
+saved first. A disk or a cassette is in at once. A module is a change of
+hardware, so the machine goes through a power cycle
+(<a href="/59/help/03-models-and-machine-control/#what-follows-a-change-of-hardware">What follows a change of hardware</a>).
+A medium that cannot be read leaves the place empty, and a notice says
+why.</p>
+<h2 id="name--save">Name &amp; Save</h2>
+<p>Use <strong>Name &amp; Save</strong> on a place whose medium is not an instance yet: a
+template the machine wrote to, for example a fresh disk you formatted.
+It asks for a name, and, where the medium has a write-protect switch
+that is still off, whether to switch it on. The medium is then saved as
+your instance, stays in its place without a power cycle, and saves
+itself from then on.</p>
+<p>A name has these rules:</p>
+<ul>
+<li>spaces around it are dropped, and runs of spaces become one;</li>
+<li>it may not be empty, and may not hold <code>/ \ : * ? &quot; &lt; &gt; |</code>;</li>
+<li>two names that differ only in upper and lower case are the same name.</li>
+</ul>
+<p>Name &amp; Save refuses the name of a medium the product brings, the name
+of a user template, and the name of an instance that is in another
+place right now. For the name of an instance of yours it asks before it
+replaces it.</p>
+<p>When you switch the write-protect switch on with a save, the medium is
+protected at once and the machine goes through a power cycle, as when a
+module is plugged in. No control switches it off again.</p>
+<p>Where a place starts a new, empty medium (a cassette you record onto, for
+example), it asks for the name first. That is Name &amp; Save done up front:
+nothing is written until the machine writes the first time.</p>
+<h2 id="insert-and-eject">Insert and eject</h2>
+<p>A disk or a cassette is inserted by choosing it in its place's picker and
+ejected by choosing the empty place or the eject control. What is in a
+place stays there across a Reset and a Cold boot. Before a medium leaves
+its place, before a preset loads, before the machine is replaced and
+when the product quits, anything not yet saved is saved.</p>
+<p>If a save fails, a notice says so, once for that medium until a save of
+it succeeds again; the next change tries again.</p>
+<h2 id="files-that-cannot-be-read">Files that cannot be read</h2>
+<p>A file of a medium's kind that cannot be read (it is broken, or it is in
+another version of its format than the release reads) is not listed in a
+picker; the app log says once why. A preset that names it is refused with
+that reason, and so is opening or importing it. Files written by an
+earlier release are converted by hand, as
+<a href="/59/help/04-media/magnetic-cards/">the product's part of this chapter</a> describes.</p>
+<h2 id="opening-and-dropping-files">Opening and dropping files</h2>
+<p>There are several ways to hand a file to the product, and all of them
+do the same thing:</p>
+<ul>
+<li>drop it on the window;</li>
+<li>open it with the product from your file manager (Open With);</li>
+<li>name it when you start the product;</li>
+<li>choose it in <strong>File ▸ Load Preset…</strong>, which offers presets only, like
+every item that loads one kind of file (in the browser also the files a
+preset names, see below).</li>
+</ul>
+<p>A drop takes one file: a drop of several files is ignored. On the
+desktop, a file you drop or open with the product brings the window to
+the front.</p>
+<p>The product looks at the file and opens it as what it is:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>The file is</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a preset (by its ending, or a text with a <code>model:</code> line)</td>
+<td>it is loaded (<a href="/59/help/06-presets/">Presets</a>)</td>
+</tr>
+<tr>
+<td>a medium (by its ending)</td>
+<td>it goes into its place (below)</td>
+</tr>
+<tr>
+<td>a program or another kind of file the product knows</td>
+<td>the product's handling of that kind (<a href="/59/help/09-product-topics/">chapter 9</a>)</td>
+</tr>
+<tr>
+<td>anything else, or too large</td>
+<td>refused, with a notice that names the file and says why</td>
+</tr>
+</tbody>
+</table></div>
+<p>A medium you open is used where it lies: nothing is copied, and what the
+machine writes is saved back into that file, unless the file says it is
+a template. It goes into its place at once, with its first side up, and
+a medium that was there is ejected first. A module is plugged in when it
+is clear where it goes: the model has one module slot, or the module
+fits only one of them. Otherwise, and when the medium's place is not
+there now, a notice says where such a medium is chosen.</p>
+<p>In the browser an opened file cannot be written back, so a medium is
+first imported into the save folder (<a href="#saved-media">Saved media</a>).</p>
+<p>The browser cannot look into the folder a preset lies in, so a preset
+brings only the files chosen with it. In <strong>File ▸ Load Preset…</strong>, pick
+the preset together with every file it names (its tape, card, disk,
+module or program files); the dialog offers those kinds of files too.
+They are taken as one folder, the preset among them is opened, and a
+file it names is found by its name alone, whatever folder the preset
+gives. A file it names that was not chosen is looked up among the files
+opened in this browser before, which are kept in its storage; one that is
+in neither is refused with a notice that names it.</p>
+<p>A file you open while an operation runs, or before the product has
+finished starting, is kept and opened as soon as the product is free.</p>
+<p>While you drag a file over the window on the desktop, the pointer shows
+whether the product would take it.</p>
+<h2 id="saved-media">Saved media</h2>
+<p>In the browser, the File menu (and the More button) has two more items:</p>
+<ul>
+<li><strong>Import Media…</strong> copies a medium file into the save folder, as the
+template or instance it says it is. An import is refused when a medium
+of that kind already has the name, and when the file cannot be read.</li>
+<li><strong>Saved Media…</strong> lists your media by kind and name, marks templates
+and the media that are in a place now, lets you save a copy of a
+medium's file, and deletes one that is in no place, after you
+confirmed.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/03-models-and-machine-control/">← 3 · Models and machine control</a><a class="btn primary" rel="next" href="/59/help/04-media/magnetic-cards/">4 · Magnetic cards →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

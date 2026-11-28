@@ -1,6 +1,5 @@
 {
-  "url": "https://github.com/tinue/calc-u/releases/download/calc-u-1600-v0.9.0-pre/Calc-U-1600-web.zip",
-  "sha256": "901d888b40552adf2395967667269257838f0f3014d3d260a679a012c1666de8",
+  "url": "local build (frontends/web/build.sh --release)",
   "version": "0.9.0",
-  "commit": "84825e86800cd5a34917e489a61afd66bc605236"
+  "commit": "3788d62bc111a243b7e7dce976a6a2dd2703cd96"
 }

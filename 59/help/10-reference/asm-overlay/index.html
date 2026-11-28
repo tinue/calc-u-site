@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASM overlay — Calc-U 59 help</title>
+<meta name="description" content="An ASM overlay is a small program in the TMC0501 processor's own instructions, which Calc-U-59 puts over the calculator's ROM at the addresses 1800 to 1FFF…">
+<link rel="canonical" href="https://calc-u.org/59/help/10-reference/asm-overlay/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/10-reference/asm-overlay/">
+<meta property="og:title" content="ASM overlay — Calc-U 59 help">
+<meta property="og:description" content="An ASM overlay is a small program in the TMC0501 processor's own instructions, which Calc-U-59 puts over the calculator's ROM at the addresses 1800 to 1FFF…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/10-reference/"><span class="k yellow">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/59/help/10-reference/">Reference</a></li><li><a href="/59/help/10-reference/reference/">Calc-U-59 reference</a></li><li><a href="/59/help/10-reference/preset-sections/">Preset sections of Calc-U-59</a></li><li><a href="/59/help/10-reference/keystroke-programs/">Keystroke program files</a></li><li><a href="/59/help/10-reference/media-files/">Media files</a></li><li><a href="/59/help/10-reference/asm-overlay/" aria-current="page">ASM overlay</a></li><li><a href="/59/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> ASM overlay</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="asm-overlay">ASM overlay</h1>
+<p>An ASM overlay is a small program in the TMC0501 processor's own
+instructions, which Calc-U-59 puts over the calculator's ROM at the
+addresses 1800 to 1FFF and runs there. It is loaded in the box
+<strong>ASM OVERLAY</strong> of the debug panel's CPU tab, or by dropping or opening a
+file whose name ends in <code>.asm</code>; how to run it is in
+<a href="/59/help/07-debugger/debugger/">Debugger</a>. Examples are on the site's
+<a href="/59/software/">software page</a>.</p>
+<p>The file is a UTF-8 text file in the ASM overlay format, version 2.0:</p>
+<pre class="help-code"><code>Calc-U-59 ASM 2.0
+PROGRAM:
+; human-readable assembly listing with comments
+1800:   01D8    MOV     A.ALL,#0
+        ...
+
+HEX:
+01D8 01DB ...   ; a comment after a semicolon
+</code></pre>
+<ul>
+<li>Lines end with LF or CRLF. The first line is exactly
+<code>Calc-U-59 ASM 2.0</code>.</li>
+<li>Everything up to the line <code>HEX:</code> (any case, alone on its line) is for
+the reader and is not read: typically the annotated listing.</li>
+<li>After <code>HEX:</code>, a <code>;</code> starts a comment that runs to the end of its line.</li>
+<li>What remains is runs of hexadecimal digits, in either case, each
+optionally after <code>0x</code>, parted by spaces and line ends. A run of four
+digits is one instruction; a run of eight, twelve and so on is that
+many, four digits each.</li>
+<li>An instruction is a value from <code>0000</code> to <code>1FFF</code>. The first goes to the
+address <code>1800</code>, each further one to the next address; at most 2048
+fit.</li>
+</ul>
+<p>A file is refused, with a notice that says why, when: its first line is
+missing or names another version; it has no <code>HEX:</code> line; nothing follows that line; a run of digits
+is not a multiple of four long; an instruction is above <code>1FFF</code>; anything
+after <code>HEX:</code> is neither hexadecimal digits nor a comment; or it has more
+than 2048 instructions. An overlay loaded before stays.</p>
+<h2 id="while-an-overlay-is-loaded">While an overlay is loaded</h2>
+<ul>
+<li><strong>Run</strong> brings the calculator to the end of its current program step
+and goes on at <code>1800</code>, with the processor's COND flag set. With the
+CPU's FREEZE ON START armed, it pauses there.</li>
+<li>While the overlay runs, the CALCULATOR tab cannot be chosen; FREEZE,
+STEP and RESUME of the CPU tab work on its instructions as on the
+ROM's.</li>
+<li>A Reset ends its run and keeps it loaded, so Run enters it again.
+<strong>Clear</strong> takes it away (and resets the calculator when it was
+running); a Cold boot, a preset or a model switch removes it too. It is
+not kept when the product quits.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/10-reference/media-files/">← 10 · Media files</a><a class="btn primary" rel="next" href="/59/help/10-reference/keyboard-map/">10 · Keyboard map →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

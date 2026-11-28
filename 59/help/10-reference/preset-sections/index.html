@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preset sections of Calc-U-59 — Calc-U 59 help</title>
+<meta name="description" content="The grammar of the preset format (format version 2), its comments, values and references, and the keys and steps every product has are in the family's…">
+<link rel="canonical" href="https://calc-u.org/59/help/10-reference/preset-sections/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Calc-U 59">
+<meta property="og:url" content="https://calc-u.org/59/help/10-reference/preset-sections/">
+<meta property="og:title" content="Preset sections of Calc-U-59 — Calc-U 59 help">
+<meta property="og:description" content="The grammar of the preset format (format version 2), its comments, values and references, and the keys and steps every product has are in the family's…">
+<meta property="og:image" content="https://calc-u.org/59/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/59/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/59/assets/app-icon.png">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/59/colors_and_type.css">
+<link rel="stylesheet" href="/59/styles.css">
+<link rel="stylesheet" href="/59/help.css">
+</head>
+<body>
+<header class="site-header"><div class="inner"><a class="brand" href="/59/"><img class="app-icon" src="/59/assets/app-icon.png" alt="Calc-U 59 — TI-59 emulator app icon"/><div class="wm"><span class="top">Calc-U <em>59</em></span><span class="sub">User Guide</span></div></a><button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span></button><div id="site-nav" class="nav-panel"><nav class="nav"><a href="/59/" class="">Overview</a><a href="/59/help/" class="active">Help</a><a href="/59/help/02-getting-started/installing/" class="">Install</a><a href="/59/play/" class="">Play</a><a href="/59/software/" class="">Software</a><a href="https://github.com/tinue/Calc-U">GitHub</a></nav><a class="nav-cta" href="https://apps.apple.com/us/app/calc-u-59/id6761413142" title="Calc-U 59 TI-59 emulator on the App Store">App Store</a></div></div></header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/59/help/">Help</a> · 3.0.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/59/help/01-introduction/"><span class="k dark">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/02-getting-started/"><span class="k dark">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/03-models-and-machine-control/"><span class="k dark">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/04-media/"><span class="k dark">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/05-peripherals-and-paper/"><span class="k dark">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/06-presets/"><span class="k dark">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/07-debugger/"><span class="k dark">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/08-settings/"><span class="k dark">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/59/help/09-product-topics/"><span class="k dark">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/59/help/10-reference/"><span class="k yellow">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/59/help/10-reference/">Reference</a></li><li><a href="/59/help/10-reference/reference/">Calc-U-59 reference</a></li><li><a href="/59/help/10-reference/preset-sections/" aria-current="page">Preset sections of Calc-U-59</a></li><li><a href="/59/help/10-reference/keystroke-programs/">Keystroke program files</a></li><li><a href="/59/help/10-reference/media-files/">Media files</a></li><li><a href="/59/help/10-reference/asm-overlay/">ASM overlay</a></li><li><a href="/59/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article prose">
+<p class="help-crumb"><a href="/59/">Calc-U 59</a> <span aria-hidden="true">›</span> <a href="/59/help/">Help</a> <span aria-hidden="true">›</span> <a href="/59/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> Preset sections of Calc-U-59</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="preset-sections-of-calc-u-59">Preset sections of Calc-U-59</h1>
+<p>The grammar of the preset format (format version 2), its comments, values
+and references, and the keys and steps every product has are in the
+family's <a href="/59/help/10-reference/#the-preset-format">Reference</a>.
+This page lists what a preset of Calc-U-59 holds: its header keys, its
+sections, its steps and the key IDs of the TI-58, TI-58C and TI-59. How
+to use them, with examples, is in <a href="/59/help/06-presets/presets/">Presets</a>; a preset
+built up step by step is the <a href="/59/help/06-presets/preset-tutorial/">Preset tutorial</a>.</p>
+<p>A preset is a text file with the extension <code>.ti59</code>, <code>.ti58</code> or <code>.ti58c</code>.
+The extension doesn't choose the model; <code>model:</code> does.</p>
+<pre class="help-code"><code class="language-yaml">format-version: 2
+model: TI-59
+preset-name: Pgm 01
+description: Master Library diagnostic, run at regular speed
+slot-1: { name: ML }
+printer: PC-100C
+keys:
+  - regular-speed:
+  - key: Pgm 0 1 SBR =
+</code></pre>
+<p>Every preset builds its machine anew: the model, the module and the
+printer the header names, and nothing else, then a cold boot, which
+clears all memory, the TI-58C's constant memory included. Then the
+sections run in file order. Without a <code>cue-card:</code> section, no cue card
+is fitted.</p>
+<h2 id="header-keys">Header keys</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format-version:</code></td>
+<td><code>2</code> (required)</td>
+</tr>
+<tr>
+<td><code>model:</code></td>
+<td><code>TI-59</code>, <code>TI-58</code> or <code>TI-58C</code>, any case (required)</td>
+</tr>
+<tr>
+<td><code>preset-name:</code></td>
+<td>the name lists and menus show; default: the file name without its extension</td>
+</tr>
+<tr>
+<td><code>description:</code></td>
+<td>one line for lists, menus and tooltips</td>
+</tr>
+<tr>
+<td><code>timeout:</code></td>
+<td>the longest wait for the calculator to become idle between two items, in seconds of emulated time; default <code>3600</code></td>
+</tr>
+<tr>
+<td><code>printer:</code></td>
+<td><code>PC-100C</code>; without it, no printer is attached</td>
+</tr>
+<tr>
+<td><code>slot-1:</code></td>
+<td>a Solid State ROM module: <code>{ name: ML }</code> by its two-letter ID (<a href="/59/help/09-product-topics/modules/">Modules</a>), or <code>{ file: … }</code> (a <code>.rom.yaml</code> file); without it, the slot is empty</td>
+</tr>
+<tr>
+<td><code>magnetic-cards:</code></td>
+<td>TI-59 only: magnetic cards defined inside the preset (<a href="#in-file-magnetic-cards">below</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Paths are relative to the preset; <code>~/</code> is your home folder.</p>
+<h2 id="sections">Sections</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Section</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>program:</code></td>
+<td>a keystroke program: <code>keycodes: |</code> with the program in the preset, or <code>file:</code> a <a href="/59/help/10-reference/keystroke-programs/">keystroke program file</a></td>
+</tr>
+<tr>
+<td><code>data:</code></td>
+<td>data registers, <code>NN: value</code></td>
+</tr>
+<tr>
+<td><code>partition:</code></td>
+<td>the partition, as the calculator shows it after <code>2nd Op 17</code></td>
+</tr>
+<tr>
+<td><code>cue-card:</code></td>
+<td>a stand-alone cue card to fit above the keys</td>
+</tr>
+<tr>
+<td><code>keys:</code></td>
+<td>a list of steps</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sections may appear any number of times, and are carried out in file
+order. A <code>program:</code>, <code>data:</code>, <code>partition:</code> or <code>cue-card:</code> after a <code>keys:</code>
+section changes the calculator in the middle of the script, as if you
+had keyed the change in: only what it lists changes.</p>
+<h3 id="program">program</h3>
+<pre class="help-code"><code class="language-yaml">program:
+  keycodes: |
+    76 11 42 29 92 76 12 42 30 92   # compact: steps 000-009
+    010 43 RCL                      # listing: step number, keycode, mnemonic
+    011 00 00
+    110 42 STO                      # the step number places the keycode
+</code></pre>
+<ul>
+<li><strong>Compact</strong> lines are keycodes, each exactly two digits; a line goes
+on at the step after the one written last (000 at the start). Steps of
+<code>00</code> are written out.</li>
+<li><strong>Listing</strong> lines are as the PC-100C lists a program: a step number of
+three or more digits, the keycode, and the mnemonic, which is not read.
+A gap needs no marker.</li>
+<li>Only the listed steps are written; every other step keeps its contents
+(00 after the cold boot). Each <code>program:</code> section starts at step 000.</li>
+<li>The highest step is 959 on the TI-59 and 479 on the TI-58 and TI-58C.</li>
+<li>Keycodes are not key IDs: the digit 1 is keycode <code>01</code>, and <code>Pgm</code> is the
+one step <code>36</code>. Key IDs are for <code>key:</code> steps (<a href="#key-ids">below</a>).</li>
+</ul>
+<h3 id="data">data</h3>
+<pre class="help-code"><code class="language-yaml">data:
+  00: 3.141592653589793
+  05: -1.5e-3
+  H01: 7.77E22           # TI-58C only
+</code></pre>
+<ul>
+<li><code>NN</code> is the register number of <code>STO</code> and <code>RCL</code>, 00 to 99; 60 to 99
+exist on the TI-59 only.</li>
+<li><code>H00</code> to <code>H03</code> are the TI-58C's four extra cells beyond its 60
+registers, reached only by the ROM's memory routines; on any other
+model they are an error.</li>
+<li>The value is a decimal number; an exponent is allowed. Integers are
+stored digit for digit, other values rounded to 13 significant digits.</li>
+<li>Only the listed registers are written.</li>
+</ul>
+<h3 id="partition">partition</h3>
+<pre class="help-code"><code class="language-yaml">partition: 719.29
+</code></pre>
+<p>The number before the dot is the last program step, so <code>719.29</code> gives
+720 steps; the part after the dot is a note and is ignored. Steps are
+rounded up to a multiple of 80, at most 960 on the TI-59 and 480 on the
+TI-58 and TI-58C. Until a <code>partition:</code> the partition is the model's after
+a cold boot: 479.59 on the TI-59, 239.29 on the TI-58 and TI-58C.</p>
+<h3 id="cue-card">cue-card</h3>
+<pre class="help-code"><code class="language-yaml">cue-card:
+  title: Roots &amp; Powers
+  A: \sqrt x
+  B: x^{2}
+  &quot;A'&quot;: \sum x_{i}
+</code></pre>
+<p>A stand-alone cue card, fitted above the top row of keys; its keys are
+those of <a href="/59/help/10-reference/media-files/#the-cue-card-block">the cue card block</a>. It
+does not go onto a magnetic card: a magnetic card has its own cue card.</p>
+<h3 id="in-file-magnetic-cards">In-file magnetic cards</h3>
+<p><code>magnetic-cards:</code> (TI-59) lists cards defined by the preset, which a
+<code>card:</code> or <code>arm:</code> step uses with <code>mem: &lt;card-name&gt;</code>:</p>
+<pre class="help-code"><code class="language-yaml">magnetic-cards:
+  - card-name: MyVars
+    cue-card:                 # optional
+      title: My Vars
+    sides:
+      0:
+        bank: 3               # required, 1-4
+        protected: false      # optional; true = written as -n Write
+        partition: 479.59     # optional; default: the calculator's when it goes in
+        data:                 # registers of bank 3: R30-R59
+          30: 1.5
+        program: |            # keycodes; bare keycodes start at the bank's first step
+          76 11 42 00
+</code></pre>
+<ul>
+<li>Each item has <code>card-name</code>, optional <code>description</code> and <code>cue-card</code>, and
+<code>sides</code> with <code>0</code>, <code>1</code> or both; a side not given is fresh.</li>
+<li>A side replaces its whole bank: what it doesn't list reads as 00.
+Bank 1 holds steps 000–239 and R90–R99, bank 2 steps 240–479 and
+R60–R89, bank 3 steps 480–719 and R30–R59, bank 4 steps 720–959 and
+R00–R29. Contents outside the bank are an error.</li>
+<li>A side written by the calculator stays with the card until the next
+load or model switch; a Reset, a power cycle or a Cold boot keep it.</li>
+<li><code>mem:</code> with a name the preset doesn't define is a fresh card without a
+cue card.</li>
+<li>Such a card is saved to a file only by <code>saveas:</code>.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<p>The family's steps (<code>key:</code>, <code>wait:</code>, <code>skip-wait:</code>, <code>let-it-finish:</code>,
+<code>full-speed:</code>, <code>regular-speed:</code>, <code>expect:</code>, <code>not-expect:</code>, <code>screenshot:</code>,
+<code>trace:</code>, <code>elapsed-time:</code>, <code>cut-paper:</code>, <code>copy-paper:</code>, <code>saveas:</code>) and these:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Step</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>card:</code></td>
+<td>TI-59: push one side of a magnetic card through the reader: <code>{ file: … }</code>, <code>{ name: … }</code> or <code>{ mem: … }</code>, with <code>side: 0|1</code> (default 0). The calculator reads it, or writes it when it waits for a card; the card is fitted after it has passed</td>
+</tr>
+<tr>
+<td><code>arm:</code></td>
+<td>TI-59: make a magnetic card ready for you to feed by tapping a corner; <code>{ file: … }</code>, <code>{ name: … }</code> or <code>{ mem: … }</code>, without a side</td>
+</tr>
+<tr>
+<td><code>saveas:</code></td>
+<td>TI-59: <code>{ card: &lt;card-name&gt;, as: live|template, name: … }</code> (or <code>file:</code> ending in <code>.magnetcard.yaml</code>): save an in-file card with its sides and cue card</td>
+</tr>
+<tr>
+<td><code>expect:</code>, <code>not-expect:</code></td>
+<td>a number, compared with the X register in its full 13 digits, whatever the display format: after <code>π</code>, <code>3.14159265359</code> passes, <code>3.141592654</code> fails</td>
+</tr>
+<tr>
+<td><code>printer-trace:</code></td>
+<td><code>on</code> or <code>off</code>: the PC-100C's TRACE switch; needs <code>printer: PC-100C</code>. Without the step, TRACE is off</td>
+</tr>
+<tr>
+<td><code>pause:</code></td>
+<td><code>program</code> or <code>cpu</code>: pause the calculator at that level</td>
+</tr>
+<tr>
+<td><code>pause-on-start:</code></td>
+<td><code>program</code> (before the first program step), <code>cpu</code> (when the ROM leaves its key scan), or <code>off</code></td>
+</tr>
+<tr>
+<td><code>step:</code></td>
+<td><code>{ level: program|cpu, count: n }</code> while paused (count default 1, at most 100000)</td>
+</tr>
+<tr>
+<td><code>resume:</code></td>
+<td>let a paused calculator run on</td>
+</tr>
+<tr>
+<td><code>debug-panel:</code></td>
+<td>show a tab of the debug panel: <code>calculator</code>, <code>cpu</code> or <code>log</code> (<a href="/59/help/07-debugger/debugger/">Debugger</a>); a frontend without the panel ignores it</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>A card named by <code>file:</code> or <code>name:</code> that does not exist refuses the
+preset; a new card is an in-file card, saved with <code>saveas:</code>.</li>
+<li>A machine waiting for a card (after <code>Write</code>) counts as idle, so
+<code>- key: 1 2nd Write</code> finishes when the calculator waits, and a
+<code>card:</code> after it feeds the card.</li>
+<li><code>type:</code> does not exist on these models: keys are pressed with <code>key:</code>.</li>
+<li>While the calculator is paused, a step that needs it to run (<code>key:</code>,
+<code>card:</code>, a <code>program:</code> section) waits until it runs again; debugger and
+frontend steps go on.</li>
+<li>A key is held 100 ms of emulated time and until the ROM has read it,
+at every speed, so a held <strong>Adv</strong> feeds the same lines at full and at
+regular speed.</li>
+</ul>
+<h2 id="key-ids">Key IDs</h2>
+<p>A <code>key:</code> step presses keys by their IDs, separated by spaces, in any
+case. A key's ID is the label on the key when that is one plain word,
+otherwise the name the PC-100C prints for it; each name with characters
+outside ASCII has an ASCII spelling too. On these models a two-digit
+number such as <code>12</code> is an error; <code>1 2</code> is two digit keys.</p>
+<p><strong>Keys</strong>, with their position (row × 10 + column):</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Position</th>
+<th>ID</th>
+<th>Also</th>
+<th></th>
+<th>Position</th>
+<th>ID</th>
+<th>Also</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11–15</td>
+<td><code>A</code> <code>B</code> <code>C</code> <code>D</code> <code>E</code></td>
+<td></td>
+<td></td>
+<td>61</td>
+<td><code>GTO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>2nd</code></td>
+<td><code>2ND</code></td>
+<td></td>
+<td>62–64</td>
+<td><code>7</code> <code>8</code> <code>9</code></td>
+<td></td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>INV</code></td>
+<td></td>
+<td></td>
+<td>65</td>
+<td><code>×</code></td>
+<td><code>x</code>, <code>*</code></td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>lnx</code></td>
+<td><code>LNX</code></td>
+<td></td>
+<td>71</td>
+<td><code>SBR</code></td>
+<td></td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>CE</code></td>
+<td></td>
+<td></td>
+<td>72–74</td>
+<td><code>4</code> <code>5</code> <code>6</code></td>
+<td></td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>CLR</code></td>
+<td></td>
+<td></td>
+<td>75</td>
+<td><code>-</code></td>
+<td></td>
+</tr>
+<tr>
+<td>31</td>
+<td><code>LRN</code></td>
+<td></td>
+<td></td>
+<td>81</td>
+<td><code>RST</code></td>
+<td></td>
+</tr>
+<tr>
+<td>32</td>
+<td><code>x⇄t</code></td>
+<td><code>X⇄T</code>, <code>x&lt;&gt;t</code></td>
+<td></td>
+<td>82–84</td>
+<td><code>1</code> <code>2</code> <code>3</code></td>
+<td></td>
+</tr>
+<tr>
+<td>33</td>
+<td><code>x²</code></td>
+<td><code>X²</code>, <code>x^2</code></td>
+<td></td>
+<td>85</td>
+<td><code>+</code></td>
+<td></td>
+</tr>
+<tr>
+<td>34</td>
+<td><code>√x</code></td>
+<td><code>√X</code>, <code>sqrt</code></td>
+<td></td>
+<td>91</td>
+<td><code>R/S</code></td>
+<td></td>
+</tr>
+<tr>
+<td>35</td>
+<td><code>1/x</code></td>
+<td><code>1/X</code></td>
+<td></td>
+<td>92</td>
+<td><code>0</code></td>
+<td></td>
+</tr>
+<tr>
+<td>41–44</td>
+<td><code>SST</code> <code>STO</code> <code>RCL</code> <code>SUM</code></td>
+<td></td>
+<td></td>
+<td>93</td>
+<td><code>.</code></td>
+<td></td>
+</tr>
+<tr>
+<td>45</td>
+<td><code>yˣ</code></td>
+<td><code>Yˣ</code>, <code>y^x</code></td>
+<td></td>
+<td>94</td>
+<td><code>+/-</code></td>
+<td></td>
+</tr>
+<tr>
+<td>51–54</td>
+<td><code>BST</code> <code>EE</code> <code>(</code> <code>)</code></td>
+<td></td>
+<td></td>
+<td>95</td>
+<td><code>=</code></td>
+<td></td>
+</tr>
+<tr>
+<td>55</td>
+<td><code>÷</code></td>
+<td><code>/</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Second functions.</strong> The ID presses 2nd, then the key. <code>2nd &lt;ID&gt;</code> means
+the same, so <code>Pgm</code>, <code>2nd Pgm</code> and <code>2nd LRN</code> all press 2nd, then LRN.</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Key</th>
+<th>ID</th>
+<th>Also</th>
+<th></th>
+<th>Key</th>
+<th>ID</th>
+<th>Also</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A–E</td>
+<td><code>A'</code> <code>B'</code> <code>C'</code> <code>D'</code> <code>E'</code></td>
+<td><code>A′</code> … <code>E′</code></td>
+<td></td>
+<td>GTO</td>
+<td><code>Pause</code></td>
+<td><code>PAU</code></td>
+</tr>
+<tr>
+<td>lnx</td>
+<td><code>log</code></td>
+<td><code>LOG</code></td>
+<td></td>
+<td>7</td>
+<td><code>x=t</code></td>
+<td><code>EQ</code></td>
+</tr>
+<tr>
+<td>CE</td>
+<td><code>CP</code></td>
+<td></td>
+<td></td>
+<td>8</td>
+<td><code>Nop</code></td>
+<td><code>NOP</code></td>
+</tr>
+<tr>
+<td>CLR</td>
+<td>— (write <code>2nd CLR</code>)</td>
+<td></td>
+<td></td>
+<td>9</td>
+<td><code>Op</code></td>
+<td><code>OP</code></td>
+</tr>
+<tr>
+<td>LRN</td>
+<td><code>Pgm</code></td>
+<td><code>PGM</code></td>
+<td></td>
+<td>×</td>
+<td><code>Deg</code></td>
+<td><code>DEG</code></td>
+</tr>
+<tr>
+<td>x⇄t</td>
+<td><code>P/R</code></td>
+<td><code>P→R</code></td>
+<td></td>
+<td>SBR</td>
+<td><code>Lbl</code></td>
+<td><code>LBL</code></td>
+</tr>
+<tr>
+<td>x²</td>
+<td><code>sin</code></td>
+<td><code>SIN</code></td>
+<td></td>
+<td>4</td>
+<td><code>x≥t</code></td>
+<td><code>GE</code>, <code>x&gt;=t</code></td>
+</tr>
+<tr>
+<td>√x</td>
+<td><code>cos</code></td>
+<td><code>COS</code></td>
+<td></td>
+<td>5</td>
+<td><code>Σ+</code></td>
+<td><code>∑+</code>, <code>sum+</code></td>
+</tr>
+<tr>
+<td>1/x</td>
+<td><code>tan</code></td>
+<td><code>TAN</code></td>
+<td></td>
+<td>6</td>
+<td><code>x̄</code></td>
+<td><code>xbar</code></td>
+</tr>
+<tr>
+<td>SST</td>
+<td><code>Ins</code></td>
+<td><code>INS</code></td>
+<td></td>
+<td>-</td>
+<td><code>Rad</code></td>
+<td><code>RAD</code></td>
+</tr>
+<tr>
+<td>STO</td>
+<td><code>CMs</code></td>
+<td><code>CMS</code></td>
+<td></td>
+<td>RST</td>
+<td><code>STF</code></td>
+<td></td>
+</tr>
+<tr>
+<td>RCL</td>
+<td><code>Exc</code></td>
+<td><code>EXC</code></td>
+<td></td>
+<td>1</td>
+<td><code>IFF</code></td>
+<td></td>
+</tr>
+<tr>
+<td>SUM</td>
+<td><code>Prd</code></td>
+<td><code>PRD</code></td>
+<td></td>
+<td>2</td>
+<td><code>D.MS</code></td>
+<td><code>DMS</code></td>
+</tr>
+<tr>
+<td>yˣ</td>
+<td><code>Ind</code></td>
+<td><code>IND</code></td>
+<td></td>
+<td>3</td>
+<td><code>π</code></td>
+<td><code>pi</code></td>
+</tr>
+<tr>
+<td>BST</td>
+<td><code>Del</code></td>
+<td><code>DEL</code></td>
+<td></td>
+<td>+</td>
+<td><code>Grad</code></td>
+<td><code>GRD</code></td>
+</tr>
+<tr>
+<td>EE</td>
+<td><code>Eng</code></td>
+<td><code>ENG</code></td>
+<td></td>
+<td>R/S</td>
+<td><code>Write</code></td>
+<td><code>WRT</code></td>
+</tr>
+<tr>
+<td>(</td>
+<td><code>Fix</code></td>
+<td><code>FIX</code></td>
+<td></td>
+<td>0</td>
+<td><code>Dsz</code></td>
+<td><code>DSZ</code></td>
+</tr>
+<tr>
+<td>)</td>
+<td><code>Int</code></td>
+<td><code>INT</code></td>
+<td></td>
+<td>.</td>
+<td><code>Adv</code></td>
+<td><code>ADV</code></td>
+</tr>
+<tr>
+<td>÷</td>
+<td><code>|x|</code></td>
+<td><code>IxI</code></td>
+<td></td>
+<td>+/-</td>
+<td><code>Prt</code></td>
+<td><code>PRT</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>=</td>
+<td><code>List</code></td>
+<td><code>LST</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><code>St flg</code> and <code>If flg</code> contain a blank, so their IDs are the printer's
+names, <code>STF</code> and <code>IFF</code>.</li>
+<li>The bare ID <code>CLR</code> is the key; its second function is written <code>2nd CLR</code>.</li>
+</ul>
+<p><strong>Printer names.</strong> Every name the PC-100C prints for a keycode is
+accepted too. Most are the IDs above; the others:</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Keycode</th>
+<th>Printer name</th>
+<th>Presses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20</td>
+<td><code>CLR</code></td>
+<td><code>CLR</code> (the key; its second function is <code>2nd CLR</code>)</td>
+</tr>
+<tr>
+<td>26, 27</td>
+<td><code>2ND</code>, <code>INV</code></td>
+<td><code>2nd</code>, <code>INV</code></td>
+</tr>
+<tr>
+<td>62</td>
+<td><code>PG*</code></td>
+<td><code>Pgm Ind</code></td>
+</tr>
+<tr>
+<td>63</td>
+<td><code>EX*</code></td>
+<td><code>Exc Ind</code></td>
+</tr>
+<tr>
+<td>64</td>
+<td><code>PD*</code></td>
+<td><code>Prd Ind</code></td>
+</tr>
+<tr>
+<td>72</td>
+<td><code>ST*</code></td>
+<td><code>STO Ind</code></td>
+</tr>
+<tr>
+<td>73</td>
+<td><code>RC*</code></td>
+<td><code>RCL Ind</code></td>
+</tr>
+<tr>
+<td>74</td>
+<td><code>SM*</code></td>
+<td><code>SUM Ind</code></td>
+</tr>
+<tr>
+<td>83</td>
+<td><code>GO*</code></td>
+<td><code>GTO Ind</code></td>
+</tr>
+<tr>
+<td>84</td>
+<td><code>OP*</code></td>
+<td><code>Op Ind</code></td>
+</tr>
+<tr>
+<td>92</td>
+<td><code>RTN</code></td>
+<td><code>INV SBR</code></td>
+</tr>
+<tr>
+<td>82</td>
+<td><code>HIR</code></td>
+<td>— (no key sequence enters it; an error)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="which-keyword-works-on-which-model">Which keyword works on which model</h2>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>Keyword</th>
+<th>TI-59</th>
+<th>TI-58</th>
+<th>TI-58C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>printer</code>, <code>slot-1</code>, <code>program</code>, <code>data</code> (00–59), <code>partition</code>, <code>cue-card</code>, <code>keys</code> and the family's steps, <code>printer-trace</code>, <code>debug-panel</code>, the debugger steps</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>data</code> 60–99</td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>data</code> H00–H03</td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>magnetic-cards</code>, <code>card</code>, <code>arm</code>, <code>saveas: { card: … }</code></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>A keyword that a model does not have refuses the preset when it is read.</p>
+<h2 id="from-a-230-file">From a 2.3.0 file</h2>
+<p>A preset written for Calc-U-59 2.3.0 (<code>MODEL:</code>, <code>PROGRAM:</code>,
+<code>KEYSTROKES:</code> …) is not read; convert it by hand
+(<a href="/59/help/10-reference/media-files/#from-230">From 2.3.0</a> lists the other files):</p>
+<div class="help-table-box"><table class="help-table">
+<thead>
+<tr>
+<th>2.3.0</th>
+<th>Version 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MODEL: TI-59</code> (optional)</td>
+<td><code>format-version: 2</code> and <code>model: TI-59</code> (required)</td>
+</tr>
+<tr>
+<td><code>SOLID-STATE-MODULE: ML</code> (absent: unchanged)</td>
+<td><code>slot-1: { name: ML }</code> (absent: none)</td>
+</tr>
+<tr>
+<td><code>PRINTER: on</code> (absent: unchanged)</td>
+<td><code>printer: PC-100C</code> (absent: none)</td>
+</tr>
+<tr>
+<td><code>PARTITION:</code>, <code>PROGRAM:</code>, <code>CUECARD:</code></td>
+<td><code>partition:</code>, <code>program: { keycodes: … }</code>, <code>cue-card:</code></td>
+</tr>
+<tr>
+<td><code>REGISTERS:</code> lines <code>NN = value</code></td>
+<td><code>data:</code> entries <code>NN: value</code></td>
+</tr>
+<tr>
+<td>sections after <code>KEYSTROKES:</code> (a reload)</td>
+<td>sections in file order</td>
+</tr>
+<tr>
+<td><code>CARD: mem:X</code> … <code>END-CARD</code></td>
+<td>an item of <code>magnetic-cards:</code></td>
+</tr>
+<tr>
+<td><code>KEYSTROKES:</code> with matrix codes such as <code>21 31</code></td>
+<td><code>keys:</code> with <code>- key: Pgm</code> (the key IDs above)</td>
+</tr>
+<tr>
+<td><code>Wait: 2s</code></td>
+<td><code>- wait: 2s</code></td>
+</tr>
+<tr>
+<td><code>FullSpeed:</code> / <code>RegularSpeed:</code> (default regular)</td>
+<td><code>- full-speed:</code> / <code>- regular-speed:</code> (default full); <code>- regular-speed:</code> first keeps the old speed</td>
+</tr>
+<tr>
+<td>the last key was waited for until the calculator was idle</td>
+<td>the last item is not waited for; <code>- let-it-finish:</code> last runs it to its end</td>
+</tr>
+<tr>
+<td><code>Trace: x</code> / <code>Trace: Off</code></td>
+<td><code>- trace: x</code> / <code>- trace: off</code></td>
+</tr>
+<tr>
+<td><code>ZeroElapseTime:</code> / <code>ReportElapseTime:</code></td>
+<td><code>- elapsed-time: start</code> / <code>report</code></td>
+</tr>
+<tr>
+<td><code>InsertCard: X:2</code></td>
+<td><code>- card: { file: X.magnetcard.yaml, side: 1 }</code> (sides are 0 and 1 now; 2.3.0's 1 and 2)</td>
+</tr>
+<tr>
+<td><code>InsertCard:</code> / <code>ArmCard:</code> on a card that did not exist yet</td>
+<td>an in-file card with its <code>cue-card</code>, fed with <code>mem:</code>, then <code>- saveas: { card: X, as: live, name: X }</code></td>
+</tr>
+<tr>
+<td><code>ArmCard: mem:X</code> (fed when the program waits)</td>
+<td><code>- card: { mem: X }</code> after the step that makes the calculator wait; or <code>- arm: { mem: X }</code> for you to feed</td>
+</tr>
+<tr>
+<td><code>PrinterTrace: on</code>, <code>CutPaper:</code>, <code>DebugPanel: CPU</code></td>
+<td><code>- printer-trace: on</code>, <code>- cut-paper:</code>, <code>- debug-panel: cpu</code></td>
+</tr>
+<tr>
+<td><code>Freeze: Calculator</code>, <code>FreezeOnStart: CPU</code>, <code>Step: CPU 5</code>, <code>Resume:</code></td>
+<td><code>- pause: program</code>, <code>- pause-on-start: cpu</code>, <code>- step: { level: cpu, count: 5 }</code>, <code>- resume:</code></td>
+</tr>
+<tr>
+<td><code>CUECARD:</code> keys <code>Title</code>, <code>Row1</code>, <code>Row1Align</code>, <code>PencilColor</code>, …</td>
+<td><code>title</code>, <code>row-1</code>, <code>row-1-align</code>, <code>pencil-color</code>, … (<a href="/59/help/10-reference/media-files/#the-cue-card-block">the cue card block</a>); <code>Template</code> and <code>Banks</code> are dropped</td>
+</tr>
+<tr>
+<td>a bad line was skipped</td>
+<td>the file is refused, with its first error and its line</td>
+</tr>
+<tr>
+<td>registers 60–99 on a TI-58 or TI-58C were ignored</td>
+<td>an error</td>
+</tr>
+</tbody>
+</table></div>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn secondary" rel="prev" href="/59/help/10-reference/reference/">← 10 · Calc-U-59 reference</a><a class="btn primary" rel="next" href="/59/help/10-reference/keystroke-programs/">10 · Keystroke program files →</a></nav>
+<p class="help-built">Help built from Calc-U-59-help.zip 3.0.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Calc-U-59 3.0.0 release</a>.</p>
+</article>
+</main>
+<footer class="site-footer"><div class="inner"><strong style="font-family:var(--font-key);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2)">Calc-U 59</strong><a href="/59/help/">Help</a><a href="/59/play/">Online emulator</a><a href="/59/software/">TI-59 Software Collection</a><a href="/59/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U">GitHub</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-59-v3.0.0">Release notes</a><a href="https://github.com/tinue/Calc-U/blob/calc-u-59-v3.0.0/products/calc-u-59/PRIVACY.md">Privacy</a><span class="credits">© 2026 · TI-59, TI-58 and TI-58C emulator for Mac, Windows, Linux, iPhone and iPad</span><p class="disclaimer">Calc-U 59 is an independent project and is not affiliated with, authorized, or endorsed by Texas Instruments. “TI-59”, “TI-58”, “TI-58C”, “Texas Instruments”, “Solid State Software”, and “Master Library” are trademarks of their respective owners, used here for descriptive purposes only.</p></div></footer>
+<script src="/59/help/help.js" defer></script>
+</body>
+</html>

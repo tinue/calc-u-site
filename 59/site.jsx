@@ -79,23 +79,12 @@ function App() {
   return <SitePage route={router.route} />;
 }
 
-// Page id (routes.js) → component.
+// Page id (routes.js) → component. The help is not here: its pages are
+// static (built from the help asset), so a link to them is a page load.
 var PAGE_COMPONENTS = {
   home: HomePage,
-  about: AboutTi59Page,
-  start: GettingStartedPage,
   play: PlayPage,
-  "install-mobile": InstallMobilePage,
-  "install-mac": InstallMacPage,
-  "install-pc": InstallPcPage,
-  "install-android": InstallAndroidPage,
-  presets: PresetsPage,
-  "preset-tutorial": PresetTutorialPage,
-  debugger: DebuggerPage,
-  ref: ReferencePage,
-  modules: ModulesPage,
   software: SoftwarePage,
-  faq: FaqPage,
 };
 
 // One route's page between the site header and footer — what the client

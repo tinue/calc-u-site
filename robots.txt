@@ -2,18 +2,23 @@
 User-agent: *
 Allow: /
 
-# Calc-U-59: the design preview, the installable app, the next release's
-# preview and the web client's demo page have no useful text to index, and
-# all but the first would compete with /59/play/. /59/build/, /59/vendor/ and the rest of
-# /59/calc/ stay crawlable: they hold the scripts a crawler needs to
-# render the pages.
+# Calc-U-59: the design preview, the installable app, the web client's demo
+# page and the pinned help asset have no useful text to index, and the app
+# and the demo would compete with /59/play/. /59/build/, /59/vendor/ and the
+# rest of /59/calc/ stay crawlable: they hold the scripts a crawler needs to
+# render the pages. /59/beta/ is kept blocked for the next preview.
 Disallow: /59/calc/app/
 Disallow: /59/calc/index.html
 Disallow: /59/calc/$
+Disallow: /59/help-asset/
 Disallow: /59/preview/
 Disallow: /59/beta/
 
-# Calc-U-1600: the preview of its first release, until /1600/ has pages.
+# Calc-U-1600: the same for its folder.
+Disallow: /1600/calc/app/
+Disallow: /1600/calc/index.html
+Disallow: /1600/calc/$
+Disallow: /1600/help-asset/
 Disallow: /1600/beta/
 
 Sitemap: https://calc-u.org/59/sitemap.xml

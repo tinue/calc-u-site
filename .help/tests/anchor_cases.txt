@@ -1,0 +1,27 @@
+# Headings and their anchors by GitHub's rule (docs/formats/help.md §1.5):
+# one heading, a tab, its anchor. A blank line starts a new file, so a
+# repeated heading counts within its group. tools/helptool's tests and
+# the help site's renderer (calc-u-site) test against this list.
+
+Getting started	getting-started
+Name & Save	name--save
+Models and machine control	models-and-machine-control
+File ▸ Open…	file--open
+The `[preset]` section	the-preset-section
+**Bold** and _emphasis_	bold-and-emphasis
+Größe und Übersicht	größe-und-übersicht
+PC-1500A: ROM A04	pc-1500a-rom-a04
+3. Plotters	3-plotters
+What's new?	whats-new
+snake_case_key	snake_case_key
+A [link](https://example.org) here	a-link-here
+C++ and C#	c-and-c
+Wait… then go	wait-then-go
+
+Steps	steps
+Steps	steps-1
+Steps	steps-2
+Steps 1	steps-1-1
+
+Reset	reset
+Reset	reset-1
