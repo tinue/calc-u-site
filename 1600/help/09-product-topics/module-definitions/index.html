@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module definitions — Calc-U-1600 help</title>
+<meta name="description" content="Every memory module of Calc-U-1600 is described by a module definition, a .module.yaml file: which connector pins enable it, what memory sits behind them, and…">
+<link rel="canonical" href="https://calc-u.org/1600/help/09-product-topics/module-definitions/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/09-product-topics/module-definitions/">
+<meta property="og:title" content="Module definitions — Calc-U-1600 help">
+<meta property="og:description" content="Every memory module of Calc-U-1600 is described by a module definition, a .module.yaml file: which connector pins enable it, what memory sits behind them, and…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k org">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/1600/help/09-product-topics/">Product topics</a></li><li><a href="/1600/help/09-product-topics/models/">What differs by model</a></li><li><a href="/1600/help/09-product-topics/basic-programs/">BASIC programs and the cassette</a></li><li><a href="/1600/help/09-product-topics/machine-code/">Machine-code programs</a></li><li><a href="/1600/help/09-product-topics/com-ports/">COM ports</a></li><li><a href="/1600/help/09-product-topics/host-drive/">A folder as a drive (PC-1600)</a></li><li><a href="/1600/help/09-product-topics/keyword-modules/">PC-1500 keyword modules</a></li><li><a href="/1600/help/09-product-topics/module-definitions/" aria-current="page">Module definitions</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> Module definitions</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="module-definitions">Module definitions</h1>
+<p>Every memory module of Calc-U-1600 is described by a <strong>module definition</strong>,
+a <code>.module.yaml</code> file: which connector pins enable it, what memory sits behind
+them, and optionally what it starts with. The bundled modules (CE-151,
+CE-155, CE-161, CE-1638, CE-163F, CE-1600M, CE-1601M, 256K custom, superRAM r4, and the
+CE-502B of the ROM set) are module definitions, and you can write your own.
+This page first shows how, then explains what a definition must express and
+why. Every key of the file is in
+<a href="/1600/help/10-reference/module-definition-format/">The module definition format</a>.</p>
+<h2 id="making-your-own-module">Making your own module</h2>
+<ul>
+<li><strong>Start from an example:</strong> copy the closest of the bundled templates,
+which the source repository keeps with the product
+(<a href="/1600/help/10-reference/module-definition-format/#7-worked-examples">Worked examples</a>
+lists them). <code>ce155.module.yaml</code> is a simple one;
+<code>ce1638.module.yaml</code> and <code>ce1601m.module.yaml</code> are banked. The fictional
+<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/examples/memory/memory-cards/pc1500-maxed-out.module.yaml">pc1500-maxed-out.module.yaml</a>
+shows every PC-1500 expansion pin in use, and its preset plugs it in with
+<code>slot-1: { file: pc1500-maxed-out.module.yaml }</code>.</li>
+<li><strong>Make it appear in the slot pickers:</strong> put a file with
+<code>format-version: 1</code> and <code>template: true</code> in the save folder. Like the
+bundled modules it is a template: it is never written to, and Name &amp; Save
+makes your own instance of it (<a href="/1600/help/04-media/media/">Media</a>).</li>
+<li><strong>Use it once:</strong> a preset's <code>slot-1:</code> (or <code>slot-2:</code> on the PC-1600) with
+<code>{ file: … }</code> plugs a definition in from where it lies
+(<a href="/1600/help/10-reference/preset-sections/">Preset sections</a>); opening or dropping a
+<code>.module.yaml</code> plugs it in when it is clear which slot it goes in.</li>
+</ul>
+<h3 id="a-module-with-content-already-on-it">A module with content already on it</h3>
+<ol>
+<li>Prepare it with a preset (see
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600/examples/setup">examples/setup/</a>).</li>
+<li>Click <strong>Module YAML</strong> in the INSPECTOR (<a href="/1600/help/07-debugger/debugger/#the-inspector">Debugger</a>).</li>
+<li>Paste the printed block into the module definition.</li>
+</ol>
+<p>If you only want to reuse one prepared module, Name &amp; Save it instead and
+choose it by name.</p>
+<h2 id="what-a-module-definition-expresses">What a module definition expresses</h2>
+<p>The rest of this page is the content model: <em>what</em> a module definition must
+express and <em>why</em>. The YAML spelling of it is in
+<a href="/1600/help/10-reference/module-definition-format/">The module definition format</a>, with worked
+examples among the <a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600/examples/memory/memory-cards">examples</a>.
+Every field exists because some documented mechanism of the PC-1500/PC-1600
+expansion connector or bank switching needs it to be expressible; §9
+cross-checks that row by row against the Technical Reference Manual and the
+project's own ROM traces.</p>
+<h3 id="1-design-principle-the-loader-connects-pins-terminology-is-an-authoring-convenience-with-no-other-meaning">1. Design principle: the loader connects pins; terminology is an authoring convenience with no other meaning</h3>
+<p><strong>The loader operates on physical pin numbers, full stop.</strong> Every signal
+a region's addressing/latch fields reference is, underneath, one of the
+40 physical pins on the expansion connector — the loader's actual job at
+run time is entirely expressible in terms of &quot;pin N asserted,&quot; never in
+terms of a name like <code>S1</code> or <code>Y0</code>. A definition file could be written
+directly in pin numbers and nothing about how the loader behaves would
+change; the file format would just be less pleasant to read and write.</p>
+<p><strong>Signal-name terminology exists purely so the file's author can think
+and write in signals instead of bare pin numbers — nothing more.</strong> The
+connector reuses the same physical pins for different signals across
+PC-1500 vs PC-1500A vs PC-1600 Slot 1 vs PC-1600 Slot 2, so &quot;S1&quot; only
+resolves to a pin once you say whose vocabulary it's drawn from; that's
+why a file declares <strong>one terminology</strong> and every signal name in it is
+looked up against that one table, once, at load/parse time, into a plain
+pin number. After that lookup, terminology has done its entire job — it
+carries no further semantic weight, is not consulted again, and has no
+bearing on anything the loader decides afterward (including
+compatibility, below). Supporting more than one terminology is a
+convenience for authors who think in a specific host's own signal names
+(most naturally, whichever host the real module they're modeling shipped
+for); the file format would be fully expressible with a single, pin-
+numbered terminology instead, at the cost of being harder for a person
+to write and review.</p>
+<p><strong>Every host's expansion connector is physically the same 40-pin port</strong>
+(<a href="https://github.com/tinue/PC-1600-Ref/blob/main/Expansion/Software-Defined-Memory-Extension.md">Ref/Expansion/Software-Defined-Memory-Extension.md</a> §4) — a module built for one model
+physically fits the slot of every other model listed here. Nothing about
+the file format needs to model a plug that won't fit; the load-time gate
+is not a connector/electrical simulation, it's a much simpler thing.</p>
+<p><strong>Compatibility is an author-declared list, and the loader's job is
+exactly one check: is the host being loaded into on that list?</strong> If yes,
+load; if no, decline. The loader does not independently derive, validate,
+or second-guess that list against pin tables, NC pins, or per-host signal
+roles — that judgment belongs to whoever authors the definition file, the
+same way it belonged to whoever wired a real hardware module and decided
+which hosts to sell it for.</p>
+<p>A pin the file references that happens to be NC on one of its declared-
+compatible hosts is not an error and not a reason to decline loading — it
+is simply a sub-region of the module that never asserts on that host, the
+same way a real hardware module would behave if plugged into a slot
+missing one of the traces it expects. Two concrete cases:</p>
+<ul>
+<li>A module built to max out the PC-1500A (<code>Y0</code> + <code>S3</code>+<code>S4</code>+<code>S5</code>, i.e. pins
+4/16/17/18, never referencing pin 5) can freely declare PC-1500
+compatible too — on a PC-1500, those same four pins are <code>Y0</code>/<code>S1</code>/<code>S2</code>/
+<code>S3</code>, giving the identical 22KB, fully live; nothing is dormant in this
+particular case at all.</li>
+<li>A module built to max out the PC-1500 (adding pin 5 / <code>S4</code> to reach
+24KB) can just as freely declare PC-1500A compatible — the pin-5-driven
+2KB slice simply stays dormant there (pin 5 is NC on PC-1500A), while
+the rest of the module behaves normally, giving the same 22KB the
+PC-1500A-only variant would. This is a legitimate, author-approved
+product, not something the loader treats as broken.</li>
+</ul>
+<p>An author who wants a module's behavior to be uniform (never dormant) on
+every host it declares compatible can still choose to write it that way
+— by simply never referencing a pin that's NC anywhere on that list — but
+nothing about the file format or the loader forces that choice; a
+partially-dormant module on some of its declared hosts is equally valid.</p>
+<p>This also settles what &quot;the module never knows which host it's plugged
+into&quot; means in practice: the loaded region's addressing/latch
+configuration is fixed at authoring time and never branches on detected
+host identity — but that's a property of a single file's own logic, not
+a reason it needs a separate file per host. One file, with one fixed
+addressing spec and one compatible-host list, is the whole story; a
+dormant NC-backed sub-region on one of its declared hosts is an expected,
+acceptable outcome of that one file, not evidence it should be split.</p>
+<p>Where the author's judgment call matters most is a region using <strong>direct
+memory-range match</strong> (§4), which decodes a raw address window with no
+host-provided chip-select at all: the same numeric address range can mean
+something different (or already be claimed by other hardware) on
+different hosts, with no pin on the module to point to either way. The
+mechanism for declaring compatibility is identical to the chip-select
+case above — the author lists the hosts, the loader checks the host
+being loaded is on that list — but getting the list right for this kind
+of region depends entirely on the author's own knowledge of each host's
+address map, since there's no signal name to anchor the decision to.</p>
+<hr>
+<h3 id="2-required-top-level-identity">2. Required top-level identity</h3>
+<ul>
+<li><strong>Module name</strong> — display name shown in the model-selection dropdown
+(e.g. &quot;CE-155 8KB Memory Module&quot;, &quot;16-bank CE-163-alike&quot;).</li>
+<li><strong>Compatible host list</strong> — subset of <code>{PC-1500, PC-1500A, PC-1600 Slot 1, PC-1600 Slot 2}</code>, chosen by the author. This is the loader's sole
+compatibility check: it declines to load a module into a host that isn't
+on this list, and imposes no further test on a host that is (§1) — no
+pin-existence check, no signal-role check. A module is not restricted to
+the one host whose vocabulary wrote it; declaring several hosts
+compatible, including ones where part of the module ends up dormant
+because a referenced pin is NC there, is an ordinary, valid choice
+(§1).</li>
+<li><strong>Definition terminology</strong> — exactly one of the same four host
+identifiers, naming which pin-name vocabulary every signal field in this
+file uses. Must appear in the compatible-host list (a file's own
+terminology host trivially belongs on its own compatible-host list),
+but the list is not limited to that one entry.</li>
+<li><strong>Load behavior on insert/change</strong> — loading a module resets the
+calculator; not itself a per-file field, but worth stating here as an
+invariant the loader guarantees regardless of what the file declares
+(no module can opt out of the reset).</li>
+<li><strong><code>battery</code></strong> <em>(optional bool, default <code>false</code>)</em> — marks the module as
+battery-backed real hardware (CE-163 and its derivatives, CE-1600M,
+CE-1601M, CE-1638). Has no effect on region/content parsing; it only
+gates the app's name-and-save persistence flow — a battery-backed module,
+once attached, can be named and saved as a standalone, independently
+persisted instance file (itself a complete <code>.module.yaml</code>, generated by
+splicing a live dump of the module's own backing store into the original
+template's source text)
+that keeps its contents durably up to date across reloads and app
+restarts. A module without <code>battery: true</code> stays purely volatile.</li>
+</ul>
+<hr>
+<h3 id="3-dimension-model">3. Dimension model</h3>
+<p>A module is a list of one or more <strong>memory regions</strong>. Every region is fully
+described by four <strong>independent dimensions</strong>. Independent means: each is
+specified once, in its own place, and none of the other three can be
+inferred from it — a region's addressing doesn't tell you its content
+type, its content type doesn't tell you whether it's banked, and so on.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>#</th>
+<th>Dimension</th>
+<th>Values</th>
+<th>Specified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td><strong>Addressing</strong></td>
+<td>chip-select set (with AND/OR combination) · address-line qualifier (specific lines at specific levels, not a bus-window compare) · direct memory-range match — see §4</td>
+<td>Once per region. If the region is banked, a <em>second</em> addressing spec of the same shape nests inside it as the bank window's own sub-range (needed for the PVOUT of the CE-1601M, 256K custom and superRAM r4 — see §6/§9)</td>
+</tr>
+<tr>
+<td>D2</td>
+<td><strong>Content</strong></td>
+<td>Regular (CPU-read/writable) · ROM (bytes carried inline in the definition file, never CPU-writable) · Flash (optional initial content carried inline in the definition file, CPU-rewritable at runtime via a command-sequence protocol) — see §5</td>
+<td>Once per region if unbanked. If banked, once <strong>per bank-range</strong> (not necessarily once per region) — see §5's split-bank note</td>
+</tr>
+<tr>
+<td>D3</td>
+<td><strong>Banking presence</strong></td>
+<td>Unbanked · Banked</td>
+<td>Once per region — see §6</td>
+</tr>
+<tr>
+<td>D4</td>
+<td><strong>Bank latch mechanism</strong> <em>(only if D3 = Banked)</em></td>
+<td>Trigger-based (a strobe — a pin, or an <code>OUT</code> to a port — whose assertion is the instant the module samples a bank-data source and latches it internally: CE-163 samples the address bus, CE-1601M the data bus) · Line-based (an always-visible signal group read live, no internal latch — expressible but unexercised) — plus which signal(s)/pin(s) and which bus domain</td>
+<td>Once per region — see §6</td>
+</tr>
+</tbody>
+</table></div>
+<p>There is deliberately <strong>no separate &quot;orientation&quot; field.</strong> Every value a
+Vertical/Horizontal label could take is fully determined by which
+signal(s) and which mechanism D4 already names — a trigger-based latch on
+pin 18 sampling <code>A0</code> (CE-163) or on <code>OUT (28H)</code> sampling <code>D0</code>–<code>D2</code>
+(CE-1601M) <em>is</em> what &quot;Vertical&quot; means; a line-based latch read live off
+<code>K0</code>–<code>K2</code> <em>is</em> what &quot;Horizontal&quot; means. Asking the file to state both
+would just be asking the same fact twice. <strong>Vertical/Horizontal remain in
+this document as descriptive terminology</strong> — they're the words this
+project's other docs and Sharp's own manuals use, and they're useful
+shorthand when talking <em>about</em> a module's mechanism — but they are not
+fields a definition file needs to fill in; the file only ever needs to
+say Trigger-based or Line-based, plus the signal(s) and domain. §6 below
+covers both confirmed banked families (both trigger-based, differing only
+in the sampled bus), for readers translating between the two vocabularies.</p>
+<p>Addressing (D1) is genuinely orthogonal to everything else and is
+specified <strong>once</strong>, as a single reusable sub-model that other dimensions
+reference rather than redefine — not a separate &quot;enable condition&quot; field
+repeated once per content kind and once per banking kind. §4 below is
+that single addressing sub-model; §5–6 all <em>use</em> it rather than defining
+their own version of it.</p>
+<hr>
+<h3 id="4-d1--addressing-shared-specified-once">4. D1 — Addressing (shared, specified once)</h3>
+<p>Every kind of memory needs to be addressed — this is common to all
+regions regardless of where they sit on D2–D4, so it's specified exactly
+once as a sub-model that other dimensions reference rather than repeat.</p>
+<p>An addressing specification is one or more <strong>enable groups</strong>, OR'd
+together; each group is one or more signals/qualifiers, AND'd together:</p>
+<ul>
+<li><strong>Chip-select signals</strong> — named lines in the file's declared terminology
+(e.g. <code>Y0</code>, <code>S1</code>, <code>S2</code>, <code>S3</code>; PC-1600's <code>RAM1</code>/<code>RAM2</code>, <code>K0</code>–<code>K2</code>). Each
+named line resolves to a physical pin via the terminology (§1); whether
+a pin is wired on a given declared-compatible host or stays NC there is
+exactly the author's dormant-sub-region case from §1, not something
+checked at load time. A group <strong>may</strong> list more than one line, meaning
+all of them asserted at the same access (an AND) — but that is
+uncommon, because the host's own decoder makes its 2KB strobes mutually
+exclusive. The usual multi-strobe module instead wires to several such
+strobes and responds to <em>whichever</em> is asserted, each strobe standing
+for a different 2KB of its storage: that is an <strong>OR of single-line
+groups</strong> (below), not an AND. <strong>CE-155's <code>S1</code>/<code>S2</code>/<code>S3</code> are exactly
+this</strong> — three mainboard chip-selects, each hard-wired straight to one
+dedicated 2KB RAM chip on the module, with no on-module address decode
+on that path at all (the module never sees an address it decodes here;
+it just uses the low 11 bits as the offset into whichever 2KB the
+asserted strobe points at). Genuine AND-of-lines shows up instead when
+a single strobe is only valid alongside another live signal — e.g.
+PC-1600 <code>RAM1</code> together with a particular <code>PVOUT</code> level (§6/§9).</li>
+<li><strong>Address-line qualifier</strong> — a handful of specific address lines
+required at specific levels, evaluated <em>together with</em> a chip select,
+standing for a real piece of on-module decode logic. It is <strong>not</strong> a
+magnitude comparison of the whole address bus against a <code>from</code>/<code>to</code>
+window. CE-155's <code>Y0</code> chip is the example: the module's own 138-family
+decoder tests <code>AD11 = AD12 = AD13 = 1</code> (its select inputs) while <code>Y0</code>
+holds its enable — three lines, nothing else. The lines <em>below</em> the
+ones it tests (<code>A0</code>–<code>A10</code> here) are the offset into the chip, not part
+of the decode; the lines it doesn't mention are simply not checked. The
+window this &quot;works out to&quot; (<code>&amp;3800</code>–<code>&amp;3FFF</code>) is a derived description,
+not what the hardware evaluates. A pure chip-select path with no
+on-module decode at all (CE-155's <code>S1</code>/<code>S2</code>/<code>S3</code>) carries no qualifier
+of either kind; its span is just the strobe's dedicated slice.</li>
+<li><strong>Direct memory-range match</strong> — a plain address window with no chip
+select at all, for modules meant to decode a raw address window
+themselves rather than relying on the host's own named strobes (a
+region that listens to a memory range directly, not via chip select).
+Compatibility here is declared the same way as everywhere else (§2/§1),
+it just has no pin to anchor the author's judgment to.</li>
+<li><strong>OR across groups</strong> — a region can be reachable more than one way
+(CE-155 again: <code>(Y0 AND sub-range)</code> <strong>OR</strong> <code>S1</code> <strong>OR</strong> <code>S2</code> <strong>OR</strong> <code>S3</code>
+— four groups, three of them a single bare strobe). An addressing spec
+is a list of such groups, not a single one.</li>
+</ul>
+<p>This same sub-model is reused, unmodified, in two other places:</p>
+<ul>
+<li>A region's own top-level addressing (when unbanked, or as the &quot;is this
+a bank-selecting access at all&quot; condition when banked).</li>
+<li>The <strong>bank window</strong>'s addressing, nested one level inside a banked
+region (§6) — needed because the CE-1601M, 256K custom and superRAM r4 apply a second,
+independent line-level condition (the <code>PVOUT</code> half-select) <em>inside</em>
+whichever bank is currently selected, which is exactly &quot;chip-select
+(the selected bank) AND a required line level (<code>PVOUT</code>),&quot; the same
+shape as CE-155's <code>Y0</code>-path group above, just composed one level
+deeper (§9).</li>
+</ul>
+<hr>
+<h3 id="5-d2--content-regular-vs-rom-vs-flash">5. D2 — Content: Regular vs. ROM vs. Flash</h3>
+<ul>
+<li><strong>Regular</strong> — CPU-read/writable at runtime. Fields: a writability flag
+(read/write vs. wired read-only) and, separately, an optional
+<strong>write-protect switch</strong> (CE-161: a switch in the RAMs' R/W line; CE-159
+likewise) — not the same thing as being wired read-only. The switch
+position is part of the module definition (§8).</li>
+<li><strong>ROM</strong> — bytes supplied by an explicit <strong>byte-content section carried
+inside the definition file itself</strong> (§5a), not by a separate
+preload/image file; never written by the running calculator, under any
+circumstance — read-only by definition, not by a togglable switch, and
+with no on-module mechanism that could ever make it otherwise. This is
+CE-160's mechanism (&quot;custom invisible BASIC programs&quot; via
+dealer-programmed write-protected RAM-as-ROM — electrically it's
+protected RAM, but functionally fixed at authoring time and never
+rewritten again by anything, so it's modeled as ROM rather than as
+permanently-protected Regular) and CE-1620M's.</li>
+<li><strong>Flash</strong> — may also carry an <em>initial</em> array, and when it does, those
+bytes are specified the same way ROM's are: in the definition file's own
+byte-content section (§5a), never an external file. Flash's initial
+array is optional (a Flash range with none declared powers up erased,
+all <code>0xFF</code>); the difference from ROM is only what happens next — unlike
+ROM, the real chip accepts CPU-driven rewrites at runtime. The
+distinguishing test against both other kinds is <em>how</em>
+those rewrites happen — never a plain memory-mapped store the way
+Regular is, and never impossible the way ROM is:
+<ul>
+<li>An ordinary CPU write into a Flash range does <strong>nothing</strong> to the array
+by default. The module's own command decoder — a small state machine
+sitting behind whatever D1 addressing/D4 bank-latch selects the
+range, and independent of both (see below) — must first see a
+specific address/data write sequence (a JEDEC-style unlock cycle) before
+a write is armed to actually take effect.</li>
+<li>Two operations exist once armed: <strong>byte-program</strong>, which can only
+<em>clear</em> bits (<code>array[addr] &amp;= data</code>, true NOR-flash semantics — a
+program alone can never set a bit back to 1), and <strong>erase</strong>, which
+resets a range of bytes to <code>0xFF</code>, the only way to undo a program.
+Erase granularity is chip-defined — a <strong>sector erase</strong> clears one
+fixed-size block, a <strong>chip erase</strong> clears the whole Flash content-range
+at once. Any write that doesn't match the sequence's next expected
+step resets the decoder back to idle (a glitch-recovery property, not
+an error condition to reject at authoring time), and a fixed reset
+command returns an already-armed decoder to plain read mode without
+completing an operation.</li>
+<li>A definition file needs enough fields to state this protocol
+concretely for a given Flash content-range: the command address(es)
+and the data byte(s) each must carry at each step of the unlock
+sequence, the data byte(s)/command that arm byte-program vs.
+sector-erase vs. chip-erase, the sector size (for sector-erase), and
+the reset command. These are chip/firmware properties, not something
+the loader infers — the exact values in current use are recorded next
+to the module's own reference material rather than duplicated
+verbatim here.</li>
+<li><strong>The command decoder is its own state machine, independent of D3/D4's
+bank-select mechanism</strong>, even when the same physical control lines
+happen to carry both a bank-latch strobe and part of an unlock
+sequence in quick succession on real hardware. A bank-select write
+must never reset or otherwise perturb the command decoder's state —
+real firmware routinely interleaves the two (writing the module's
+bank/window-select port between the unlock cycle's own address/data
+writes), and a definition file/loader that conflated the two state
+machines would break that interleaving, wedging the real firmware's
+post-operation verify/poll loop indefinitely.</li>
+<li>Confirmed example: <strong>CE-163F</strong>, a modern (non-Sharp-original) 16-bank
+PC-1500/1500A module — banks 0–7 Regular RAM, banks 8–F Flash
+(Microchip SST39SF010A: bank 8 reserved for the module's own
+management firmware, banks 9–F user-writable), all 16 banks selected
+by the same trigger-based latch on pin 18 sampling <code>A0</code>–<code>A3</code> (§6).
+Its unlock addresses, program/erase state machine and the
+bank-latch/command-decoder independence above were recovered from a
+real CE163F firmware disassembly and are the concrete reference for
+every Flash field named above (see the bundled <code>ce163f.module.yaml</code>,
+§9). Deliberately not modeled, and so not required of a definition
+file: status-polling toggle bits (DQ6/DQ7) and software-ID/autoselect,
+both unused by that firmware; program/erase complete instantaneously
+rather than taking simulated time.</li>
+</ul>
+</li>
+</ul>
+<p>ROM and Flash share the same D1 addressing sub-model as Regular — content
+kind is purely a question of where the bytes come from and whether/how the
+CPU can change them, never a question of how the region is addressed.</p>
+<p><strong>Split content within one banked region.</strong> D2 is specified <strong>per
+bank-range</strong>, not necessarily once for the whole region, because a real
+banking scheme can mix kinds behind the same bank-select mechanism — CE-163F
+above is exactly this: 8 Regular banks followed by 8 Flash banks, all
+selected the same way. The definition file records this as a list of
+<code>{bank range → content kind}</code> entries (e.g. <code>banks 0–7: Regular</code>, <code>banks 8–15: Flash</code>) rather than one kind per region — a single-kind region is
+just the degenerate case of one entry covering every bank (or, if D3 =
+Unbanked, the only entry, implicitly covering the region's one and only
+&quot;bank&quot;). A ROM/Flash mix behind one bank-select, or any other combination
+of the three kinds, is equally expressible even though no module in §9
+happens to need it today.</p>
+<h3 id="5a-where-rom-flash-and-regular-bytes-are-specified">5a. Where ROM, Flash, and Regular bytes are specified</h3>
+<p>Any content this spec pins down at authoring time lives <strong>inside the
+definition file itself</strong>, never in an external preload/image file. That
+covers all of ROM's bytes (mandatory — ROM is nothing without them) and,
+when one is declared at all (optional, §5), a Flash range's <em>initial</em>
+array or a Regular (RAM) range's own pre-loaded content — there is no
+content-kind restriction on carrying one. All three are expressed through
+the same <strong>byte-content section</strong>, which every ROM region must (it is
+incomplete without one) and any other region or bank-range may carry
+regardless of its D2 kind. It expresses:</p>
+<ul>
+<li><strong>The bytes themselves</strong>, as an ordered sequence over the range's
+capacity. The concrete encoding is a serialization question settled in
+the format's §6 (<code>hex</code> / <code>base64</code> / <code>addressed-hex</code>) — the content-model
+requirement is only that the definition file is self-contained, with no
+file lookup. A ROM module under development takes its bytes from the
+preset instead (<code>slot-N-rom:</code>, see <a href="/1600/help/07-debugger/debugger/#3-developing-a-rom-extension">Debugger</a>).</li>
+<li><strong>Placement within the region / bank window</strong> — the offset each run of
+bytes starts at, so a range that populates only part of its address span
+(e.g. the 8-byte PC-1600 module header at its fixed offset plus a jump
+table, §7, with the gaps left unspecified) can be written sparsely.
+Bytes left unspecified take the range's declared fill pattern (§8),
+conventionally <code>0xFF</code>.</li>
+<li><strong>Multi-bank content</strong> — the section must be able to specify bytes for
+<strong>more than one bank</strong> of the same region: each byte-content block is
+keyed by the bank (or bank range) it fills, so a multi-bank ROM, a
+multi-bank Flash initial image, or the ROM/Flash bank-ranges of a
+mixed-content banked region can all be populated from one file without
+the banks colliding or loading out of order.</li>
+</ul>
+<p>A file that marks a region or bank-range D2 = ROM without supplying its
+bytes is incomplete and should be rejected at load time, the same way a
+header/content pairing that contradicts itself is (§7). A Flash range with
+no byte-content block is complete — it just starts erased.</p>
+<p>This section is only about content fixed <em>by the definition</em>. A separate
+preload file that runs BASIC or machine code which then drives the Flash
+write protocol (§5) at runtime is an ordinary use of the running machine,
+outside this spec's scope, and changes nothing here.</p>
+<hr>
+<h3 id="6-d3d4--banking-presence-and-latch-mechanism">6. D3/D4 — Banking presence and latch mechanism</h3>
+<ul>
+<li><strong>Unbanked</strong> (D3) — one copy of the content behind the addressing spec,
+no selection needed. This is CE-155, CE-161, CE-159, CE-160, the
+non-banked &quot;maxed out&quot; modules, and — despite Sharp's own module having
+two physical banks — CE-1600M/CE-1620M, because that pair's two-bank
+selection is entirely inside the <em>host's</em> native address remapping
+(Port 31H/PU/PT) and never appears as a distinct signal on the module's
+own connector pins to decode at all (§9).</li>
+<li><strong>Banked</strong> (D3) — more than one copy of the content exists behind the
+same addressing spec (§4), with an active bank selected per D4. Every
+banked region needs a <strong>bank window</strong> (§4's addressing sub-model,
+reused) describing the address span the banking applies within, and a
+<strong>bank count</strong> per D2's content-range list (§5). D4 — the bank latch
+signal — is one of exactly two shapes, and is the <em>only</em> field a
+definition file needs to fill in for this; there is no additional
+&quot;orientation&quot; field alongside it (§3):
+<ul>
+<li>
+<p><strong>Trigger-based</strong> — a strobe whose assertion is the <em>instant</em> the
+module samples a bank number, decodes it, and latches it internally,
+held until the next such strobe. This is the mechanism <strong>both</strong>
+confirmed banked families use; they differ only in what the strobe is
+and which bus it samples:</p>
+<ul>
+<li><strong>CE-163 / CE-163F</strong> — the strobe is a <strong>pin</strong> (pin 18: <code>S3</code> on
+PC-1500, <code>S5</code> on PC-1500A), a memory-write pulse; the sampled
+source is the <strong>address</strong> bus (<code>A0</code> confirmed; <code>A0</code>–<code>A3</code> for the
+16-bank recreation).</li>
+<li><strong>CE-1601M, 256K custom, superRAM r4</strong> — the strobe is an <strong><code>OUT (28H)</code></strong> I/O
+write (Sharp's &quot;vertical bank register&quot;); the sampled source is the
+<strong>data</strong> bus — the byte written (<code>D0</code>–<code>D2</code> for the 8-way decoder
+of the CE-1601M and 256K custom, <code>D0</code>–<code>D4</code> for the superRAM r4's 5-bit register). Port 28H is
+decoded <em>on the module</em>, so the module — not the mainboard — holds
+the latched value.</li>
+</ul>
+<p>Fields: what the trigger is (a pin, or an I/O port), which lines are
+sampled, and — recorded explicitly, never inferred from line names —
+which <strong>domain</strong> (address vs data) they belong to, since the two
+families use different domains and &quot;4 bits&quot; alone doesn't
+disambiguate <code>A0</code>–<code>A3</code> from <code>D0</code>–<code>D3</code>. This is what &quot;Vertical&quot; denotes
+in the descriptive terminology (§3).</p>
+</li>
+<li>
+<p><strong>Line-based</strong> — a named signal or signal group the module reads live
+on every access, with no internal latch at all (the host holds the
+bank number in one of its own registers and drives it continuously
+onto the lines). Field: which line(s), and the <strong>bank data source
+domain</strong> (the address/select-line domain). No confirmed module needs
+this today — the CE-1601M and its kin look line-based from the host side
+but latch internally (above), so they are trigger-based — but the
+shape stays expressible for a future module that genuinely wires a
+live host register straight through. This is what &quot;Horizontal&quot;
+denotes in the descriptive terminology (§3).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Naming trap:</strong> Sharp's own TRM calls the CE-1601M mechanism
+the &quot;vertical bank register&quot; (Port 28H). It is tempting to read &quot;register&quot;
+as &quot;the host holds it, so the module just reads a live line&quot; — i.e.
+Line-based. But Port 28H is decoded <em>on the module</em>: the <code>OUT (28H)</code> is a
+strobe, and the module samples the data bus and latches the result. By
+the test that matters (does the module have to remember something), that
+is <strong>Trigger-based</strong>, the same family as CE-163 — the two just sample
+different buses (CE-163 the address bus off a pin strobe, CE-1601M the
+data bus off an I/O-port strobe). Neither a definition file author nor the
+loader ever has to write &quot;Vertical&quot; or &quot;Horizontal&quot;: naming the trigger,
+the sampled lines, and the domain says everything the file needs to.</p>
+<hr>
+<h3 id="7-pc-1600-module-header">7. PC-1600 module header</h3>
+<p>The PC-1600 firmware identifies a ROM/RAM-disk module by an <strong>8-byte
+header physically present at the start of the module's own address space</strong>
+(<code>8000H</code>, <code>A000H</code>, or <code>B000H</code> depending on which page the module occupies)
+— <a href="https://github.com/tinue/PC-1600-Ref/blob/main/Firmware/PC-1600-Transparent-Banking.md">Ref/Firmware/PC-1600-Transparent-Banking.md</a>'s &quot;ROM Module Detection and Headers&quot;:
+ID bytes <code>43H 16H</code>, reset-jump/checksum, start/boot fields, module
+length/boot address, BASIC address, end address, and a type byte
+(<code>80H</code>/<code>FFH</code> = RAM-Disk, <code>F0H</code> = Program, <code>F2H</code> = System, <code>01H</code> =
+write-protected), followed by a jump table (reset, interrupt, important
+routines, <code>AUTORUN.BAS</code> search, device-name pointer, token-table pointer,
+file-processing jump) at a fixed offset. Boot-time presence is additionally
+tracked host-side via bitmaps at <code>F0AEH</code>/<code>F0AFH</code> (by start address and
+bank position) and probed per-slot via the <code>SLOTST</code> firmware call, which
+reads the type byte directly out of the header.</p>
+<p>This has two consequences for the definition file, not one:</p>
+<ul>
+<li><strong>The header's bytes are content, not decode configuration.</strong> They live
+inside whatever populates the region — the definition file's own
+byte-content section (§5a) — at the
+fixed offset the real hardware uses — the
+definition file doesn't need fields to spell out the reset-jump address
+or the jump table, because that data is part of the loaded image the
+same way it would be part of a real EPROM's contents. A PC-1600
+region's D1 addressing already puts that image at
+<code>8000H</code>/<code>A000H</code>/<code>B000H</code> correctly if the enable condition is right;
+nothing further is needed for the <em>bytes themselves</em> to be correct.</li>
+<li><strong>The module's class still needs to be a declared field</strong>, separate
+from the header bytes, for two reasons: (a) authoring/validation — the
+loader can sanity-check that a region's (or bank-range's) own declared
+D2 content is consistent with what its header claims (e.g. a range
+marked ROM/read-only but whose header type byte says RAM-Disk is a
+self-contradictory file, worth rejecting or warning on rather than
+silently loading); and (b) because the two host-side presence bitmaps
+(<code>F0AEH</code>/<code>F0AFH</code>) are populated by the firmware's own boot-time scan
+reading the header live off the module — since that scan is exactly the
+kind of real hardware behavior this project reimplements at the
+connector level rather than shortcuts, the definition file doesn't need
+to duplicate the bitmap
+encoding itself, only to guarantee the header bytes it ships are
+self-consistent so the firmware's real scan logic produces the right
+answer. <strong>A PC-1600 module region should therefore carry an explicit
+&quot;module class&quot; field (Program / System / RAM-Disk / plain-unbanked-
+RAM-no-header) purely as an authoring-time cross-check against the
+header bytes in its loaded content — not as a separate runtime
+mechanism the loader has to implement in addition to just exposing the
+header bytes at the right address.</strong></li>
+<li>The PC-1500/1500A side has no equivalent header requirement — this
+section is PC-1600-only. (CE-163 is explicitly confirmed to carry <em>no</em>
+header at all, per the source doc — &quot;to a boot-time probe it looks like
+plain unbanked SRAM,&quot; which is consistent with modeling it as Regular
+content with a trigger-based bank latch (§6) and no module-class field
+set, since that field is PC-1600-specific.)</li>
+</ul>
+<hr>
+<h3 id="8-initial-content--power-up-state">8. Initial content / power-up state</h3>
+<p>Distinct from D1 (addressing) and D2 (content kind) is <em>what's inside</em> a
+region or bank-range at load time:</p>
+<ul>
+<li>A <strong>Regular, writable</strong> range typically starts as whatever the real
+chip's power-up state is (per this project's own convention — RAM
+powers up as <code>0x00</code>: CMOS RAM that has lost its supply comes back
+mostly zero on real hardware, not <code>0xFF</code>) — the definition
+file should be able to declare this per range rather than assume the
+emulator's global default is always right for every module (a
+battery-backed module that's been &quot;used&quot; already, for instance, isn't
+meaningfully modeled by a fresh power-up pattern, but that's a content
+question, not addressed further here).</li>
+<li>A <strong>ROM or Flash</strong> range (§5) has no meaningful power-up state of its
+own — any fixed content comes from the definition file's own
+byte-content section (§5a), keyed per bank-range for a banked region so
+a multi-bank module's banks don't collide or load out of order. There is
+no external preset/image file to name. <strong>ROM</strong> must carry this content;
+<strong>Flash</strong> carries it only as the range's <em>initial</em> array, and only if
+the file declares one (otherwise the Flash range starts erased, all
+<code>0xFF</code>). The running calculator can subsequently overwrite a Flash range
+via the runtime program/erase protocol (§5); reloading the module always
+resets it back to that initial content (or to erased if none was
+declared), the same way it resets a Regular range to its own default
+(above) and a ROM range to its definition-file bytes — a load is a full
+reset of the module regardless of content kind.</li>
+<li>A Regular range's write-protect switch (§5, e.g. CE-161) is part of
+the module's saved state: the file records the position, a load starts
+from it, and saving the module with the switch on writes <code>protected</code>.</li>
+</ul>
+<hr>
+<h3 id="9-coverage-check-against-the-source-module-table">9. Coverage check against the source module table</h3>
+<p>Every row of <a href="https://github.com/tinue/PC-1600-Ref/blob/main/Expansion/Software-Defined-Memory-Extension.md">Ref/Expansion/Software-Defined-Memory-Extension.md</a> §2–3 must be
+expressible as one or more regions, each fully placed on D1–D4. Working
+through them:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Module</th>
+<th>D1 Addressing</th>
+<th>D2 Content</th>
+<th>D3 Banking</th>
+<th>D4 Latch mechanism</th>
+<th>Compatible hosts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE-151</td>
+<td>S1 OR S2 — two bare mainboard strobes, one per 2 KB chip, no on-module decode and no Y0 path (Service Manual schematic 5-3)</td>
+<td>Regular</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1500, PC-1500A (pins 16, 17 keep the same role on both), PC-1600 Slot 1 (B000–BFFF, Port 3CH = 1AH) — expressed as the bundled <code>ce151.module.yaml</code></td>
+</tr>
+<tr>
+<td>CE-155</td>
+<td>(Y0 AND <code>AD11–AD13 = 111</code>) OR S1 OR S2 OR S3 — the three S groups are bare mainboard strobes, one per dedicated 2KB chip, no on-module decode</td>
+<td>Regular</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1500, PC-1500A (pins 4, 16, 17, 18 keep the same role on both — §1)</td>
+</tr>
+<tr>
+<td>CE-157</td>
+<td>RAM: same shape as CE-151/155 area. ROM: likely Y2 sub-range, PV-selected</td>
+<td>RAM: Regular. ROM: ROM</td>
+<td>RAM: Unbanked. ROM: unconfirmed — possibly banked if PV is a live line</td>
+<td>ROM: unconfirmed — flagged in the source doc itself; this spec's job is only to be <em>capable</em> of expressing it once confirmed</td>
+<td>PC-1500, PC-1500A</td>
+</tr>
+<tr>
+<td>CE-159</td>
+<td>Same as CE-155</td>
+<td>Regular, write-protect switch</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1500, PC-1500A</td>
+</tr>
+<tr>
+<td>CE-160</td>
+<td>Same territory class as CE-159 (read-only)</td>
+<td>ROM</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1500, PC-1500A</td>
+</tr>
+<tr>
+<td>CE-161</td>
+<td>Y0 alone, full 16KB</td>
+<td>Regular</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1500, PC-1500A, PC-1600 Slot 1, PC-1600 Slot 2 — expressed as the bundled <code>ce161.module.yaml</code></td>
+</tr>
+<tr>
+<td>CE-163</td>
+<td>Y0, 16KB window</td>
+<td>Regular, all banks</td>
+<td>Banked</td>
+<td>Trigger-based: pin 18 write pulse; source <code>A0</code> (address domain)</td>
+<td>PC-1500, PC-1500A</td>
+</tr>
+<tr>
+<td>16-bank CE-163-alike</td>
+<td>Same as CE-163</td>
+<td>Regular, all banks</td>
+<td>Banked</td>
+<td>Trigger-based: pin 18; source <code>A0</code>–<code>A3</code></td>
+<td>PC-1500, PC-1500A</td>
+</tr>
+<tr>
+<td>CE-1638</td>
+<td>Y0, 16KB window</td>
+<td>Regular, all banks</td>
+<td>Banked, 8 banks</td>
+<td>Trigger-based: pin 18 write pulse; source <code>A0</code>–<code>A2</code> (address domain)</td>
+<td>PC-1500, PC-1500A, PC-1600 Slot 1, PC-1600 Slot 2 — expressed as the bundled <code>ce1638.module.yaml</code></td>
+</tr>
+<tr>
+<td>CE-163F</td>
+<td>Y0, 16KB window</td>
+<td>Banks 0–7: Regular. Banks 8–F: Flash (bank 8 firmware-reserved, 9–F user-writable) — see §5</td>
+<td>Banked, 16 banks</td>
+<td>Trigger-based: pin 18 write pulse; source <code>A0</code>–<code>A3</code> (address domain, same mechanism as the 16-bank CE-163-alike above)</td>
+<td>PC-1500, PC-1500A, PC-1600 Slot 1, PC-1600 Slot 2 — expressed as the bundled <code>ce163f.module.yaml</code> (Flash content + <code>by-bank</code> split, §5)</td>
+</tr>
+<tr>
+<td>&quot;maxed out,&quot; PC-1500/1500A</td>
+<td>Y0 full window OR S1 OR S2 OR S3 OR S4 (pin 5 included) — again bare per-strobe groups, OR'd</td>
+<td>Regular</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1500 (full 24KB, all four S-pins live), PC-1500A (author's choice — the pin-5-driven 2KB slice stays dormant there since pin 5 is NC, leaving the same 22KB a PC-1500A-only variant would offer; declaring PC-1500A compatible is optional but not incorrect, §1)</td>
+</tr>
+<tr>
+<td>CE-1600M</td>
+<td>RAM1/RAM2</td>
+<td>Regular</td>
+<td>Unbanked (native host bank selection, invisible on the connector)</td>
+<td>—</td>
+<td>PC-1600 Slot 1, PC-1600 Slot 2</td>
+</tr>
+<tr>
+<td>CE-1601M</td>
+<td>RAM1 (Slot 2)</td>
+<td>Regular, both banks</td>
+<td>Banked</td>
+<td>Trigger-based: <code>OUT (28H)</code> write; source <code>D0</code>–<code>D2</code> (data domain — the module decodes/latches Port 28H itself); bank window nests a <code>PVOUT</code> half-select (D1, one level deeper — see §4)</td>
+<td>PC-1600 Slot 2 only (the Port 28H strobe doesn't reach Slot 1)</td>
+</tr>
+<tr>
+<td>CE-1620M</td>
+<td>Same as CE-1600M</td>
+<td>ROM</td>
+<td>Unbanked</td>
+<td>—</td>
+<td>PC-1600 Slot 1, PC-1600 Slot 2</td>
+</tr>
+<tr>
+<td>256K custom (PC-1600 Slot 2 &quot;maxed out&quot;)</td>
+<td>RAM1</td>
+<td>Regular, all 8 banks (256 KB)</td>
+<td>Banked</td>
+<td>Trigger-based: <code>OUT (28H)</code> write; source <code>D0</code>–<code>D2</code>, as CE-1601M with every bank fitted; same PVOUT nesting</td>
+<td>PC-1600 Slot 2 only — expressed as the bundled <code>256k-custom.module.yaml</code></td>
+</tr>
+<tr>
+<td>superRAM r4</td>
+<td>RAM1</td>
+<td>Regular, all 32 banks (1 MB)</td>
+<td>Banked</td>
+<td>Trigger-based: <code>OUT (28H)</code> write; source <code>D0</code>–<code>D4</code> (5-bit register latched on the module); same PVOUT nesting as CE-1601M</td>
+<td>PC-1600 Slot 2 only — expressed as the bundled <code>superRAMr4.module.yaml</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Three structural points this table confirms rather than just illustrates:</p>
+<ol>
+<li><strong>D1's nesting requirement is real, not hypothetical</strong> — the CE-1601M, 256K custom and
+superRAM r4 all need a bank-select condition combined with an
+independent <code>PVOUT</code> half-select inside whichever bank is currently
+active; the bank window (§6) carries its own full D1 spec rather than a
+bare address range specifically because of these rows.</li>
+<li><strong>CE-163F confirms the split-content case is real, not hypothetical
+either</strong> (§5) — its 8 Regular banks followed by 8 Flash banks, one
+D2 value changing partway through an otherwise-uniform bank range, is
+exactly what §5's <code>{bank range → content kind}</code> list form exists for.
+No confirmed module mixes ROM with either of the other two kinds within
+one banked region, or nests Flash inside CE-1601M-style
+sub-banked territory — those remain unexercised but expressible,
+because D2/D3/D4 being genuinely independent dimensions is what makes
+future hypothetical or modern-recreation modules (an R/W-plus-ROM-bank
+cartridge, say) expressible without a spec change.</li>
+<li><strong>The PC-1500/1500A &quot;maxed out&quot; row is one definition covering both hosts, with one
+host running it partially dormant</strong> — compatibility is an author
+choice, not a pin-derived pass/fail (§1), so a single file using pin 5
+can declare both PC-1500 and PC-1500A compatible: it reaches the true
+24KB ceiling on PC-1500, and on PC-1500A the pin-5-driven 2KB slice
+simply never asserts (pin 5 is NC there), leaving the same 22KB a
+PC-1500A-targeted module would offer on its own. An author who instead
+wants a module that behaves identically (no dormant slice) on every host
+it declares compatible can still write one that never references pin
+5 at all — nothing in the mechanism forces either choice, both are
+valid (§1).</li>
+</ol>
+<hr>
+<hr>
+<p>Which further modules ship as bundled definitions is open; CE-157's ROM half
+and CE-160's exact 7.8 KB reserved layout are unconfirmed in the research,
+and this model is written so that they are expressible once confirmed.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/keyword-modules/">← 9 · PC-1500 keyword modules</a><a class="btn dark" rel="next" href="/1600/help/10-reference/">10 · Reference →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

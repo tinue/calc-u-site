@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings of Calc-U-1600 — Calc-U-1600 help</title>
+<meta name="description" content="The settings file, where it lies, and the keys every product of the family has are described in Settings. This page lists what Calc-U-1600 adds: its file's…">
+<link rel="canonical" href="https://calc-u.org/1600/help/08-settings/settings/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/08-settings/settings/">
+<meta property="og:title" content="Settings of Calc-U-1600 — Calc-U-1600 help">
+<meta property="og:description" content="The settings file, where it lies, and the keys every product of the family has are described in Settings. This page lists what Calc-U-1600 adds: its file's…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/08-settings/"><span class="k org">8</span><span>Settings</span></a><ul class="help-parts"><li><a href="/1600/help/08-settings/">Settings</a></li><li><a href="/1600/help/08-settings/settings/" aria-current="page">Settings of Calc-U-1600</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/08-settings/">8 Settings</a> <span aria-hidden="true">›</span> Settings of Calc-U-1600</p>
+<p class="eyebrow">Chapter 8 · Settings</p>
+<h1 id="settings-of-calc-u-1600">Settings of Calc-U-1600</h1>
+<p>The settings file, where it lies, and the keys every product of the family
+has are described in <a href="/1600/help/08-settings/">Settings</a>. This
+page lists what Calc-U-1600 adds: its file's name, the names it gives the
+family's keys, and its own keys.</p>
+<p>Calc-U-1600's settings file is <code>Calc-U-1600.ini</code>. <strong>File ▸ Settings…</strong>
+opens the settings dialog; a change applies at once.</p>
+<p><img src="/1600/help/images/09-settings.png" alt="The Settings dialog" width="1314" height="2232" loading="lazy" decoding="async"></p>
+<h2 id="the-dialog">The dialog</h2>
+<ul>
+<li><strong>General ▸ Startup model:</strong> the model to start with: the one used last,
+PC-1500, PC-1500A or PC-1600 (<code>[startup] model</code>).</li>
+<li><strong>Startup presets:</strong> one per model, see
+<a href="#startup-presets">Startup presets</a> below.</li>
+<li><strong>Storage ▸ Save folder</strong> and <strong>Cassettes:</strong> where your saved modules, disks
+and cassettes go (<a href="/1600/help/04-media/media/">Media</a>).</li>
+<li><strong>Folders:</strong> where the file dialogs start, see <a href="#folders">Folders</a>.</li>
+<li><strong>Tracing:</strong> the trace folder and the size limit of a trace (the
+family's keys).</li>
+<li><strong>Serial ports ▸ Link folder:</strong> where the serial port files go, with
+their current paths while the ports are open
+(<a href="/1600/help/09-product-topics/com-ports/">COM ports</a>). Not on Windows.</li>
+<li><strong>Debugger:</strong> the debug server for VS Code, its port, its status, and
+<strong>Disconnect</strong> (<a href="/1600/help/07-debugger/debugger/">Debugger</a>).</li>
+<li><strong>App log ▸ App log level:</strong> how much the app log keeps
+(<a href="/1600/help/08-settings/#the-app-log">The app log</a>).</li>
+</ul>
+<p>The Web frontend shows the startup model, the startup presets, the app
+log level and, under Storage, a note that it keeps your modules, disks and cassettes in the
+browser's storage for the page.</p>
+<h2 id="startup-presets">Startup presets</h2>
+<p><code>[preset] &lt;model&gt;</code> of the family has one key per model here:</p>
+<ul>
+<li><code>[preset] PC-1500</code>: the startup preset of the PC-1500; empty: none.</li>
+<li><code>[preset] PC-1500A</code>: the startup preset of the PC-1500A; empty: none.</li>
+<li><code>[preset] PC-1600</code>: the startup preset of the PC-1600; empty: none.</li>
+</ul>
+<p>The first start sets each to the model's bundled startup preset: the
+CE-150 and a CE-163F on the PC-1500 and PC-1500A, the CE-1600P with its
+floppy and a CE-1600M and a CE-1601M (a RAM disk) on the PC-1600.</p>
+<p>A startup preset is applied at each start and each switch to its model
+(<a href="/1600/help/06-presets/presets/">Presets</a>).</p>
+<h2 id="folders">Folders</h2>
+<p><code>[folders] &lt;kind&gt;</code> of the family has four kinds here. Each is where a file
+dialog starts: the folder last used (written by the app), or a fixed folder
+given as <code>fixed:&lt;folder&gt;</code>.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Dialog label</th>
+<th>Where it applies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[folders] presets</code></td>
+<td>Presets folder</td>
+<td><strong>File ▸ Load Preset…</strong></td>
+</tr>
+<tr>
+<td><code>[folders] basic-programs</code></td>
+<td>BASIC folder</td>
+<td><strong>File ▸ Load BASIC Program…</strong></td>
+</tr>
+<tr>
+<td><code>[folders] machine-code</code></td>
+<td>Assembly folder</td>
+<td><strong>File ▸ Load Machine Code…</strong></td>
+</tr>
+<tr>
+<td><code>[folders] host-drive</code></td>
+<td>Host drive folder</td>
+<td><strong>File ▸ Host Drive…</strong> (the folder last mounted by default)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="debug-server">Debug server</h2>
+<ul>
+<li><code>[debug] dap-enabled</code>: the debug server for VS Code (DAP, on 127.0.0.1
+only): <code>true</code> or <code>false</code>; <code>false</code> by default. In the dialog: <strong>Debugger ▸
+Debug server (DAP)</strong>.</li>
+<li><code>[debug] dap-port</code>: the port of the debug server, 1024 to 65535; any other
+value counts as missing, and the port is 32168. In the dialog:
+<strong>Debugger ▸ Port</strong>.</li>
+</ul>
+<p>Starting Calc-U-1600 with <code>--dap &lt;port&gt;</code> turns the server on for that run only
+and leaves both keys as they are (<a href="/1600/help/07-debugger/debugger/#one-time-installation">Debugger</a>).</p>
+<h2 id="window">Window</h2>
+<p><code>[window] &lt;key&gt;</code> of the family has these keys here, all written by the
+app:</p>
+<ul>
+<li><code>[window] x</code>, <code>[window] y</code>: the window's left and top edge.</li>
+<li><code>[window] width</code>, <code>[window] height</code>: the window's size; 900 by 700
+by default.</li>
+</ul>
+<p>The windows come back at their last normal size and place, never
+maximised or full screen.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/08-settings/">← 8 · Settings</a><a class="btn dark" rel="next" href="/1600/help/09-product-topics/">9 · Product topics →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module definition format — Calc-U-1600 help</title>
+<meta name="description" content="A module definition (.module.yaml) describes one memory module: its memory, how it is addressed and the hosts it fits. The bundled memory modules are module…">
+<link rel="canonical" href="https://calc-u.org/1600/help/10-reference/module-definition-format/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/10-reference/module-definition-format/">
+<meta property="og:title" content="Module definition format — Calc-U-1600 help">
+<meta property="og:description" content="A module definition (.module.yaml) describes one memory module: its memory, how it is addressed and the hosts it fits. The bundled memory modules are module…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/10-reference/"><span class="k org">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/1600/help/10-reference/">Reference</a></li><li><a href="/1600/help/10-reference/reference/">Calc-U-1600 reference</a></li><li><a href="/1600/help/10-reference/preset-sections/">Preset sections of Calc-U-1600</a></li><li><a href="/1600/help/10-reference/module-definition-format/" aria-current="page">Module definition format</a></li><li><a href="/1600/help/10-reference/media-files/">Media files</a></li><li><a href="/1600/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> Module definition format</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="module-definition-format">Module definition format</h1>
+<p>A <strong>module definition</strong> (<code>.module.yaml</code>) describes one memory module: its
+memory, how it is addressed and the hosts it fits. The bundled memory
+modules are module definitions, and so is a battery-backed module you
+saved with Name &amp; Save. <a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a>
+describes <em>what</em> a definition expresses and <em>why</em>; this page is <em>how</em> it
+is written, in its current version, <code>format-version: 1</code>.</p>
+<h2 id="0-the-file">0. The file</h2>
+<ul>
+<li><strong>YAML</strong>, UTF-8, one module per file, extension <code>.module.yaml</code>. A
+definition is written and reviewed by hand, so it has comments (<code>#</code>
+starts one anywhere).</li>
+<li>Integers are decimal (<code>8192</code>) or hex with <code>0x</code> (<code>0x2000</code>); hex is usual
+for addresses and byte values.</li>
+<li>An unknown key is an error, not ignored: a misspelled key must not load
+silently.</li>
+<li>The bundled modules are the bundled templates that come with the
+product (<a href="#7-worked-examples">§7</a> lists them); your own definitions and saved instances lie in the save folder, where
+the module pickers list them with the bundled ones.</li>
+</ul>
+<hr>
+<h2 id="1-top-level-keys">1. Top-level keys</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>no</td>
+<td><code>memory-module</code>. Calc-U-1600 writes it into every module it saves; a file without it is read too, one with another value is refused.</td>
+</tr>
+<tr>
+<td><code>format-version</code></td>
+<td>yes</td>
+<td>Integer; this document is version <strong>1</strong>.</td>
+</tr>
+<tr>
+<td><code>module-name</code></td>
+<td>yes</td>
+<td>Short identifier for the module (e.g. <code>CE-155</code>, <code>CE-1600M</code>). Shown as it is in the module picker, and what a preset's <code>slot-N: { name: … }</code> resolves against (§8). Unique within a folder of modules.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>no</td>
+<td>One line about the module (e.g. <code>&quot;8 KB static RAM&quot;</code>), the picker's tooltip for it. A saved instance keeps its template's.</td>
+</tr>
+<tr>
+<td><code>insert-notice</code></td>
+<td>no</td>
+<td>One line shown when you plug the template in by hand (<a href="/1600/help/04-media/#templates-and-instances">Media</a>); the superRAM r4 names the program it needs. A saved instance keeps it and shows nothing.</td>
+</tr>
+<tr>
+<td><code>compatible-hosts</code></td>
+<td>yes</td>
+<td>List, non-empty, drawn from <code>PC-1500</code>, <code>PC-1500A</code>, <code>PC-1600-Slot-1</code>, <code>PC-1600-Slot-2</code>. The loader's <strong>only</strong> compatibility check: a host not on this list is declined; a host on it gets no further test.</td>
+</tr>
+<tr>
+<td><code>definition-terminology</code></td>
+<td>yes</td>
+<td>Exactly one of the same four identifiers. Names the pin-name vocabulary every <code>chip-select</code> / <code>signal</code> / <code>line</code> field in the file is resolved against, once, at parse time. Must appear in <code>compatible-hosts</code>.</td>
+</tr>
+<tr>
+<td><code>regions</code></td>
+<td>yes</td>
+<td>List of one or more region maps (§2).</td>
+</tr>
+<tr>
+<td><code>battery</code></td>
+<td>no</td>
+<td><code>true</code> for battery-backed hardware. A battery-backed template offers Name &amp; Save, which makes the module a medium (<a href="/1600/help/10-reference/media-files/#battery-backed-module">Media files</a>). A file without it, a ROM module for one, goes into its slot as it is and is never written; a ROM keeps its bytes without a battery.</td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td>no</td>
+<td><code>true</code> marks a read-only <strong>template</strong> (§8): the product never writes the file, wherever it lies. Absent or <code>false</code> = an instance, autosaved in place. Name &amp; Save and autosave never write it; a preset's <code>saveas: { as: template }</code> writes <code>template: true</code>.</td>
+</tr>
+<tr>
+<td><code>saved</code></td>
+<td>no</td>
+<td>The time of the last write (UTC, ISO 8601), written into every saved instance; for information.</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>no</td>
+<td>Free text; ignored by the loader.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The reset-on-load behaviour is a loader invariant,
+not a field — no key can opt out of it.</p>
+<p><strong>Versioning.</strong> A reader rejects a file without <code>format-version</code>, or with
+a version it does not know, rather than guess; the version is checked
+before the other keys. Any change a version-1 reader would misread
+requires a new version number. A saved instance keeps the line of the file
+it was saved from.</p>
+<h3 id="terminology--signal-names">Terminology → signal names</h3>
+<p>The name in a <code>chip-select</code> / <code>signal</code> / <code>line</code> field must be legal for
+the declared <code>definition-terminology</code>:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Terminology</th>
+<th>Legal signal names (besides <code>A0</code>… address / <code>D0</code>… data lines)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PC-1500</code></td>
+<td><code>Y0</code>, <code>Y2</code>, <code>S1</code>, <code>S2</code>, <code>S3</code>, <code>S4</code>, <code>PU</code>, <code>PV</code></td>
+</tr>
+<tr>
+<td><code>PC-1500A</code></td>
+<td><code>Y0</code>, <code>Y2</code>, <code>S3</code>, <code>S4</code>, <code>S5</code>, <code>PU</code>, <code>PV</code></td>
+</tr>
+<tr>
+<td><code>PC-1600-Slot-1</code></td>
+<td><code>RAM2</code>, <code>PVOUT</code>, <code>S1</code>, <code>S2</code>, <code>S3</code>, <code>PU</code>, <code>PT</code></td>
+</tr>
+<tr>
+<td><code>PC-1600-Slot-2</code></td>
+<td><code>RAM1</code>, <code>PVOUT</code>, <code>K0</code>, <code>K1</code>, <code>K2</code>, <code>PU</code>, <code>PT</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Each name
+resolves, once at parse time, to one physical 40-pin contact
+(<code>Y0</code>/<code>RAM2</code>/<code>RAM1</code> → pin 4, <code>S4</code>/<code>PVOUT</code> → pin 5, <code>S1</code>/<code>S3</code>/<code>K0</code> → pin
+16, <code>S2</code>/<code>S4</code>/<code>K1</code> → pin 17, <code>S3</code>/<code>S5</code>/<code>K2</code> → pin 18, <code>Y2</code>/<code>PT</code> → pin 19;
+<code>PU</code> → pin 2 and <code>PV</code> → pin 3 on the PC-1500/1500A, as measured on a real
+unit (the TRM prints them swapped), <code>PU</code> → pin 3 on the PC-1600 slots).</p>
+<p>Whether a name resolves to a live pin or a dormant one on a <em>particular</em>
+compatible host is not checked here — that is the author's dormant
+sub-region judgement.</p>
+<hr>
+<h2 id="2-region-map">2. Region map</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>yes</td>
+<td>Identifier, unique within the file.</td>
+</tr>
+<tr>
+<td><code>addressing</code></td>
+<td>yes</td>
+<td>Addressing spec (§3) — dimension D1.</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>yes</td>
+<td>Content spec (§4) — dimension D2.</td>
+</tr>
+<tr>
+<td><code>banking</code></td>
+<td>yes</td>
+<td><code>none</code>, or a banking map (§5) — dimensions D3/D4.</td>
+</tr>
+<tr>
+<td><code>capacity</code></td>
+<td>unbanked only</td>
+<td>Backing-store size in bytes for the one copy of the region. Required when <code>banking: none</code>; omitted when banked (there it is <code>bank-count * bank-size</code>).</td>
+</tr>
+<tr>
+<td><code>initial-content</code></td>
+<td>ROM: yes (must cover every byte) · Flash/Regular: optional</td>
+<td>Byte content carried in the file (§6). Allowed for any content kind, no restriction — a Regular (RAM) range can power up pre-loaded exactly like a Flash range's initial image.</td>
+</tr>
+<tr>
+<td><code>pc1600-module-class</code></td>
+<td>PC-1600 regions only</td>
+<td><code>program</code> | <code>system</code> | <code>ram-disk</code> | <code>plain-ram-no-header</code> — authoring cross-check against the header bytes in <code>initial-content</code>. Omit on PC-1500/1500A regions.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="3-addressing-spec">3. Addressing spec</h2>
+<p>An addressing spec is <strong>enable groups OR'd together</strong>; each group is
+<strong>terms AND'd together</strong>. It appears in three places, all the same shape:
+a region's <code>addressing</code>, a banked region's <code>bank-window</code>, and (in
+principle) deeper nestings.</p>
+<pre class="lcd"><code class="language-yaml">addressing:
+  any-of:                      # OR across groups
+    - all-of:                  # AND within a group
+        - chip-select: Y0
+        - address-bits: { A13: 1, A12: 1, A11: 1 }   # the on-module decoder's select inputs
+      span: 0x0800             # 2 KB — served via the low 11 address lines (A0 to A10)
+      maps-to: 0x0000          # where this slice lands in the backing store
+    - chip-select: S1          # bare dedicated strobe, no address decode on this path
+      span: 0x0800
+      maps-to: 0x0800
+    - chip-select: S2
+      span: 0x0800
+      maps-to: 0x1000
+</code></pre>
+<p>Shorthand: a single-group spec may drop <code>any-of</code> and give <code>all-of</code>
+directly; a single-term group may drop <code>all-of</code> and give the bare term.</p>
+<h3 id="group-terms">Group terms</h3>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chip-select: NAME</code></td>
+<td>Named line asserted. Friendly alias for <code>signal</code>. The common case: one dedicated strobe standing for one slice of storage, with no address decode on that path. Several such strobes for one region are separate OR'd groups (one per <code>- </code> entry under <code>any-of</code>), <strong>not</strong> a list.</td>
+</tr>
+<tr>
+<td><code>chip-select: [A, B, C]</code></td>
+<td>All listed lines asserted at the same access (an AND). Uncommon — the host's 2 KB strobes are mutually exclusive, so this is only for a strobe that is qualified by another live signal.</td>
+</tr>
+<tr>
+<td><code>signal: NAME</code> / <code>signal: [..]</code></td>
+<td>Same as <code>chip-select</code>; use when the line isn't a decode strobe (e.g. <code>PVOUT</code>).</td>
+</tr>
+<tr>
+<td><code>signal-negated: NAME</code></td>
+<td>Line explicitly <strong>not</strong> asserted. Needed to split a window by a half-select line (<code>PVOUT</code> low vs. high).</td>
+</tr>
+<tr>
+<td><code>address-bits: { An: 0|1, … }</code></td>
+<td>Specific address lines required at specific levels, AND'd into the group. Models an on-module decoder that gates on a <strong>few</strong> address lines alongside a chip select — <em>not</em> a full address-bus comparison. CE-155's <code>Y0</code> chip: <code>{ A13: 1, A12: 1, A11: 1 }</code> (the &quot;<code>AD11–AD13 = 111</code>&quot; of <a href="https://github.com/tinue/PC-1600-Ref/blob/main/Expansion/PC-1500A-Rewiring.md">PC-1500 address decoding</a> §3.2). Lines not listed are not tested. Does <strong>not</strong> set <code>span</code> — the low, un-listed lines are the offset.</td>
+</tr>
+<tr>
+<td><code>memory-range: { from, to }</code></td>
+<td>A raw address window the module decodes itself, with <strong>no</strong> chip select in the group. Fixes <code>span</code> from <code>to − from + 1</code>; the offset within the slice is <code>address − from</code>, so the window need be neither a power of two nor aligned. Flagged distinctly because the author's host-compatibility judgement has no pin to anchor to.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="group-keys">Group keys</h3>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>span</code></td>
+<td>required unless the group has a <code>memory-range</code></td>
+<td>Size in bytes of the storage slice behind this group. The module serves it using the low <code>log2(span)</code> address lines as the offset (a <code>memory-range</code> group uses <code>address − from</code> instead) (<code>0x0800</code> ⇒ A0 to A10); it does <strong>not</strong> decode any higher line except those an <code>address-bits</code> term names.</td>
+</tr>
+<tr>
+<td><code>maps-to</code></td>
+<td>groups packed in declaration order, each starting where the previous ended</td>
+<td>Byte offset in the region's backing store (or, inside <code>bank-window</code>, the current bank's slice) that the low end of this group's slice maps to.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The groups' slices must tile <code>capacity</code> (unbanked) or <code>bank-size</code>
+(banked) exactly — no gap, no overlap.</p>
+<hr>
+<h2 id="4-content-spec">4. Content spec</h2>
+<h3 id="whole-region-one-kind">Whole-region, one kind</h3>
+<pre class="lcd"><code class="language-yaml">content: rom            # bare string form: regular | rom | flash (defaults for each kind)
+</code></pre>
+<pre class="lcd"><code class="language-yaml">content:
+  kind: regular
+  writable: true              # false = wired read-only (not a togglable switch)
+  power-up-fill: 0x00         # per-range power-up byte; default 0x00 (CMOS RAM after a power loss)
+  write-protect: unprotected  # optional: the module has a write-protect switch (CE-161); omit if not.
+                              # protected | unprotected = the switch position, part of the module's file.
+                              # Protected refuses every write, host pokes included. Name &amp; Save with
+                              # &quot;Write-protect&quot; / `saveas: { …, protected: true }` saves it as `protected`.
+</code></pre>
+<pre class="lcd"><code class="language-yaml">content:
+  kind: flash
+  power-up-fill: 0xFF         # default 0xFF (erased); applies only where `initial-content` leaves gaps
+  protocol:                   # chip/firmware properties, not inferred
+    unlock-sequence:
+      - { address: 0x5555, data: 0xAA }
+      - { address: 0x2AAA, data: 0x55 }
+    byte-program-command: 0xA0
+    erase-setup-command:  0x80
+    sector-erase-command: 0x30
+    chip-erase-command:   0x10
+    sector-size: 0x1000
+    reset-command: 0xF0
+    command-address-mask: 0x7FF   # optional; default = full address, no masking.
+                                   # How many low address bits the command
+                                   # decoder actually looks at before comparing
+                                   # against an unlock-sequence/command address --
+                                   # some flash chips (recovered from a real
+                                   # CE-163F firmware disassembly) decode fewer
+                                   # bits than the full bus, so an unlock write's
+                                   # upper address bits don't have to match.
+</code></pre>
+<p>Every field above is required except <code>command-address-mask</code> — there is no
+sensible default for a chip/firmware property, so <code>content: flash</code>
+as a bare string (no <code>protocol:</code>) is a load error, not a &quot;use the defaults&quot;
+shorthand.</p>
+<p><code>rom</code> takes no options beyond the implicit read-only-forever rule; its
+bytes come from <code>initial-content</code> (§6), which is mandatory for ROM.</p>
+<h3 id="split-content-in-a-banked-region">Split content in a banked region</h3>
+<pre class="lcd"><code class="language-yaml">content:
+  by-bank:
+    - { banks: &quot;0-7&quot;,  kind: regular, power-up-fill: 0x00 }
+    - { banks: &quot;8-15&quot;, kind: flash, protocol: { ... } }
+</code></pre>
+<p><code>banks</code> is a <code>&quot;lo-hi&quot;</code> string or a single integer. Ranges must partition
+<code>0 .. bank-count-1</code> with no gap or overlap. A single-kind banked region
+just uses the whole-region form above.</p>
+<hr>
+<h2 id="5-banking-map">5. Banking map</h2>
+<pre class="lcd"><code class="language-yaml">banking:
+  latch:
+    type: trigger-based            # trigger-based | line-based
+    # --- trigger-based ---
+    trigger: { pin: 18 }           # a memory-write strobe pin (CE-163: S3),
+                                   # OR { io-port: 0x28 } for an OUT (n) write (CE-1601M)
+    sampled-lines: [A0, A1, A2, A3]  # bits latched on the trigger; sampled-lines[0] is the LSB
+    source-domain: address         # address → bits of the address bus (CE-163)
+                                   # data    → bits of the written byte (CE-1601M's OUT (28H))
+    # --- line-based (instead of trigger/sampled-lines) ---
+    # lines: [K0, K1, K2]          # the bank number read live off these lines
+    # source-domain: address-select
+  bank-count: 2                    # live banks (may be &lt; what the latch width allows)
+  bank-size: 0x8000               # bytes per bank
+  bank-window:                     # addressing spec (§3), nested one level
+    any-of: [ ... ]
+</code></pre>
+<p>A banked region's top-level <code>addressing</code> (§2) is a <strong>pure gate</strong> — &quot;is
+this access one my banking applies to at all&quot; — so it carries only
+terms, no <code>span</code> / <code>maps-to</code>. All slice mapping happens in <code>bank-window</code>,
+which carries its own full addressing spec so a second, independent
+sub-range (the <code>PVOUT</code> of the CE-1601M, 256K custom and superRAM r4) can be expressed as
+&quot;selected-bank AND half-select line&quot;, one level deeper. Inside
+<code>bank-window</code>, <code>span</code> / <code>maps-to</code> offsets are into the current bank's
+<code>bank-size</code> slice.</p>
+<p>Both confirmed banked modules are <strong>trigger-based</strong> and differ only in
+<code>source-domain</code>: CE-163's <code>{ pin: 18 }</code> strobe samples the <strong>address</strong>
+bus; CE-1601M's <code>{ io-port: 0x28 }</code> write samples the <strong>data</strong> bus. Both
+latch the decoded bank internally until the next trigger.</p>
+<p>Descriptive &quot;Vertical / Horizontal&quot; is <strong>not</strong> a field:
+line-based = Horizontal, trigger-based = Vertical.</p>
+<hr>
+<h2 id="6-initial-content">6. <code>initial-content</code></h2>
+<p>Bytes fixed by the definition — all of ROM's content (required), or a
+Flash or Regular (RAM) range's <em>initial</em> array (optional; absent ⇒ the
+range powers up as its <code>power-up-fill</code> byte). There is no
+content-kind restriction: a Regular range takes <code>initial-content</code> exactly
+like a Flash range does — CE-163F's RAM banks and Flash banks are both
+populated this way when dumped and pasted back in (§9). Never an external
+file: a ROM under development comes in through the preset instead (§8,
+<code>slot-N-rom:</code>).</p>
+<pre class="lcd"><code class="language-yaml">initial-content:
+  fill: 0xFF                 # bytes no block covers; default is the bank's
+                              # own power-up-fill (content §4), not always 0xFF
+  blocks:
+    - bank: 0                # omit entirely for an unbanked region
+      offset: 0x0000         # start offset within the region / bank slice
+      encoding: hex          # hex | base64 | addressed-hex
+      bytes: |
+        43 16 00 00 ...       # whitespace/newlines ignored for hex
+    - bank: 1
+      offset: 0x0000
+      encoding: addressed-hex
+      bytes: |
+        $0000: FF...          # the whole bank slice, one byte value
+</code></pre>
+<ul>
+<li><strong>Multi-bank</strong> content is just multiple <code>blocks</code> with different <code>bank:</code>
+keys — one file populates every bank. Two blocks touching
+the same bytes is an error.</li>
+<li>A region/bank-range marked <code>rom</code> with no covering block is incomplete
+and is rejected at load. A <code>flash</code> range with none is valid.</li>
+<li>For a PC-1600 header-bearing module the 8-byte header and jump table
+are just bytes in a block at their fixed offset — there are
+no separate header fields.</li>
+</ul>
+<h3 id="encoding-addressed-hex"><code>encoding: addressed-hex</code></h3>
+<p>A project-specific dialect designed so a memory dump can be pasted
+straight into a <code>bytes: |</code> block with no reformatting — the INSPECTOR's
+<strong>Module YAML</strong> button (<a href="/1600/help/07-debugger/debugger/">Debugger</a>) writes exactly this. Lines are
+either an explicit row or a same-byte run:</p>
+<pre class="lcd"><code class="language-yaml">bytes: |
+  $0000: 00...
+  $0050: 00 00 00 00 00 00 11 F1  8A 26 45 33 2C 58 40 12
+  $0060: F0 97 22 42 41 4E 4B 20  22 3B F1 6F 26 45 32 40
+  $0070: 13 F0 97 22 56 32 30 22  40 FF FF FF FF FF FF FF
+  $0080: FF...
+  $3FF0: AA...
+</code></pre>
+<ul>
+<li><code>$XXXX: &lt;up to 16 space-separated hex byte pairs&gt;</code> places those literal
+bytes starting at that address.</li>
+<li><code>$XXXX: XX...</code> (the only token on its line) means &quot;byte <code>XX</code> repeats from this address up to (but not
+including) the next line's address&quot; — or up to the end of the block's
+span for the last line. This is exact, not a guess: because lines must
+partition the block's address range with no gap or overlap, a run's
+length is always computable from the surrounding addresses, unlike an
+elided hex dump (which drops a run with no record of which byte value it
+was).</li>
+<li>A run only ever stands for one uniform byte value — content that
+alternates between two fill values (e.g. <code>00</code>/<code>FF</code> rows) is written out
+in full, the same as an ordinary row.</li>
+</ul>
+<h3 id="encodings">Encodings</h3>
+<p><code>addressed-hex</code>, <code>hex</code> and <code>base64</code>; any other encoding is an error.</p>
+<hr>
+<h2 id="7-worked-examples">7. Worked examples</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>File</th>
+<th>Module</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ce151.module.yaml</code></td>
+<td>CE-151, 4 KB</td>
+<td>Two bare-strobe <code>span</code> groups (<code>S1</code>, <code>S2</code>), one 2 KB chip each, no on-module decode (Service Manual schematic 5-3); PC-1500/1500A and PC-1600 Slot 1.</td>
+</tr>
+<tr>
+<td><code>ce161.module.yaml</code></td>
+<td>CE-161, 16 KB</td>
+<td>One bare <code>Y0</code> group spanning the whole 16 KB window; battery-backed with a <code>write-protect:</code> switch (<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/docs/developer/CE-161-Program-Module.md">CE-161 program module</a>); PC-1500/1500A and both PC-1600 slots.</td>
+</tr>
+<tr>
+<td><code>ce155.module.yaml</code></td>
+<td>CE-155, 8 KB</td>
+<td>one <code>address-bits</code> group (the on-module <code>AD11–AD13</code> decoder) OR'd with three bare-strobe <code>span</code> groups; an author-declared host list covering PC-1500 and PC-1600 Slot 1.</td>
+</tr>
+<tr>
+<td><code>ce1600m.module.yaml</code></td>
+<td>CE-1600M, 32 KB</td>
+<td><code>PVOUT</code> folded into addressing as a half-select line — unbanked despite two physical halves; one Slot-1-terminology file declared for both PC-1600 slots (<code>RAM2</code> resolves to the pin-4 enable on both).</td>
+</tr>
+<tr>
+<td><code>ce1601m.module.yaml</code></td>
+<td>CE-1601M, 64 KB</td>
+<td>Trigger-based vertical banking — <code>trigger: { io-port: 0x28 }</code>, <code>source-domain: data</code> (the byte written by <code>OUT (28H)</code>); <code>bank-window</code> nesting the <code>PVOUT</code> half-select.</td>
+</tr>
+<tr>
+<td><code>256k-custom.module.yaml</code></td>
+<td>256K custom, 256 KB</td>
+<td>The CE-1601M mechanism with all 8 × 32 KB vertical banks of its 3-bit (<code>D0</code>–<code>D2</code>) latch fitted; initialised (<code>addressed-hex</code> blocks as <code>INIT&quot;S2:&quot;,&quot;F&quot;</code> then <code>&quot;M&quot;</code> leave it); PC-1600 Slot 2 only.</td>
+</tr>
+<tr>
+<td><code>superRAMr4.module.yaml</code></td>
+<td>superRAM r4, 1 MB</td>
+<td>The CE-1601M mechanism with a 5-bit (<code>D0</code>–<code>D4</code>) <code>OUT (28H)</code> latch and 32 × 32 KB vertical banks; blank; PC-1600 Slot 2 only.</td>
+</tr>
+<tr>
+<td><code>ce1638.module.yaml</code></td>
+<td>CE-1638, 128 KB</td>
+<td>A single-kind banked region — trigger-based, address-domain, 8 banks sampling <code>A0</code>-<code>A2</code>.</td>
+</tr>
+<tr>
+<td><code>CE-502B.module.yaml</code> (comes with the ROMs)</td>
+<td>CE-502B, 16 KB ROM</td>
+<td><code>content: rom</code> with one <code>addressed-hex</code> block covering the whole region: a Sharp program module (ROM header at &amp;0000, BASIC program from &amp;00C5) on Y0.</td>
+</tr>
+<tr>
+<td><code>ce163f.module.yaml</code></td>
+<td>CE-163F, 256 KB</td>
+<td><code>content: by-bank:</code> (§4) splitting one 16-bank region into Regular (0-7) and Flash (8-15) content, and a <code>flash</code> <code>protocol:</code> block including <code>command-address-mask</code> for its real low-11-bit command decode quirk.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="8-plugging-a-module-in-slot-1-slot-2-and-slot-n-rom-in-a-preset">8. Plugging a module in: <code>slot-1:</code>, <code>slot-2:</code> and <code>slot-N-rom:</code> in a preset</h2>
+<p>A preset plugs a module into a slot by name or by file (the preset's
+other keys: <a href="/1600/help/10-reference/preset-sections/">Preset sections</a>):</p>
+<pre class="lcd"><code class="language-yaml"># PC-1500 / PC-1500A: one slot
+slot-1: { name: CE-155 }
+
+# PC-1600: two slots
+slot-1: { name: CE-1600M }
+slot-2: { file: cards/prototype.module.yaml }   # relative to the preset
+</code></pre>
+<ul>
+<li><code>name:</code> finds the definition whose <code>module-name</code> is that name: the
+bundled modules first, then the save folder, so a preset can name a
+module you saved (<code>slot-2: { name: CE-1601M - Programs }</code>; the file's
+name is not consulted). A bundled module hides a saved one of the same
+name. No match is an error, and so are two files in one folder that
+claim the same name.</li>
+<li><code>file:</code> names a definition directly, relative to the preset.</li>
+</ul>
+<p><strong>A ROM from a file: <code>slot-N-rom:</code>.</strong> While a ROM module is being
+developed, its bytes come from the build, not from the module definition:</p>
+<pre class="lcd"><code class="language-yaml">slot-1: { file: module.module.yaml }      # decode, banking, the ROM's size
+slot-1-rom: { file: build/module.bin }  # what the ROM holds
+</code></pre>
+<p>The module definition stays complete: its ROM region holds a placeholder
+(<code>$0000: FF...</code>, §6) and loads on its own. <code>slot-N-rom:</code> replaces those
+bytes, and only those:</p>
+<ul>
+<li>it needs a module in the same slot;</li>
+<li>the module must be a ROM module of one region (<code>content: rom</code>, no
+<code>by-bank:</code> split with RAM or Flash);</li>
+<li>the file must be exactly the region's size, or the preset fails;</li>
+<li>the file is read each time the preset is loaded, so a fresh start in
+the debugger picks up a rebuilt ROM (<a href="/1600/help/07-debugger/debugger/">Debugger</a>);</li>
+<li>such a module is never saved: no autosave, no Name &amp; Save, and a
+<code>saveas:</code> of its slot is refused.</li>
+</ul>
+<p><strong>Templates and instances.</strong> What happens to a module's file is decided
+by the file itself, not by where it lies:</p>
+<ul>
+<li><code>template: true</code>: a <strong>template</strong>, never written. Every bundled module is
+one, and a template of your own in the save folder is listed with the
+bundled modules. A battery-backed template (<code>battery: true</code>) offers
+<strong>Name &amp; Save</strong>, which copies it, with the module's memory as
+<code>initial-content:</code>, into an instance in the save folder.</li>
+<li>No <code>template</code> key: an <strong>instance</strong>. Every write to the module is saved
+back into its file, wherever it was loaded from. A preset's
+<code>saveas: { place: slot-1, as: live, name: … }</code> saves a copy as an
+instance, <code>as: template</code> as a template.</li>
+</ul>
+<p>Either way the host (the model, or the PC-1600's slot) must be in
+<code>compatible-hosts</code>, or the module is refused. The slot pickers list the
+modules whose <code>compatible-hosts</code> cover the model and slot, by
+<code>module-name</code>.</p>
+<h2 id="9-what-is-supported">9. What is supported</h2>
+<p>The parser reads the whole format and validates it; the product
+supports:</p>
+<ul>
+<li><strong>Content:</strong> Regular, Flash and ROM, single-kind or <code>by-bank</code>-split
+across a banked region's banks. A <code>rom</code>
+range ignores every write — the machine's CPU, the debugger's poke and the loaders alike — and its <code>initial-content</code> must cover every
+byte (<code>fill:</code> doesn't count). <code>initial-content</code> is supported via
+<code>encoding: addressed-hex | hex | base64</code> (§6); a preset's <code>slot-N-rom:</code>
+replaces a ROM module's bytes (§8).</li>
+<li><strong>Banking:</strong> Unbanked, and <strong>trigger-based</strong> Banked (both a memory-write
+strobe <code>{ pin: N }</code> sampling the address bus and an <code>{ io-port: 0xNN }</code>
+write sampling the data bus). <code>line-based</code> is a hard load error.</li>
+<li>On the PC-1600, <code>pc1600-module-class: plain-ram-no-header</code> (or the field
+absent) needs nothing further; the header-bearing classes need an
+<code>initial-content</code> block covering the header/jump-table offset.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/10-reference/preset-sections/">← 10 · Preset sections of Calc-U-1600</a><a class="btn dark" rel="next" href="/1600/help/10-reference/media-files/">10 · Media files →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presets for Calc-U-1600 — Calc-U-1600 help</title>
+<meta name="description" content="What a preset is, its header, its steps, waiting, expect: and startup presets are the family's; the shared part of this chapter describes them. This part…">
+<link rel="canonical" href="https://calc-u.org/1600/help/06-presets/presets/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/06-presets/presets/">
+<meta property="og:title" content="Presets for Calc-U-1600 — Calc-U-1600 help">
+<meta property="og:description" content="What a preset is, its header, its steps, waiting, expect: and startup presets are the family's; the shared part of this chapter describes them. This part…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/06-presets/"><span class="k org">6</span><span>Presets</span></a><ul class="help-parts"><li><a href="/1600/help/06-presets/">Presets</a></li><li><a href="/1600/help/06-presets/presets/" aria-current="page">Presets for Calc-U-1600</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/06-presets/">6 Presets</a> <span aria-hidden="true">›</span> Presets for Calc-U-1600</p>
+<p class="eyebrow">Chapter 6 · Presets</p>
+<h1 id="presets-for-calc-u-1600">Presets for Calc-U-1600</h1>
+<p>What a preset is, its header, its steps, waiting, <code>expect:</code> and startup
+presets are the family's; the <a href="/1600/help/06-presets/">shared part of this chapter</a>
+describes them. This part covers what a preset of Calc-U-1600 holds: its
+models and hardware, its programs, its steps, the examples and the
+startup presets. The full list of the product's keys is
+<a href="/1600/help/10-reference/preset-sections/">Preset sections</a>.</p>
+<p>The file name ends with the model: <code>.pc1500</code>, <code>.pc1500a</code> or <code>.pc1600</code>.</p>
+<h2 id="the-smallest-preset">The smallest preset</h2>
+<pre class="lcd"><code class="language-yaml">format-version: 2
+model: PC-1500A
+keys:
+  - key: cl
+  - type: NEW0
+  - key: mode
+  - type: PRINT &quot;HELLO&quot;
+</code></pre>
+<p><code>key:</code> presses keys by their IDs, one after the other (<code>- key: shift up up</code>); <code>type:</code> types a line, then ENTER. Everything after <code>type: </code> is typed
+as written, <code>#</code> and quotes included, so a <code>#</code> in BASIC (<code>PRINT #1</code>) stays.</p>
+<h2 id="adding-hardware">Adding hardware</h2>
+<pre class="lcd"><code class="language-yaml">format-version: 2
+model: PC-1600:new            # PC-1500[:A01|A03|A04] | PC-1500A | PC-1600[:new|old]
+printer: CE-1600P:new         # CE-150 (all models) | CE-1600P[:new|old] (PC-1600)
+slot-1: { name: CE-1600M }    # a bundled or saved module, by name
+</code></pre>
+<ul>
+<li><strong>Names</strong> are Sharp's, with the hyphen, in any case: <code>CE-1600P</code>,
+<code>ce-1600p</code>.</li>
+<li><strong>By name or by file:</strong> <code>slot-1: { name: … }</code> names a module,
+<code>slot-1: { file: … }</code> a <code>.module.yaml</code> file. Paths are relative to the
+preset; <code>~/</code> is your home folder.</li>
+<li><strong>PC-1500 and PC-1500A:</strong> there is only <code>slot-1:</code>.</li>
+<li><strong>CE-158:</strong> <code>interface: CE-158</code> (not together with the CE-1600P).</li>
+<li><strong>A folder as a drive (PC-1600):</strong> <code>host-drive: { folder: … }</code>
+(<a href="/1600/help/09-product-topics/host-drive/">The host drive</a>).</li>
+<li><strong>Nothing plugged in:</strong> leave the key out.</li>
+</ul>
+<p>A floppy disk and a cassette are steps, since they change while the computer
+runs (<a href="#media-steps">below</a>).</p>
+<h2 id="loading-a-basic-program">Loading a BASIC program</h2>
+<pre class="lcd"><code class="language-yaml">format-version: 2
+model: PC-1600
+keys:
+  - key: mode
+  - type: NEW0
+program:
+  file: hanoi.bas             # converted and written straight into memory
+keys:
+  - key: mode
+  - type: RUN
+</code></pre>
+<ul>
+<li>
+<p><strong>Before a <code>program:</code> section,</strong> leave the computer in PRO mode after
+<code>NEW0</code>, as above, and switch to RUN mode afterwards. For a PC-1500
+program on the PC-1600, type <code>MODE1</code> first; for a program module,
+<code>INIT&quot;S1:&quot;,&quot;P&quot;</code> and <code>TITLE&quot;S1:&quot;</code>. The loader follows MODE and <code>TITLE</code>,
+as Load BASIC Program does.</p>
+</li>
+<li>
+<p><code>file:</code> works like <strong>File ▸ Load BASIC Program…</strong>
+(<a href="/1600/help/09-product-topics/basic-programs/">Loading a BASIC program</a>) and is fast: the file
+is a <code>.bas</code> listing, a tokenized <code>.bbin</code>, or a cassette WAV. What the
+file holds decides how it is loaded, as when you drop it on the window.</p>
+</li>
+<li>
+<p><code>text: |</code> types the program line by line through the ROM's editor, the
+way you would. It is slow but works everywhere, and the program sits in
+the preset itself. <code>typed: true</code> next to a <code>file:</code> types a listing in
+the same way:</p>
+<pre class="lcd"><code class="language-yaml">program:
+  text: |
+    10 PRINT &quot;HELLO&quot;
+    20 GOTO 10
+</code></pre>
+</li>
+</ul>
+<h2 id="machine-code">Machine code</h2>
+<pre class="lcd"><code class="language-yaml">program:
+  file: memtest_bank.bin
+  address: &amp;7C01              # needed if the file has no header
+# length: &amp;200                # load only part of the file
+</code></pre>
+<ul>
+<li><strong>Numbers:</strong> <code>&amp;</code>, <code>0x</code> or <code>$</code> makes a number hex; without one it is
+decimal. This holds for every number in a preset.</li>
+<li><strong>Files with a header</strong> (PC-1600, CE-158) bring their own address.</li>
+<li><strong>PC-1600:</strong> the loader places the code the way Load Machine Code does,
+by MODE, <code>TITLE</code> and the address: in MODE 1 <code>address:</code> is an LH5803
+address. Switch MODE or <code>TITLE</code> in a <code>keys:</code> section first.</li>
+<li><strong>Auto-run:</strong> if the header has an auto-run address, the preset types
+<code>CALL</code> for you and waits until the code returns.</li>
+</ul>
+<p>More on machine code is in <a href="/1600/help/09-product-topics/machine-code/">Machine-code programs</a>.</p>
+<h2 id="media-steps">Media steps</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Step</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>- floppy: { name: Formatted }</code></td>
+<td>Puts a disk into the CE-1600F (PC-1600 with the CE-1600P), by <code>name:</code> or <code>file:</code>, with <code>side: 0</code> or <code>1</code> (default 0)</td>
+</tr>
+<tr>
+<td><code>- cassette: { file: mytape.cassette.yaml }</code></td>
+<td>Puts a cassette into the cassette recorder of the CE-150 (PC-1500, PC-1500A) or CE-1600P, by <code>name:</code> or <code>file:</code></td>
+</tr>
+<tr>
+<td><code>- eject: floppy</code> / <code>- eject: cassette</code></td>
+<td>Takes the disk or the cassette out</td>
+</tr>
+<tr>
+<td><code>- saveas: { place: slot-1, as: live, name: My module }</code></td>
+<td>Name &amp; Save the module in slot 1 into your save folder. <code>cassette</code> saves the cassette; <code>slot-2</code> and <code>floppy</code> are PC-1600 only</td>
+</tr>
+<tr>
+<td><code>- saveas: { place: slot-1, as: template, name: My module }</code></td>
+<td>The same, saved as a template</td>
+</tr>
+<tr>
+<td><code>- saveas: { place: slot-1, as: live, protected: true, name: My ROM }</code></td>
+<td>The same, with the module's write-protect switch on (the CE-161; not a disk)</td>
+</tr>
+<tr>
+<td><code>- saveas: { place: slot-2, as: template, file: Module.module.yaml }</code></td>
+<td>Saves to that file, next to the preset (<code>.module.yaml</code> for a module, <code>.floppy.yaml</code> for <code>place: floppy</code>); the name is the file name</td>
+</tr>
+</tbody>
+</table></div>
+<p>A preset that prepares a module and a disk and saves both as templates
+next to itself, and the preset that uses them:
+<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/examples/dwx/make_diskworks_media.pc1600">make_diskworks_media.pc1600</a>
+and <a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/examples/dwx/DiskWorks.pc1600">DiskWorks.pc1600</a>.</p>
+<h2 id="calc-u-1600s-steps">Calc-U-1600's steps</h2>
+<p>Besides the <a href="/1600/help/06-presets/#steps">family's steps</a>:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Step</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>- expect: 11834</code></td>
+<td>Stops the preset with an error unless one line of the display contains that text. A backslash is written <code>\\</code>, a character outside ASCII <code>\xHH</code> (its code); between slashes (<code>/ERROR 1\b/</code>) the text is a regular expression</td>
+</tr>
+<tr>
+<td><code>- sync-clock:</code></td>
+<td>Sets the computer's clock from your computer's. Put it last: a preset runs at full speed, so the clock runs ahead</td>
+</tr>
+</tbody>
+</table></div>
+<p>The debugger steps of the family (<code>pause:</code>, <code>step:</code>, <code>resume:</code>) are not
+available on the Sharp models.</p>
+<p><strong>Key IDs for <code>key:</code>:</strong> a single letter, digit, or <code>+ - * / = ( ) .</code>;
+<code>enter</code>, <code>space</code>, <code>cl</code>, <code>mode</code>, <code>shift</code>, <code>def</code>, <code>sml</code>, <code>rcl</code>, <code>rsv</code>,
+<code>off</code>, <code>up</code>, <code>down</code>, <code>left</code>, <code>right</code>, <code>f1</code>–<code>f6</code>, and <code>on</code> (or <code>break</code>);
+on the PC-1600 also <code>ctrl</code>, <code>kbii</code> and <code>bs</code>.</p>
+<h2 id="the-examples">The examples</h2>
+<p>The presets Calc-U-1600 comes with are under <strong>File ▸ Examples</strong>, by
+name, in three groups: BASIC (Hanoi, the Towers of Hanoi), Plotter
+(Lissajous on the CE-150 of a PC-1500A; on the CE-1600P Lissajous,
+Rectangles in four pens, a globe, a biorhythm chart and a character
+chart) and Machine code (a memory test of the PC-1500A). Every
+example, also those not bundled, is in the
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600/examples">examples folder</a>
+of the source repository; download it to open the files with <strong>File ▸
+Load Preset…</strong>.</p>
+<h2 id="startup-presets">Startup presets</h2>
+<p><strong>Settings ▸ Startup presets</strong> sets one preset per model (the keys
+<code>[preset] PC-1500</code>, <code>[preset] PC-1500A</code>, <code>[preset] PC-1600</code>,
+<a href="/1600/help/08-settings/settings/">Settings</a>). Each model's list offers the startup presets
+the product comes with, each as its name and description; <strong>Choose…</strong>
+takes a preset file of your own (in the browser, with the files it
+names; <a href="/1600/help/06-presets/#startup-presets">Startup presets</a>). A model switch starts with no modules and no peripherals, so a
+startup preset is how a model gets its usual hardware.</p>
+<p>The PC-1600's bundled startup preset:</p>
+<ol>
+<li>plugs in the CE-1600P, with the bundled Formatted disk in the drive, a
+CE-1600M in slot 1 and a CE-1601M in slot 2;</li>
+<li>formats and splits the CE-1601M as a RAM disk (<code>INIT&quot;S2:&quot;,&quot;F&quot;</code>,
+<code>INIT&quot;S2:&quot;,&quot;M&quot;</code>);</li>
+<li>sets up <code>COM1:</code> at 9600 baud, 8 bits, no parity, 1 stop bit and no
+handshake (<code>SETCOM &quot;COM1:&quot;,9600,8,N,1,N,N</code>, then <code>OUTSTAT</code>,
+<code>SNDSTAT &quot;COM1:&quot;,28</code>, <code>RCVSTAT &quot;COM1:&quot;,28</code> and <code>INIT &quot;COM1:&quot;,8192</code>;
+<a href="/1600/help/09-product-topics/com-ports/">COM ports</a> explains them);</li>
+<li>puts <code>SAVE&quot;COM1:&quot;@</code> and <code>LOAD&quot;COM1:&quot;@</code> on the F1 and F2 keys;</li>
+<li>shows the free memory, then sets the clock.</li>
+</ol>
+<p>This is what it leaves on the LCD:</p>
+<p><img src="/1600/help/images/08-default-pc1600.png" alt="What the PC-1600's startup preset leaves on the LCD" width="1456" height="344" loading="lazy" decoding="async"></p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/06-presets/">← 6 · Presets</a><a class="btn dark" rel="next" href="/1600/help/07-debugger/">7 · Debugger →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

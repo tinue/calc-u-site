@@ -19,6 +19,6 @@ Disallow: /1600/calc/app/
 Disallow: /1600/calc/index.html
 Disallow: /1600/calc/$
 Disallow: /1600/help-asset/
-Disallow: /1600/beta/
 
 Sitemap: https://calc-u.org/59/sitemap.xml
+Sitemap: https://calc-u.org/1600/sitemap.xml

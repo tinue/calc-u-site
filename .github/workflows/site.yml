@@ -1,6 +1,6 @@
 name: Site
 
-# Checks every push to main: each site folder holds exactly its pinned
+# Checks every push to main: each site folder (/59/, /1600/) holds exactly its pinned
 # release (help asset, Web frontend, examples), its pages are what the
 # build makes from them, its static checks pass, and the Playwright tests
 # pass against the repository served as calc-u.org serves it.
@@ -66,5 +66,41 @@ jobs:
           npm install --no-save --no-audit --no-fund jsdom
           node .seo/check.js
 
+      - name: Tests
+        run: tests/run-tests.sh
+
+  site-1600:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: '1600'
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Renderer dependencies
+        run: npm ci --no-audit --no-fund
+        working-directory: .help
+
+      - name: The folder holds the pinned release
+        run: |
+          node ../.help/pins.js 1600
+          git diff --exit-code -- calc help-asset
+          test -z "$(git status --porcelain -- calc help-asset)"
+
+      - name: Build is current
+        run: |
+          node .site/build.js
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain -- .)"
+
+      - name: Check
+        run: node .site/check.js
+
+      # Includes the start test of each model and the storage test, which
+      # opens /59/play/ beside /1600/play/.
       - name: Tests
         run: tests/run-tests.sh

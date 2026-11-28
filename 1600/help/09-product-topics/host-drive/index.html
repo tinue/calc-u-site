@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A folder as a drive (PC-1600) — Calc-U-1600 help</title>
+<meta name="description" content="File ▸ Host Drive… makes a folder on your computer a PC-1600 drive, S3:. It is also Y: when no CE-1600P or CE-1600F is attached. BASIC uses it like a RAM-disk…">
+<link rel="canonical" href="https://calc-u.org/1600/help/09-product-topics/host-drive/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/09-product-topics/host-drive/">
+<meta property="og:title" content="A folder as a drive (PC-1600) — Calc-U-1600 help">
+<meta property="og:description" content="File ▸ Host Drive… makes a folder on your computer a PC-1600 drive, S3:. It is also Y: when no CE-1600P or CE-1600F is attached. BASIC uses it like a RAM-disk…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k org">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/1600/help/09-product-topics/">Product topics</a></li><li><a href="/1600/help/09-product-topics/models/">What differs by model</a></li><li><a href="/1600/help/09-product-topics/basic-programs/">BASIC programs and the cassette</a></li><li><a href="/1600/help/09-product-topics/machine-code/">Machine-code programs</a></li><li><a href="/1600/help/09-product-topics/com-ports/">COM ports</a></li><li><a href="/1600/help/09-product-topics/host-drive/" aria-current="page">A folder as a drive (PC-1600)</a></li><li><a href="/1600/help/09-product-topics/keyword-modules/">PC-1500 keyword modules</a></li><li><a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> A folder as a drive (PC-1600)</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="a-folder-as-a-drive-pc-1600">A folder as a drive (PC-1600)</h1>
+<p><strong>File ▸ Host Drive…</strong> makes a folder on your computer a PC-1600
+drive, <code>S3:</code>. It is also <code>Y:</code> when no CE-1600P or CE-1600F is attached.
+BASIC uses it like a RAM-disk drive, and the files are ordinary files in the
+folder, stored byte for byte. The menu item is there on the PC-1600 only,
+and not in the Web frontend.</p>
+<p>In short:</p>
+<ul>
+<li><strong>Commands:</strong> <code>LOAD</code>, <code>SAVE</code>, <code>BLOAD</code>, <code>BSAVE</code>, <code>OPEN</code>, <code>FILES</code>, <code>KILL</code>,
+<code>NAME</code>, <code>COPY</code>, <code>SET</code> and <code>DSKF</code> work on it.</li>
+<li><strong>Names:</strong> only 8.3 names the PC-1600 accepts are shown, in capitals.
+Longer names stay hidden and are never touched.</li>
+<li><strong>Subfolders:</strong> as on a MEP USB drive, <code>CDIR &quot;GAMES&quot;</code> changes the current
+folder (<code>CDIR &quot;..&quot;</code> goes up, <code>CDIR &quot;/&quot;</code> to the top; <code>\</code> works like <code>/</code>) and <code>LDIR</code> lists the
+subfolders. All file commands work in the current folder. Switching the
+calculator off returns to the top.</li>
+<li><strong>MEP programs:</strong> tools written for the MEP module, such as FILEX, work on
+<code>S3:</code>.</li>
+<li><strong>Dates:</strong> the PC-1600 shows each file's month, day and time. Your
+computer keeps the full date.</li>
+<li><strong>Refused:</strong> <code>INIT &quot;S3:&quot;</code>, so a format can never wipe the folder.</li>
+<li><strong>In a preset:</strong> <code>host-drive: { folder: &lt;folder&gt; }</code> mounts a folder
+(<a href="/1600/help/10-reference/preset-sections/">Preset sections</a>).</li>
+</ul>
+<p>The host drive is a Calc-U-1600 peripheral with no Sharp original. It is
+modelled on the MEP rev3 module, a USB drive for the PC-1600's 60-pin
+connector. To software it looks like a MEP rev3 USB drive: the same device
+names, subdirectories through <code>CDIR</code> / <code>LDIR</code>, and the MEP's fixed entries,
+so MEP programs such as FILEX work on it. The MEP is credited in
+<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/THIRD-PARTY-NOTICES.md#acknowledgments">THIRD-PARTY-NOTICES.md</a>.</p>
+<h2 id="what-works">What works</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>BASIC</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOAD</code> / <code>SAVE</code> / <code>BLOAD</code> / <code>BSAVE</code></td>
+<td>Files are stored byte for byte, exactly as the PC-1600 writes them: tokenized BASIC, <code>SAVE ,A</code> text, BSAVE headers</td>
+</tr>
+<tr>
+<td><code>OPEN</code> … <code>FOR INPUT</code> / <code>OUTPUT</code> / <code>APPEND</code>, <code>INPUT#</code>, <code>PRINT#</code>, <code>CLOSE</code></td>
+<td>Set <code>MAXFILES</code> first, as for every device</td>
+</tr>
+<tr>
+<td><code>FILES</code> / <code>LFILES</code></td>
+<td>Only 8.3 names, see below</td>
+</tr>
+<tr>
+<td><code>KILL</code>, <code>NAME</code>, <code>COPY</code>, <code>SET &quot;…&quot;,&quot;P&quot;</code> / <code>&quot;I&quot;</code> / <code>&quot; &quot;</code></td>
+<td>Wildcards work as on the RAM disk: every matching file, protected ones skipped (error 159)</td>
+</tr>
+<tr>
+<td><code>DSKF(&quot;S3:&quot;)</code></td>
+<td>The host volume's free space, capped at 2 147 450 880 bytes, the most DSKF can compute</td>
+</tr>
+<tr>
+<td><code>INIT &quot;S3:&quot;</code></td>
+<td>Refused: a format must never wipe a host folder</td>
+</tr>
+<tr>
+<td><code>CDIR &quot;path&quot;</code></td>
+<td>Changes the current directory and shows the prompt, e.g. <code>S3:/DEV/ASM&gt;</code>, <code>S3:&gt;</code> at the top. <code>/</code> (or <code>\</code>) starts at the top folder, <code>..</code> goes up, <code>.</code> stays. A folder that isn't there, or <code>..</code> at the top, is error 152 and the directory stays. A prompt longer than 26 characters shows <code>...</code> and the end of the path</td>
+</tr>
+<tr>
+<td><code>LDIR</code></td>
+<td>Lists the subdirectories of the current directory, in the FILES format</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nothing is converted on the way. A text file written on the computer needs
+CR LF line ends to read line by line with <code>INPUT#</code>.</p>
+<h2 id="which-host-files-are-visible">Which host files are visible</h2>
+<p>The PC-1600 sees regular files whose name fits 8.3 and uses only the
+characters its file-name parser accepts:
+letters, digits and <code>`@#$%^&amp;()-_{}'</code>.</p>
+<ul>
+<li>Names are shown upper-case: <code>prog.bas</code> is <code>PROG.BAS</code>.</li>
+<li>Long names, extra dots, spaces, non-ASCII names and dotfiles are not shown
+and are never touched.</li>
+<li>Subdirectories follow the same name rule. FILES lists only the files of the
+current directory; <code>LDIR</code> lists its subdirectories. Symbolic links to
+folders are left out, so the drive never leaves the mounted folder.</li>
+<li>On a case-sensitive file system, two files that fold to the same name show
+as one. The exact upper-case spelling wins, otherwise the first in sort
+order.</li>
+<li>New files are created upper-case. Writing to an existing file keeps its
+host spelling.</li>
+</ul>
+<h2 id="attributes-and-dates">Attributes and dates</h2>
+<ul>
+<li><strong>P</strong> (protected) is the host file's owner-write permission. SET &quot;P&quot;
+clears it, and SET &quot; &quot; sets it again.</li>
+<li><strong>I</strong> (invisible) is the macOS hidden flag (<code>chflags hidden</code>). On other
+systems it is never set.</li>
+<li><strong>Directory dates</strong> are the host modification time in local time, the
+year included, as on the MEP. FILES shows only mm/dd hh:mm.</li>
+<li><strong>On the host side</strong> the file keeps its real time stamp. The OS writes it
+on every change, from the computer's clock.</li>
+</ul>
+<h2 id="mounting-a-folder">Mounting a folder</h2>
+<ul>
+<li><strong>Host Drive…</strong> (PC-1600 only) plugs the drive in with a power
+cycle, as attaching any peripheral does, because the ROM only finds
+modules at power-on; the memory is kept. The dialog starts in
+<strong>File ▸ Settings… ▸ Folders ▸ Host drive folder</strong> (<code>[folders] host-drive</code>):
+the folder last mounted by default, or a fixed folder.</li>
+<li><strong>Host Drive… again</strong> while a folder is mounted replaces the drive's
+folder, with a power cycle as well.</li>
+<li><strong>File ▸ Unmount &quot;&lt;folder&gt;&quot;</strong> unplugs the drive, with a power cycle.</li>
+<li>The mount survives a change of ROM variant but not a model switch, and is
+not kept across starts.</li>
+<li><strong>Preset:</strong> <code>host-drive: { folder: &lt;folder&gt; }</code> mounts a folder before the
+preset's cold boot. The path is relative to the preset, or starts with
+<code>~/</code>. The window then shows the drive as <strong>File ▸ Unmount &quot;&lt;folder&gt;&quot;</strong>
+(the example <code>dwx/DiskWorks.pc1600</code>). A preset whose folder does not
+exist is refused before the machine is touched.</li>
+<li><strong>Without a window:</strong> the harness's <code>c1600 host-drive &lt;folder&gt;|off</code>.</li>
+</ul>
+<h2 id="compared-with-a-real-mep-rev3">Compared with a real MEP rev3</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Area</th>
+<th>MEP rev3</th>
+<th>S3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subdirectories, CDIR / LDIR, the MEP's fixed ROM entries</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Current directory after power-on</td>
+<td>Top folder</td>
+<td>Top folder</td>
+</tr>
+<tr>
+<td>APPEND, DSKF, SET, GET LENGTH</td>
+<td>ERROR 158</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td>Files open at once</td>
+<td>One for reading, one for writing</td>
+<td>As many as MAXFILES</td>
+</tr>
+<tr>
+<td>Names</td>
+<td>8.3 recommended</td>
+<td>Only 8.3 names are visible</td>
+</tr>
+<tr>
+<td>INIT</td>
+<td>Not handled</td>
+<td>Refused</td>
+</tr>
+</tbody>
+</table></div>
+<p>How the drive is built (driver ROM, I/O protocol, FILE functions) is in
+<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/docs/developer/PC1600-Host-Drive-Internals.md">PC1600-Host-Drive-Internals.md</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/com-ports/">← 9 · COM ports</a><a class="btn dark" rel="next" href="/1600/help/09-product-topics/keyword-modules/">9 · PC-1500 keyword modules →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

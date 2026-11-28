@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calc-U-1600 reference — Calc-U-1600 help</title>
+<meta name="description" content="This chapter describes the files Calc-U-1600 reads and writes, each in its current version, and the keyboard map. What every product of the family shares (the…">
+<link rel="canonical" href="https://calc-u.org/1600/help/10-reference/reference/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/10-reference/reference/">
+<meta property="og:title" content="Calc-U-1600 reference — Calc-U-1600 help">
+<meta property="og:description" content="This chapter describes the files Calc-U-1600 reads and writes, each in its current version, and the keyboard map. What every product of the family shares (the…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/10-reference/"><span class="k org">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/1600/help/10-reference/">Reference</a></li><li><a href="/1600/help/10-reference/reference/" aria-current="page">Calc-U-1600 reference</a></li><li><a href="/1600/help/10-reference/preset-sections/">Preset sections of Calc-U-1600</a></li><li><a href="/1600/help/10-reference/module-definition-format/">Module definition format</a></li><li><a href="/1600/help/10-reference/media-files/">Media files</a></li><li><a href="/1600/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> Calc-U-1600 reference</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="calc-u-1600-reference">Calc-U-1600 reference</h1>
+<p>This chapter describes the files Calc-U-1600 reads and writes, each in
+its current version, and the keyboard map. What every product of the
+family shares (the grammar of the preset format, the rules of the
+settings file, the glossary) is in the <a href="/1600/help/10-reference/">shared reference</a>;
+the pages below add what is Calc-U-1600's own.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>File</th>
+<th>Extension</th>
+<th>Version</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preset</td>
+<td><code>.pc1500</code>, <code>.pc1500a</code>, <code>.pc1600</code></td>
+<td><code>format-version: 2</code></td>
+<td><a href="/1600/help/10-reference/preset-sections/">Preset sections</a></td>
+</tr>
+<tr>
+<td>Module definition (a memory module, and a saved battery-backed module)</td>
+<td><code>.module.yaml</code></td>
+<td><code>format: memory-module</code>, <code>format-version: 1</code></td>
+<td><a href="/1600/help/10-reference/module-definition-format/">Module definition format</a></td>
+</tr>
+<tr>
+<td>Floppy disk</td>
+<td><code>.floppy.yaml</code></td>
+<td><code>format-version: 2</code></td>
+<td><a href="/1600/help/10-reference/media-files/#floppy-disk">Media files</a></td>
+</tr>
+<tr>
+<td>Cassette definition (with its sound file)</td>
+<td><code>.cassette.yaml</code> and <code>.wav</code></td>
+<td><code>format: cassette</code>, <code>format-version: 1</code></td>
+<td><a href="/1600/help/10-reference/media-files/#cassette-definition">Media files</a></td>
+</tr>
+<tr>
+<td>Settings file</td>
+<td><code>Calc-U-1600.ini</code></td>
+<td><code>format-version = 1</code></td>
+<td><a href="#the-settings-file">below</a></td>
+</tr>
+<tr>
+<td>Keyboard map</td>
+<td>(built in)</td>
+<td></td>
+<td><a href="/1600/help/10-reference/keyboard-map/">Keyboard map</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>What a module definition expresses, and why, is described in
+<a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a>; the format page here is
+how it is written.</p>
+<h2 id="the-settings-file">The settings file</h2>
+<p>Calc-U-1600 keeps its settings in one file, <code>Calc-U-1600.ini</code>, in the folder that
+<a href="/1600/help/08-settings/#the-settings-file">Settings</a>
+names for each platform, with <code>&lt;Product&gt;</code> as <code>Calc-U-1600</code>.</p>
+<p>The rules of the file (its sections, how a
+missing or unknown key is treated, which keys the product writes itself)
+are those of the <a href="/1600/help/10-reference/">shared reference</a>
+and the <a href="/1600/help/08-settings/">shared Settings chapter</a>; Calc-U-1600's
+own keys and the names it gives the family's keys are in
+<a href="/1600/help/08-settings/settings/">Settings</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/10-reference/">← 10 · Reference</a><a class="btn dark" rel="next" href="/1600/help/10-reference/preset-sections/">10 · Preset sections of Calc-U-1600 →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

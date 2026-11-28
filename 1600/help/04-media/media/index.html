@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory modules and floppy disks — Calc-U-1600 help</title>
+<meta name="description" content="Templates, instances, Name &amp; Save, inserting and ejecting, the save folder and files that cannot be read are the family's; the shared part of this chapter…">
+<link rel="canonical" href="https://calc-u.org/1600/help/04-media/media/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/04-media/media/">
+<meta property="og:title" content="Memory modules and floppy disks — Calc-U-1600 help">
+<meta property="og:description" content="Templates, instances, Name &amp; Save, inserting and ejecting, the save folder and files that cannot be read are the family's; the shared part of this chapter…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/04-media/"><span class="k org">4</span><span>Media</span></a><ul class="help-parts"><li><a href="/1600/help/04-media/">Media</a></li><li><a href="/1600/help/04-media/media/" aria-current="page">Memory modules and floppy disks</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/04-media/">4 Media</a> <span aria-hidden="true">›</span> Memory modules and floppy disks</p>
+<p class="eyebrow">Chapter 4 · Media</p>
+<h1 id="memory-modules-and-floppy-disks">Memory modules and floppy disks</h1>
+<p>Templates, instances, Name &amp; Save, inserting and ejecting, the save folder
+and files that cannot be read are the family's; the
+<a href="/1600/help/04-media/">shared part of this chapter</a>
+describes them. This part covers the media of Calc-U-1600: the memory
+modules, the CE-1600F's floppy disks, and which files the product opens.
+Cassettes are in <a href="/1600/help/09-product-topics/basic-programs/">Loading a BASIC program</a>; a
+folder of your computer as a drive is in <a href="/1600/help/09-product-topics/host-drive/">The host drive</a>.</p>
+<h2 id="the-slot-pickers">The slot pickers</h2>
+<p>Each memory slot has a picker in the control bar. The PC-1500 and
+PC-1500A have one slot; the PC-1600 has two. A picker lists, from the top:</p>
+<ul>
+<li><strong>(empty)</strong></li>
+<li>The <strong>battery-backed modules</strong>: the bundled templates that fit this
+slot, your own templates, then your saved instances (here: &quot;My
+programs&quot;).</li>
+<li>The <strong>modules that are no media</strong>: the CE-151, the CE-155 and the ROM
+modules, each where it fits the slot.</li>
+</ul>
+<p><img src="/1600/help/images/05-slot-picker.png" alt="The PC-1600 Slot 1 picker" width="2846" height="320" loading="lazy" decoding="async"></p>
+<p>Choosing an entry plugs the module in at once, and the computer goes
+through a power cycle, as when a module is plugged into the real one. The
+memory is kept; the ROM then finds the changed memory and asks you to set
+BASIC up again (<code>NEW0? :CHECK</code>), as on the real computer. A module change
+leaves the other slot and the disk alone.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Module</th>
+<th>Models</th>
+<th>What it is</th>
+<th>Battery-backed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE-151</td>
+<td>PC-1500/1500A, PC-1600 Slot 1</td>
+<td>4 KB RAM</td>
+<td>no</td>
+</tr>
+<tr>
+<td>CE-155</td>
+<td>PC-1500/1500A, PC-1600 Slot 1</td>
+<td>8 KB RAM</td>
+<td>no</td>
+</tr>
+<tr>
+<td>CE-161</td>
+<td>PC-1500/1500A, PC-1600 Slot 1 or 2</td>
+<td>16 KB RAM with a write-protect switch</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>CE-1638</td>
+<td>PC-1500/1500A, PC-1600</td>
+<td>128 KB banked RAM (hobbyist module)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>CE-163F</td>
+<td>PC-1500/1500A, PC-1600</td>
+<td>128 KB RAM and 128 KB flash (hobbyist module)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>CE-502B</td>
+<td>PC-1500/1500A</td>
+<td>&quot;Statistics&quot; program module (ROM)</td>
+<td>–</td>
+</tr>
+<tr>
+<td>CE-1600M</td>
+<td>PC-1600 Slot 1 or 2</td>
+<td>32 KB RAM</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>CE-1601M</td>
+<td>PC-1600 Slot 2</td>
+<td>64 KB banked RAM</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>256K custom</td>
+<td>PC-1600 Slot 2</td>
+<td>256 KB banked RAM of no particular make, initialised: 32 KB expansion memory and the RAM disk S2: (220,160 bytes free)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>superRAM r4</td>
+<td>PC-1600 Slot 2</td>
+<td>1 MB banked RAM by spellbound, blank: it is initialised with SRAMINIT.BIN, which comes with the module, not with Calc-U-1600 (its insert notice says so when you plug it in)</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table></div>
+<p>A module without a battery (the CE-151, the CE-155) loses its contents at
+a Cold boot; a battery-backed one keeps them
+(<a href="/1600/help/09-product-topics/models/">What differs by model</a>). Modules of your own design are
+<a href="/1600/help/09-product-topics/module-definitions/">module definitions</a>.</p>
+<h2 id="program-modules-on-the-pc-1500">Program modules on the PC-1500</h2>
+<p>A <strong>program module</strong> holds a BASIC program and its reserve keys in memory
+the computer can't write: Sharp's ROM modules such as the CE-502B, or a
+CE-161 saved with <strong>Write-protect</strong> (<a href="#write-protect-ce-161">below</a>). At
+power-on the PC-1500's ROM looks for one in &amp;0000–&amp;6FFF: a page that
+can't be written and starts with the byte &amp;55 (a module header). How the
+memory is used then depends on what it finds:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>PC-1500 with …</th>
+<th>Reserve keys</th>
+<th>BASIC after <code>NEW 0</code></th>
+<th>Variables</th>
+<th><code>MEM</code> (empty)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no module</td>
+<td>&amp;4008–&amp;40C4</td>
+<td>&amp;40C5</td>
+<td>down from &amp;47FF</td>
+<td>1850</td>
+</tr>
+<tr>
+<td>a RAM module (CE-161 not protected)</td>
+<td>&amp;0008–&amp;00C4</td>
+<td>&amp;00C5</td>
+<td>down from &amp;47FF</td>
+<td>18234</td>
+</tr>
+<tr>
+<td>a program module (CE-502B, protected CE-161)</td>
+<td>in the module, &amp;0008–&amp;00C4</td>
+<td>&amp;4000</td>
+<td>down from &amp;47FF</td>
+<td>2047</td>
+</tr>
+</tbody>
+</table></div>
+<p>On the PC-1500A the built-in RAM ends at &amp;57FF, so every row has 4 KB
+more and the variables start at &amp;57FF (<code>MEM</code> 5946 without a module, 6143
+next to a program module).</p>
+<p>With a program module:</p>
+<ul>
+<li><strong>Your own program goes into the built-in RAM.</strong> BASIC starts right at
+&amp;4000, without the usual &amp;C5 bytes in front, because the reserve area
+is in the module. Variables, also those of the module's program, live
+in the built-in RAM.</li>
+<li><strong>The reserve keys are the module's.</strong> They come from the module and
+can't be changed while it is plugged in.</li>
+<li><strong>Start programs by label.</strong> <code>RUN</code> starts the module's program, and DEF
+or <code>GOTO &quot;label&quot;</code> finds a label in either program. Line numbers don't
+cross over: <code>GOTO</code>, <code>LIST</code> or <code>GOSUB</code> with a number only find lines in
+the same program, otherwise ERROR 11. Give a program of your own a label
+and start it with DEF or <code>RUN &quot;label&quot;</code>.</li>
+<li><strong>Plugging in or pulling out costs the built-in RAM.</strong> Either way the
+memory layout changes, the computer shows <code>NEW0? :CHECK</code>, and you type
+<code>NEW 0</code>. A program and variables in the built-in RAM are lost; the
+module's program and reserve keys are not. Choosing a module in the
+picker is plugging it in.</li>
+</ul>
+<p>How the ROM recognizes a module, the header and the CE-161's <code>POKE</code> are
+in the
+<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/docs/developer/CE-161-Program-Module.md">CE-161 program module notes</a>.</p>
+<h2 id="the-floppy-disk-pc-1600">The floppy disk (PC-1600)</h2>
+<p>The CE-1600F floppy drive comes with the CE-1600P: plugging in the
+plotter plugs in the drive, and unplugging it takes the disk out. Its row
+in the control bar has:</p>
+<p><img src="/1600/help/images/05-floppy-picker.png" alt="The disk picker" width="2846" height="166" loading="lazy" decoding="async"></p>
+<ul>
+<li><strong>Disk:</strong> (empty), <strong>Blank</strong> (not formatted), <strong>Formatted</strong> (ready to
+use), then your own templates and saved disks.</li>
+<li><strong>0/1</strong> shows the side that is up and turns the disk over (eject, turn,
+insert).</li>
+<li><strong>Name &amp; Save</strong>, as for modules.</li>
+<li><strong>The lamp</strong> lights while the drive is busy. Wait for it to go dark
+before you turn the disk over.</li>
+</ul>
+<p>Switching the CE-1600P's ROM keeps the disk in the drive, the same side
+up.</p>
+<h2 id="naming-and-saving">Naming and saving</h2>
+<p>The battery-backed modules and the disks get <strong>Name &amp; Save</strong>; the family's
+rules for it, autosave and the save folder are in the
+<a href="/1600/help/04-media/">shared part</a>. For Calc-U-1600:</p>
+<p><img src="/1600/help/images/05-name-and-save.png" alt="Name &amp; Save" width="400" height="226" loading="lazy" decoding="async"></p>
+<ul>
+<li><strong>Files.</strong> A module is saved as <code>&lt;name&gt;.module.yaml</code>, a disk as
+<code>&lt;name&gt;.floppy.yaml</code>, a cassette as <code>&lt;name&gt;.cassette.yaml</code> with <code>&lt;name&gt;.wav</code> in
+the cassette folder. Modules and disks go into the save folder (desktop:
+<strong>Settings ▸ Storage</strong>, default <code>~/Calc-U-1600</code>; in the browser they are
+kept by the browser). The file formats are in
+<a href="/1600/help/10-reference/media-files/">Media files</a> and the
+<a href="/1600/help/10-reference/module-definition-format/">module definition format</a>.</li>
+<li><strong>Disks of Calc-U-1600 0.8.</strong> Disk files are version 2, whose sides are
+<code>0:</code> and <code>1:</code>. A disk saved with 0.8 is not listed in the picker;
+convert it by hand as <a href="/1600/help/10-reference/media-files/#from-08">From 0.8</a> says.</li>
+<li><strong>Editing a saved disk file.</strong> To change a saved disk's file with
+another program, choose (empty) first, so that Calc-U-1600 doesn't
+write over your edit.</li>
+</ul>
+<h3 id="write-protect-ce-161">Write-protect (CE-161)</h3>
+<p>For a module with a write-protect switch, the Name &amp; Save dialog has a
+<strong>Write-protect</strong> box. Ticked, the instance is saved with the switch set
+to read-only, and it stays that way: the computer can read it but no
+longer write to it. Saving it so goes through a power cycle, as plugging
+in a module does. On the PC-1500 this turns a prepared CE-161 into a
+program module, as in its manual: <code>NEW 256</code>, enter the program, run the
+manual's fill program, <code>POKE 0,85,0,1,0,0,0,0,255</code>, then Name &amp; Save with
+the box ticked, and <code>NEW 0</code>.</p>
+<h2 id="opening-a-file">Opening a file</h2>
+<p>Drop a file on the window, or open it with <strong>File ▸ Load Preset…</strong>, and it
+is opened as what it is (the family's rules for opening files are in the
+<a href="/1600/help/04-media/">shared part</a>). A preset and a module,
+disk or cassette file are told by their names; for the rest, what's inside the
+file decides:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>The file holds</th>
+<th>Opened as if by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a preset (<code>.pc1500</code>, <code>.pc1500a</code>, <code>.pc1600</code>, or a line starting with <code>model:</code>)</td>
+<td><strong>File ▸ Load Preset…</strong> (<a href="/1600/help/06-presets/presets/">Presets</a>)</td>
+</tr>
+<tr>
+<td>a module (<code>.module.yaml</code>), a floppy disk (<code>.floppy.yaml</code>) or a cassette (<code>.cassette.yaml</code>)</td>
+<td>put into its place from where it lies and saved back there; a module only when it is clear which slot it goes into (the PC-1500's one slot, or a module that fits only one), a disk only while the CE-1600F is there</td>
+</tr>
+<tr>
+<td>a BASIC listing, or tokenized BASIC (<code>.bbin</code>)</td>
+<td><strong>File ▸ Load BASIC Program…</strong> (<a href="/1600/help/09-product-topics/basic-programs/">BASIC programs</a>)</td>
+</tr>
+<tr>
+<td>machine code with a CE-158 or PC-1600 header</td>
+<td><strong>File ▸ Load Machine Code…</strong> (<a href="/1600/help/09-product-topics/machine-code/">Machine code</a>)</td>
+</tr>
+<tr>
+<td>machine code without a header, in a <code>.bin</code> file</td>
+<td><strong>File ▸ Load Machine Code…</strong>, which asks for the address</td>
+</tr>
+<tr>
+<td>a cassette's sound file (<code>.wav</code>) of a PC-1500 (CE-150) or PC-1600 (CE-1600P)</td>
+<td>by the file on the tape, as above; with several files you choose one</td>
+</tr>
+</tbody>
+</table></div>
+<p>Anything else, and a file over 1 MiB, is refused with a notice. A file
+loads into the running computer, exactly like the menu item, so prepare
+the computer the same way first (<code>NEW0</code> before a BASIC program, and so
+on). In the browser a module, disk or cassette file is imported into the
+saved media first.</p>
+<p>On macOS you can also drop a file onto the Dock icon, or open it from the
+Finder with <strong>Open With ▸ Calc-U-1600</strong>. On macOS, Windows and Linux,
+double-clicking a preset (<code>.pc1500</code>, <code>.pc1500a</code>, <code>.pc1600</code>) opens it in
+Calc-U-1600.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/04-media/">← 4 · Media</a><a class="btn dark" rel="next" href="/1600/help/05-peripherals-and-paper/">5 · Peripherals and paper →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

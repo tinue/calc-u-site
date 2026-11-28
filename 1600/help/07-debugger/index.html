@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugger — Calc-U-1600 help</title>
+<meta name="description" content="The debugger stops a running machine, lets you step through it, and records what its processor does. Use it to find out why a program does what it does, or to…">
+<link rel="canonical" href="https://calc-u.org/1600/help/07-debugger/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/07-debugger/">
+<meta property="og:title" content="Debugger — Calc-U-1600 help">
+<meta property="og:description" content="The debugger stops a running machine, lets you step through it, and records what its processor does. Use it to find out why a program does what it does, or to…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/07-debugger/" aria-current="page"><span class="k org">7</span><span>Debugger</span></a><ul class="help-parts"><li><a href="/1600/help/07-debugger/" aria-current="page">Debugger</a></li><li><a href="/1600/help/07-debugger/debugger/">Debugger on the PC-1500 and PC-1600</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> 7 Debugger</p>
+<p class="eyebrow">Chapter 7 · Debugger</p>
+<h1 id="debugger">Debugger</h1>
+<p>The debugger stops a running machine, lets you step through it, and
+records what its processor does. Use it to find out why a program does
+what it does, or to follow the ROM through a routine. What the
+product's debug panel shows, its debugger in an editor, breakpoints and
+watches are in the product's part: <a href="/1600/help/07-debugger/debugger/">Debugger of this product</a>.</p>
+<h2 id="running-and-paused">Running and paused</h2>
+<p>A machine is either <strong>running</strong> or <strong>paused</strong>. While it is paused:</p>
+<ul>
+<li>no emulated time passes: the display keeps its last picture, nothing
+is printed, and what waits for time waits;</li>
+<li>every processor of the machine stands between two instructions, so
+its registers and memory can be read as they are;</li>
+<li>the machine is paused as a whole: on a model with several processors,
+all of them stop.</li>
+</ul>
+<p>A pause has a <strong>level</strong>. Every product has the level of single
+instructions, <code>cpu</code>; a product may have a level of its own, such as one
+program step of a user program. The product's part says which levels it
+has.</p>
+<h2 id="pause-step-and-resume">Pause, step and resume</h2>
+<p>The window has three <strong>run-control buttons</strong> for a level: pause, step
+and resume. Their labels and their place are the product's.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Button</th>
+<th>Can be used</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pause</td>
+<td>while the machine runs</td>
+<td>pauses it where that level lands</td>
+</tr>
+<tr>
+<td>Step</td>
+<td>while it is paused at that level</td>
+<td>carries out one step and pauses again; held down, it repeats four times a second</td>
+</tr>
+<tr>
+<td>Resume</td>
+<td>while it is paused at that level</td>
+<td>lets it run on</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Machine ▸ Resume</strong> resumes the machine whatever paused it. It can be
+used while the machine is paused.</p>
+<ul>
+<li>After a resume, the machine's clocks are given the computer's time,
+and pacing starts afresh: the time the machine was paused is not made
+up.</li>
+<li>Reset and Cold boot while paused let the machine run again. A model
+switch, a variant switch or a preset builds a new machine, which is
+not paused.</li>
+<li>While an operation runs (a preset loads, a file is loaded),
+breakpoints and watches do not pause the machine; a pause that the
+preset itself asks for does.</li>
+<li>A machine that is paused stays paused while the product is in the
+background or the page is hidden.</li>
+</ul>
+<h2 id="traces">Traces</h2>
+<p>A <strong>trace</strong> records every instruction the processor carries out into a
+trace file, in the product's trace format. Start one with the product's
+trace button or with a preset's <code>trace:</code> step.</p>
+<ul>
+<li>Only one trace runs at a time: starting a trace ends the one that
+runs.</li>
+<li>The trace file goes into the trace folder: the save folder, unless
+<code>[trace] folder</code> names another one. A frontend that offers
+<code>[trace] location</code> follows it instead: the product's Application
+Support folder (<code>app-support</code>, the default), the save folder
+(<code>icloud</code>), or <code>[trace] folder</code> (<code>folder</code>) (<a href="/1600/help/08-settings/">Settings</a>). A
+file of the same name is replaced. In a Web frontend that has traces,
+a trace that has ended is offered as a download.</li>
+<li>The trace folder and the size limit are read when a trace starts, so a
+change in the settings is used by the next trace. The folder is made
+when it is missing; when it cannot be made or written, the trace does
+not start and a notice says &quot;The trace folder cannot be written:&quot; and
+why.</li>
+<li>A trace ends with <code>trace: off</code>, at the end of the preset that started
+it, when a new machine is built (a line of the log says so), or when
+you end it with the button.</li>
+<li><strong>Size limit.</strong> When the trace file reaches <code>[trace] max-file-size-mb</code> (50 MB unless the settings say otherwise; zero or
+less also means 50), the trace
+ends, the file is complete up to there, and a notice says so.</li>
+<li>While a trace runs, the window shows it, with the file name, whoever
+started it.</li>
+</ul>
+<h2 id="debugger-steps-in-a-preset">Debugger steps in a preset</h2>
+<p>A preset can drive the debugger with these steps
+(<a href="/1600/help/06-presets/">Presets</a>):</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Step</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trace: &lt;file name&gt;</code></td>
+<td>starts a trace into that file in the trace folder; no <code>/</code> or <code>\</code> in the name</td>
+</tr>
+<tr>
+<td><code>trace: off</code></td>
+<td>ends the trace</td>
+</tr>
+<tr>
+<td><code>pause: &lt;level&gt;</code></td>
+<td>pauses the machine at that level; already paused: nothing happens</td>
+</tr>
+<tr>
+<td><code>pause-on-start: &lt;level&gt;</code> / <code>off</code></td>
+<td>pauses at the next start the level names (the next program step; the processor leaving key readiness); <code>off</code> disarms it</td>
+</tr>
+<tr>
+<td><code>step: { level: &lt;level&gt;, count: n }</code></td>
+<td>while paused, carries out n steps (1 to 100000; 1 without a count); not paused, a line in the log and nothing else</td>
+</tr>
+<tr>
+<td><code>resume:</code></td>
+<td>lets the paused machine run on</td>
+</tr>
+<tr>
+<td><code>debug-panel: &lt;view&gt;</code></td>
+<td>shows that view of the debug panel; a frontend without the panel ignores it</td>
+</tr>
+</tbody>
+</table></div>
+<p>Not every product defines every one of these steps on every model; the
+product's part says which it takes. A step it does not take refuses the
+preset when it is read.</p>
+<p>While the machine is paused, a step that needs it to run (a key press, a
+program to write into memory) waits until it runs again; the debugger
+steps go on, so <code>step:</code> and <code>resume:</code> work. A <code>wait:</code> while paused counts
+the computer's time and ends with the machine still paused. A preset
+that ends paused leaves the machine paused.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/06-presets/presets/">← 6 · Presets for Calc-U-1600</a><a class="btn dark" rel="next" href="/1600/help/07-debugger/debugger/">7 · Debugger on the PC-1500 and PC-1600 →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

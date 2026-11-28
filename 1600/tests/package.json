@@ -1,0 +1,7 @@
+{
+  "name": "calc-u-site-1600-tests",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}

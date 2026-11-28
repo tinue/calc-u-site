@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preset sections of Calc-U-1600 — Calc-U-1600 help</title>
+<meta name="description" content="The grammar of the preset format (format version 2), its comments, values and references, and the keys and steps every product has are in the family's…">
+<link rel="canonical" href="https://calc-u.org/1600/help/10-reference/preset-sections/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/10-reference/preset-sections/">
+<meta property="og:title" content="Preset sections of Calc-U-1600 — Calc-U-1600 help">
+<meta property="og:description" content="The grammar of the preset format (format version 2), its comments, values and references, and the keys and steps every product has are in the family's…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/10-reference/"><span class="k org">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/1600/help/10-reference/">Reference</a></li><li><a href="/1600/help/10-reference/reference/">Calc-U-1600 reference</a></li><li><a href="/1600/help/10-reference/preset-sections/" aria-current="page">Preset sections of Calc-U-1600</a></li><li><a href="/1600/help/10-reference/module-definition-format/">Module definition format</a></li><li><a href="/1600/help/10-reference/media-files/">Media files</a></li><li><a href="/1600/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> Preset sections of Calc-U-1600</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="preset-sections-of-calc-u-1600">Preset sections of Calc-U-1600</h1>
+<p>The grammar of the preset format (format version 2), its comments, values
+and references, and the keys and steps every product has are in the
+family's <a href="/1600/help/10-reference/">Reference</a>. This page
+lists what a preset of Calc-U-1600 holds: its header keys, its sections
+and its steps, with the YAML of <code>bus-rom:</code> and <code>debug:</code>. How to use them is
+in <a href="/1600/help/06-presets/presets/">Presets</a>.</p>
+<h2 id="header-keys">Header keys</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format-version:</code></td>
+<td><code>2</code> (required)</td>
+</tr>
+<tr>
+<td><code>model:</code></td>
+<td><code>PC-1500[:A01|A03|A04]</code> (default A04), <code>PC-1500A</code>, <code>PC-1600[:new|old]</code> (default new); any case (required)</td>
+</tr>
+<tr>
+<td><code>preset-name:</code></td>
+<td>the short name a list shows once the preset is chosen; default: the file name without its extension</td>
+</tr>
+<tr>
+<td><code>description:</code></td>
+<td>one line for lists, menus and tooltips</td>
+</tr>
+<tr>
+<td><code>timeout:</code></td>
+<td>the longest wait for the computer to become idle between two items, in seconds of emulated time; default <code>3600</code></td>
+</tr>
+<tr>
+<td><code>printer:</code></td>
+<td><code>CE-150</code>, <code>CE-1600P[:new|old]</code> (default new; PC-1600)</td>
+</tr>
+<tr>
+<td><code>interface:</code></td>
+<td><code>CE-158</code></td>
+</tr>
+<tr>
+<td><code>slot-1:</code>, <code>slot-2:</code></td>
+<td>a module by <code>{ name: … }</code> (its module name) or <code>{ file: … }</code> (a <code>.module.yaml</code> file); <code>slot-2:</code> on the PC-1600 only</td>
+</tr>
+<tr>
+<td><code>slot-1-rom:</code>, <code>slot-2-rom:</code></td>
+<td><code>{ file: … }</code>: a ROM file whose bytes replace the ROM of the module in that slot (<a href="#slot-n-rom">below</a>)</td>
+</tr>
+<tr>
+<td><code>host-drive:</code></td>
+<td><code>{ folder: … }</code>: the folder of drive <code>S3:</code> (PC-1600; <a href="/1600/help/09-product-topics/host-drive/">The host drive</a>)</td>
+</tr>
+<tr>
+<td><code>bus-rom:</code></td>
+<td>ROM files on the 60-pin connector (<a href="#bus-rom">below</a>)</td>
+</tr>
+<tr>
+<td><code>debug:</code></td>
+<td>the debugger's set-up of a project preset (<a href="#debug">below</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Paths are relative to the preset; <code>~/</code> is your home folder.</p>
+<h2 id="sections">Sections</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Section</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>program:</code></td>
+<td><code>file:</code> a BASIC listing (<code>.bas</code>), tokenized BASIC (<code>.bbin</code>), a cassette WAV, or machine code with or without a header; with <code>address:</code> (needed for headerless machine code), <code>length:</code>, or <code>typed: true</code> (type a listing through the ROM's editor). Or <code>text: |</code> with the listing in the preset</td>
+</tr>
+<tr>
+<td><code>keys:</code></td>
+<td>a list of steps</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both may appear any number of times, and are carried out in file order.</p>
+<h2 id="steps">Steps</h2>
+<p><code>key:</code>, <code>type:</code>, <code>wait:</code>, <code>skip-wait:</code>, <code>let-it-finish:</code>, <code>full-speed:</code>,
+<code>regular-speed:</code>, <code>expect:</code>, <code>not-expect:</code>, <code>screenshot:</code>, <code>sync-clock:</code>,
+<code>trace:</code>, <code>elapsed-time:</code>, <code>cut-paper:</code>, <code>copy-paper:</code>, and the media steps <code>floppy:</code>,
+<code>cassette:</code>, <code>eject:</code>, <code>saveas:</code> (<a href="/1600/help/06-presets/presets/#media-steps">Presets</a>). The
+debugger steps <code>pause:</code>, <code>pause-on-start:</code>, <code>step:</code> and <code>resume:</code> are not
+available on these models.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Step</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>floppy:</code></td>
+<td><code>{ name: … }</code> or <code>{ file: … }</code>, with <code>side: 0|1</code> (default 0); PC-1600 with the CE-1600P</td>
+</tr>
+<tr>
+<td><code>cassette:</code></td>
+<td><code>{ name: … }</code> or <code>{ file: … }</code> (a <code>.cassette.yaml</code>); with the CE-150 (PC-1500, PC-1500A) or the CE-1600P</td>
+</tr>
+<tr>
+<td><code>eject:</code></td>
+<td><code>floppy</code> or <code>cassette</code></td>
+</tr>
+<tr>
+<td><code>saveas:</code></td>
+<td><code>place:</code> (<code>slot-1</code>, <code>slot-2</code>, <code>floppy</code>, <code>cassette</code>), <code>as:</code> (<code>live</code> or <code>template</code>), <code>protected: true</code> (CE-161 only), and <code>name:</code> or <code>file:</code></td>
+</tr>
+<tr>
+<td><code>expect:</code>, <code>not-expect:</code></td>
+<td>text in one line of the display; <code>\\</code> for a backslash, <code>\xHH</code> for a character outside ASCII; <code>/…/</code> a regular expression</td>
+</tr>
+<tr>
+<td><code>sync-clock:</code></td>
+<td>sets the computer's clock from your computer's</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Key IDs:</strong> a single letter, digit, or <code>+ - * / = ( ) .</code>; <code>enter</code>,
+<code>space</code>, <code>cl</code>, <code>mode</code>, <code>shift</code>, <code>def</code>, <code>sml</code>, <code>rcl</code>, <code>rsv</code>, <code>off</code>, <code>up</code>,
+<code>down</code>, <code>left</code>, <code>right</code>, <code>f1</code>–<code>f6</code>, and <code>on</code> (or <code>break</code>); on the PC-1600
+also <code>ctrl</code>, <code>kbii</code> and <code>bs</code>.</p>
+<h2 id="slot-n-rom">slot-N-rom</h2>
+<p>While a ROM module is being developed, its bytes come from the build:</p>
+<pre class="lcd"><code class="language-yaml">slot-1: { file: module.module.yaml }     # decode, banking, the ROM's size
+slot-1-rom: { file: build/module.bin } # what the ROM holds
+</code></pre>
+<ul>
+<li>It needs a module in the same slot, a ROM module of one region
+(<a href="/1600/help/10-reference/module-definition-format/">module definition format</a>).</li>
+<li>The file is exactly the region's size, and it is read each time the
+preset is loaded.</li>
+<li>Such a module is never saved: no autosave, no Name &amp; Save, and a
+<code>saveas:</code> of that slot fails.</li>
+</ul>
+<h2 id="bus-rom">bus-rom</h2>
+<p>A list of ROM files on the 60-pin connector, for developing a ROM
+extension. A bus ROM shadows a built-in ROM at the same place.</p>
+<pre class="lcd"><code class="language-yaml">bus-rom:
+  - file: build/ext.bin
+    bank: 7          # PC-1600 system bus, page B, bank 4–7
+  - file: ext1500.bin
+    address: &amp;8000   # PC-1500 connector, or the PC-1600's LH5803 side
+    me: 1            # optional: ME1 (default ME0)
+    pv: 1            # optional: only while PV is 0 / 1
+    pu: 0            # optional: only while PU is 0 / 1
+</code></pre>
+<p>Each item has <code>file</code> and either <code>bank</code> (4–7, PC-1600 only) or <code>address</code>
+(&amp;0000–&amp;FFFF). <code>me</code>, <code>pv</code> and <code>pu</code> (0 or 1) go with <code>address</code> only. A
+<code>bus-rom:</code> given twice refuses the preset, as any header key.</p>
+<h2 id="debug">debug</h2>
+<p>What a debug session loads, builds and starts on the computer this preset
+sets up (<a href="/1600/help/07-debugger/debugger/">Debugger</a>). Loading the preset for use, not for
+debugging, does nothing with the block beyond reading it.</p>
+<pre class="lcd"><code class="language-yaml">debug:
+  program:
+    bin: build/memtest.bin
+    listing: build/memtest.rst
+    cpu: lh5801
+    address: &amp;7C01
+    after: stopOnEntry
+  symbols: [build/memtest.sym]
+</code></pre>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>program</code></td>
+<td>The program to load: <code>bin</code>, <code>listing</code>, <code>source</code> (if the main source isn't <code>&lt;listing&gt;.asm</code>), <code>symbols</code>, <code>cpu</code> (<code>lh5801</code>, <code>z80</code> or <code>lh5803</code>), <code>address</code>, <code>entry</code>, <code>after</code> (<code>stopOnEntry</code>, <code>call</code> or <code>none</code>; default <code>none</code>), <code>cleanStart</code> (default <code>true</code>), and the bank qualifiers <code>bank</code>, <code>me</code>, <code>pu</code>, <code>pv</code></td>
+</tr>
+<tr>
+<td><code>listings</code></td>
+<td>Listings of code that isn't loaded (ROM): a path, or <code>{ path, source, cpu, bank, me, pu, pv }</code></td>
+</tr>
+<tr>
+<td><code>symbols</code></td>
+<td>Symbol tables: a path, or <code>{ path, cpu, bank, me, pu, pv }</code></td>
+</tr>
+<tr>
+<td><code>command</code></td>
+<td>A BASIC line typed to start the code: in place of the program's <code>CALL</code>, or, without a program, once the computer is set up</td>
+</tr>
+<tr>
+<td><code>boot</code></td>
+<td><code>debug</code>: run the power-on under the debugger (the preset's hardware only; no <code>program</code> or <code>command</code>)</td>
+</tr>
+<tr>
+<td><code>reset</code></td>
+<td><code>none</code> (default), <code>reset</code> or <code>allReset</code>: a Reset or a Cold boot that stops at the reset vector; the start-up runs from there under the debugger</td>
+</tr>
+<tr>
+<td><code>stopOnEntry</code></td>
+<td>Stop right after the debugger attaches (after a reset: before the first instruction)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Numbers (<code>address</code>, <code>entry</code>, <code>bank</code>, <code>me</code>, <code>pu</code>, <code>pv</code>) follow the number
+rule (<code>&amp;</code>, <code>0x</code> or <code>$</code> for hex); an <code>entry</code> may also be a symbol.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/10-reference/reference/">← 10 · Calc-U-1600 reference</a><a class="btn dark" rel="next" href="/1600/help/10-reference/module-definition-format/">10 · Module definition format →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

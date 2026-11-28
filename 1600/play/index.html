@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calc-U-1600 online — a Sharp PC-1500 and PC-1600 in your browser</title>
+<meta name="description" content="Run a Sharp PC-1500, PC-1500A or PC-1600 in your browser: the Calc-U-1600 emulator in WebAssembly, with its modules, plotters and floppy drive. Nothing to install.">
+<link rel="canonical" href="https://calc-u.org/1600/play/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/play/">
+<meta property="og:title" content="Calc-U-1600 online — a Sharp PC-1500 and PC-1600 in your browser">
+<meta property="og:description" content="Run a Sharp PC-1500, PC-1500A or PC-1600 in your browser: the Calc-U-1600 emulator in WebAssembly, with its modules, plotters and floppy drive. Nothing to install.">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+<link rel="stylesheet" href="/1600/calc/calc.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/">Help</a>
+<a href="/1600/play/" class="on" aria-current="page">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+
+</div>
+</header>
+<main class="wrap" style="padding-top: 24px">
+<div id="calc" class="play-holder" style="height: min(calc(100vh - 140px), 980px); min-height: 520px"></div>
+<div class="play-below prose">
+<h1 class="title" style="font-size: clamp(28px, 6vw, 38px)">Calc-U-1600 online</h1>
+<p>Above is the Calc-U-1600 emulator, compiled to WebAssembly and running in your browser. <strong>Machine ▸ Model</strong> switches between the <strong>PC-1500</strong>, the <strong>PC-1500A</strong> and the <strong>PC-1600</strong>; the control bar below the faceplate plugs in the modules, the plotters and the floppy drive. <strong>File ▸ Examples</strong> opens the bundled programs, <strong>File ▸ Load Preset…</strong> your own. Files are read in your browser and never leave your machine.</p>
+<p>Your saved modules, disks and cassettes stay in your browser from one visit to the next (<strong>File ▸ Saved Media…</strong>). What the browser version has and has not, compared with the desktop program, is in <a href="/1600/help/02-getting-started/getting-started/#the-browser-version">The browser version</a>.</p>
+<p>Prefer it without the page around it? <a href="/1600/calc/app/">Open the standalone app</a>: the same emulator alone, installable as an app that runs offline. For the desktop program, see <a href="/1600/#download">the downloads</a>.</p>
+</div>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">calc-u.org/1600/play</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/calc/vendor/react.production.min.js"></script>
+<script src="/1600/calc/vendor/react-dom.production.min.js"></script>
+<script src="/1600/calc/calc.js"></script>
+<script src="/1600/play/play.js"></script>
+</body>
+</html>

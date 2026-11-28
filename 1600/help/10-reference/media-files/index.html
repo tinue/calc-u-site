@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media files — Calc-U-1600 help</title>
+<meta name="description" content="Calc-U-1600 has three kinds of media: the battery-backed module, the floppy disk and the cassette. Each is a file you can keep, copy, import and export. How…">
+<link rel="canonical" href="https://calc-u.org/1600/help/10-reference/media-files/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/10-reference/media-files/">
+<meta property="og:title" content="Media files — Calc-U-1600 help">
+<meta property="og:description" content="Calc-U-1600 has three kinds of media: the battery-backed module, the floppy disk and the cassette. Each is a file you can keep, copy, import and export. How…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/10-reference/"><span class="k org">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/1600/help/10-reference/">Reference</a></li><li><a href="/1600/help/10-reference/reference/">Calc-U-1600 reference</a></li><li><a href="/1600/help/10-reference/preset-sections/">Preset sections of Calc-U-1600</a></li><li><a href="/1600/help/10-reference/module-definition-format/">Module definition format</a></li><li><a href="/1600/help/10-reference/media-files/" aria-current="page">Media files</a></li><li><a href="/1600/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/10-reference/">10 Reference</a> <span aria-hidden="true">›</span> Media files</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="media-files">Media files</h1>
+<p>Calc-U-1600 has three kinds of media: the battery-backed module, the
+floppy disk and the cassette. Each is a file you can keep, copy,
+import and export. How media are used (templates and instances, Name &amp;
+Save, inserting and ejecting) is in the <a href="/1600/help/04-media/">shared Media chapter</a>
+and in <a href="/1600/help/04-media/media/">Media</a>; this page gives the files themselves.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Medium</th>
+<th>File</th>
+<th>Version</th>
+<th>Its place</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Battery-backed module</td>
+<td><code>.module.yaml</code></td>
+<td>1</td>
+<td>a module slot</td>
+</tr>
+<tr>
+<td>Floppy disk</td>
+<td><code>.floppy.yaml</code></td>
+<td>2</td>
+<td>the CE-1600F drive of the CE-1600P (PC-1600)</td>
+</tr>
+<tr>
+<td>Cassette</td>
+<td><code>.cassette.yaml</code> with a <code>.wav</code></td>
+<td>1</td>
+<td>the cassette recorder of a CE-150 (PC-1500, PC-1500A) or CE-1600P</td>
+</tr>
+</tbody>
+</table></div>
+<p>Common to all three:</p>
+<ul>
+<li>A file with <code>template: true</code> is a <strong>template</strong>: the product never
+writes it. The bundled media are templates. A file without that key is
+an <strong>instance</strong>, saved in place after each change.</li>
+<li>Name &amp; Save copies a template (or an instance) into a new instance
+under the name you give. A preset's <code>saveas:</code> step can save a copy as
+a template instead (<a href="/1600/help/06-presets/presets/">Presets</a>).</li>
+<li>Instances lie in the save folder; cassettes lie in the cassette folder,
+<code>Cassettes</code> in the save folder unless the settings name another one
+(<a href="/1600/help/08-settings/settings/">Settings</a>).</li>
+<li>A name with a character a file name cannot hold (<code>/</code>, <code>:</code>) is refused.</li>
+</ul>
+<h2 id="battery-backed-module">Battery-backed module</h2>
+<p>A battery-backed module is a module definition with <code>battery: true</code>
+(<a href="/1600/help/10-reference/module-definition-format/">Module definition format</a>). Its saved
+instance is the same kind of file, a <code>.module.yaml</code>, written from the
+template it came from:</p>
+<ul>
+<li>everything but the content, the name and the template mark is kept as
+the template has it: the addressing, the hosts, the description, the
+insert notice;</li>
+<li><code>module-name:</code> is the name you gave in Name &amp; Save;</li>
+<li>the region's <code>initial-content:</code> holds what the module's memory held,
+as <code>addressed-hex</code>;</li>
+<li>there is no <code>template:</code> line (unless a preset's <code>saveas:</code> saved it as
+a template);</li>
+<li>for a module with a write-protect switch (the CE-161), <code>write-protect:</code>
+holds the switch's position;</li>
+<li>it has <code>format: memory-module</code> and <code>saved:</code>, the time of
+the last write;</li>
+<li>a comment at the top (<code># Calc-U-1600 memory module instance -- generated from &quot;…&quot;.</code> and <code># created: …</code>) says from which module the instance was
+made and when.</li>
+</ul>
+<p>A preset plugs a saved instance in by its name, <code>slot-1: { name: … }</code>,
+like a bundled module: the bundled modules are searched first, then the
+save folder.</p>
+<h2 id="floppy-disk">Floppy disk</h2>
+<p>A disk for the PC-1600's CE-1600F drive, with two sides, 0 and 1, used
+one at a time. The file holds the raw bytes of both sides and nothing
+else: the files on a side are kept in the disk's own file system, which
+the CE-1600P's ROM reads and writes as on real hardware.</p>
+<pre class="lcd"><code class="language-yaml"># Calc-U-1600 CE-1600F floppy disk image
+format: ce1600f-floppy
+format-version: 2
+disk-name: &quot;Formatted&quot;
+description: &quot;Formatted, both sides empty&quot;
+template: true
+saved: 2026-09-19T10:17:46Z
+sides:
+  0:
+    encoding: addressed-hex
+    bytes: |
+      $0000: 00...
+      $0200: F2 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+      $0210: 00...
+      $0400: F2 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+      $0410: 00...
+  1:
+    encoding: addressed-hex
+    bytes: |
+      $0000: 00...
+</code></pre>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>yes</td>
+<td><code>ce1600f-floppy</code></td>
+</tr>
+<tr>
+<td><code>format-version</code></td>
+<td>yes</td>
+<td><code>2</code> (version 1, of Calc-U-1600 0.8, named the sides <code>a</code> and <code>b</code>)</td>
+</tr>
+<tr>
+<td><code>disk-name</code></td>
+<td>yes</td>
+<td>The name tag, shown in the disk picker; not empty, without <code>&quot;</code> or a line break</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>no</td>
+<td>One line, the picker's tooltip. Name &amp; Save and every later write keep it</td>
+</tr>
+<tr>
+<td><code>insert-notice</code></td>
+<td>no</td>
+<td>One line shown when you put the template in (<a href="/1600/help/04-media/#templates-and-instances">Media</a>). Name &amp; Save and every later write keep it</td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td>no</td>
+<td><code>true</code>: a template, never written</td>
+</tr>
+<tr>
+<td><code>saved</code></td>
+<td>no</td>
+<td>The time of the last write (UTC, ISO 8601); for information</td>
+</tr>
+<tr>
+<td><code>sides</code></td>
+<td>yes</td>
+<td>Exactly the keys <code>0</code> and <code>1</code></td>
+</tr>
+<tr>
+<td><code>sides.0</code>, <code>sides.1</code></td>
+<td>yes</td>
+<td>Exactly <code>encoding: addressed-hex</code> and <code>bytes</code></td>
+</tr>
+<tr>
+<td><code>…bytes</code></td>
+<td>yes</td>
+<td>The side's 65536 bytes, every byte covered</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>A side.</strong> Each side is 65536 bytes: 16 tracks of 8 sectors of 512
+bytes. The drive reads one side, and you turn the disk to use the other,
+so each side is a volume of its own. A byte's offset in a side is the
+logical sector × 512, where the logical sector is track × 8 + sector,
+sectors counted from 0. The boot sector is at <code>$0000</code>, the FAT at
+<code>$0200</code>, its copy at <code>$0400</code>, the directory at <code>$0600</code> to <code>$0BFF</code>, and
+the first data cluster at <code>$0C00</code>.</p>
+<p><strong><code>addressed-hex</code>.</strong> Each line is either <code>$XXXX:</code> followed by up to 16
+bytes in hex, placed from that offset on, or <code>$XXXX: XX...</code> alone, which
+repeats the byte <code>XX</code> from that offset up to the next line's offset (or
+to the end of the side). The lines cover the side without gap or
+overlap.</p>
+<p><strong>Writing.</strong> The product rewrites the whole file after the machine wrote
+to the disk, with <code>saved</code> set to the time of the write. While a disk is
+in the drive, a change another program makes to its file can be lost:
+eject the disk before you edit its file.</p>
+<p>The bundled templates are <strong>Blank</strong> (unformatted: <code>INIT</code> it before use)
+and <strong>Formatted</strong> (both sides formatted and empty).</p>
+<h2 id="cassette-definition">Cassette definition</h2>
+<p>A cassette for the cassette recorder of a CE-150 (PC-1500, PC-1500A) or a
+CE-1600P. Its tape
+is sound, in a <code>.wav</code> file; the cassette definition gives it a name and
+a description, like any other medium, and names the sound file.</p>
+<pre class="lcd"><code class="language-yaml"># Calc-U-1600 cassette
+format: cassette
+format-version: 1
+cassette-name: &quot;Games&quot;
+description: &quot;Three games saved with CSAVE&quot;
+saved: 2026-11-17T10:00:00Z
+audio: { file: games.wav }
+position: 0
+</code></pre>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>yes</td>
+<td><code>cassette</code></td>
+</tr>
+<tr>
+<td><code>format-version</code></td>
+<td>yes</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>cassette-name</code></td>
+<td>yes</td>
+<td>The name tag, shown in the cassette picker; without <code>&quot;</code> or a line break</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>no</td>
+<td>One line about the cassette</td>
+</tr>
+<tr>
+<td><code>insert-notice</code></td>
+<td>no</td>
+<td>One line shown when you put the template in (<a href="/1600/help/04-media/#templates-and-instances">Media</a>)</td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td>no</td>
+<td><code>true</code>: a template; its sound file is never written either</td>
+</tr>
+<tr>
+<td><code>saved</code></td>
+<td>no</td>
+<td>The time of the last write (UTC, ISO 8601); for information</td>
+</tr>
+<tr>
+<td><code>audio</code></td>
+<td>yes</td>
+<td>The sound file, by <code>file:</code> only, relative to the cassette definition</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td>no</td>
+<td>Reserved for later use; must be <code>0</code>, the default</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Recording onto an instance writes into its sound file, as a mono
+16-bit WAV at 48000 Hz, each time the motor stops and when the cassette
+is ejected. A write that fails is shown as a notice.</li>
+<li>Name &amp; Save copies the definition and its sound file into the cassette
+folder, side by side; the definition gets <code>saved</code> and the comment line.</li>
+<li>To use a WAV you already have as a cassette, write a cassette
+definition next to it that names it; the definition may name it by any
+relative path.</li>
+<li>Several recordings on one cassette are part of the sound, not of the
+definition.</li>
+<li>A <code>.wav</code> on its own is not a cassette but a program file: opened or
+dropped, it is loaded as a program (<a href="/1600/help/09-product-topics/basic-programs/">BASIC programs</a>).</li>
+</ul>
+<p>The bundled template is <strong>Blank</strong>, a blank cassette.</p>
+<h2 id="from-08">From 0.8</h2>
+<p>Calc-U-1600 reads none of the files 0.8 wrote; they stay where they are,
+and you convert them by hand:</p>
+<ul>
+<li>a preset of version 1: as the
+<a href="https://github.com/tinue/Calc-U/blob/main/docs/formats/preset.md#92-calc-u-1600-preset-version-1">preset format, §9.2</a>
+lists;</li>
+<li>a floppy disk (version 1): set <code>format-version: 2</code> and rename the
+sides <code>a:</code> and <code>b:</code> to <code>0:</code> and <code>1:</code>;</li>
+<li>a module definition (<code>.card.yaml</code>): rename it to <code>.module.yaml</code>;
+<code>format: memory-module</code> may be added;</li>
+<li>a cassette (<code>.tape.yaml</code>, <code>format: cassette-tape</code>, <code>tape-name:</code>):
+rename it to <code>.cassette.yaml</code> and change those two keys to
+<code>format: cassette</code> and <code>cassette-name:</code>.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/10-reference/module-definition-format/">← 10 · Module definition format</a><a class="btn dark" rel="next" href="/1600/help/10-reference/keyboard-map/">10 · Keyboard map →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

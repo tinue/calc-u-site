@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BASIC programs and the cassette — Calc-U-1600 help</title>
+<meta name="description" content="File ▸ Load BASIC Program… opens a plain-text BASIC listing (.bas), an already tokenized program (.bbin, as Sharp-Data-Exchange's sde convert writes it, with…">
+<link rel="canonical" href="https://calc-u.org/1600/help/09-product-topics/basic-programs/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/09-product-topics/basic-programs/">
+<meta property="og:title" content="BASIC programs and the cassette — Calc-U-1600 help">
+<meta property="og:description" content="File ▸ Load BASIC Program… opens a plain-text BASIC listing (.bas), an already tokenized program (.bbin, as Sharp-Data-Exchange's sde convert writes it, with…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k org">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/1600/help/09-product-topics/">Product topics</a></li><li><a href="/1600/help/09-product-topics/models/">What differs by model</a></li><li><a href="/1600/help/09-product-topics/basic-programs/" aria-current="page">BASIC programs and the cassette</a></li><li><a href="/1600/help/09-product-topics/machine-code/">Machine-code programs</a></li><li><a href="/1600/help/09-product-topics/com-ports/">COM ports</a></li><li><a href="/1600/help/09-product-topics/host-drive/">A folder as a drive (PC-1600)</a></li><li><a href="/1600/help/09-product-topics/keyword-modules/">PC-1500 keyword modules</a></li><li><a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> BASIC programs and the cassette</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="basic-programs-and-the-cassette">BASIC programs and the cassette</h1>
+<h2 id="loading-a-basic-program">Loading a BASIC program</h2>
+<p><strong>File ▸ Load BASIC Program…</strong> opens a plain-text BASIC listing (<code>.bas</code>), an
+already tokenized program (<code>.bbin</code>, as Sharp-Data-Exchange's <code>sde convert</code>
+writes it, with a CE-158 or PC-1600 header), or a cassette WAV
+(<a href="#fast-loading-a-cassette-wav">below</a>), converts a listing to BASIC's
+internal form, and writes the program straight into the program memory. It
+behaves like the real <code>LOAD</code>: it doesn't reset the machine, change the mode,
+or run <code>NEW</code> for you. So prepare the machine the same way you would for
+<code>LOAD</code>:</p>
+<pre class="mermaid">flowchart TD
+    A{&quot;Model?&quot;} --&gt;|PC-1600| B[&quot;MODE (to PRO)&lt;br/&gt;then type NEW0&quot;]
+    A --&gt;|PC-1500 / 1500A| C[&quot;CL&lt;br/&gt;then type NEW0&quot;]
+    B --&gt; D[&quot;File ▸ Load BASIC Program…&quot;]
+    C --&gt; D
+    D --&gt; E[&quot;LIST to check it (PRO mode)&quot;]
+    E --&gt; F[&quot;MODE (to RUN), then RUN&quot;]
+</pre>
+<p>Right after loading, <code>LIST</code> in PRO mode shows the program:</p>
+<p><img src="/1600/help/images/04-hanoi-listed.png" alt="The Towers of Hanoi program, listed after loading" width="1456" height="344" loading="lazy" decoding="async"></p>
+<p>and <code>RUN</code> starts it:</p>
+<p><img src="/1600/help/images/04-hanoi-running.png" alt="The same program running" width="1456" height="344" loading="lazy" decoding="async"></p>
+<p>Good to know:</p>
+<ul>
+<li><strong>Where the program goes.</strong> It goes to the same place a <code>LOAD</code> would put
+it: on a PC-1600, into the program area <code>TITLE</code> selects. That is S0
+(internal RAM, plus a RAM module folded into it), or a program module
+after <code>INIT&quot;S1:&quot;,&quot;P&quot;</code> and <code>TITLE&quot;S1:&quot;</code>. Across a module's 16 KB banks
+lines are never split, just as the calculator itself stores them.</li>
+<li><strong>MODE decides how the listing is read (PC-1600).</strong> In MODE 0 it is
+PC-1600 BASIC; in MODE 1 it is PC-1500 BASIC, so a PC-1500 listing's
+<code>CALL</code> becomes the PC-1500 <code>CALL</code> (which the PC-1600 lists as <code>XCALL</code>),
+exactly as if the program had been saved on a PC-1500 and loaded with
+<code>CLOAD</code>. A listing the PC-1500 can't hold (for example one with <code>ä</code>) is
+refused in MODE 1. PC-1600-only keywords stay plain text in MODE 1 and
+fail when the program runs.</li>
+<li><strong>Tokenized files carry their machine.</strong> A PC-1600 <code>.bbin</code> loads in both
+MODEs, as with the calculator's own <code>LOAD</code>. A PC-1500 one (CE-158 header)
+loads on a PC-1500 or PC-1500A, and on a PC-1600 in MODE 1 only.</li>
+<li><strong>Any way in.</strong> Machine code is refused here with a pointer to
+<a href="/1600/help/09-product-topics/machine-code/">Load Machine Code…</a>, and a BASIC program is refused
+there. Dropping the file onto the window, or choosing it in
+<strong>File ▸ Load Preset…</strong>, opens it as what it is and picks the right loader
+for you (<a href="/1600/help/04-media/">Media</a>).</li>
+<li><strong>Nothing is switched for you.</strong> Calc-U-1600 never changes MODE or <code>TITLE</code>;
+set them first, as on the real calculator.</li>
+<li><strong>Single lines.</strong> <strong>Edit ▸ Paste Text</strong> types the clipboard's text through
+the keyboard (<a href="/1600/help/02-getting-started/">Getting started</a>).
+That's handy for a long command or one program line, but not for a whole
+program.</li>
+<li><strong>In a preset,</strong> <code>program:</code> loads a BASIC program or types it line by
+line (<a href="/1600/help/10-reference/preset-sections/">Preset sections</a>).</li>
+<li><strong>No export.</strong> Calc-U-1600 doesn't export programs as files. Use the machine's
+own <code>SAVE</code> to a memory module or a floppy disk. To get a program onto your
+computer, <code>CSAVE</code> it to a <a href="#the-cassette-cload-and-csave">cassette</a>, <code>SAVE</code> it
+to a <a href="/1600/help/09-product-topics/host-drive/">folder mounted as a drive</a> (PC-1600) or over
+<code>COM1:</code> (<a href="/1600/help/09-product-topics/com-ports/">COM ports</a>).</li>
+</ul>
+<h3 id="fast-loading-a-cassette-wav">Fast-loading a cassette WAV</h3>
+<p><strong>File ▸ Load BASIC Program…</strong>, <strong>File ▸ Load Machine Code…</strong> and a drop also
+open a cassette WAV of a PC-1500 or PC-1500A (CE-150) or PC-1600 (CE-1600P,
+MODE 0): a real recording or one Calc-U-1600 saved. The tape is decoded at
+once (by libsharpdx, the same code as <code>sde get tape.wav</code>) and the file on it
+is written straight into memory, like a <code>.bbin</code> or <code>.bin</code>: no <code>CLOAD</code>, no
+waiting for the tape. If the tape holds several files, a list asks which
+one; a machine-code file goes to the machine-code flow. Recordings may be
+quiet, noisy, a little fast or slow, or at any sample rate; a file is only
+loaded when all of its checksums match, otherwise the message says what is
+damaged and where on the tape.</p>
+<p>This is not the cassette below: that plays the tape to the emulated
+interface in real time, and the ROM's <code>CLOAD</code> reads it.</p>
+<h2 id="the-cassette-cload-and-csave">The cassette: CLOAD and CSAVE</h2>
+<p>The CE-150 and the CE-1600P (PC-1600) have the jacks of a cassette
+recorder. On a PC-1600 the CE-150's cassette works in MODE 1, with
+PC-1500 tapes; in MODE 0 the PC-1600 refuses <code>CLOAD</code> and <code>CSAVE</code> through
+it (ERROR 110), as the real one does. A cassette is a medium (<a href="/1600/help/04-media/media/">Media</a>): a
+<strong>cassette definition</strong> (<code>&lt;name&gt;.cassette.yaml</code>: its name, a description,
+and the sound file it uses) with the sound of its tape, a WAV file beside
+it, in the cassette folder (<strong>File ▸ Settings… ▸ Storage ▸ Cassettes</strong>,
+<code>Cassettes</code> in the save folder by default). The cassette controls sit on
+the control bar whenever one of them is plugged in. The
+recorder starts empty, and detaching its interface takes the cassette
+out. You put a cassette in, then type the command as on the real
+machine:</p>
+<ul>
+<li><strong>To load,</strong> pick a cassette from the <strong>Cassette</strong> list. It goes in rewound.
+Type <code>CLOAD</code>, <code>CLOAD &quot;name&quot;</code>, <code>CLOAD M</code> or <code>CLOAD?</code>. A second <code>CLOAD</code>
+reads on from where the first one stopped, as on a real tape.</li>
+<li><strong>To save,</strong> pick <strong>Blank</strong> from the <strong>Cassette</strong> list and type
+<code>CSAVE &quot;name&quot;</code> (or <code>CSAVE M</code>). Another <code>CSAVE</code> goes after it on the same
+tape. The blank cassette is a template: what you record stays in the
+recorder until you keep it with <strong>Name &amp; Save</strong>, the save button next
+to the list (or take the cassette out). If a cassette of that name
+exists, you're asked before it is replaced.</li>
+<li><strong>(empty)</strong> is no cassette: a <code>CSAVE</code> then records nothing.</li>
+</ul>
+<p><img src="/1600/help/images/04-tape-save.png" alt="Naming a new cassette" width="400" height="226" loading="lazy" decoding="async"></p>
+<p>A cassette keeps its role: one you saved plays, the blank one records. To play back what you recorded, pick it from the list; that
+also takes the recording cassette out. &quot;(empty)&quot; takes a cassette out. The counter shows
+▶ and the tape position while playing, ● and the length recorded while
+recording, and a dimmed 0:00 without a cassette. It turns green while the
+motor runs:</p>
+<p><img src="/1600/help/images/04-tape-recording.png" alt="CSAVE running onto a new cassette" width="3504" height="108" loading="lazy" decoding="async"></p>
+<p><img src="/1600/help/images/04-tape-loading.png" alt="CLOAD running from the same cassette, picked from the list" width="3504" height="108" loading="lazy" decoding="async"></p>
+<p><img src="/1600/help/images/04-tape-loaded.png" alt="The program loaded from the tape" width="1798" height="424" loading="lazy" decoding="async"></p>
+<p>Good to know:</p>
+<ul>
+<li><strong>The calculator runs the motor.</strong> As with a real CE-152 on the remote
+jack, the tape moves only while the calculator's remote relay is on: from
+the moment it starts <code>CLOAD</code> or <code>CSAVE</code> until it's done. A cassette put in
+early simply waits.</li>
+<li><strong>Real time or faster.</strong> The tape runs in the calculator's own time, so
+you hear <code>CSAVE</code> (and see the counter) at the real speed. Pressing and
+holding the LCD runs everything faster as usual, sound off; the WAV comes
+out the same.</li>
+<li><strong>Interchangeable WAVs.</strong> The sound files are standard 48 kHz, 16-bit
+WAVs. Calc-U-1600 plays any PCM WAV, 8 to 32 bits, mono or stereo: recordings
+of a real calculator, or files made with Pocket Tools' <code>bin2wav</code> and read
+with its <code>wav2bin</code>. A WAV on its own is not a cassette: write a small
+cassette definition next to it (<a href="/1600/help/10-reference/media-files/">Media files</a>), and it is
+listed. Opened or dropped on its own, a WAV is loaded as a program, as
+above.</li>
+<li><strong>The buzzer sounds the tape</strong> while saving and loading, as on the real
+machines.</li>
+<li><strong>Leave a long lead-in.</strong> After switching on the motor the calculator
+waits about half a second for the recorder, then needs a few seconds of
+lead-in tone. A tape made with <code>bin2wav</code> therefore needs <code>-s 3</code> (a 3 s
+lead-in) or <code>-l 0x400</code> (gap and lead-in as long as the calculator's own);
+its default (0.5 s on the PC-1500, 2.1 s on the PC-1600) is too short.
+The calculator's own <code>CSAVE</code> writes a long lead-in.</li>
+<li><strong>Formats.</strong> The PC-1500 reads and writes PC-1500 tapes. The PC-1600 in
+MODE 0 reads and writes PC-1600 tapes. Not yet supported: the PC-1600
+reading PC-1500 tapes in MODE 1 (<code>CLOAD</code> through the CE-1600P).</li>
+<li><strong>In a preset</strong> the step <code>cassette:</code> puts a cassette in and <code>eject: cassette</code> takes it
+out (<a href="/1600/help/06-presets/presets/">Presets</a>).</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/models/">← 9 · What differs by model</a><a class="btn dark" rel="next" href="/1600/help/09-product-topics/machine-code/">9 · Machine-code programs →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Calc-U-1600 help</title>
+<meta name="description" content="Settings are your preferences for a product: the model it starts with, the startup preset of each model, the folders it uses. They never say which modules…">
+<link rel="canonical" href="https://calc-u.org/1600/help/08-settings/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/08-settings/">
+<meta property="og:title" content="Settings — Calc-U-1600 help">
+<meta property="og:description" content="Settings are your preferences for a product: the model it starts with, the startup preset of each model, the folders it uses. They never say which modules…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/08-settings/" aria-current="page"><span class="k org">8</span><span>Settings</span></a><ul class="help-parts"><li><a href="/1600/help/08-settings/" aria-current="page">Settings</a></li><li><a href="/1600/help/08-settings/settings/">Settings of Calc-U-1600</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> 8 Settings</p>
+<p class="eyebrow">Chapter 8 · Settings</p>
+<h1 id="settings">Settings</h1>
+<p>Settings are your preferences for a product: the model it starts with,
+the startup preset of each model, the folders it uses. They never say
+which modules, peripherals or media a machine has; a preset does that
+(<a href="/1600/help/06-presets/">Presets</a>).</p>
+<h2 id="the-settings-dialog">The Settings dialog</h2>
+<p><strong>File ▸ Settings…</strong> opens the dialog (More ▸ Settings… on every bar, the only way on mobile; on macOS it is in the
+application menu). A change applies at once and is kept; where the
+settings file cannot be written, a notice says so and the change holds
+until you quit. The only
+button is Close (Done on iOS). The dialog can be used while an operation runs. Its
+sections, each shown when the frontend has one of its settings:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Section</th>
+<th>Settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>General</td>
+<td>Startup model: &quot;Last used&quot; or one of the product's models</td>
+</tr>
+<tr>
+<td>Startup presets</td>
+<td>one row per model: &quot;None&quot;, the bundled startup presets for that model, or a file chosen with &quot;Choose…&quot; (checked before it is set)</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>the save folder, and the product's further folders</td>
+</tr>
+<tr>
+<td>Folders</td>
+<td>the folder in which each file dialog starts</td>
+</tr>
+<tr>
+<td>Tracing</td>
+<td>the trace folder and the largest trace file, in MB</td>
+</tr>
+<tr>
+<td>the product's sections</td>
+<td>the product's own settings (<a href="/1600/help/08-settings/settings/">Settings of this product</a>)</td>
+</tr>
+<tr>
+<td>App log</td>
+<td>how much the app log keeps (<a href="#the-app-log">The app log</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A folder's row shows the folder in use, with <code>~</code> for your home folder, a
+&quot;Change…&quot; button, and &quot;Reset&quot;, which puts the setting back to its
+default.</p>
+<h2 id="the-settings-file">The settings file</h2>
+<p>All settings are kept in one text file, <code>&lt;Product&gt;.ini</code>, named after the
+product as it is written. It is written when the product first starts,
+with every key at its default (a model's startup preset at the bundled
+one, where the product names it) and a comment line above each key, and
+again whenever a setting changes. It is read when the product starts,
+and not again while it runs: to edit it by hand, quit the product
+first.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Platform</th>
+<th>Where the settings file lies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS, iOS</td>
+<td>the product's Application Support folder (<code>~/Library/Application Support/&lt;Product&gt;/</code>, or inside the app's container when it is sandboxed)</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>%APPDATA%\&lt;Product&gt;\</code></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><code>$XDG_CONFIG_HOME/&lt;Product&gt;/</code>, or <code>~/.config/&lt;Product&gt;/</code> when that variable is not set</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>the browser's storage for the page</td>
+</tr>
+</tbody>
+</table></div>
+<p>No other place is searched. The rules of the file are in the
+<a href="/1600/help/10-reference/#the-settings-file">reference</a>.</p>
+<ul>
+<li>A key that is missing has its default.</li>
+<li>A value its key does not accept counts as missing, so the setting has
+its default; the value stays in the file until you change the setting.</li>
+<li>Keys and sections the product does not know, comments, blank lines
+and the order of the file are kept when the product writes it.</li>
+<li>A file that cannot be read is left untouched; the product starts with
+the defaults and says so in its app log.</li>
+<li>A file without its <code>format-version</code> line is not read; the product
+starts with the defaults and says so.</li>
+<li>When two copies of the product run, the last one to write wins.</li>
+</ul>
+<h2 id="the-familys-keys">The family's keys</h2>
+<p>These are the family's keys, with their meanings and defaults; the
+product's part of this chapter lists which of them the product has. A key a frontend has no use for is kept in the file and
+ignored. Keys marked &quot;written by the product&quot; are kept up to date by the
+product itself.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[startup] model</code></td>
+<td><code>last</code></td>
+<td>The startup model: <code>last</code> (the model used last) or a model's name. A value that is neither counts as <code>last</code></td>
+</tr>
+<tr>
+<td><code>[startup] last-model</code></td>
+<td>empty</td>
+<td>The model used last; written by the product. A model built by a preset counts too. If it names no model of the product, the product's fallback model starts</td>
+</tr>
+<tr>
+<td><code>[preset] &lt;model&gt;</code></td>
+<td>empty; at the first start the model's bundled startup preset, where the product has one</td>
+<td>One key per model, named after the model: the startup preset of that model, a path or a bundled preset. Empty: none, so the model is built as the product's built-in default machine</td>
+</tr>
+<tr>
+<td><code>[storage] save-folder</code></td>
+<td>empty</td>
+<td>The save folder, where instances, screenshots, traces and serial links go. Empty: a folder named after the product in your home folder (desktop frontends)</td>
+</tr>
+<tr>
+<td><code>[storage] cassette-folder</code></td>
+<td>empty</td>
+<td>The folder for cassettes. Empty: <code>Cassettes</code> in the save folder</td>
+</tr>
+<tr>
+<td><code>[trace] folder</code></td>
+<td>empty</td>
+<td>The folder for traces. Empty: the save folder</td>
+</tr>
+<tr>
+<td><code>[trace] max-file-size-mb</code></td>
+<td><code>50</code></td>
+<td>The largest trace file, in MB (MiB: 1 MB is 1 048 576 bytes); zero or less counts as 50; read when a trace starts (<a href="/1600/help/07-debugger/#traces">Debugger</a>)</td>
+</tr>
+<tr>
+<td><code>[trace] location</code></td>
+<td><code>app-support</code></td>
+<td>Where traces go in the frontends that offer the choice: <code>app-support</code> or <code>icloud</code></td>
+</tr>
+<tr>
+<td><code>[app-log] level</code></td>
+<td><code>default</code></td>
+<td>How much the app log keeps: <code>default</code> (<code>warn</code>; <code>info</code> in a development build), <code>error</code>, <code>warn</code>, <code>info</code> or <code>debug</code>; applied at once (<a href="#the-app-log">The app log</a>)</td>
+</tr>
+<tr>
+<td><code>[serial] link-folder</code></td>
+<td>empty</td>
+<td>The folder for the files of serial links. Empty: the save folder</td>
+</tr>
+<tr>
+<td><code>[folders] &lt;kind&gt;</code></td>
+<td>empty</td>
+<td>One key per kind of file the product opens: the folder its file dialog starts in. Written by the product: the folder last used, or <code>fixed:&lt;folder&gt;</code> for a folder set in the Settings dialog, which later picks do not change</td>
+</tr>
+<tr>
+<td><code>[window] &lt;key&gt;</code></td>
+<td>the product's</td>
+<td>The place and size of the main window and the split between its panels, as plain numbers; written by the product</td>
+</tr>
+<tr>
+<td><code>[window] paper-own-window</code></td>
+<td><code>false</code></td>
+<td>The paper in a window of its own, <code>true</code> or <code>false</code>; written by the product (<a href="/1600/help/05-peripherals-and-paper/#the-paper-in-its-own-window">The paper in its own window</a>)</td>
+</tr>
+<tr>
+<td><code>[window] paper-x</code>, <code>[window] paper-y</code>, <code>[window] paper-width</code>, <code>[window] paper-height</code></td>
+<td>empty, empty, <code>400</code>, <code>640</code></td>
+<td>That window's left and top edge and its size, as plain numbers; written by the product</td>
+</tr>
+</tbody>
+</table></div>
+<p>Which models stand for <code>&lt;model&gt;</code>, which kinds for <code>&lt;kind&gt;</code> and which
+names for <code>&lt;key&gt;</code>, and the product's own keys, are in the product's
+part: <a href="/1600/help/08-settings/settings/">Settings of this product</a>.</p>
+<h2 id="the-app-log">The app log</h2>
+<p>The app log tells how the product ran: when it started, what went wrong
+and why, and, at the levels below, what it did for you. It is not the
+log of the debugger, which tells what the calculator ran. Each line has
+the date and time and one of the levels:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Level</th>
+<th>What it keeps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td>the product, or the machine's session, ended or could not start, with everything needed to find out why</td>
+</tr>
+<tr>
+<td><code>warn</code></td>
+<td>something failed and the product went on: a copy to the clipboard, a file that could not be written, a setting that could not be saved, each with its cause</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td>also what the product did for you: started, saved, imported, opened</td>
+</tr>
+<tr>
+<td><code>debug</code></td>
+<td>also the product's own detail</td>
+</tr>
+</tbody>
+</table></div>
+<p>A level keeps its lines and those above it in the table. The setting
+<code>[app-log] level</code> (the Settings dialog's &quot;App log level&quot;) chooses it;
+<code>default</code> is <code>warn</code>. On a desktop frontend, <code>--app-log-level &lt;level&gt;</code> on
+the command line sets the level for one run; on the Web,
+<code>?app-log-level=&lt;level&gt;</code> at the end of the page's address does.</p>
+<p><strong>Help ▸ Show App Log</strong> shows it (also in More):</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Platform</th>
+<th>Where the app log lies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS</td>
+<td><code>~/Library/Logs/&lt;Product&gt;/&lt;Product&gt;.log</code>; Show App Log opens it in Console</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>%LOCALAPPDATA%\&lt;Product&gt;\&lt;Product&gt;.log</code></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><code>$XDG_STATE_HOME/&lt;Product&gt;/&lt;Product&gt;.log</code>, or <code>~/.local/state/&lt;Product&gt;/&lt;Product&gt;.log</code></td>
+</tr>
+<tr>
+<td>iOS</td>
+<td>inside the app; Show App Log offers it to share</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>the browser's console; Show App Log downloads the last 2000 lines as <code>&lt;Product&gt;.log</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A file over 1 MiB is kept as <code>&lt;Product&gt;.1.log</code> when the product starts,
+and a new one begun. When you report a problem, add the app log.</p>
+<h2 id="folders">Folders</h2>
+<ul>
+<li>A folder that does not exist yet is created when something is first
+written there.</li>
+<li>A save folder that cannot be created or written is reported, and
+nothing is written to another folder instead.</li>
+<li>A path is absolute; a leading <code>~</code> stands for your home folder.</li>
+<li>In a frontend that keeps files in iCloud, the save folder is its
+iCloud Documents folder, or its local Documents folder when iCloud is
+not available; media are not moved between the two.</li>
+<li>In a Web frontend the save folder lies in the browser's storage for
+the page; screenshots and traces are offered as downloads instead.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/07-debugger/debugger/">← 7 · Debugger on the PC-1500 and PC-1600</a><a class="btn dark" rel="next" href="/1600/help/08-settings/settings/">8 · Settings of Calc-U-1600 →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

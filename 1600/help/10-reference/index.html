@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — Calc-U-1600 help</title>
+<meta name="description" content="The rules every product of the family shares: the preset format, the settings file, and the terms this help uses. The product's sections, keys, file formats…">
+<link rel="canonical" href="https://calc-u.org/1600/help/10-reference/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/10-reference/">
+<meta property="og:title" content="Reference — Calc-U-1600 help">
+<meta property="og:description" content="The rules every product of the family shares: the preset format, the settings file, and the terms this help uses. The product's sections, keys, file formats…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/10-reference/" aria-current="page"><span class="k org">10</span><span>Reference</span></a><ul class="help-parts"><li><a href="/1600/help/10-reference/" aria-current="page">Reference</a></li><li><a href="/1600/help/10-reference/reference/">Calc-U-1600 reference</a></li><li><a href="/1600/help/10-reference/preset-sections/">Preset sections of Calc-U-1600</a></li><li><a href="/1600/help/10-reference/module-definition-format/">Module definition format</a></li><li><a href="/1600/help/10-reference/media-files/">Media files</a></li><li><a href="/1600/help/10-reference/keyboard-map/">Keyboard map</a></li></ul></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> 10 Reference</p>
+<p class="eyebrow">Chapter 10 · Reference</p>
+<h1 id="reference">Reference</h1>
+<p>The rules every product of the family shares: the preset format, the
+settings file, and the terms this help uses. The product's sections,
+keys, file formats and keyboard map are in its part:
+<a href="/1600/help/10-reference/reference/">Reference of this product</a>.</p>
+<h2 id="the-preset-format">The preset format</h2>
+<p>A preset is written in <strong>preset format version 2</strong>. How presets are
+used is in <a href="/1600/help/06-presets/">Presets</a>.</p>
+<h3 id="syntax">Syntax</h3>
+<p>Presets, and the product's other files, are written in one simplified
+form of YAML:</p>
+<ul>
+<li>UTF-8 text; a <code>\r</code> before a line end is dropped.</li>
+<li>Mappings by indentation, with spaces only: a <strong>tab anywhere is an
+error</strong>. Write 2 spaces per level.</li>
+<li>Lists of items <code>- item</code>; an item is a value, a <code>[a, b]</code> or
+<code>{ key: value }</code> on one line, or a mapping (<code>- key: value</code>, the further
+keys aligned under the first).</li>
+<li>Values bare, <code>&quot;double-quoted&quot;</code> or <code>'single-quoted'</code>, with no escapes:
+a quoted value cannot hold its own quote character.</li>
+<li><code>key: |</code> starts a block of lines; their common indentation is
+removed.</li>
+<li><code>#</code> starts a comment, as a whole line or after a value with a space
+before it, outside quotes and brackets. The values of <code>type:</code> and
+<code>expect:</code> are the exception: they run to the end of the line, <code>#</code> and
+quotes included.</li>
+<li>Numbers are decimal; <code>&amp;</code>, <code>0x</code> or <code>$</code> before them makes them hex.
+Booleans are <code>true</code> and <code>false</code>.</li>
+<li>Keywords (keys and fixed values) are lower case with hyphens:
+<code>format-version</code>, <code>full-speed</code>. Fixed values are read in any case.
+Names of models, variants and peripherals are read in any case; their
+hyphen is required.</li>
+<li><strong>An unknown key is an error</strong>, at every level.</li>
+<li>Not supported: anchors and aliases, tags, <code>&gt;</code> blocks, several
+documents in one file.</li>
+</ul>
+<p>A file that does not follow these rules, or the rules below, is refused
+as a whole; nothing of it is used.</p>
+<h3 id="header-keys">Header keys</h3>
+<p>Header keys describe the preset and its machine. They act on the whole
+file wherever they stand, and each appears at most once.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format-version</code></td>
+<td><code>2</code>. Required. A file without it or with another value is refused</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>Required. A model of the product, optionally followed by <code>:</code> and one of its variants: <code>&lt;model&gt;:&lt;variant&gt;</code>. Without a variant, the model's default one</td>
+</tr>
+<tr>
+<td><code>preset-name</code></td>
+<td>The name shown in menus and lists, at most 18 characters, different from the other presets of the same model. Without it, the file name without its extension</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>One line for lists, menus and tooltips</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>The longest the preset waits for an item to finish, in seconds of emulated time. Default <code>3600</code></td>
+</tr>
+<tr>
+<td>one key per place</td>
+<td>named after the place of the model (<code>slot-1</code>, <code>printer</code>, …): what is plugged in there. A place no key names stays empty</td>
+</tr>
+</tbody>
+</table></div>
+<p>The places of each model, the peripherals that fit them and the
+product's further header keys are in the product's part.</p>
+<h3 id="references-to-files-and-names">References to files and names</h3>
+<p>Where a key names a module, a medium, a program file or a folder, it
+says how, with exactly one of these keys, plus the options its owner
+allows (<code>side:</code>, …):</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Key</th>
+<th>Names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file: &lt;path&gt;</code></td>
+<td>a file, by its path. A relative path starts at the folder of the preset; <code>~/</code> is your home folder</td>
+</tr>
+<tr>
+<td><code>name: &lt;name&gt;</code></td>
+<td>the item whose name tag is <code>&lt;name&gt;</code>, in any case</td>
+</tr>
+<tr>
+<td><code>folder: &lt;path&gt;</code></td>
+<td>a folder, by its path</td>
+</tr>
+</tbody>
+</table></div>
+<p>A bare value is an error: <code>slot-1: { name: Mine }</code>, not <code>slot-1: Mine</code>.</p>
+<h3 id="sections">Sections</h3>
+<p>Top-level keys that are not header keys are <strong>sections</strong>. They are
+carried out from top to bottom, each to its end before the next starts,
+and may appear more than once.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Section</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keys</code></td>
+<td>a list of steps</td>
+</tr>
+<tr>
+<td><code>program</code></td>
+<td>a program to put into memory</td>
+</tr>
+</tbody>
+</table></div>
+<p>A product may add sections of its own; they are in its part. A section
+of another product is an error.</p>
+<h3 id="steps">Steps</h3>
+<p>A step is an item <code>- verb: value</code> of a <code>keys:</code> section, or <code>- verb:</code>
+for a verb without a value. Each step starts only when the item before
+has finished, unless a <code>skip-wait:</code> stands between them.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Step</th>
+<th>Value</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td>key IDs, separated by spaces</td>
+<td>presses and releases each key in turn, each when the machine is ready for it. A word that is not a key ID is an error</td>
+</tr>
+<tr>
+<td><code>wait</code></td>
+<td>a duration with its unit: <code>2s</code>, <code>1.5s</code>, <code>500ms</code></td>
+<td>lets that much emulated time pass after the item before has finished; while the machine is paused, the computer's time</td>
+</tr>
+<tr>
+<td><code>skip-wait</code></td>
+<td>none</td>
+<td>the item before is not waited for. Not the first or the last item</td>
+</tr>
+<tr>
+<td><code>let-it-finish</code></td>
+<td>none</td>
+<td>the machine runs on until it is idle, then the preset ends. Only as the last item</td>
+</tr>
+<tr>
+<td><code>regular-speed</code>, <code>full-speed</code></td>
+<td>none</td>
+<td>the items after it run at that speed</td>
+</tr>
+<tr>
+<td><code>expect</code></td>
+<td>a text, to the end of the line</td>
+<td>fails the preset unless the display shows it</td>
+</tr>
+<tr>
+<td><code>not-expect</code></td>
+<td>a text, to the end of the line</td>
+<td>fails the preset if the display shows it</td>
+</tr>
+<tr>
+<td><code>screenshot</code></td>
+<td>a file name, without <code>/</code> or <code>\</code></td>
+<td>saves a picture of the display into the save folder; on the Web, as a download</td>
+</tr>
+<tr>
+<td><code>trace</code></td>
+<td>a file name, without <code>/</code> or <code>\</code>, or <code>off</code></td>
+<td>starts or ends a trace (<a href="/1600/help/07-debugger/#traces">Debugger</a>)</td>
+</tr>
+<tr>
+<td><code>elapsed-time</code></td>
+<td><code>start</code> or <code>report</code></td>
+<td>notes the emulated time, or writes the time since then (or since the preset started) to the log as <code>m:ss.mmm</code></td>
+</tr>
+<tr>
+<td><code>cut-paper</code></td>
+<td>none</td>
+<td>copies the paper of the printer that is plugged in to the clipboard, then cuts it (in the browser it only cuts); without one, nothing happens</td>
+</tr>
+<tr>
+<td><code>copy-paper</code></td>
+<td>none</td>
+<td>copies the paper of the printer that is plugged in to the clipboard (in the browser it does nothing); without one, nothing happens</td>
+</tr>
+<tr>
+<td><code>saveas</code></td>
+<td><code>{ place: …, as: live|template, name: … }</code> or <code>file:</code> instead of <code>name:</code></td>
+<td>Name &amp; Save of the medium or module at a place (<a href="/1600/help/04-media/">Media</a>)</td>
+</tr>
+<tr>
+<td><code>pause</code>, <code>pause-on-start</code>, <code>step</code>, <code>resume</code>, <code>debug-panel</code></td>
+<td>as in <a href="/1600/help/07-debugger/#debugger-steps-in-a-preset">Debugger</a></td>
+<td>drive the debugger, where the product defines them</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>When an item has finished:</strong> a <code>key:</code> when its last press is done and
+the machine is idle; a section when its content is written (machine code
+that starts itself, when the code has returned); a <code>wait:</code> when its
+duration has passed; every other step when it has taken effect. A paused
+machine is not idle.</p>
+<p>Steps for media and the product's own steps are in its part. A keyword
+that a product or model does not have refuses the preset when it is
+read.</p>
+<h3 id="example">Example</h3>
+<pre class="lcd"><code class="language-yaml"># A comment
+format-version: 2
+model: &lt;model&gt;
+preset-name: Demo
+description: Presses two keys, waits, checks
+slot-1: { name: &lt;module&gt; }
+keys:
+  - regular-speed:
+  - key: &lt;key&gt; &lt;key&gt;
+  - wait: 500ms
+  - full-speed:
+  - expect: &lt;text&gt;
+  - let-it-finish:
+</code></pre>
+<h2 id="the-settings-file">The settings file</h2>
+<p>The settings file is <code>&lt;Product&gt;.ini</code>, an INI file
+(<a href="/1600/help/08-settings/">Settings</a> says where it lies and what each key means):</p>
+<ul>
+<li>UTF-8 without a byte order mark; either line ending.</li>
+<li><code>[section]</code> lines start a section; <code>key = value</code> lines give a value.
+The value is the rest of the line after <code>=</code>, with the spaces around it
+removed, <strong>without quotes or escapes</strong>.</li>
+<li>A line starting with <code>#</code> or <code>;</code> is a comment.</li>
+<li>Section and key names are lower case with hyphens, except the keys of
+<code>[preset]</code>, which are model names as the product writes them. Names
+are matched in any case.</li>
+<li>A key given twice: the last one counts.</li>
+<li>Booleans are <code>true</code> and <code>false</code>. A path is absolute; a leading <code>~</code>
+stands for your home folder.</li>
+<li>The first line, before any section, is <code>format-version = 1</code>; the
+product writes it.</li>
+</ul>
+<pre class="lcd"><code class="language-ini">format-version = 1
+
+[startup]
+# The model at start: last (the model used last) or a model's name.
+model = last
+
+[trace]
+max-file-size-mb = 50
+</code></pre>
+<h2 id="glossary">Glossary</h2>
+<p>The terms this help uses, each with one meaning.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product</td>
+<td>One separately released member of the Calc-U family, with its own releases and help</td>
+</tr>
+<tr>
+<td>Family</td>
+<td>All Calc-U products together</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>A real device a product reproduces and you pick</td>
+</tr>
+<tr>
+<td>Variant</td>
+<td>A revision of a model or a peripheral that you can choose and that changes behaviour, mostly a ROM version</td>
+</tr>
+<tr>
+<td>Machine</td>
+<td>One emulated model while it runs, with whatever is plugged into it. Switching the model builds a new machine</td>
+</tr>
+<tr>
+<td>Place</td>
+<td>Where a peripheral or a module plugs into a machine: a module slot, the printer's place, …</td>
+</tr>
+<tr>
+<td>Peripheral</td>
+<td>Emulated hardware that plugs into a machine: a printer, an interface, a module</td>
+</tr>
+<tr>
+<td>Printer</td>
+<td>A peripheral that prints or plots</td>
+</tr>
+<tr>
+<td>Module</td>
+<td>A peripheral that holds memory and plugs into a module slot</td>
+</tr>
+<tr>
+<td>Module slot</td>
+<td>A place of a machine for modules</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>A removable item that holds your data and can be named and saved: a floppy disk, a cassette, a magnetic card, a battery-backed module</td>
+</tr>
+<tr>
+<td>Template</td>
+<td>A medium bundled with the product, which is never written, or one you made a template</td>
+</tr>
+<tr>
+<td>Instance</td>
+<td>A medium that is not a template; it saves itself in place after each change</td>
+</tr>
+<tr>
+<td>Name &amp; Save</td>
+<td>Giving a template a name and saving it as an instance</td>
+</tr>
+<tr>
+<td>Insert, Eject</td>
+<td>Putting a medium into its place on a machine; taking it out</td>
+</tr>
+<tr>
+<td>Save folder</td>
+<td>The folder where a product keeps your instances and other files</td>
+</tr>
+<tr>
+<td>Preset</td>
+<td>A file that sets up a machine: the model, what is plugged in, programs and scripted input</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>A preset bundled with the product that shows what it can do</td>
+</tr>
+<tr>
+<td>Startup preset</td>
+<td>The preset a model is built from when the product starts with it or you switch to it</td>
+</tr>
+<tr>
+<td>Startup model</td>
+<td>The model the product starts with: a fixed one or the last used</td>
+</tr>
+<tr>
+<td>Full speed</td>
+<td>Running a machine as fast as the computer allows</td>
+</tr>
+<tr>
+<td>Regular speed</td>
+<td>Running a machine at the real device's speed</td>
+</tr>
+<tr>
+<td>Emulated time</td>
+<td>The time a machine has run, counted by the machine itself</td>
+</tr>
+<tr>
+<td>Idle</td>
+<td>A machine that waits for you and is busy with nothing else: at its prompt, or a program waiting for a key</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>Restarting a machine with its memory kept</td>
+</tr>
+<tr>
+<td>Cold boot</td>
+<td>Starting a machine with all memory empty, as after a long battery removal</td>
+</tr>
+<tr>
+<td>Power cycle</td>
+<td>Switching a real device off and on; what survives depends on the model</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>A key of the emulated machine</td>
+</tr>
+<tr>
+<td>Host key</td>
+<td>A key of your computer's keyboard</td>
+</tr>
+<tr>
+<td>Keyboard map</td>
+<td>Which host key presses which key, per model</td>
+</tr>
+<tr>
+<td>Typing</td>
+<td>Feeding text into a machine as key presses</td>
+</tr>
+<tr>
+<td>Debugger</td>
+<td>Pausing, stepping and breakpoints on a running machine</td>
+</tr>
+<tr>
+<td>Pause, Resume</td>
+<td>The debugger stopping a running machine; letting it run on</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>A record of every instruction a processor carries out, saved as a trace file</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td>Your preferences for a product, kept in its settings file</td>
+</tr>
+<tr>
+<td>Help</td>
+<td>A product's user guide: this text</td>
+</tr>
+<tr>
+<td>Shared part</td>
+<td>The part of a chapter written once for the whole family</td>
+</tr>
+<tr>
+<td>Product part</td>
+<td>The part of a chapter that belongs to one product</td>
+</tr>
+</tbody>
+</table></div>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/module-definitions/">← 9 · Module definitions</a><a class="btn dark" rel="next" href="/1600/help/10-reference/reference/">10 · Calc-U-1600 reference →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

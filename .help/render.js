@@ -61,11 +61,16 @@ function plainText(tokens) {
 // The meta description: the first paragraphs after the title, cut at a word
 // to at most 160 characters.
 function describe(tokens) {
+  // Paragraph and list text, in order, until there is enough; headings,
+  // tables and pictures say nothing here.
   let text = "";
+  let inTable = false;
   for (let i = 0; i < tokens.length && text.length < 110; i++) {
-    if (tokens[i].type !== "paragraph_open" || tokens[i].level !== 0) continue;
-    // A paragraph that only holds a picture says nothing.
-    const words = inlineText(tokens[i + 1].children.filter((c) => c.type !== "image")).replace(/\s+/g, " ").trim();
+    const t = tokens[i];
+    if (t.type === "table_open") inTable = true;
+    if (t.type === "table_close") inTable = false;
+    if (t.type !== "inline" || inTable || (tokens[i - 1] && tokens[i - 1].type === "heading_open")) continue;
+    const words = inlineText(t.children.filter((c) => c.type !== "image")).replace(/\s+/g, " ").trim();
     if (words) text += (text ? " " : "") + words;
   }
   if (text.length <= 160) return text;

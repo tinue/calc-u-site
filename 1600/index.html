@@ -1,17 +1,113 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calc-U-1600</title>
-  <link rel="stylesheet" href="/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calc-U-1600 — Sharp PC-1500, PC-1500A and PC-1600 emulator</title>
+<meta name="description" content="Calc-U-1600 emulates the Sharp PC-1500, PC-1500A and PC-1600 pocket computers with their modules, plotters and floppy drive, on macOS, Linux, Windows and in the browser.">
+<link rel="canonical" href="https://calc-u.org/1600/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/">
+<meta property="og:title" content="Calc-U-1600 — Sharp PC-1500, PC-1500A and PC-1600 emulator">
+<meta property="og:description" content="Calc-U-1600 emulates the Sharp PC-1500, PC-1500A and PC-1600 pocket computers with their modules, plotters and floppy drive, on macOS, Linux, Windows and in the browser.">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
 </head>
 <body>
-  <main>
-    <h1>Calc-U-1600</h1>
-    <p class="lead">Emulator for the Sharp PC-1500, PC-1500A and PC-1600. Under construction.</p>
-    <p>Meanwhile: <a href="/1600/beta/app/">try the 0.9.0 preview</a>, the standalone app of the coming first release. It may change without notice.</p>
-    <p><a href="https://github.com/tinue/calc-u/tree/main/products/calc-u-1600">github.com/tinue/calc-u</a> · <a href="/">Calc-U</a></p>
-  </main>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/" class="on" aria-current="page">Home</a>
+<a href="/1600/help/">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main>
+<section class="wrap home-hero">
+<p class="eyebrow">Sharp PC-1500, PC-1500A and PC-1600 emulator for Mac, Windows, Linux and the browser</p>
+<h1 class="title">Calc-U <em>1600</em></h1>
+<p class="lede">Calc-U-1600 emulates three Sharp pocket computers, the <strong>PC-1500, PC-1500A and PC-1600</strong>, together with their memory modules, the CE-150 and CE-1600P plotters with their cassette interfaces, the CE-1600F floppy drive and the CE-158 interface. It runs on macOS, Linux and Windows, and in your browser.</p>
+<div class="home-actions">
+<a class="btn primary" href="/1600/play/">Play in browser <span class="arrow">→</span></a>
+<a class="btn dark" href="/1600/help/">Read the help</a>
+<a class="btn grey" href="#download">Download</a>
+</div>
+</section>
+
+<section class="home-shot">
+<img class="shot" src="/1600/assets/pc1600.png" width="1200" height="533" alt="The PC-1600 faceplate of Calc-U-1600: the green LCD on its brown display band, the black QWERTY keys, the grey number block and the orange SHIFT keys">
+</section>
+
+<div class="wrap" style="padding-top: 8px">
+<h2 class="h2">Where to start</h2>
+<div class="grid-3">
+<div class="panel">
+<p class="eyebrow" style="margin-bottom: 4px">Chapter 2</p>
+<h3 class="h3">Getting started</h3>
+<p style="margin: 0 0 12px; font-size: 15px; color: var(--fg-2)">The faceplate, the keyboard, Copy Screen and Paste Text, the control bar and the menus.</p>
+<a class="card-link" href="/1600/help/02-getting-started/getting-started/">First steps →</a>
+</div>
+<div class="panel">
+<p class="eyebrow" style="margin-bottom: 4px">Chapter 4</p>
+<h3 class="h3">Modules and disks</h3>
+<p style="margin: 0 0 12px; font-size: 15px; color: var(--fg-2)">The slot pickers, from the CE-151 to the superRAM r4, and the CE-1600F's floppy disks.</p>
+<a class="card-link" href="/1600/help/04-media/media/">Memory and media →</a>
+</div>
+<div class="panel">
+<p class="eyebrow" style="margin-bottom: 4px">Chapter 9</p>
+<h3 class="h3">BASIC programs</h3>
+<p style="margin: 0 0 12px; font-size: 15px; color: var(--fg-2)">Load a BASIC listing, a tokenized program or a cassette WAV into the computer, and the cassette's CLOAD and CSAVE.</p>
+<a class="card-link" href="/1600/help/09-product-topics/basic-programs/">Load a program →</a>
+</div>
+</div>
+
+<h2 class="h2">What Calc-U-1600 plugs in</h2>
+<div class="grid-2" style="align-items: start">
+<div class="panel prose">
+<ul style="margin: 0; padding-left: 20px">
+<li>Three models, <strong>PC-1500, PC-1500A and PC-1600</strong>, switched from the control bar (<a href="/1600/help/01-introduction/">introduction</a>).</li>
+<li><strong>Memory modules</strong> in the PC-1500's slot or the PC-1600's two (<a href="/1600/help/04-media/media/">modules and disks</a>).</li>
+<li>The <strong>CE-150 and CE-1600P plotters</strong> with their cassette interfaces, and the <strong>CE-1600F floppy drive</strong> (<a href="/1600/help/05-peripherals-and-paper/peripherals/">peripherals</a>).</li>
+<li>The <strong>CE-158</strong> and the PC-1600's own RS-232C port, connected to your computer (<a href="/1600/help/09-product-topics/com-ports/">COM ports</a>).</li>
+<li>On the PC-1600, a folder on your computer as the drive <code>S3:</code> (<a href="/1600/help/09-product-topics/host-drive/">host drive</a>).</li>
+<li>A debugger in VS Code for BASIC and machine code (<a href="/1600/help/07-debugger/debugger/">debugger</a>).</li>
+</ul>
+</div>
+<div class="lcd" role="img" aria-label="The PC-1600's display after a start: DEG and RUN, and the prompt" style="margin: 0; font-size: 15px"><span class="dim">DEG          RUN</span>
+&gt;_</div>
+</div>
+
+<div class="panel release" id="download">
+<img src="/1600/assets/icon.png" alt="" width="72" height="72">
+<div>
+<h3 class="h3" style="margin: 0 0 4px">Version 0.9.0</h3>
+<p style="margin: 0; font-size: 14px; color: var(--fg-2)">Free downloads of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">0.9.0 release on GitHub</a>. In the browser it runs <a href="/1600/play/">without installing</a>, and installs as an app from <a href="/1600/calc/app/">calc-u.org/1600/calc/app/</a> (<a href="/1600/help/02-getting-started/getting-started/#the-browser-version">what the browser version has</a>). Calc-U-1600 is free software; the source code is on <a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>.</p>
+<ul class="downloads">
+<li><a href="https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-mac-aarch64.dmg">macOS (Apple silicon), disk image</a></li>
+<li><a href="https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-windows-x86_64.exe">Windows x86_64, installer</a></li>
+<li><a href="https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-windows-arm64.exe">Windows arm64, installer</a></li>
+<li><a href="https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-linux-x86_64.AppImage">Linux x86_64, AppImage</a></li>
+<li><a href="https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-linux-aarch64.AppImage">Linux aarch64, AppImage</a></li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">calc-u.org/1600</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
 </body>
 </html>

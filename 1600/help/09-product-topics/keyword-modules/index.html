@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PC-1500 keyword modules — Calc-U-1600 help</title>
+<meta name="description" content="How a ROM on the PC-1500's 60-pin connector adds BASIC commands that work like built-in ones: typed, abbreviated, stored as tokens in programs, with the usual…">
+<link rel="canonical" href="https://calc-u.org/1600/help/09-product-topics/keyword-modules/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/09-product-topics/keyword-modules/">
+<meta property="og:title" content="PC-1500 keyword modules — Calc-U-1600 help">
+<meta property="og:description" content="How a ROM on the PC-1500's 60-pin connector adds BASIC commands that work like built-in ones: typed, abbreviated, stored as tokens in programs, with the usual…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k org">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/1600/help/09-product-topics/">Product topics</a></li><li><a href="/1600/help/09-product-topics/models/">What differs by model</a></li><li><a href="/1600/help/09-product-topics/basic-programs/">BASIC programs and the cassette</a></li><li><a href="/1600/help/09-product-topics/machine-code/">Machine-code programs</a></li><li><a href="/1600/help/09-product-topics/com-ports/">COM ports</a></li><li><a href="/1600/help/09-product-topics/host-drive/">A folder as a drive (PC-1600)</a></li><li><a href="/1600/help/09-product-topics/keyword-modules/" aria-current="page">PC-1500 keyword modules</a></li><li><a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> PC-1500 keyword modules</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="pc-1500-keyword-modules">PC-1500 keyword modules</h1>
+<p>How a ROM on the PC-1500's 60-pin connector adds BASIC commands that work like
+built-in ones: typed, abbreviated, stored as tokens in programs, with the
+usual error messages. The CE-150 and CE-158 add their commands this way, and
+so does the RENUM example of the debugger's <em>PC-1500 ROM extension</em> template
+(<a href="/1600/help/07-debugger/debugger/#example-renum-on-the-pc-1500">Debugger</a>).</p>
+<p>Everything here is read from the PC-1500 system ROM, except where noted.
+The addresses are the same in revisions A01, A03 and A04, and the RENUM
+template was tested against it in Calc-U-1600. Routine names follow the
+ROM disassembly credited in the
+<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/THIRD-PARTY-NOTICES.md#acknowledgments">acknowledgments</a>.</p>
+<h2 id="where-the-firmware-looks">Where the firmware looks</h2>
+<p>The firmware looks at eight 2 KB pages, &amp;8000, &amp;8800, … &amp;B800. It looks at
+each one twice, with PV low and with PV high, so there are 16 places a
+module can sit. A page holds a module when its first byte is <code>55H</code>.</p>
+<p>The search happens in three places:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>When</th>
+<th>What happens</th>
+<th>ROM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Power-on</td>
+<td>for each module, the code at page + <code>0AH</code> is called</td>
+<td><code>TOK_TABL_SRCH</code> E4A8, <code>RESET_19</code> E10B</td>
+</tr>
+<tr>
+<td>A word BASIC doesn't know is typed</td>
+<td>each module's index and table are searched for the name</td>
+<td><code>TOK_INBUF_14</code> F9C7</td>
+</tr>
+<tr>
+<td>A module token is executed</td>
+<td>the token's own page is searched for the code</td>
+<td><code>TOK_PROCESS</code> FA89</td>
+</tr>
+</tbody>
+</table></div>
+<p>Calc-U-1600 plugs such a ROM in with <code>bus-rom:</code> in a preset, with <code>pv:</code> for
+the PV state it answers in (<a href="/1600/help/10-reference/preset-sections/">Preset sections</a>).</p>
+<h2 id="the-page">The page</h2>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Offset</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+00</td>
+<td><code>55H</code></td>
+</tr>
+<tr>
+<td>+0A</td>
+<td>power-on code, ending in <code>RTN</code>; a bare <code>RTN</code> if there is nothing to do</td>
+</tr>
+<tr>
+<td>+20</td>
+<td>the index: 26 words (high byte first), one per letter A–Z</td>
+</tr>
+<tr>
+<td>+54</td>
+<td>the keyword table</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The index.</strong> Each word is the address of the <em>second</em> letter of the first
+keyword with that initial, or 0 if no keyword starts with it. A word that
+isn't in the index can't be found.</p>
+<p><strong>The table.</strong> One entry per keyword, ended by a byte whose low nibble is 0:</p>
+<pre class="lcd"><code>marker  name   code (2 bytes)  address (2 bytes)
+ C5     RENUM  E1 80           88 5F
+</code></pre>
+<ul>
+<li><strong>marker:</strong>
+<ul>
+<li>
+<p>The low nibble is the name's length.</p>
+</li>
+<li>
+<p>The high nibble belongs to the keyword <em>before</em> this entry, as in the ROM's own table at C054 (the disassembly's <code>CNIB</code> macro). Bit 4 set means that keyword was the last one with its initial: a search that fails on it stops there.</p>
+</li>
+<li>
+<p>Bits 6–5 say where the keyword may run:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Bits 6–5</th>
+<th>The keyword runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00</code></td>
+<td>only typed at the prompt; inside a program it is ERROR 1</td>
+</tr>
+<tr>
+<td><code>01</code></td>
+<td>only inside a program (<code>FOR</code>, <code>READ</code>)</td>
+</tr>
+<tr>
+<td><code>10</code>, <code>11</code></td>
+<td>both (<code>PRINT</code>, <code>GOTO</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>With <code>00</code>, the routine's first byte is a mask of the modes it may be typed in: <code>40H</code> RUN, <code>20H</code> PRO, <code>10H</code> RESERVE. The firmware ANDs it with 764FH (ERROR 26 if nothing is left), then starts the routine at the <em>next</em> byte. <code>LIST</code> (C96E) starts with <code>20H</code>, <code>RUN</code> (C8B4) with <code>40H</code>.</p>
+</li>
+<li>
+<p>So the byte after the last entry of a table ends the table (low nibble 0) and also carries the last keyword's attributes. RENUM's is <code>90H</code>: last R keyword, typed only.</p>
+</li>
+</ul>
+</li>
+<li><strong>name:</strong> ASCII, with no terminator. Typing a prefix with a period (<code>REN.</code>) finds it too.</li>
+<li><strong>code:</strong> the token stored in the program, high byte first.
+<ul>
+<li><strong>The high byte names the page.</strong> <code>E0H</code>–<code>E7H</code> are pages &amp;8000–&amp;B800 with PV low, and <code>E8H</code>–<code>EFH</code> the same pages with PV high: page = <code>80H + (code &amp; 7) × 8</code> (<code>TOK_PROCESS</code> FAA8). A token runs only from the page its code names.</li>
+<li><code>F0xxH</code> codes are searched for on every page: these are the printer commands that the base ROM knows by name.</li>
+<li>On page &amp;8000 with PV low (<code>E0H</code>), only one keyword per initial can be found. When a name doesn't match, the search steps to the next entry by looking for a byte above <code>E0H</code> (F9F5–FA3E), and <code>E0H</code> itself isn't above it.</li>
+</ul>
+</li>
+<li><strong>The low byte of the code</strong> says what kind of keyword it is (checked by the expression evaluator):
+<ul>
+<li><code>80H</code> and up: a statement;</li>
+<li><code>60H</code>–<code>7FH</code>: a function with an argument;</li>
+<li><code>50H</code>–<code>5FH</code>: a function without one.</li>
+</ul>
+</li>
+<li><strong>address:</strong> where the routine starts, high byte first.</li>
+</ul>
+<h2 id="the-routine">The routine</h2>
+<p><strong>Entry.</strong> A statement's routine is entered with Y pointing just past its
+own token, at the rest of the statement as BASIC stores it: spaces removed,
+BASIC's keywords tokenized. Typed at the prompt that is the input buffer;
+in a program it is the program line.</p>
+<p><strong>Arguments.</strong> The routine parses its own arguments with the ROM's vector
+calls:</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th>Call</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VEJ DE</code> + offset</td>
+<td>evaluate the expression at Y; on an error, branch (UH = error)</td>
+</tr>
+<tr>
+<td><code>VEJ D0</code> + range + offset</td>
+<td>convert the result to an integer in U (<code>00</code>: 16 bits)</td>
+</tr>
+<tr>
+<td><code>VEJ C2</code> + char + offset</td>
+<td>the next element must be that character, else branch</td>
+</tr>
+<tr>
+<td><code>VEJ C8</code> + offset</td>
+<td>branch unless the statement ends here</td>
+</tr>
+<tr>
+<td><code>VEJ E0</code> / <code>VEJ E4</code></td>
+<td>raise ERROR UH / ERROR 1</td>
+</tr>
+</tbody>
+</table></div>
+<p>Branch offsets after a <code>VEJ</code> are forward, counted from the byte after the
+offset (in sdas: <code>.db TARGET-.-1</code>). sdaslh5801 writes the vector as a plain
+number: <code>vej 0xDE</code>, not <code>vej (DE)</code>. A routine that changes the program
+calls <code>INIT_SYS_ADDR</code> (CFD0) as the ROM's own line editor does. That resets
+the DATA pointer, the GOSUB/FOR stacks, ON ERROR and CONT.</p>
+<p><strong>Exit.</strong> A statement ends with <code>VEJ E2</code>, with Y at the end of its statement
+(<code>:</code> or <code>0DH</code>). That continues the program, or completes a typed command.
+It works for both, so no other clean-up is needed.</p>
+<p><strong>Functions</strong> (low byte below <code>80H</code>; the evaluator sorts the tokens at
+D8A3–D8CF) are called from the middle of an expression instead. This part
+isn't used by RENUM and isn't checked against the ROM
+(<a href="https://github.com/tinue/Calc-U/blob/main/products/calc-u-1600/THIRD-PARTY-NOTICES.md#acknowledgments">acknowledgments</a>): the
+argument is already evaluated, in the arithmetic register at 7A00H. The
+routine leaves its result there and returns with <code>RTN</code> and UH = 0; a
+non-zero UH is raised as that error.</p>
+<p><strong>Errors.</strong> To report an error as one in a program line (&quot;ERROR 11 IN 30&quot;,
+and the up arrow shows the line), RENUM sets the current line 789CH and the
+program start 789EH before <code>VEJ E0</code>. It calls <code>INIT_SYS_ADDR</code> first, so that
+an <code>ON ERROR GOTO</code> of the last run doesn't catch the error.</p>
+<h2 id="the-program-in-memory">The program in memory</h2>
+<p>RENUM changes the program, so it relies on its layout:</p>
+<ul>
+<li>The program runs from BASPRG_ST (7865H) to BASPRG_END (7867H), where its
+end byte <code>FFH</code> is. After a MERGE, BASPRG_EDT (7869H) points at the last
+merged program.</li>
+<li>A line is: number (2 bytes, high first), length (the bytes that follow,
+up to and including <code>0DH</code>), the tokenized text, <code>0DH</code>.</li>
+<li>Line numbers after <code>GOTO</code>, <code>GOSUB</code>, <code>THEN</code> and <code>RESTORE</code> are decimal
+digits, not binary as on the PC-1600: <code>GOTO 30</code> is <code>F1 92 33 30</code>. A
+reference that gets more digits makes the line longer.</li>
+<li>The ROM's line editor (<code>PRGLINE_TDI</code> CF27) checks that the new end stays
+below RAM_END_H (7864H), or it raises ERROR 13. Then <code>DEL_DIM_VAR_1</code>
+(D09C) drops the arrays if the program has grown into them.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/host-drive/">← 9 · A folder as a drive (PC-1600)</a><a class="btn dark" rel="next" href="/1600/help/09-product-topics/module-definitions/">9 · Module definitions →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

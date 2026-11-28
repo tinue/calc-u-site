@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Machine-code programs — Calc-U-1600 help</title>
+<meta name="description" content="File ▸ Load Machine Code… opens a .bin file (or a machine-code file on a cassette WAV, see BASIC programs) and writes it into the calculator's memory. It…">
+<link rel="canonical" href="https://calc-u.org/1600/help/09-product-topics/machine-code/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/09-product-topics/machine-code/">
+<meta property="og:title" content="Machine-code programs — Calc-U-1600 help">
+<meta property="og:description" content="File ▸ Load Machine Code… opens a .bin file (or a machine-code file on a cassette WAV, see BASIC programs) and writes it into the calculator's memory. It…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k org">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/1600/help/09-product-topics/">Product topics</a></li><li><a href="/1600/help/09-product-topics/models/">What differs by model</a></li><li><a href="/1600/help/09-product-topics/basic-programs/">BASIC programs and the cassette</a></li><li><a href="/1600/help/09-product-topics/machine-code/" aria-current="page">Machine-code programs</a></li><li><a href="/1600/help/09-product-topics/com-ports/">COM ports</a></li><li><a href="/1600/help/09-product-topics/host-drive/">A folder as a drive (PC-1600)</a></li><li><a href="/1600/help/09-product-topics/keyword-modules/">PC-1500 keyword modules</a></li><li><a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> Machine-code programs</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="machine-code-programs">Machine-code programs</h1>
+<p><strong>File ▸ Load Machine Code…</strong> opens a <code>.bin</code> file (or a machine-code file on
+a cassette WAV, see <a href="/1600/help/09-product-topics/basic-programs/#fast-loading-a-cassette-wav">BASIC programs</a>)
+and writes it into the calculator's memory. It never runs the code. On a
+PC-1600 the calculator's MODE and the program area <code>TITLE</code> selects decide
+where it goes and which CPU it is for; Calc-U-1600 never changes them. What
+happens next depends on the file:</p>
+<pre class="mermaid">flowchart TD
+    F[&quot;File ▸ Load Machine Code… (.bin)&quot;] --&gt; H{&quot;Header?&quot;}
+    H --&gt;|&quot;PC-1600 header (16 bytes)&quot;| Z[&quot;Z-80 code, address known&quot;]
+    H --&gt;|&quot;CE-158 header (27 bytes)&lt;br/&gt;PC-1500/1500A, or a PC-1600 in MODE 1&quot;| L[&quot;LH5801 code, LH5803 address known&quot;]
+    H --&gt;|none| D{&quot;MODE (PC-1600)&quot;}
+    D --&gt;|&quot;MODE 0&quot;| DZ[&quot;dialog: Z-80 address&quot;]
+    D --&gt;|&quot;MODE 1&quot;| DL[&quot;dialog: LH5803 address&quot;]
+    Z --&gt; P[&quot;target: &amp;C000-&amp;FFFF internal RAM;&lt;br/&gt;&amp;8000-&amp;BFFF the module of the selected program area&quot;]
+    L --&gt; P
+    DZ --&gt; P
+    DL --&gt; P
+    P --&gt; B[&quot;'Machine Code Loaded':&lt;br/&gt;NEW that protects the code, CALL / XCALL that starts it&quot;]
+    B --&gt; C[&quot;the command is typed for you — press ENTER&quot;]
+</pre>
+<p>A file without a header needs a start address. On a PC-1600 the dialog says
+which address space it expects: in MODE 0 a Z-80 address (Z-80 code is
+assumed), in MODE 1 an LH5803 address as on a PC-1500 (LH5801 code is
+assumed; the internal RAM is &amp;4000-&amp;7FFF there). For every address that
+holds, the dialog says where the code goes: the internal RAM, a module, or
+the work area. An address in the work area (&amp;F000-&amp;FFFF, LH5803
+&amp;7000-&amp;7FFF) is allowed with a warning that says what lies there. Many
+programs live at the top, in the area of the CE-1F01A bar-code reader pen
+(&amp;FF40-&amp;FFFF); <code>CLOCK.BIN</code>, for example, loads at &amp;FF3A and so also covers
+part of the WAKE$ strings. The PC-1500A's machine-code area &amp;7C01 is
+PC-1600 system work area, one reason the PC-1600 is compatible with the
+PC-1500 only.</p>
+<p><img src="/1600/help/images/06-start-address.png" alt="Start address for a file without a header" width="920" height="254" loading="lazy" decoding="async"></p>
+<p>On a PC-1500, a load that meets a byte that is not RAM writes nothing. After loading, Calc-U-1600 tells you two things:</p>
+<ul>
+<li>which <code>NEW</code> keeps BASIC from overwriting the code: <code>NEW &quot;S0:&quot;,size</code> in
+MODE 0, <code>NEW &amp;addr</code> the PC-1500 way in MODE 1, <code>NEW &quot;S1:&quot;,size</code> for code
+in a selected program module;</li>
+<li>how to start it: <code>CALL</code> for Z-80 code, <code>XCALL</code> for LH5801 code. The
+command is already typed on the calculator, so you only have to press
+ENTER.</li>
+</ul>
+<p><img src="/1600/help/images/06-loaded.png" alt="The advice after loading a PC-1600 program" width="840" height="558" loading="lazy" decoding="async"></p>
+<p>To load code into a program module, select it first (<code>TITLE&quot;S1:&quot;</code>); to load
+several files in one go, use a preset: its <code>program:</code> section takes
+machine code too (<a href="/1600/help/10-reference/preset-sections/">Preset sections</a>).</p>
+<p><strong>Debugging.</strong> With the debug server on (<strong>File ▸ Settings… ▸ Debugger</strong>),
+VS Code can attach to Calc-U-1600 and debug the program. It can build, load
+and start the program; stop at breakpoints in your <code>.asm</code> source; step
+through it; and show registers and memory. It also works for ROM code. See
+<a href="/1600/help/07-debugger/debugger/">Debugger</a>.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/basic-programs/">← 9 · BASIC programs and the cassette</a><a class="btn dark" rel="next" href="/1600/help/09-product-topics/com-ports/">9 · COM ports →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

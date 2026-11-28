@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction — Calc-U-1600 help</title>
+<meta name="description" content="Calc-U-1600 emulates three Sharp pocket computers: the PC-1500, the PC-1500A and the PC-1600. Around them it emulates the memory modules, the CE-150 and…">
+<link rel="canonical" href="https://calc-u.org/1600/help/01-introduction/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/01-introduction/">
+<meta property="og:title" content="Introduction — Calc-U-1600 help">
+<meta property="og:description" content="Calc-U-1600 emulates three Sharp pocket computers: the PC-1500, the PC-1500A and the PC-1600. Around them it emulates the memory modules, the CE-150 and…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class="open"><a class="help-chapter" href="/1600/help/01-introduction/" aria-current="page"><span class="k org">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> 1 Introduction</p>
+<p class="eyebrow">Chapter 1 · Introduction</p>
+<h1 id="introduction">Introduction</h1>
+<p>Calc-U-1600 emulates three Sharp pocket computers: the <strong>PC-1500</strong>, the
+<strong>PC-1500A</strong> and the <strong>PC-1600</strong>. Around them it emulates the memory
+modules, the CE-150 and CE-1600P plotters with their cassette interfaces,
+the CE-1600F floppy drive and the CE-158 interface. It connects the
+computers' serial ports to your computer, and on the PC-1600 a folder on
+your computer can be a drive.</p>
+<p>Calc-U-1600 runs as a desktop program on macOS, Linux and Windows, and in
+the browser (<a href="/1600/help/02-getting-started/getting-started/#the-browser-version">The browser version</a>).
+This help describes both; where the browser differs, it says so.</p>
+<p><img src="/1600/help/images/01-app-overview.png" alt="A PC-1600 with the CE-1600P plotter, after plotting a Lissajous figure" width="2860" height="2624" loading="lazy" decoding="async"></p>
+<p>The window has three parts:</p>
+<ul>
+<li><strong>The faceplate</strong> (the keys and the LCD) at the top.</li>
+<li><strong>The control bar</strong> below it: the model, the memory slots and the
+peripherals.</li>
+<li><strong>The panels</strong> at the bottom: the INSPECTOR and the plotter's paper,
+plus the CE-158's printer output while a CE-158 is plugged in.</li>
+</ul>
+<p>Everything you can plug into the real computers, Calc-U-1600 can plug in
+too:</p>
+<pre class="mermaid">flowchart LR
+    App[&quot;Calc-U-1600&quot;] --&gt; Model{&quot;Model&quot;}
+    Model --&gt; P15[&quot;PC-1500 / PC-1500A&quot;]
+    Model --&gt; P16[&quot;PC-1600&quot;]
+    P15 --&gt; S[&quot;Memory slot&lt;br/&gt;(CE-151, CE-155, CE-161, CE-1638, …)&quot;]
+    P15 --&gt; C150[&quot;CE-150 plotter&quot;]
+    P15 --&gt; C158[&quot;CE-158 interface&lt;br/&gt;(serial and printer port)&quot;]
+    P16 --&gt; S1[&quot;Slot 1 / Slot 2&lt;br/&gt;(CE-1600M, CE-1601M, superRAM r4, …)&quot;]
+    P16 --&gt; C16P[&quot;CE-1600P plotter&quot;] --&gt; C16F[&quot;CE-1600F floppy drive&quot;]
+    P16 --&gt; C150
+    P16 --&gt; C158
+    P16 --&gt; COM[&quot;Built-in RS-232C port&quot;]
+    P16 --&gt; S3[&quot;Drive S3:&lt;br/&gt;(a folder on your computer)&quot;]
+    C158 --&gt; Host[&quot;Your computer&lt;br/&gt;(serial port file)&quot;]
+    COM --&gt; Host
+</pre>
+<h2 id="where-to-go-next">Where to go next</h2>
+<ul>
+<li><a href="/1600/help/02-getting-started/getting-started/">Getting started</a>: the faceplate, the keyboard,
+Copy Screen and Paste Text on these models; the window, the control bar
+and the menus are in the family's
+<a href="/1600/help/02-getting-started/">Getting started</a>.</li>
+<li><a href="/1600/help/04-media/media/">Memory modules and floppy disks</a>,
+<a href="/1600/help/05-peripherals-and-paper/peripherals/">plotters and the CE-158</a>, <a href="/1600/help/06-presets/presets/">presets</a>.</li>
+<li><a href="/1600/help/09-product-topics/">Product topics</a>: loading BASIC and machine-code
+programs, the COM ports, a folder as a drive, and more.</li>
+</ul>
+
+<nav class="help-steps" aria-label="Previous and next"><span></span><a class="btn dark" rel="next" href="/1600/help/02-getting-started/">2 · Getting started →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

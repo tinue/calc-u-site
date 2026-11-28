@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COM ports — Calc-U-1600 help</title>
+<meta name="description" content="Calc-U-1600 connects the calculators' serial ports to serial port files on your computer. These are pseudo-terminals that any serial program can open like a…">
+<link rel="canonical" href="https://calc-u.org/1600/help/09-product-topics/com-ports/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/09-product-topics/com-ports/">
+<meta property="og:title" content="COM ports — Calc-U-1600 help">
+<meta property="og:description" content="Calc-U-1600 connects the calculators' serial ports to serial port files on your computer. These are pseudo-terminals that any serial program can open like a…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/03-models-and-machine-control/"><span class="k gry">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k org">9</span><span>Product topics</span></a><ul class="help-parts"><li><a href="/1600/help/09-product-topics/">Product topics</a></li><li><a href="/1600/help/09-product-topics/models/">What differs by model</a></li><li><a href="/1600/help/09-product-topics/basic-programs/">BASIC programs and the cassette</a></li><li><a href="/1600/help/09-product-topics/machine-code/">Machine-code programs</a></li><li><a href="/1600/help/09-product-topics/com-ports/" aria-current="page">COM ports</a></li><li><a href="/1600/help/09-product-topics/host-drive/">A folder as a drive (PC-1600)</a></li><li><a href="/1600/help/09-product-topics/keyword-modules/">PC-1500 keyword modules</a></li><li><a href="/1600/help/09-product-topics/module-definitions/">Module definitions</a></li></ul></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> <a href="/1600/help/09-product-topics/">9 Product topics</a> <span aria-hidden="true">›</span> COM ports</p>
+<p class="eyebrow">Chapter 9 · Product topics</p>
+<h1 id="com-ports">COM ports</h1>
+<p>Calc-U-1600 connects the calculators' serial ports to <strong>serial port files</strong>
+on your computer. These are pseudo-terminals that any serial program can
+open like a real port:</p>
+<pre class="mermaid">flowchart LR
+    subgraph Calc-U-1600
+      U16[&quot;PC-1600 RS-232C&lt;br/&gt;(COM1:)&quot;]
+      U158[&quot;CE-158 RS-232C&quot;]
+    end
+    U16 --&gt; L1[&quot;calcu1600-rs232c.serial&quot;]
+    U158 --&gt; L2[&quot;calcu1600-ce158.serial&quot;]
+    L1 --&gt; SDE[&quot;Sharp-Data-Exchange (sde)&quot;]
+    L1 --&gt; T[&quot;any terminal program&quot;]
+    L2 --&gt; SCR[&quot;e.g. screen … 300&quot;]
+</pre>
+<p>Both files are in the link folder (<strong>File ▸ Settings… ▸ Serial ports ▸ Link
+folder</strong>, <code>[serial] link-folder</code>; the save folder, <code>~/Calc-U-1600</code>, by
+default). The settings dialog also shows their full paths while the ports
+are open:</p>
+<p><img src="/1600/help/images/07-settings-serial.png" alt="Settings, Serial ports" width="1234" height="262" loading="lazy" decoding="async"></p>
+<p>Serial ports work on macOS and Linux; on Windows and in the Web frontend they
+are not available.</p>
+<h2 id="pc-1600-the-built-in-rs-232c-port">PC-1600: the built-in RS-232C port</h2>
+<p>The port is always on while a PC-1600 is running. Set it up on the
+calculator once after each power-on or reset:</p>
+<pre class="lcd"><code class="language-basic">SETCOM &quot;COM1:&quot;,9600,8,N,1,N,N
+INIT &quot;COM1:&quot;,4096
+OUTSTAT &quot;COM1:&quot;
+RCVSTAT &quot;COM1:&quot;,28
+SNDSTAT &quot;COM1:&quot;,28
+</code></pre>
+<p>This is 9600 baud, 8 bits, no parity, 1 stop bit, and <strong>no handshake</strong>.
+XON/XOFF (<code>…,X,N</code>) doesn't work well here: the control characters simply
+become part of the data, because no driver on the computer side reacts to
+them. <code>28</code> switches the handshake-line checks off.</p>
+<p><strong>Exchanging programs with Sharp-Data-Exchange</strong>
+(<a href="https://github.com/tinue/Sharp-Data-Exchange">github.com/tinue/Sharp-Data-Exchange</a>):</p>
+<pre class="lcd"><code class="language-sh"># computer → PC-1600: start LOAD &quot;COM1:&quot; on the calculator, then
+sde put myprogram.bas --device pc1600emul --port ~/Calc-U-1600/calcu1600-rs232c.serial
+
+# PC-1600 → computer: start this first, then SAVE &quot;COM1:&quot; on the calculator
+sde get myprogram.bas --device pc1600emul --port ~/Calc-U-1600/calcu1600-rs232c.serial
+</code></pre>
+<p>To avoid typing <code>--port</code> every time, store the folder once:
+<code>sde config set pc1600emul.port ~/Calc-U-1600</code>. sde's own default is
+<code>/tmp</code>, which is not where Calc-U-1600 puts the file.</p>
+<h2 id="ce-158-serial-and-printer-port">CE-158: serial and printer port</h2>
+<p>The <strong>CE-158</strong> button on the control bar attaches the CE-158 interface, with
+a power cycle like every peripheral (<a href="/1600/help/05-peripherals-and-paper/peripherals/">Peripherals</a>). It
+works on all three models. The CE-158 and the CE-1600P cannot be used
+together: attaching one while the other is attached is refused.</p>
+<ul>
+<li><strong>Serial port:</strong> <code>calcu1600-ce158.serial</code> runs at 300 baud by default, for
+example <code>screen ~/Calc-U-1600/calcu1600-ce158.serial 300</code>.</li>
+<li><strong>Printer port:</strong> whatever the program prints on the parallel port
+(<code>OPN &quot;LPRT&quot;</code>, then <code>LPRINT</code>) appears in the CE-158's panel
+(<a href="/1600/help/05-peripherals-and-paper/peripherals/">Peripherals</a>).</li>
+</ul>
+<p>In BASIC:</p>
+<ul>
+<li><code>OPN &quot;LPRT&quot;</code> sends <code>LPRINT</code> to the printer port, and <code>OPN</code> alone switches
+it back.</li>
+<li><code>SETDEV PO</code> sends <code>LPRINT</code>/<code>LLIST</code> to the serial port instead, and
+<code>SETDEV KI</code> makes <code>INPUT</code> read from it.</li>
+<li><code>OUTSTAT 0</code> switches the DTR/RTS lines on.</li>
+</ul>
+<p>The full command set is in the
+<a href="https://github.com/tinue/Sharp-BASIC-Ref/blob/main/PC-1500-BASIC-Reference.md#ce-158-serialparallel-interface">CE-158 reference</a>.</p>
+<p>Known gap: on the PC-1600, <code>SETDEV KI</code> + <code>INPUT</code> doesn't work yet.
+<code>RINKEY$</code> does.</p>
+<h2 id="without-a-window">Without a window</h2>
+<p>The harness <code>calcu</code> feeds and captures both ports in emulated time, without
+a serial port file unless you ask for one:
+<code>calcu --product c1600 c1600 serial ce158|rs232c feed &lt;file&gt;</code>,
+<code>capture &lt;file&gt;</code>, <code>link</code> (makes the serial port file) and <code>report</code>. It is
+built from the source repository
+(<a href="https://github.com/tinue/Calc-U/blob/main/docs/Building.md">Building</a>).</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/09-product-topics/machine-code/">← 9 · Machine-code programs</a><a class="btn dark" rel="next" href="/1600/help/09-product-topics/host-drive/">9 · A folder as a drive (PC-1600) →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>

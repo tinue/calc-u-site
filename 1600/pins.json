@@ -1,0 +1,18 @@
+{
+  "product": "Calc-U-1600",
+  "release": "calc-u-1600-v0.9.0",
+  "help": {
+    "url": "https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-help.zip",
+    "sha256": "430cfeb475f62634f00c44301baa4a51d1fc7a7ca8069e7651e759b8e8594d6b",
+    "version": "0.9.0"
+  },
+  "web": {
+    "url": "https://github.com/tinue/Calc-U/releases/download/calc-u-1600-v0.9.0/Calc-U-1600-web.zip",
+    "sha256": "6390168d9ca5bfbd643416ab072dca480010f3d8a96cc7d17fd3cd80dc813617",
+    "version": "0.9.0",
+    "commit": "be0d0fede264821acd2bf0f50573e2ee0188cfd8"
+  },
+  "examples": {
+    "tag": "calc-u-1600-v0.9.0"
+  }
+}

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Models and machine control — Calc-U-1600 help</title>
+<meta name="description" content="A product runs one machine at a time: one model, in one variant, with the peripherals and media you put into it. This chapter shows how to choose the model…">
+<link rel="canonical" href="https://calc-u.org/1600/help/03-models-and-machine-control/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calc-U-1600">
+<meta property="og:url" content="https://calc-u.org/1600/help/03-models-and-machine-control/">
+<meta property="og:title" content="Models and machine control — Calc-U-1600 help">
+<meta property="og:description" content="A product runs one machine at a time: one model, in one variant, with the peripherals and media you put into it. This chapter shows how to choose the model…">
+<meta property="og:image" content="https://calc-u.org/1600/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/1600/assets/icon.png">
+<link rel="apple-touch-icon" href="/1600/assets/icon.png">
+<meta name="theme-color" content="#443a31">
+<link rel="stylesheet" href="/1600/site.css">
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-in">
+<a class="brand" href="/1600/"><img src="/1600/assets/icon.png" alt="" width="40" height="40"><span class="wm"><span class="wm-top">Calc-U <em>1600</em></span><span class="wm-sub">Pocket computer emulator</span></span></a>
+<nav class="nav" aria-label="Main">
+<a href="/1600/">Home</a>
+<a href="/1600/help/" class="on" aria-current="page">Help</a>
+<a href="/1600/play/">Play</a>
+<a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+</nav>
+<a class="btn primary" href="/1600/play/">Play in browser</a>
+</div>
+</header>
+<main class="wrap help-layout">
+<nav class="help-nav" aria-label="Help chapters">
+<p class="eyebrow"><a href="/1600/help/">Help</a> · 0.9.0</p>
+<ol>
+<li class=""><a class="help-chapter" href="/1600/help/01-introduction/"><span class="k gry">1</span><span>Introduction</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/02-getting-started/"><span class="k gry">2</span><span>Getting started</span></a></li>
+<li class="open"><a class="help-chapter" href="/1600/help/03-models-and-machine-control/" aria-current="page"><span class="k org">3</span><span>Models and machine control</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/04-media/"><span class="k gry">4</span><span>Media</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/05-peripherals-and-paper/"><span class="k gry">5</span><span>Peripherals and paper</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/06-presets/"><span class="k gry">6</span><span>Presets</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/07-debugger/"><span class="k gry">7</span><span>Debugger</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/08-settings/"><span class="k gry">8</span><span>Settings</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/09-product-topics/"><span class="k gry">9</span><span>Product topics</span></a></li>
+<li class=""><a class="help-chapter" href="/1600/help/10-reference/"><span class="k gry">10</span><span>Reference</span></a></li>
+</ol>
+</nav>
+<article class="help-article">
+<p class="help-crumb"><a href="/1600/">Calc-U-1600</a> <span aria-hidden="true">›</span> <a href="/1600/help/">Help</a> <span aria-hidden="true">›</span> 3 Models and machine control</p>
+<p class="eyebrow">Chapter 3 · Models and machine control</p>
+<h1 id="models-and-machine-control">Models and machine control</h1>
+<p>A product runs one machine at a time: one model, in one variant, with
+the peripherals and media you put into it. This chapter shows how to
+choose the model and the variant, how to reset it, and what
+the product needs to start at all.</p>
+<p>What a Reset, a Cold boot or a power cycle keeps is not the same on
+every model. The product's <a href="/1600/help/09-product-topics/">Product topics</a> say what each of
+its models keeps.</p>
+<h2 id="choosing-a-model">Choosing a model</h2>
+<p>Choose the model in the model picker at the left of the control bar, or
+under <strong>Machine ▸ Model ▸</strong>, where the running model is marked.</p>
+<p>A model switch builds a new machine of that model, as at a start of the
+product:</p>
+<ul>
+<li>when a startup preset is set for that model, the machine is built from
+it (<a href="/1600/help/06-presets/">Startup presets</a>);</li>
+<li>otherwise the product builds its own default machine for that model.</li>
+</ul>
+<p>The machine you leave is gone with everything in its memory. What you
+saved as a medium stays saved (<a href="/1600/help/04-media/">Media</a>). Text that was
+still being typed, keys you held and full speed do not carry over.</p>
+<p>Choosing the model that already runs does nothing.</p>
+<h2 id="choosing-a-variant">Choosing a variant</h2>
+<p>A model or a peripheral that comes in several variants, mostly ROM
+versions, has a submenu of its own under <strong>Machine</strong>, with the running
+variant marked. The product gives each submenu its name.</p>
+<ul>
+<li><strong>A variant of the model.</strong> The machine is built again in that
+variant, with the same peripherals in the same places and the same
+media in them. Its own memory starts empty, and no startup preset is
+loaded.</li>
+<li><strong>A variant of a peripheral.</strong> The peripheral is replaced by the same
+one in the other variant, in one step, as when you attach a
+peripheral (<a href="#what-follows-a-change-of-hardware">What follows a change of hardware</a>).</li>
+</ul>
+<p>The submenu of a peripheral is shown only while it is plugged in.</p>
+<h2 id="reset-and-cold-boot">Reset and Cold boot</h2>
+<p><strong>Machine ▸ Reset</strong> restarts the machine and keeps its memory, as far as
+the model does. <strong>Machine ▸ Cold boot</strong> starts it as after the batteries
+were out for a long time: all memory is empty, on every model.</p>
+<div class="tbl-box"><table class="tbl">
+<thead>
+<tr>
+<th></th>
+<th>Reset</th>
+<th>Cold boot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory</td>
+<td>kept, as the model keeps it (<a href="/1600/help/09-product-topics/">chapter 9</a>)</td>
+<td>empty</td>
+</tr>
+<tr>
+<td>Peripherals and media</td>
+<td>stay plugged in and inserted</td>
+<td>stay plugged in and inserted</td>
+</tr>
+<tr>
+<td>Text being typed, keys held</td>
+<td>dropped</td>
+<td>dropped</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both end when the machine is ready for keys again. A machine with a
+real-time clock gets your computer's date and time afterwards.</p>
+<p>Reset, Cold boot and a model switch can be used while an operation runs,
+such as a preset that loads: the operation is stopped first. Every
+other change to the machine waits until the operation is over.</p>
+<h2 id="what-follows-a-change-of-hardware">What follows a change of hardware</h2>
+<p>When you attach or detach a peripheral, or plug in a module, the machine
+does what the real one would: for most places it goes through a <strong>power
+cycle</strong>, as if you had switched it off and on, so that its ROM finds
+what is plugged in now. The change is over when the machine is ready for
+keys again.</p>
+<pre class="mermaid">flowchart LR
+  change[&quot;Attach, detach or replace&quot;] --&gt; check{&quot;Does it fit?&quot;}
+  check -- no --&gt; refused[&quot;Nothing changes; a notice says why&quot;]
+  check -- yes --&gt; cycle[&quot;Power cycle, where the place asks for one&quot;]
+  cycle --&gt; ready[&quot;Ready for keys&quot;]
+</pre>
+<p>Replacing one peripheral by another (choosing another module in a slot's
+picker, another printer in a picker) is one step with one power cycle.</p>
+<p>What the memory keeps through a power cycle depends on the model
+(<a href="/1600/help/09-product-topics/">chapter 9</a>).</p>
+<h2 id="the-startup-model">The startup model</h2>
+<p>When the product starts, it builds the <strong>startup model</strong>: the model you
+chose as Startup model in the General section of the settings dialog, or with &quot;Last used&quot;
+the model that ran last. The model that ran last is the one of the last
+machine built, by the model picker, the menus or a preset. On the first
+start the product chooses a model of its own.</p>
+<p>A startup preset set for the startup model is loaded at the start
+(<a href="/1600/help/08-settings/">Settings</a>, <a href="/1600/help/06-presets/">Presets</a>).</p>
+<h2 id="roms">ROMs</h2>
+<p>Each model and each peripheral with a ROM needs its ROM files. A
+release brings every one of them: the full set for every model, variant
+and peripheral of the product. You never have to look for a ROM, and
+nothing is ever refused while the product runs because a ROM is
+missing.</p>
+<p>When a file of the full set is missing or damaged, which can happen in
+a build of your own before the ROMs were fetched, the product starts no
+machine. In place of the faceplate it shows which files are missing or
+bad, and that the full set is needed. There is no control bar and no
+Machine menu then; Help and About still work.</p>
+
+<nav class="help-steps" aria-label="Previous and next"><a class="btn grey" rel="prev" href="/1600/help/02-getting-started/getting-started/">← 2 · Getting started with Calc-U-1600</a><a class="btn dark" rel="next" href="/1600/help/04-media/">4 · Media →</a></nav>
+<p class="help-built">Help built from Calc-U-1600-help.zip 0.9.0, the help of the <a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Calc-U-1600 0.9.0 release</a>.</p>
+</article>
+</main>
+<footer class="ftr">
+<div class="ftr-in">
+<a href="/">Calc-U</a><a href="/59/">Calc-U-59</a><a href="/1600/help/">Help</a><a href="/1600/calc/app/">Install the web app</a><a href="https://github.com/tinue/Calc-U/releases/tag/calc-u-1600-v0.9.0">Release notes</a><a href="https://github.com/tinue/Calc-U/tree/main/products/calc-u-1600">GitHub</a>
+<span class="where">Help built from Calc-U-1600-help.zip 0.9.0</span>
+<p class="disc">Sharp, PC-1500, PC-1500A and PC-1600 are names of their owners. Calc-U-1600 is an independent emulator and not affiliated with Sharp. This site loads nothing from another site and sets no cookies.</p>
+</div>
+</footer>
+<script src="/1600/help/help.js" defer></script>
+</body>
+</html>
