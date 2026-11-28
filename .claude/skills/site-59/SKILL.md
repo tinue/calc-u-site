@@ -8,7 +8,8 @@ user-invocable: true
 
 The user documentation for Calc-U-59, a TI-59/TI-58/TI-58C emulator for
 macOS, iOS, iPadOS, Windows and Linux. The emulator's code and developer
-documentation live in the Calc-U-59 repository (`../Calc-U-59`).
+documentation live in the source repository tinue/calc-u (`../Calc-U`),
+under `products/calc-u-59/`; its file formats under `docs/formats/`.
 
 **Read `59/.seo/README.md` before changing anything under `59/`.** It is the
 reference for the build, the `/59` base path, the web client import, the
@@ -33,8 +34,9 @@ committed with it. Push only when the user asks (pushing publishes).
 - **This site is the only place for end-user documentation** — installing,
   operating, syncing, modules, settings, presets, the debugger from a user's
   point of view.
-- **Developer documentation stays in Calc-U-59** (`reference/`, `README.md`,
-  `CHANGELOG.md`). Technical facts a user doesn't need — the `.ti59` grammar,
+- **Developer documentation stays in the source repository**
+  (`products/calc-u-59/docs/developer/`, `docs/formats/`,
+  `products/calc-u-59/README.md`, `products/calc-u-59/CHANGELOG.md`). Technical facts a user doesn't need — the `.ti59` grammar,
   the CUECARD grammar, the debug API — live there; the site mentions that
   they exist and links to GitHub.
 - **Copy scope:** the app (installing, syncing, modules, settings, file
@@ -47,22 +49,24 @@ committed with it. Push only when the user asks (pushing publishes).
 ## The calculator is imported (`59/calc/`)
 
 `/play/` and the installable app `/59/calc/app/` are Calc-U-59's web client
-(`Web/` there; its contract is `reference/WebClient.md`), built by its CI and
+(`products/calc-u-59/frontends/web/` in tinue/calc-u; the embedding contract
+is `docs/formats/web-embed.md`, the client
+`products/calc-u-59/docs/developer/Web-Client.md`), built by its CI and
 attached to each release as `Calc-U-59-web.zip`.
 
-- **Never edit `59/calc/`.** A calculator change is made in Calc-U-59
-  (`calc-u-59-web` skill there) and arrives with its next build.
+- **Never edit `59/calc/`.** A calculator change is made in the source
+  repository (`calc-u-59-web` skill there) and arrives with its next build.
 - **Updating it:** `node .seo/fetch-web-client.js --pin <url of Calc-U-59-web.zip>`,
   then build, check, test, and commit `calc/`, `web-client.json` and the
   rebuilt pages in one commit. Pin the release tag
-  (`https://github.com/tinue/Calc-U-59/releases/download/v<version>/Calc-U-59-web.zip`),
+  (`https://github.com/tinue/calc-u/releases/download/calc-u-59-v<version>/Calc-U-59-web.zip`),
   so the calculator and its documentation move together. Never push a
   `-pre` pin or `releases/latest/`: promotion deletes the `-pre` tag (404)
-  and rebuilds the zip, and `latest` fails the sha256 check on every push
-  once the next version is out.
+  and rebuilds the zip, and tinue/calc-u's releases are never "Latest"
+  (several products share it), so `latest` names no Calc-U-59 release.
 - **Testing an unreleased client:**
-  `node .seo/fetch-web-client.js --local ../../Calc-U-59/Web/dist` (build it
-  there first). `check.js` then fails on purpose until the pinned build is
+  `node .seo/fetch-web-client.js --local ../../Calc-U/products/calc-u-59/frontends/web/dist`
+  (build it there first). `check.js` then fails on purpose until the pinned build is
   reinstalled with `node .seo/fetch-web-client.js` — never commit a local
   build.
 - **Previewing the next release:** `node .seo/fetch-web-client.js --beta <url>`
@@ -76,12 +80,13 @@ attached to each release as `Calc-U-59-web.zip`.
 ## `/software/` needs a sync check
 
 `59/software-files/` holds hand-copied `.ti59`/`.ti58`/`.ti58c`/`.asm` files
-from Calc-U-59's `examples/`, self-hosted so the `download` links work.
-Nothing syncs them. When a Calc-U-59 session added examples, or whenever
+from the source repository's `products/calc-u-59/examples/`, self-hosted so
+the `download` links work.
+Nothing syncs them. When a source repository session added examples, or whenever
 you're here anyway, diff the two:
 
 ```bash
-comm -23 <(cd ../Calc-U-59/examples && find . \( -name '*.ti59' -o -name '*.ti58' -o -name '*.ti58c' -o -name '*.asm' \) ! -path './debug/*' ! -path './screentest/*' | sed 's|.*/||' | sort) \
+comm -23 <(cd ../Calc-U/products/calc-u-59/examples && find . \( -name '*.ti59' -o -name '*.ti58' -o -name '*.ti58c' -o -name '*.asm' \) ! -path './debug/*' ! -path './screentest/*' | sed 's|.*/||' | sort) \
          <(cd 59/software-files && find . -type f | sed 's|.*/||' | sort)
 ```
 
@@ -90,7 +95,7 @@ It compares file names: the examples sit in subfolders (`calendar/`,
 missing here: copy it, add it to the matching category in `SoftwarePage`
 (`Pages.jsx`), rebuild. A changed example is not listed: compare the contents
 too (`cmp`). The PDCM guides
-(`examples/historic/PDCM*.md`) are copied too; the check doesn't see them. `examples/debug/` and
+(`historic/PDCM*.md` in the examples) are copied too; the check doesn't see them. `examples/debug/` and
 `examples/screentest/` are test fixtures and stay off the site. The
 `tutorial-files/` are the preset tutorial's own steps, not examples.
 
@@ -98,7 +103,7 @@ too (`cmp`). The PDCM guides
 
 1. Pin the release's `Calc-U-59-web.zip` (above), and remove `59/beta/` if it
    previewed this version.
-2. Read the release's `CHANGELOG.md` entry in Calc-U-59 and update the pages
+2. Read the release's entry in `products/calc-u-59/CHANGELOG.md` and update the pages
    for anything user-facing: settings, modules, install steps (Mac, iOS,
    Windows, Linux), preset directives (mention them, link to
    `docs/formats/preset.md` of the Calc-U repository for the grammar).

@@ -1,8 +1,8 @@
 // Calc-U 59 — the imported web client in calc/.
 //
-// calc/ is the web client's built dist/ from the Calc-U-59 repository
-// (Web/, contract in its reference/WebClient.md), unpacked unchanged. It is
-// never edited here. web-client.json pins which build it is:
+// calc/ is Calc-U-59's web client, the built dist/ of the source repository
+// tinue/calc-u (products/calc-u-59/frontends/web/; embedding contract in its
+// docs/formats/web-embed.md), unpacked unchanged. It is never edited here. web-client.json pins which build it is:
 //
 //   { "url": "<release asset>", "sha256": "<of the zip>",
 //     "version": "<MANIFEST.json version>", "commit": "<MANIFEST.json commit>" }

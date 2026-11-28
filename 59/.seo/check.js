@@ -177,8 +177,8 @@ for (const name of SCRIPTS) {
 
 /* ---- the web client is the pinned build, unchanged ---------------- *
  *
- * calc/ is imported from the Calc-U-59 repository and never edited here.
- * It must match its own MANIFEST.json file for file, and be the build
+ * calc/ is imported from the source repository tinue/calc-u and never
+ * edited here. It must match its own MANIFEST.json file for file, and be the build
  * web-client.json pins — a --local test build fails here until the pinned
  * one is installed again (node .seo/fetch-web-client.js).
  */

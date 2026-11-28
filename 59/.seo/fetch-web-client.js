@@ -4,12 +4,13 @@
 //
 //   node .seo/fetch-web-client.js               the build web-client.json pins
 //   node .seo/fetch-web-client.js --pin <url>   pin another release asset, install it
-//   node .seo/fetch-web-client.js --local <dir> a local Web/dist/, for testing only
+//   node .seo/fetch-web-client.js --local <dir> a local frontends/web/dist/, for testing only
 //   node .seo/fetch-web-client.js --beta <url>  a pre-release asset, into beta/
 //   node .seo/fetch-web-client.js --beta <dir>  a local --release dist/, into beta/
 //
-// The client is built in the Calc-U-59 repository (Web/build.sh, CI attaches
-// it to each release as Calc-U-59-web.zip) and unpacked here unchanged.
+// The client is built in the source repository tinue/calc-u
+// (products/calc-u-59/frontends/web/build.sh; CI attaches it to each release,
+// tag calc-u-59-v<version>, as Calc-U-59-web.zip) and unpacked here unchanged.
 // Every install checks the zip against the pinned sha256 and the tree
 // against its MANIFEST.json, then replaces calc/ as a whole.
 //
@@ -52,7 +53,7 @@ async function main() {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "calcu59-web-"));
   try {
     if (args[0] === "--local") {
-      if (!args[1]) fail("--local needs the path of a Web/dist/ folder");
+      if (!args[1]) fail("--local needs the path of a frontends/web/dist/ folder");
       install(path.resolve(args[1]));
       console.log("not pinned: check.js fails until a pinned build is installed again");
       return;

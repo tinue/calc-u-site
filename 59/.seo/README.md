@@ -28,16 +28,19 @@ calc-u-site repository. `BASE` in `routes.js` is `"/59"`:
 
 ## The playable calculator (`calc/`)
 
-`/play/` and the installable app `/calc/app/` are the web client of the
-Calc-U-59 repository (`Web/`; the contract is its `reference/WebClient.md`).
-Its CI builds it, and each release carries it as `Calc-U-59-web.zip`.
+`/play/` and the installable app `/calc/app/` are Calc-U-59's web client,
+built in the source repository tinue/calc-u (`products/calc-u-59/frontends/web/`;
+the embedding contract is `docs/formats/web-embed.md`, the client
+`products/calc-u-59/docs/developer/Web-Client.md`). Its CI builds it, and
+each release (tag `calc-u-59-v<version>`) carries it as `Calc-U-59-web.zip`.
 `calc/` is that zip, unpacked unchanged — **never edit it here**; a
-calculator change is made in Calc-U-59 and arrives with its next build.
+calculator change is made in the source repository and arrives with its
+next build.
 
 ```bash
 node .seo/fetch-web-client.js               # (re)install the pinned build
 node .seo/fetch-web-client.js --pin <url>   # move to another release asset
-node .seo/fetch-web-client.js --local ../../Calc-U-59/Web/dist   # test a local build
+node .seo/fetch-web-client.js --local ../../Calc-U/products/calc-u-59/frontends/web/dist   # test a local build
 ```
 
 `web-client.json` pins the zip's URL and sha256 and the version and commit
