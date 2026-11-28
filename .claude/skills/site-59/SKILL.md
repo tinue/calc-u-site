@@ -1,126 +1,77 @@
 ---
 name: site-59
-description: Use this skill for any work on the Calc-U-59 website in 59/ (served at calc-u.org/59/) — page content in Pages.jsx/components.jsx, routes, the static build and checks, the embedded web calculator (59/calc/, /play/), the downloadable software files, and the site tests. Also use it when a Calc-U-59 release needs the website updated (new web client, changed features, new examples).
+description: Use for any work on the Calc-U-59 website in 59/ (calc-u.org/59/) — the site pages (home, play, software) in Pages.jsx/components.jsx, the help built from the pinned help asset, the redirects of old addresses, the embedded Web frontend (59/calc/), the hosted example files, the build, checks and tests. Also when a Calc-U-59 release is to be published on the site.
 user-invocable: true
 ---
 
 # Calc-U-59 website (`59/`)
 
-The user documentation for Calc-U-59, a TI-59/TI-58/TI-58C emulator for
-macOS, iOS, iPadOS, Windows and Linux. The emulator's code and developer
-documentation live in the source repository tinue/calc-u (`../Calc-U`),
-under `products/calc-u-59/`; its file formats under `docs/formats/`.
+The website of Calc-U-59, a TI-59/TI-58/TI-58C emulator. Its source,
+developer documentation and **help** are written in the source repository
+tinue/Calc-U (`../Calc-U`, `products/calc-u-59/`, the shared help parts in
+`library/help/`); this folder publishes them.
 
-**Read `59/.seo/README.md` before changing anything under `59/`.** It is the
-reference for the build, the `/59` base path, the web client import, the
-URL map, how to add a page, serving locally, and the deliberate oddities.
-Put new build facts there, not here. Visual and brand work: the
-`site-59-design` skill.
+**Read `59/.seo/README.md` before changing anything under `59/`**: the
+build, the `/59` base path, the pins, the help pages, the redirects,
+serving locally. Put new build facts there. Visual work: `site-59-design`.
+The renderer shared with `/1600/`: `.help/README.md`.
 
 ## Workflow
 
 ```bash
+(cd .help && npm ci)      # once: the renderer's dependencies
 cd 59
-node .seo/build.js       # after every .jsx edit — otherwise the pages show the old text
-node .seo/check.js       # 1100+ assertions; npm i --no-save jsdom adds the boot check
-tests/run-tests.sh       # Playwright: navigation, fonts, the embedded calculator
+node .seo/build.js        # after every .jsx, CSS-in-template or pin change
+node .seo/check.js        # ~1900 assertions; npm i --no-save jsdom adds the boot check
+tests/run-tests.sh        # Playwright: navigation, redirects, fonts, the calculator
 ```
 
-A `.jsx` change is finished when it is rebuilt and the generated files are
-committed with it. Push only when the user asks (pushing publishes).
+A change is finished when it is rebuilt and the generated files are
+committed with it. Push only when the user asks (pushing `main` publishes).
 
-## Documentation policy
+## What is whose
 
-- **This site is the only place for end-user documentation** — installing,
-  operating, syncing, modules, settings, presets, the debugger from a user's
-  point of view.
-- **Developer documentation stays in the source repository**
-  (`products/calc-u-59/docs/developer/`, `docs/formats/`,
-  `products/calc-u-59/README.md`, `products/calc-u-59/CHANGELOG.md`). Technical facts a user doesn't need — the `.ti59` grammar,
-  the CUECARD grammar, the debug API — live there; the site mentions that
-  they exist and links to GitHub.
-- **Copy scope:** the app (installing, syncing, modules, settings, file
-  formats, the toolbar), not TI-59 hardware or AOS arithmetic. **One
-  exception: `/what-is-a-ti-59/`** (`AboutTi59Page`) is deliberately about
-  the hardware — people search for the machine, not the app, so it and
-  `/play/` are the cold-search entry points. Don't delete it as scope creep,
-  and don't treat it as licence for hardware writing elsewhere.
+- **The help is the release's, never written here.** `/59/help/` is built
+  from `help-asset/Calc-U-59-help.zip`, the asset `pins.json` pins. A wrong
+  sentence in the help is fixed in the source repository and arrives with
+  the next release; this site changes only how the help looks
+  (`help.css`, `.seo/help-page.js`) and is reached.
+- **The site pages are the site's:** home, `/play/`, `/software/` and the
+  articles (`Pages.jsx`, `routes.js`, `.seo/pages.js`). They link into the
+  help through `HELP` in `Pages.jsx`; `check.js` fails on a link or an
+  anchor that leads nowhere, and on a link to an address that only
+  redirects.
+- **Imported, never edited:** `calc/` (the Web frontend), `help-asset/`,
+  `software-files/` (the examples of the pinned tag). `pins.js` installs
+  them; `check.js` and CI fail on any difference.
+- **Old addresses** of the hand-written help (2.3.0 and before) are
+  redirects: `redirects.js` (paths) and `LEGACY_HASHES` in `routes.js`
+  (`#hash` links). When a release renames a help file, its address changes:
+  update `HELP`, the two tables and `START_CARDS`, then build and check.
 
-## The calculator is imported (`59/calc/`)
+## Publishing a Calc-U-59 release
 
-`/play/` and the installable app `/59/calc/app/` are Calc-U-59's web client
-(`products/calc-u-59/frontends/web/` in tinue/calc-u; the embedding contract
-is `docs/formats/web-embed.md`, the client
-`products/calc-u-59/docs/developer/Web-Client.md`), built by its CI and
-attached to each release as `Calc-U-59-web.zip`.
+On the branch `59/<version>` (root `CLAUDE.md`, "Branches"):
 
-- **Never edit `59/calc/`.** A calculator change is made in the source
-  repository (`calc-u-59-web` skill there) and arrives with its next build.
-- **Updating it:** `node .seo/fetch-web-client.js --pin <url of Calc-U-59-web.zip>`,
-  then build, check, test, and commit `calc/`, `web-client.json` and the
-  rebuilt pages in one commit. Pin the release tag
-  (`https://github.com/tinue/calc-u/releases/download/calc-u-59-v<version>/Calc-U-59-web.zip`),
-  so the calculator and its documentation move together. Never push a
-  `-pre` pin or `releases/latest/`: promotion deletes the `-pre` tag (404)
-  and rebuilds the zip, and tinue/calc-u's releases are never "Latest"
-  (several products share it), so `latest` names no Calc-U-59 release.
-- **Testing an unreleased client:**
-  `node .seo/fetch-web-client.js --local ../../Calc-U/products/calc-u-59/frontends/web/dist`
-  (build it there first). `check.js` then fails on purpose until the pinned build is
-  reinstalled with `node .seo/fetch-web-client.js` — never commit a local
-  build.
-- **Previewing the next release:** `node .seo/fetch-web-client.js --beta <url>`
-  installs a `-pre` zip into `59/beta/`, served at `/59/beta/app/`. It is the
-  one place for a `-pre` asset; nothing re-downloads it. Remove it with the
-  release (`59/.seo/README.md` § "The beta").
-- The site only sizes it: `PlayPage` in `Pages.jsx` passes `layout`, `width` and
-  `keyboard`. Its styles come with it (`calc/calc.css`, tokens scoped to
-  `.calcu-client`); don't restyle it from the site's CSS.
+1. `node ../.help/pins.js 59 --pin calc-u-59-v<version>` — pins and installs
+   the help asset, the Web frontend and the examples of that release tag
+   (never a `-pre`).
+2. Build. A help file that moved breaks a `HELP` link or a redirect:
+   `check.js` names it; fix the tables, not the help.
+3. If an example was added or removed, update its entry in `SoftwarePage`
+   (`Pages.jsx`); `check.js` fails on a download link without its file.
+4. Update the version in the home page's release box and `RELEASE`.
+5. Build, check, test, commit pins, assets and pages together.
 
-## `/software/` needs a sync check
-
-`59/software-files/` holds hand-copied `.ti59`/`.ti58`/`.ti58c`/`.asm` files
-from the source repository's `products/calc-u-59/examples/`, self-hosted so
-the `download` links work.
-Nothing syncs them. When a source repository session added examples, or whenever
-you're here anyway, diff the two:
-
-```bash
-comm -23 <(cd ../Calc-U/products/calc-u-59/examples && find . \( -name '*.ti59' -o -name '*.ti58' -o -name '*.ti58c' -o -name '*.asm' \) ! -path './debug/*' ! -path './screentest/*' | sed 's|.*/||' | sort) \
-         <(cd 59/software-files && find . -type f | sed 's|.*/||' | sort)
-```
-
-It compares file names: the examples sit in subfolders (`calendar/`,
-`historic/`), the site's `.ti59` files in one flat folder. Anything listed is
-missing here: copy it, add it to the matching category in `SoftwarePage`
-(`Pages.jsx`), rebuild. A changed example is not listed: compare the contents
-too (`cmp`). The PDCM guides
-(`historic/PDCM*.md` in the examples) are copied too; the check doesn't see them. `examples/debug/` and
-`examples/screentest/` are test fixtures and stay off the site. The
-`tutorial-files/` are the preset tutorial's own steps, not examples.
-
-## After a Calc-U-59 release
-
-1. Pin the release's `Calc-U-59-web.zip` (above), and remove `59/beta/` if it
-   previewed this version.
-2. Read the release's entry in `products/calc-u-59/CHANGELOG.md` and update the pages
-   for anything user-facing: settings, modules, install steps (Mac, iOS,
-   Windows, Linux), preset directives (mention them, link to
-   `docs/formats/preset.md` of the Calc-U repository for the grammar).
-3. Run the software sync check.
-4. Build, check, test, commit.
+To try an unreleased Web frontend: `node ../.help/pins.js 59 --local-web <dist>`;
+`check.js` fails until `node ../.help/pins.js 59` reinstalls the pin.
 
 ## Rules
 
-- **No third parties.** Everything a page fetches comes from calc-u.org: no
-  CDN, no Google Fonts, no embeds, no analytics or telemetry. `check.js`
-  enforces it structurally (`59/.seo/README.md` § "Self-hosted"); the
-  reasoning is `59/fonts/README.md`. The privacy policy (Calc-U-59
-  `PRIVACY.md`, linked from the footer) promises exactly this.
-- **Every internal URL starts with `/59/`** in the page text; routes in
-  `routes.js` and `.seo/pages.js` are site paths without it. `check.js`
-  fails on a missing prefix.
-- **Generated, never edit by hand:** `build/`, every `index.html`,
-  `sitemap.xml`.
-- **Cite sources** for hardware facts with an https link (on
-  `/what-is-a-ti-59/` especially).
+- **No third parties.** Everything a page fetches comes from calc-u.org
+  (fonts, React, Mermaid, the calculator); no analytics. `check.js`
+  enforces it (`59/.seo/README.md` § "Self-hosted").
+- **Every internal URL starts with `/59/`**; routes in `routes.js` and
+  `.seo/pages.js` are site paths without it.
+- **Generated:** `build/`, `help/`, every `index.html`, `sitemap.xml`.
+  Rebuild them; edit their sources.
