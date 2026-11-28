@@ -6,10 +6,18 @@ The website for the Calc-U emulators, served by GitHub Pages from `main`
 | Path | Site | Skill |
 |---|---|---|
 | `/` (root files) | Landing page, `404.html`, `robots.txt`, `CNAME`, `style.css` | — |
-| `59/` | Calc-U-59 (TI-59 emulator) — has a build step | `site-59`, `site-59-design` |
-| `1600/` | Calc-U-1600 (Sharp PC-1500 / PC-1600) — placeholder | — |
+| `59/` | Calc-U-59 (TI-59 emulator) | `site-59`, `site-59-design` |
+| `1600/` | Calc-U-1600 (Sharp PC-1500 / PC-1500A / PC-1600) | `site-1600`, `site-1600-design` |
+| `.help/` | The renderer of the help asset, shared by the site folders | `.help/README.md` |
 
 Invoke the site's skill before working in its folder.
+
+Each site folder publishes one release of its product, named by the three
+pins in `<folder>/pins.json`: the help asset, the Web frontend and the
+examples, all of one release tag of tinue/Calc-U
+(`node .help/pins.js <folder> --pin <tag>`). Its help pages are built from
+that help asset; the site writes only its own pages (home, play, software)
+and how the help looks.
 
 ## Branches
 
@@ -19,8 +27,8 @@ emulator release, named `<site folder>/<emulator version>`:
 
 | Branch | Holds | Merged into `main` |
 |---|---|---|
-| `59/<current>`, e.g. `59/2.3.0` | Fixes and additions for the released Calc-U-59 version | Any time |
-| `59/<next>`, e.g. `59/3.0.0` | Documentation of features not yet released | When Calc-U-59 tags `calc-u-59-v<next>` |
+| `59/<current>`, e.g. `59/3.0.0` | Fixes and additions for the released Calc-U-59 version | Any time |
+| `59/<next>`, e.g. `59/3.1.0` | Documentation of features not yet released | When Calc-U-59 tags `calc-u-59-v<next>` |
 | `1600/<current>`, `1600/<next>` | The same for Calc-U-1600 | The same |
 
 - The version is the emulator's own: the source repository tinue/calc-u
@@ -43,18 +51,23 @@ emulator release, named `<site folder>/<emulator version>`:
   only after the site's build, checks and tests pass.
   `.github/workflows/site.yml` re-checks every push to `main` but fixes
   nothing. Release branches may be pushed to `origin` at any time.
-- **This repository holds the end-user documentation only.** The emulators'
-  code and developer documentation stay in their source repository,
-  tinue/calc-u (`../Calc-U`): `products/calc-u-59/`,
-  `products/calc-u-1600/`, the formats in `docs/formats/`.
-- **Code that ships with an emulator is imported, never edited here.**
-  `59/calc/` is Calc-U-59's web client, installed by
-  `59/.seo/fetch-web-client.js` from a release asset; `check.js` fails on any
-  change to it.
+- **The help is written in the source repository, never here.** The
+  emulators, their help and their developer documentation are in
+  tinue/Calc-U (`../Calc-U`): `products/calc-u-59/`,
+  `products/calc-u-1600/`, the shared help in `library/help/`, the formats
+  in `docs/formats/`, how the site takes a release in `docs/help-site.md`.
+  A wrong sentence in a help page is fixed there and arrives with the next
+  release.
+- **What ships with a release is imported, never edited here:**
+  `<folder>/calc/` (the Web frontend), `<folder>/help-asset/`, and
+  `59/software-files/` (the examples). `node .help/pins.js <folder>`
+  installs them; each folder's check and CI fail on any change.
 - **`robots.txt` and `404.html` live at the root**, for all sites: search
   engines and GitHub Pages only look for them here.
 - **Nothing is fetched from a third party** on any page — fonts, scripts,
   images and the calculator are all served from calc-u.org, and there are no
   analytics, cookies or embeds. Outbound `<a href>` links are fine.
 - **Paths:** a site's pages use root-relative URLs that start with its
-  folder (`/59/…`); the root pages link to `/59/` and `/1600/`.
+  folder (`/59/…`, `/1600/…`); the root pages link to `/59/` and `/1600/`.
+- **Each folder's build gives the same bytes for the same sources and pins.**
+  Commit what it makes; CI rebuilds and fails on a difference.
